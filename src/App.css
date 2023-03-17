@@ -1,0 +1,101 @@
+hr {
+  margin: 10px 0px;
+}
+
+.item-box {
+  width: calc(15rem - 2rem);
+  border: 0.2px solid rgba(212, 212, 212, 0.404);
+  padding: 20px;
+}
+
+div.data-table .css-80pr5n-MuiPaper-root {
+  padding: 0rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: none;
+  border: 1px solid rgb(233, 233, 233);
+}
+
+div.data-table > div > div > table > thead > tr {
+  border-radius: 10px;
+}
+
+div.data-table > div > div > table > thead > tr {
+  box-shadow: none;
+}
+div.data-table > div > div > table > thead > tr > th {
+  border: 1px solid #e8e8e8;
+}
+
+div.data-table > div > div > table > thead > tr > th > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.p-0 > .css-80pr5n-MuiPaper-root {
+  padding: 0px !important;
+}
+
+div.data-table .css-80pr5n-MuiPaper-root > .MuiToolbar-dense > .css-sq9qdz {
+  border-bottom: 1px solid #eeeeee;
+  margin-bottom: 24px;
+}
+
+div.text-field > div,
+div.text-field {
+  height: 30px;
+}
+
+div.text-field > label {
+  font-size: 14px;
+  margin-top: -2px;
+}
+
+.text-field > div {
+  padding-right: 1px;
+  position: relative;
+  padding-left: 0px;
+}
+
+span.MuiLinearProgress-root {
+  display: none;
+}
+
+.date-picker > div {
+  width: 100%;
+}
+
+.date-picker > div > div {
+  height: 30px;
+}
+
+.date-picker > div > div > input {
+  font-size: 15px;
+}
+
+.date-picker-error > div > div {
+  /* border: 0.8px solid red; */
+}
+
+.date-picker-error > div > div > div > button > svg {
+  /* color: rgba(212, 5, 5, 0.815); */
+}
+
+.date-picker > div > div > div > button > svg {
+  font-size: 20px;
+}
+
+.mui-select > div {
+  height: 30px;
+}
+
+.mui-select > div > div {
+  font-size: 13px;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
