@@ -15,9 +15,10 @@ interface ModalProps {
     disableClose?: boolean,
     okLabel?: string,
     disableTitle?: boolean,
+    disableFooter?: boolean,
 }
 
-const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false }) => {
+const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false }) => {
     return (
         <Transition appear show={open} as={Fragment}>
             <Dialog as="div" className="relative z-[100] " onClose={onClose}>
@@ -57,15 +58,16 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                                     {children}
                                 </div>
 
-                                <div className="mt-4 flex justify-end">
-                                    <button
-                                        type="button"
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                        onClick={onClose}
-                                    >
-                                        {okLabel ? okLabel : 'Ok'}
-                                    </button>
-                                </div>
+                                {!disableFooter ? <>
+                                    <div className="mt-4 flex justify-end">
+                                        <button
+                                            type="button"
+                                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                            onClick={onClose}
+                                        >
+                                            {okLabel ? okLabel : 'Ok'}
+                                        </button>
+                                    </div></> : null}
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>

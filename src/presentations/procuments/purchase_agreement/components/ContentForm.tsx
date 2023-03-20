@@ -4,8 +4,6 @@ import MaterialReactTable from "material-react-table";
 import { Button } from "@mui/material";
 import MUITextField from '../../../../components/input/MUITextField'
 import { AiOutlineDelete } from "react-icons/ai";
-
-
 import { AiOutlineSetting } from "react-icons/ai";
 import ShippingType from "@/components/selectbox/ShippingType";
 import { currencyFormat } from "@/utilies";

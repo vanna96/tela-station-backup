@@ -9,7 +9,7 @@ export default function App() {
     return (
         <div className='h-full w-full flex '>
             <SideBar />
-            <div className='grow  rounded-lg bg-white shadow  overflow-auto'>
+            <div className='grow  rounded-lg shadow  overflow-auto'>
                 <Outlet />
             </div>
         </div>

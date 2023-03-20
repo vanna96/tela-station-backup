@@ -7,14 +7,14 @@ import InitializeData from "@/services/actions";
 
 
 function Owner(props: any) {
-    const { data, isLoading }: any = useQuery({ queryKey: ['owners'], queryFn: () => InitializeData.owner() })
+    // const { data, isLoading }: any = useQuery({ queryKey: ['owners'], queryFn: () => InitializeData.owner() })
 
     return <MUISelect
         {...props}
-        items={data ?? []}
+        items={[]}
         aliaslabel="id"
         aliasvalue="name"
-        loading={isLoading.toString()}
+        loading={true}
     />
 }
 

@@ -19,11 +19,12 @@ interface MUISelectProps<T = unknown> {
   aliasvalue?: string | undefined,
   aliaslabel?: string | undefined,
   onChange?: SelectInputProps<T>['onChange'],
+  name?: string | undefined
 }
 
 
 
-const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, value, defaultValue, className, aliasvalue, aliaslabel, onChange }: MUISelectProps) => {
+const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, value, defaultValue, className, aliasvalue, aliaslabel, onChange, name }: MUISelectProps) => {
   if (loading)
     return <div className="text-field">
       <OutlinedInput
@@ -48,6 +49,7 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
           value={value ?? ''}
           defaultValue={defaultValue ?? ''}
           className={`w-full ${className}`}
+          name={name}
           onChange={onChange}
         >
           {items ? (

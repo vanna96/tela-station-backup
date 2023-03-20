@@ -22,7 +22,7 @@ export default function SideBar() {
     const logout = () => navigate('/login')
 
     return (
-        <aside className={`${collapse ? 'min-w-[18rem] 2xl:min-w-[14rem] xl:min-w-[13rem] p-2 px-4 xl:px-2' : 'w-[4rem] px-2'} transition-min-width duration-300 flex flex-col gap-16  text-[#a8a6a6] py-8 relative z-20`}>
+        <aside className={`${collapse ? 'min-w-[18rem] 2xl:min-w-[14rem] xl:min-w-[13rem] p-2 px-4 xl:px-2' : 'w-[4rem] px-2'} bg-white shadow transition-min-width duration-300 flex flex-col gap-16  text-[#a8a6a6] py-8 relative z-20`}>
             <h1 className='text-2xl 2xl:text-xl xl:text-lg font-bold uppercase text-center text-stone-800 whitespace-nowrap overflow-hidden '>Tela App</h1>
             <div role='button' onClick={() => setCollapse(!collapse)} className={`p-[0.7rem] border rounded-full absolute  bg-white shadow  z-50`}><IoChevronForwardSharp className={`${collapse ? '' : 'rotate-180'} duration-300 `} /></div>
 
@@ -57,12 +57,12 @@ export function NavButton(props: NavButtonProps) {
     return (
         <div role="button"
             onClick={props.onClick}
-            className={`flex ${props.collapse ? 'px-10 2xl:px-4' : 'pl-[0.9rem]'} ${location.pathname?.split('/')[1] === props.route ? 'bg-white shadow  text-slate-900' : ''}  transition-all duration-300  p-[0.6rem] hover:bg-white hover:shadow-sm hover:text-stone-900 rounded-lg text-center items-center gap-4 `}
+            className={`flex ${props.collapse ? 'px-10 2xl:px-4' : 'pl-[0.9rem]'} ${location.pathname?.split('/')[1] === props.route ? ' bg-blue-400 shadow  text-white' : ''}  transition-all duration-300  p-[0.6rem] hover:bg-blue-400 hover:shadow-sm hover:text-white rounded-lg text-center items-center gap-4 `}
         >
-            <span className={`${location.pathname?.split('/')[1] === props.route ? 'text-blue-500' : ''} text-xl font-extrabold`}>
+            <span className={`${location.pathname?.split('/')[1] === props.route ? 'text-white' : ''} text-xl font-extrabold`}>
                 {props.icon}
             </span>
-            {props.collapse ? <span className={location.pathname?.split('/')[1] === props.route ? 'text-blue-400' : ''} >{props.title}</span> : null}
+            {props.collapse ? <span className={location.pathname?.split('/')[1] === props.route ? 'text-white' : ''} >{props.title}</span> : null}
         </div>
     )
 }
