@@ -7,11 +7,12 @@ import PurchaseAgreementLists from '../presentations/procuments/purchase_agreeme
 import PurchaseAgreementDetail from '../presentations/procuments/purchase_agreement/page/PurchaseAgreementDetail';
 import Form from '@/presentations/procuments/purchase_agreement/page/PurchaseAgreementForm';
 import PurchaseAgreementForm from '@/presentations/procuments/purchase_agreement/page/PurchaseAgreementForm';
+import ProcumentPage from '@/presentations/procuments';
 
 export default function ProcumentRoute() {
     return (
         <Routes>
-            <Route path='/' element={<span>procuments</span>} />
+            <Route index element={<ProcumentPage />} />
             <Route path='/purchase-agreement' >
                 <Route index element={<PurchaseAgreementLists />} />
                 <Route path=':id' element={<PurchaseAgreementDetail />} />
