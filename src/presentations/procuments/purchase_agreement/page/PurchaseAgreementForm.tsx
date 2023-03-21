@@ -7,7 +7,9 @@ import ContentForm from '../components/ContentForm';
 import { LoadingButton } from '@mui/lab';
 import { FormEventHandler } from 'react';
 import AttachmentForm from '../components/AttachmentForm';
-
+import { CoreFormDocumentState } from '../../../../components/core/CoreFormDocument';
+import DocumentSerieRepository from '@/services/actions/documentSerie';
+import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 
 class PurchaseAgreementForm extends CoreFormDocument {
 
@@ -20,7 +22,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
             status: 'D',
             renewal: false,
 
-        } as any
+        } as any;
 
 
         this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
@@ -29,6 +31,14 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
     componentDidMount(): void {
+
+        DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie).then((res: any) => {
+            this.setState({ ...this.state, series: res, })
+        });
+
+        DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie).then((res: any) => {
+            this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber, isLoadingSerie: false })
+        });
     }
 
     handlerRemoveItem(code: string) {
@@ -55,8 +65,6 @@ class PurchaseAgreementForm extends CoreFormDocument {
         console.log(formData)
         console.log(this.state)
     }
-
-
 
 
     FormRender = () => {

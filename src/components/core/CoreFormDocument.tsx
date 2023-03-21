@@ -11,12 +11,13 @@ import BackButton from '../button/BackButton';
 import Project from '@/models/Project';
 import Item from '@/models/Item';
 
-interface CoreFormDocumentState {
+export interface CoreFormDocumentState {
     collapse: boolean,
     isOpenItem: boolean,
     isOpenVendor: boolean,
     isOpenAccount: boolean,
     isOpenProject: boolean,
+    isLoadingSerie: boolean,
     renewal: boolean,
     cardCode?: string | undefined | null,
     cardName?: string | undefined | null,
@@ -39,7 +40,10 @@ interface CoreFormDocumentState {
     contactPersonList?: any[],
     items?: any[],
     services?: any[],
-    attachments?: any[]
+    attachments?: any[],
+    series: any[],
+    serie: any,
+    docNum: any
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -74,6 +78,10 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             currency: '',
             renewal: false,
             items: [],
+            series: [],
+            serie: 0,
+            docNum: '',
+            isLoadingSerie: true,
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -208,14 +216,19 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             project: record.code,
             isOpenProject: false,
         });
-
-        console.log(this.state.project)
     }
 
 
     protected handlerChange(key: string, value: any) {
         let temps: any = { ...this.state };
         temps[key] = value;
+
+        if (key === 'serie') {
+            const document = this.state.series.find((e: any) => e.Series === value);
+            console.log(document?.NextNumber)
+            temps['docNum'] = document?.NextNumber;
+        }
+
         this.setState(temps)
     }
 }

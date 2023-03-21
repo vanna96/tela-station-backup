@@ -3,8 +3,13 @@ import PurchaseAgreement from '../../models/PurchaseAgreement';
 import request from '../../utilies/request';
 
 export default class PurchaseAgreementRepository extends Repository<PurchaseAgreement> {
+    
     url: string = '/BlanketAgreements';
     
+    public static documentSerie = {
+        Document: "1250000025",
+        DocumentSubType: "S"
+    }
     
     async get<T>(query?: string): Promise<T[]> {
         const response: any = await request('GET', this.url).then((res: any) => {
@@ -15,6 +20,10 @@ export default class PurchaseAgreementRepository extends Repository<PurchaseAgre
         });
 
         return response;
+    }
+
+    async find<T>(query?: string | undefined): Promise<T> {
+        throw new Error('Method not implemented.');
     }
 
 

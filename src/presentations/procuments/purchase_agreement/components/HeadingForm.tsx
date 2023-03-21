@@ -13,6 +13,8 @@ export interface IHeadingFormProps {
 }
 
 export default function HeadingForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject }: IHeadingFormProps) {
+
+
     return (
         <>
             <FormCard title='Information'>
@@ -68,12 +70,15 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                         </label>
                         <div className="grid grid-cols-2 gap-3">
                             <MUISelect
-                                items={[]}
+                                items={data.series ?? []}
                                 aliasvalue="Series"
                                 aliaslabel="Name"
                                 name="Series"
+                                loading={data?.isLoadingSerie}
+                                value={data?.serie}
+                                onChange={(e: any) => handlerChange('serie', e.target.value)}
                             />
-                            <TextField size="small" name="DocNum" placeholder='Document No' fullWidth className="w-full text-field" />
+                            <TextField size="small" name="DocNum" key={data?.docNum} defaultValue={data?.docNum} disabled={data?.isLoadingSerie} placeholder='Document No' fullWidth className="w-full text-field" />
                         </div>
                     </div>
 
