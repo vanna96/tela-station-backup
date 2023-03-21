@@ -2,16 +2,16 @@ import Model from './Model';
 
 
 export default class ItemGroup extends Model {
-    id: number;
-    name: string;
+    id: number | undefined;
+    name: string | undefined;
     itemGroupWwarehouseInfos: any[];
 
 
     constructor(json: any) {
         super()
 
-        this.id = json['Number']
-        this.name = json['GroupName']
+        this.id = json['Number'] ?? ''
+        this.name = json['GroupName'] ?? ''
         this.itemGroupWwarehouseInfos = json['ItemGroupsWarehouseInfos']
     } 
 

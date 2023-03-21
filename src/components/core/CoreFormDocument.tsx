@@ -48,7 +48,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         super(props);
 
         this.state = {
-            collapse: false,
+            collapse: true,
             cardCode: '',
             cardName: '',
             contactPersonCode: undefined,
@@ -91,6 +91,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type='customer' />
                 <GLAccountModal open={this.state.isOpenAccount} onClose={() => this.handlerCloseAccount()} />
                 <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
+
                 <div className='bg-gray-100 flex flex-col  w-full h-full p-4 relative'>
                     <div className="rounded-lg px-6 py-4 flex items-center justify-between gap-3 sticky border-b top-2 backdrop-blur-md bg-white shadow-sm xl:text-sm font-bold z-20">
                         <div className="flex gap-3 items-center">
@@ -125,10 +126,15 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                         </div>
                     </div>
 
+
+
+
                     <div className={`grow flex flex-col gap-4 w-full ${this.state.collapse ? '' : 'mt-4'}`}>
                         <this.FormRender />
                         <div className='mt-4'></div>
                     </div>
+
+
                 </div>
             </>
         );

@@ -2,10 +2,10 @@ import Model from './Model';
 
 
 export default class UnitOfMeasurement extends Model {
-    id: number;
-    code: string;
-    name: string;
-    baseUoM?: number;
+    id: number  | undefined;
+    code: string | undefined;
+    name: string | undefined;
+    baseUoM?: number | undefined;
     collections?: [];
 
 

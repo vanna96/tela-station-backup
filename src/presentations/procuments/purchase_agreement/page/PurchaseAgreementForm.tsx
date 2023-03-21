@@ -4,6 +4,9 @@ import GeneralForm from "../components/GeneralForm";
 import HeadingForm from "../components/HeadingForm";
 import { withRouter } from '@/routes/withRouter';
 import ContentForm from '../components/ContentForm';
+import { LoadingButton } from '@mui/lab';
+import { FormEventHandler } from 'react';
+import AttachmentForm from '../components/AttachmentForm';
 
 
 class PurchaseAgreementForm extends CoreFormDocument {
@@ -22,6 +25,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
         this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
         this.handlerAddItem = this.handlerAddItem.bind(this);
+        this.handlerSubmit = this.handlerSubmit.bind(this);
     }
 
     componentDidMount(): void {
@@ -44,12 +48,21 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
 
+    handlerSubmit(event: any) {
+        event.preventDefault();
+        const form = new FormData(event.target);
+        const formData = Object.fromEntries(form.entries());
+        console.log(formData)
+        console.log(this.state)
+    }
+
+
 
 
     FormRender = () => {
 
         return <>
-            <form className='flex flex-col gap-4'>
+            <form onSubmit={this.handlerSubmit} className='flex flex-col gap-4'>
                 <HeadingForm
                     data={this.state}
                     handlerOpenVendor={() => {
@@ -68,6 +81,21 @@ class PurchaseAgreementForm extends CoreFormDocument {
                     handlerRemoveItem={this.handlerRemoveItem}
                     handlerChangeItem={this.handlerAddItem}
                 />
+
+                <AttachmentForm />
+
+                <div className="sticky w-full bottom-4  mt-2">
+                    <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
+                        <div className="flex ">
+                            <LoadingButton size="small" sx={{ height: '25px' }} variant="contained" disableElevation><span className="px-3 text-[11px] py-1">Copy To</span></LoadingButton>
+                        </div>
+                        <div className="flex items-center">
+                            <LoadingButton type="submit" sx={{ height: '25px' }} className='bg-white' loading={false} size="small" variant="contained" disableElevation>
+                                <span className="px-3 text-[11px] py-1">Save & New</span>
+                            </LoadingButton>
+                        </div>
+                    </div>
+                </div>
             </form>
         </>
     }

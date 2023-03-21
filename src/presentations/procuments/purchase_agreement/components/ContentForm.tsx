@@ -163,7 +163,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => {
                     return <ShippingType
                         value={cell.getValue()}
-                        onBlur={(event: any) => handlerChangeInput(event, cell?.row?.original, 'ShppingType')}
+                        onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'ShppingType')}
                     />;
                 },
             },
@@ -181,7 +181,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
         []
     );
 
-    const [colVisibility, setColVisibility] = React.useState({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
+    const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
 
     return (
         <FormCard title="Content" >
@@ -221,10 +221,6 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                             <Button variant="outlined" size="small"
                                 onClick={handlerAddItem}
                             ><span className="text-xs  capitalize font-normal">+ Add New</span></Button>
-                            {/* <Button variant="outlined" size="small"
-                        onClick={handlerAddItem}
-                        color="error"
-                    ><span className="text-xs">Remove All</span></Button> */}
                         </div>
                     }}
                 />

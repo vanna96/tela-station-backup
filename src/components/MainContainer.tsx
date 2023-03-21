@@ -15,7 +15,7 @@ export default function MainContainer({ title, children }: MainContainer) {
                     <hr className='my-4' />
                 </div>
                 {/* <div className='grid grid-cols-5 gap-6 mb-10'> */}
-                <div className='grid grid-cols-5 xl:grid-cols-5 gap-6 xl:gap-3 mb-10'>
+                <div className='grid grid-cols-5 xl:grid-cols-5 gap-6 xl:gap-3 lg:grid-cols-3 sm:grid-cols-2 mb-10'>
                     {children}
                 </div>
                 <div className="h-[6rem]"></div>

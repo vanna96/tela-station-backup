@@ -26,7 +26,7 @@ export default function Login() {
 
       console.log(response);
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
-      // navigate("/");
+      navigate("/");
     } catch (e: any) {
       setMessage(e?.message)
     } finally {

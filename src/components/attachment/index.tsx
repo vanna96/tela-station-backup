@@ -1,14 +1,11 @@
 import React from 'react'
-import { IoChevronForwardSharp } from "react-icons/io5";
 import MaterialReactTable from "material-react-table";
 import moment from 'moment'
 import { AiOutlineDelete, AiOutlineEye, AiOutlineDownload } from "react-icons/ai";
-
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import { fileToBase64 } from '../../../../utilies/index';
 import FormCard from '@/components/card/FormCard';
-import { Button } from '@mui/material';
+import { fileToBase64 } from '@/utilies';
 
 
 const style = {
@@ -44,7 +41,6 @@ export function PreviewImage({ open, close, base64Image }: any) {
 
 
 export default function AttachmentForm() {
-    const [collapse, setCollapse] = React.useState(true);
     const [data, setData] = React.useState<any>([]);
     const [preview, setPreview] = React.useState(false);
     const [image, setImage] = React.useState('');
