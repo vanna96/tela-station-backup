@@ -2,7 +2,7 @@ import { QueryFunction, UseQueryResult, useQuery, } from "react-query";
 import request from "./request";
 
 
-export const useQueryHook = (key: string, queryFn:  void) : UseQueryResult => useQuery({
+export const useQueryHook = (key: string, queryFn:  Promise<any>) : UseQueryResult => useQuery({
       queryKey: [key],
         queryFn: () => queryFn,
         staleTime: Infinity,

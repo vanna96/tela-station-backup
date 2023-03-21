@@ -13,8 +13,11 @@ export default class Owner extends Model {
         this.name = `${json['FirstName']}, ${ json['LastName']} `
     }
     
-    toJson(update: boolean) {
-        throw new Error('Method not implemented.');
+    toJson(update?: boolean) {
+        return {
+            id: this.id,
+            name: this.name,
+        }
     }
 
 }

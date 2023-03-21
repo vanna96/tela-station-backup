@@ -1,40 +1,23 @@
-import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom';
-import PurchaseAgreement from '../../../../models/PurchaseAgreement';
+import { withRouter } from '@/routes/withRouter';
+import React, { Component } from 'react'
+import { useParams } from 'react-router-dom';
 
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
-import Modal from '../../../../components/modal/Modal';
-import ItemModal from '../../../../components/modal/ItemModal';
-import Button from '@mui/material/Button';
+class PurchaseAgreementDetail extends Component<any, any> {
 
-
-export default function PurchaseAgreementDetail() {
-
-    const location = useLocation();
-    const [purchaseAgreement, setPurchaseAgreement] = useState<PurchaseAgreement>();
-
-    React.useEffect(() => {
-        setPurchaseAgreement(location.state)
-    }, [])
-
-    let [isOpen, setIsOpen] = useState(false)
-
-    function closeModal() {
-        setIsOpen(false)
-    }
-
-    function openModal() {
-        setIsOpen(true)
+    constructor(props: any) {
+        super(props);
     }
 
 
-    const ref = React.useRef<HTMLIFrameElement>(null);
+    componentDidMount(): void {
+        const { id } = this.props.match.params;
+    }
 
-    return (
-        <>
-            <ItemModal open={isOpen} onClose={closeModal} />
-        </>
-    )
+    render() {
+        return (
+            <div>PurchaseAgreementDetail</div>
+        )
+    }
 }
 
+export default withRouter(PurchaseAgreementDetail)

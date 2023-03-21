@@ -20,10 +20,11 @@ interface MUITextFieldProps {
     disabled?: boolean,
     startAdornment?: any,
     type?: string,
+    endAdornment?: boolean,
 }
 
 
-const MUITextField: FC<MUITextFieldProps> = ({ error, label, name, size, onChange, onClick, value, defaultValue, onBlur, disabled, startAdornment, type }: MUITextFieldProps) => {
+const MUITextField: FC<MUITextFieldProps> = ({ error, label, name, size, onChange, onClick, value, defaultValue, onBlur, disabled, startAdornment, type, endAdornment = false }: MUITextFieldProps) => {
     return <>
         <FormControl fullWidth error={error}>
             <div className="flex flex-col gap-1 text-sm">
@@ -44,7 +45,7 @@ const MUITextField: FC<MUITextFieldProps> = ({ error, label, name, size, onChang
                         disabled={disabled}
                         type={type}
                         startAdornment={startAdornment ? <span className="text-[13px] px-2 pr-4 mr-3 bg-gray-100 overflow-hidden border-r ">{startAdornment}</span> : null}
-                        endAdornment={onClick ?
+                        endAdornment={endAdornment ?
                             <InputAdornment position="end">
                                 <IconButton
                                     // aria-label="toggle password visibility"

@@ -7,6 +7,7 @@ import Alert from '@mui/material/Alert';
 import request from '../../../utilies/request';
 import AuthLogin from '../../../models/AuthLogin';
 import InitializeData from '../../../services/actions';
+import { setItemToLocal } from '@/utilies';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -42,11 +43,13 @@ export default function Login() {
   //     InitializeData.branches(),
   //     InitializeData.department(),
   //     InitializeData.factoringIndicator(),
-  //     InitializeData.owner(),
+  //     // InitializeData.owner(),
   //     InitializeData.paymentTermType(),
   //     InitializeData.vatGroups(),
-  //   ]).then((res: any) => {
-  //     console.log(res)
+  //     InitializeData.listItemGroup(),
+  //   ]).then((res: any[]) => {
+  //     const lists = ['shippingType', 'uom', 'branch', 'department', '']
+  //     // setItemToLocal('',res);
   //   }).finally(() => setLoading(false))
   // }
 

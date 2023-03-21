@@ -8,25 +8,27 @@ import { AiOutlineSetting } from "react-icons/ai";
 import ShippingType from "@/components/selectbox/ShippingType";
 import { currencyFormat } from "@/utilies";
 import ItemModal from "@/components/modal/ItemModal";
+import FormCard from "@/components/card/FormCard";
+import Formular from "@/utilies/formular";
 
 
-export default function ContentForm({ formData, setFormData, setItems, items }: any) {
-    const [collapse, setCollapse] = React.useState(true);
-    const [showModal, setShowModal] = React.useState(false);
+interface ContentFormProps {
+    handlerAddItem: () => void,
+    handlerChangeItem: (record: any) => void,
+    handlerRemoveItem: (record: string) => void,
+    data: any,
+}
 
+
+export default function ContentForm({ data, handlerChangeItem, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
     const [tableKey, setTableKey] = React.useState(Date.now())
 
     const handlerChangeInput = (event: any, row: any, field: any) => {
-        const newArr = [...items];
-        const index = newArr.indexOf(row);
-        newArr[index][field] = event.target.value;
-        setTableKey(Date.now())
+        handlerChangeItem({ value: event.target.value, record: row, field })
     }
 
     const handlerRemoveRow = (row: any) => {
-        const temps = [...items];
-        const newArr = temps.filter((e) => e.key != row.key);
-        setItems([...newArr]);
+        handlerRemoveItem(row.ItemCode);
     }
 
     const itemColumns = React.useMemo(
@@ -54,13 +56,19 @@ export default function ContentForm({ formData, setFormData, setItems, items }: 
                     />;
                 },
             },
+
             {
                 accessorKey: "ItemName",
                 header: "Description",
                 Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />
             },
             {
-                accessorKey: "ItemGroupName",
+                accessorKey: "UoMGroupName",
+                header: "UoM Group",
+                Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
+            },
+            {
+                accessorKey: "ItemsGroupName",
                 header: "Item Group",
                 Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
             },
@@ -91,14 +99,16 @@ export default function ContentForm({ formData, setFormData, setItems, items }: 
                 accessorKey: "Total",
                 header: "Total",
                 Cell: ({ cell }: any) => {
+
+                    console.log(cell.row.original.UnitPrice)
                     return <MUITextField
                         startAdornment={'USD'}
-                        defaultValue={parseFloat(cell.row.original.UnitPrice ?? 0) * parseFloat(cell.row.original.Quantity ?? 0)}
+                        value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
                     />;
                 },
             },
         ],
-        [items]
+        []
     );
 
     const serviceColumns = React.useMemo(
@@ -153,7 +163,7 @@ export default function ContentForm({ formData, setFormData, setItems, items }: 
                 Cell: ({ cell }: any) => {
                     return <ShippingType
                         value={cell.getValue()}
-                        onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'ShppingType')}
+                        onBlur={(event: any) => handlerChangeInput(event, cell?.row?.original, 'ShppingType')}
                     />;
                 },
             },
@@ -168,64 +178,19 @@ export default function ContentForm({ formData, setFormData, setItems, items }: 
                 },
             },
         ],
-        [items]
+        []
     );
 
-    const [colVisibility, setColVisibility] = React.useState({ Total: false, ItemGroupName: false })
-
-    const handlerClose = () => setShowModal(false);
-    const handlerSelectItem = (records: any) => {
-        let temps = [...items];
-        records.forEach((e: any) => {
-            let row = items.find((old: any) => old?.ItemCode === e?.ItemCode);
-
-            if (!row) {
-                let item = e;
-                item['key'] = Date.now().toString();
-                temps.push(e);
-            }
-        });
-
-        setItems(temps)
-    }
-    const handlerAddItem = () => setShowModal(true);
-
+    const [colVisibility, setColVisibility] = React.useState({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
 
     return (
-        <div className="flex flex-col gap-4 bg-white rounded-lg p-4 pb-8 shadow">
-            <div
-                role="button"
-                className="font-bold text-xl flex justify-between items-center p-2 px-4 rounded hover:bg-gray-100"
-                onClick={() => setCollapse(!collapse)}
-            >
-                <h2>Content</h2>
-                <div
-                    role="button"
-                    className={`${collapse ? "rotate-90" : "rotate-0"
-                        }  rounded-full  duration-150 `}
-                >
-                    <IoChevronForwardSharp />
-                </div>
-            </div>
-            <hr />
-
-            <ItemModal open={showModal} onClose={handlerClose} />
-
-            <div
-                className={`w-full rounded-lg px-4 ${collapse ? "" : "h-[0rem]"
-                    } overflow-hidden transition-height duration-300 data-table p-0 flex flex-col gap-3`}
-            >
-                <div className="grid grid-cols-2">
-                    <div className="w-full flex items-center gap-3">
-                    </div>
-                    <div className="flex justify-end">
-                    </div>
-                </div>
-
+        <FormCard title="Content" >
+            <div className="col-span-2 data-table">
                 <MaterialReactTable
                     key={tableKey}
-                    columns={formData?.AgreementMethod === 'M' ? serviceColumns : itemColumns}
-                    data={items}
+                    // columns={itemColumns}
+                    columns={data?.agreementMethod === 'M' ? serviceColumns : itemColumns}
+                    data={data.items ?? []}
                     enableStickyHeader={true}
                     enableColumnActions={false}
                     enableColumnFilters={false}
@@ -240,7 +205,7 @@ export default function ContentForm({ formData, setFormData, setItems, items }: 
                     enableFullScreenToggle={false}
                     enableGlobalFilter={false}
                     enableHiding={true}
-                    // onColumnVisibilityChange={setColVisibility}
+                    onColumnVisibilityChange={setColVisibility}
                     initialState={{
                         density: "compact",
                         columnVisibility: colVisibility
@@ -264,6 +229,6 @@ export default function ContentForm({ formData, setFormData, setItems, items }: 
                     }}
                 />
             </div>
-        </div>
+        </FormCard>
     );
 }

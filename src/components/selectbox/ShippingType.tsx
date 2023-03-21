@@ -1,14 +1,31 @@
 import { useMemo } from "react";
 import MUISelect from "./MUISelect";
+import { useQuery } from "react-query";
+import InitializeData from "@/services/actions";
+import { SelectInputProps } from "@mui/material/Select/SelectInput";
 
-function ShippingType(props: any) {
+interface ShippingTypeProps<T = unknown> {
+    name?: string,
+    defaultValue?: any,
+    value?: any,
+    onChange?: SelectInputProps<T>['onChange'],
+}
+
+
+function ShippingType(props: ShippingTypeProps) {
+
+    const { data, isLoading }: any = useQuery({
+        queryKey: ["shipping-types"],
+        queryFn: () => InitializeData.shippingType(),
+        staleTime: Infinity,
+    });
 
     return <MUISelect
         {...props}
         aliaslabel="Name"
         aliasvalue="Code"
-        loading={true}
-        items={[]}
+        loading={isLoading}
+        items={data}
     />
 }
 

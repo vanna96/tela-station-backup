@@ -51,6 +51,7 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
           className={`w-full ${className}`}
           name={name}
           onChange={onChange}
+          disabled={disabled}
         >
           {items ? (
             items?.map((e) => {

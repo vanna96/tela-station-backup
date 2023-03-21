@@ -4,17 +4,27 @@ import { useQueryHook } from "@/utilies/useQueryHook";
 import request from "@/utilies/request";
 import { useQuery } from "react-query";
 import InitializeData from "@/services/actions";
+import { SelectInputProps } from "@mui/material/Select/SelectInput";
 
 
-function Owner(props: any) {
-    // const { data, isLoading }: any = useQuery({ queryKey: ['owners'], queryFn: () => InitializeData.owner() })
+interface OwnerProps<T = unknown> {
+    name?: string,
+    defaultValue?: any,
+    value?: any,
+    onChange?: SelectInputProps<T>['onChange'],
+}
+
+
+
+function Owner(props: OwnerProps) {
+    const { data, isLoading }: any = useQuery({ queryKey: ['owners'], queryFn: () => InitializeData.owner() })
 
     return <MUISelect
         {...props}
-        items={[]}
-        aliaslabel="id"
-        aliasvalue="name"
-        loading={true}
+        items={data ?? []}
+        aliaslabel="name"
+        aliasvalue="id"
+        loading={isLoading}
     />
 }
 

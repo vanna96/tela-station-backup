@@ -36,12 +36,14 @@ export default class BusinessPartner extends Model {
     bpAddress?: BPAddress[];
     contactEmployee?: ContactEmployee[];
     bpPaymentMethod?: [];
+    internalCode?: number;
 
     constructor (json: any) {
         super();
 
         this.cardCode = json['CardCode'];
-        this.cardName = json['CardName'];
+        this.cardCode = json['CardCode'];
+        this.internalCode = json['InternalCode'];
         this.cardType = json['CardType'];
         this.groupCode = json['GroupCode'];
         this.address = json['Address'];

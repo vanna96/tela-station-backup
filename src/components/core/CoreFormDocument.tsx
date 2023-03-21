@@ -3,18 +3,32 @@ import React from 'react'
 import { FaArrowLeft } from "react-icons/fa";
 import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
 import VendorModal from '../modal/VendorModal';
+import GLAccountModal from '../modal/GLAccountModal';
+import ProjectModal from '../modal/ProjectModal';
+import BusinessPartner from '../../models/BusinessParter';
+import { useNavigate, useParams } from 'react-router-dom';
+import BackButton from '../button/BackButton';
+import Project from '@/models/Project';
+import Item from '@/models/Item';
 
 interface CoreFormDocumentState {
     collapse: boolean,
     isOpenItem: boolean,
     isOpenVendor: boolean,
+    isOpenAccount: boolean,
+    isOpenProject: boolean,
+    renewal: boolean,
     cardCode?: string | undefined | null,
     cardName?: string | undefined | null,
-    contactPersonCode?: string | undefined | null,
+    contactPersonCode?: number | undefined | null,
     phone?: string | undefined | null,
     email?: string | undefined | null,
     owner?: string | undefined | null,
     buyer?: string | undefined | null,
+    shippingType?: number | undefined | null,
+    paymentTermType?: string | undefined | null,
+    paymentMethod?: string | undefined | null,
+    currency?: string | undefined | null,
     vendorRef?: string | undefined | null,
     documentStatus?: string | undefined | null,
     remark?: string | undefined | null,
@@ -37,7 +51,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             collapse: false,
             cardCode: '',
             cardName: '',
-            contactPersonCode: '',
+            contactPersonCode: undefined,
             contactPersonList: [],
             phone: '',
             email: '',
@@ -52,21 +66,36 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             project: '',
             isOpenItem: false,
             isOpenVendor: false,
+            isOpenAccount: false,
+            isOpenProject: false,
+            shippingType: undefined,
+            paymentMethod: '',
+            paymentTermType: '',
+            currency: '',
+            renewal: false,
+            items: [],
         }
-    }
 
+        this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
+        this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
+        this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
+    }
 
     abstract FormRender(): JSX.Element;
 
     render() {
+
         return (
             <>
-                <ItemModal open={this.state.isOpenItem} onClose={() => this.handlerCloseItem()} />
-                <VendorModal open={this.state.isOpenVendor} onClose={() => this.handlerCloseVendor()} type='customer'  />
+                <ItemModal open={this.state.isOpenItem} onClose={() => this.handlerCloseItem()} type='purchase' onOk={this.handlerConfirmItem} />
+                <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type='customer' />
+                <GLAccountModal open={this.state.isOpenAccount} onClose={() => this.handlerCloseAccount()} />
+                <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
                 <div className='bg-gray-100 flex flex-col  w-full h-full p-4 relative'>
                     <div className="rounded-lg px-6 py-4 flex items-center justify-between gap-3 sticky border-b top-2 backdrop-blur-md bg-white shadow-sm xl:text-sm font-bold z-20">
                         <div className="flex gap-3 items-center">
-                            <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3 "><FaArrowLeft /></div>
+                            {/* <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3"><FaArrowLeft /></div> */}
+                            <BackButton />
                             <div>Purchase Agreement</div>
                         </div>
 
@@ -114,8 +143,31 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.setState({ ...this.state, isOpenItem: true })
     }
 
+    protected handlerConfirmItem(data: any[]) {
+        this.setState({ ...this.state, isOpenItem: false, items: [...data] })
+    }
+
     private handlerCloseItem() {
-        this.setState({ ...this.state, isOpenItem: false })
+        // this.setState({ ...this.state, isOpenItem: false })
+    }
+
+    // handler vendor 
+    protected handlerConfirmVendor(record: BusinessPartner) {
+        this.setState({
+            ...this.state,
+            cardCode: record.cardCode,
+            cardName: record.cardName,
+            contactPersonCode: record.contactEmployee!.length > 0 ? record.contactEmployee![0].id : undefined,
+            contactPersonList: record.contactEmployee,
+            email: record.email,
+            phone: record.phone,
+            shippingType: record.shippingType,
+            paymentTermType: record.paymentTermTypeCode,
+            paymentMethod: record.paymentMethod,
+            isOpenProject: false,
+            isOpenVendor: false,
+            currency: record.currency,
+        });
     }
 
     protected handlerOpenVendor() {
@@ -123,7 +175,41 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     }
 
     private handlerCloseVendor() {
-        this.setState({ ...this.state, isOpenVendor: false })
+        // this.setState({ ...this.state, isOpenVendor: false })
     }
 
+    // List Account modal
+    protected handlerOpenAccount() {
+        this.setState({ ...this.state, isOpenAccount: true })
+    }
+
+    private handlerCloseAccount() {
+        this.setState({ ...this.state, isOpenAccount: false })
+    }
+
+    // List Project modal
+    protected handlerOpenProject() {
+        this.setState({ ...this.state, isOpenProject: true })
+    }
+
+    private handlerCloseProject() {
+        // this.setState({ ...this.state, isOpenProject: false })
+    }
+
+    protected handlerConfirmProject(record: Project) {
+        this.setState({
+            ...this.state,
+            project: record.code,
+            isOpenProject: false,
+        });
+
+        console.log(this.state.project)
+    }
+
+
+    protected handlerChange(key: string, value: any) {
+        let temps: any = { ...this.state };
+        temps[key] = value;
+        this.setState(temps)
+    }
 }

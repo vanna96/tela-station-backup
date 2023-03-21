@@ -2,6 +2,7 @@ import { getItemFromLocal } from "../../utilies";
 import request from '@/utilies/request';
 import ShippingType from "@/models/ShippingType";
 import Owner from "@/models/Owner";
+import GLAccount from "@/models/GLAccount";
 
 
 
@@ -10,15 +11,15 @@ export default class InitializeData {
     constructor() {
     }
 
-    public static async shippingType() : Promise<ShippingType[]> {
+    public static async shippingType(): Promise<any[]> {
 
         const response: any = await request('GET', '/ShippingTypes?$select=Code,Name&$orderby=Name asc');
         if (!response?.data) return [];
 
-        return response.data.value?.map((e:any) => new ShippingType(e));
+        return response.data.value;
     }
 
-    public static async unitOfMeasurement() : Promise<any> {
+    public static async unitOfMeasurement(): Promise<any> {
         const response: any = await request('GET', '/UnitOfMeasurementGroups?$select=AbsEntry,Code,Name,BaseUoM');
 
         if (!response?.data) return [];
@@ -26,23 +27,22 @@ export default class InitializeData {
         return response.data.value;
     }
 
-    public static async paymentTermType() : Promise<any> {
-        const response: any = await request('GET', '/PaymentTermsTypes');
+    public static async paymentTermType(): Promise<any[]> {
+        const response: any = await request('GET', '/PaymentTermsTypes?$select=GroupNumber,PaymentTermsGroupName');
 
-        if (!response?.data) return [];
+        if (!response?.data) throw new Error("No data");
 
         return response.data.value;
     }
 
-    public static async vatGroups() : Promise<any> {
+    public static async vatGroups(): Promise<any> {
         const response: any = await request('GET', '/VatGroups');
 
         if (!response?.data) return [];
-
         return response.data.value;
     }
 
-    public static async branches() : Promise<any> {
+    public static async branches(): Promise<any> {
         const response: any = await request('GET', '/Branches');
 
         if (!response?.data) return [];
@@ -50,7 +50,7 @@ export default class InitializeData {
         return response.data.value;
     }
 
-    public static async department() : Promise<any> {
+    public static async department(): Promise<any> {
         const response: any = await request('GET', '/Departments');
 
         if (!response?.data) return [];
@@ -58,19 +58,51 @@ export default class InitializeData {
         return response.data.value;
     }
 
-    public static async owner() : Promise<Owner[]> {
+    public static async owner(): Promise<Owner[]> {
         const response: any = await request('GET', '/EmployeesInfo?$filter=ApplicationUserID ne null&$select=EmployeeID,FirstName,LastName');
 
         if (!response?.data) return [];
 
-        return response.data.value?.map((e: any) => new Owner(e));
+        return response.data.value?.map((e: any) => new Owner(e).toJson());
     }
 
-    public static async factoringIndicator() : Promise<any> {
+    public static async factoringIndicator(): Promise<any> {
         const response: any = await request('GET', '/FactoringIndicators');
 
         if (!response?.data) return [];
 
         return response.data.value;
+    }
+
+    public static async listOfAccounts(): Promise<any[]> {
+        const response: any = await request('GET', '/ChartOfAccounts?$select=Code,Name');
+
+        if (!response?.data) return [];
+
+        return response.data.value;
+    }
+
+    public static async listOfProjects(): Promise<any[]> {
+        const response: any = await request('GET', "/Projects?$filter=Active eq 'tYES' ");
+
+        if (!response?.data) return [];
+
+        return response.data.value;
+    }
+
+    public static async listPaymentMethod(): Promise<any[]> {
+        const response: any = await request('GET', "/WizardPaymentMethods?$select=Type, PaymentMethodCode,Description");
+
+        if (!response?.data) return [];
+
+        return response.data.value;
+    }
+
+    public static async listItemGroup(): Promise<[]> {
+        const response: any = await request('GET', '/ItemGroups?$select=GroupName,Number,ItemGroupsWarehouseInfos');
+
+        if (!response?.data) return [];
+
+        return response.data.value as [];
     }
 }

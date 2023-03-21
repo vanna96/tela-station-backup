@@ -7,6 +7,7 @@ type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 interface ModalProps {
     open: boolean,
     onClose: () => void,
+    onOk?: () => void,
     size?: ModalSize;
     widthClass?: string,
     heightClass?: string,
@@ -18,7 +19,7 @@ interface ModalProps {
     disableFooter?: boolean,
 }
 
-const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false }) => {
+const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false , onOk}) => {
     return (
         <Transition appear show={open} as={Fragment}>
             <Dialog as="div" className="relative z-[100] " onClose={onClose}>
@@ -63,7 +64,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                                         <button
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={onClose}
+                                            onClick={onOk}
                                         >
                                             {okLabel ? okLabel : 'Ok'}
                                         </button>

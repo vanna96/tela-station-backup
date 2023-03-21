@@ -124,17 +124,19 @@ import { useQuery } from 'react-query';
 import request from '../../utilies/request';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import { currencyFormat } from '../../utilies/index';
+import BusinessPartner from '../../models/BusinessParter';
 
 type VendorModalType = 'supplier' | 'customer';
 
 interface VendorModalProps {
   open: boolean,
   onClose: () => void,
+  onOk: (vendor: BusinessPartner) => void
   type: VendorModalType,
 }
 
 
-const VendorModal: FC<VendorModalProps> = ({ open, onClose, }) => {
+const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk }) => {
   const { data, isLoading }: any = useQuery({
     queryKey: ["venders"],
     queryFn: () => new BusinessPartnerRepository().get(),
@@ -146,8 +148,6 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, }) => {
     pageSize: 8,
   });
 
-  const handlerConfirm = () => {
-  }
 
   const [rowSelection, setRowSelection] = React.useState({});
   const columns = React.useMemo(
@@ -175,9 +175,6 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, }) => {
     []
   );
 
-  console.log(data);
-
-
   return (
     <Modal
       open={open}
@@ -197,21 +194,26 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, }) => {
           enableTopToolbar={true}
           enableDensityToggle={false}
           initialState={{ density: "compact" }}
-          enableRowSelection={true}
+          // enableRowSelection={true}
           onPaginationChange={setPagination}
-          onRowSelectionChange={setRowSelection}
+          // onRowSelectionChange={setRowSelection}
           getRowId={(row: any) => row.ItemCode}
-          enableSelectAll={true}
+          enableSelectAll={false}
           enableFullScreenToggle={false}
           enableColumnVirtualization={false}
-          positionToolbarAlertBanner="bottom"
+          enableMultiRowSelection={false}
+          positionToolbarAlertBanner="none"
           muiTablePaginationProps={{
             rowsPerPageOptions: [5, 8, 15],
             showFirstButton: false,
             showLastButton: false,
           }}
           muiTableBodyRowProps={({ row }) => ({
-            onClick: row.getToggleSelectedHandler(),
+            // onClick: row.getToggleSelectedHandler(),
+            onClick: () => {
+              onOk(new BusinessPartner(row.original));
+              onClose()
+            },
             sx: { cursor: 'pointer' },
           })}
           state={
