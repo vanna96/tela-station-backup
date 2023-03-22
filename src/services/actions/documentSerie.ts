@@ -16,7 +16,7 @@ export default class DocumentSerieRepository {
         };
 
         const response = await request('POST', `/SeriesService_GetDocumentSeries?$filter=${this.filter.join(' and ')}&$select=${this.query.join(',')}`, payload)
-            .then((res: any) => res?.data?.value?.filter((e:any) => e?.Locked === 'tNO' && e?.PeriodIndicator === 'Default'))
+            .then((res: any) => res?.data?.value?.filter((e:any) => e?.Locked === 'tNO' ))
 
 
         return response;

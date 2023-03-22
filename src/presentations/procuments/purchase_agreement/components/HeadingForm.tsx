@@ -107,7 +107,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 Start Date
                             </label>
                             <div className="">
-                                <MUIDatePicker />
+                                <MUIDatePicker value={data.startDate} onChange={(e: any) => handlerChange('startDate', e)} />
                             </div>
                         </div>
 
@@ -116,7 +116,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 End Date
                             </label>
                             <div className="">
-                                <MUIDatePicker />
+                                <MUIDatePicker value={data.endDate} onChange={(e: any) => handlerChange('endDate', e)} />
                             </div>
                         </div>
                     </div>
@@ -142,7 +142,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 Terminate Date
                             </label>
                             <div className="">
-                                <MUIDatePicker name="TerminateDate" />
+                                <MUIDatePicker onChange={(e: any) => console.log(e)} name="TerminateDate" />
                             </div>
                         </div>
                     </div>
@@ -151,7 +151,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                             Signing Date
                         </label>
                         <div className="">
-                            <MUIDatePicker name="SigningDate" />
+                            <MUIDatePicker onChange={(e: any) => console.log(e)} name="SigningDate" />
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 text-sm">

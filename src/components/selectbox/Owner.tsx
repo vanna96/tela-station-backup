@@ -17,7 +17,7 @@ interface OwnerProps<T = unknown> {
 
 
 function Owner(props: OwnerProps) {
-    const { data, isLoading }: any = useQuery({ queryKey: ['owners'], queryFn: () => InitializeData.owner() })
+    const { data, isLoading }: any = useQuery({ queryKey: ['owners'], queryFn: () => InitializeData.owner(), staleTime: Infinity })
 
     return <MUISelect
         {...props}

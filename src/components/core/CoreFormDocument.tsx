@@ -15,6 +15,7 @@ import Modal from '../modal/Modal';
 import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DistributionRuleModal from '../modal/DistributionRuleModal';
+import { VendorModalType } from '../modal/VendorModal';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -67,6 +68,7 @@ export interface CoreFormDocumentState {
     showDialogMessage: boolean,
     inWhichDimension: number,
     showDistribution: boolean,
+    vendorType: VendorModalType
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -76,34 +78,34 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
         this.state = {
             collapse: true,
-            cardCode: '',
-            cardName: '',
+            cardCode: null,
+            cardName: null,
             contactPersonCode: undefined,
             contactPersonList: [],
-            phone: '',
-            email: '',
-            owner: '',
-            buyer: '',
-            vendorRef: '',
+            phone: null,
+            email: null,
+            owner: null,
+            buyer: null,
+            vendorRef: null,
             documentStatus: 'Open',
-            remark: '',
-            description: '',
+            remark: null,
+            description: null,
             documentServiceItemType: 'I',
             attachmentEntry: null,
-            project: '',
+            project: null,
             isOpenItem: false,
             isOpenVendor: false,
             isOpenAccount: false,
             isOpenProject: false,
             shippingType: undefined,
-            paymentMethod: '',
-            paymentTermType: '',
-            currency: '',
+            paymentMethod: null,
+            paymentTermType: null,
+            currency: null,
             renewal: false,
             items: [],
             series: [],
             serie: 0,
-            docNum: '',
+            docNum: null,
             isLoadingSerie: true,
             isSubmitting: false,
             message: '',
@@ -111,6 +113,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             title: '',
             showDistribution: false,
             inWhichDimension: 0,
+            vendorType: 'customer',
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -126,7 +129,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         return (
             <>
                 <ItemModal open={this.state.isOpenItem} onClose={() => this.handlerCloseItem()} type='purchase' onOk={this.handlerConfirmItem} />
-                <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type='customer' />
+                <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type={this.state.vendorType} />
                 <GLAccountModal open={this.state.isOpenAccount} onClose={() => this.handlerCloseAccount()} />
                 <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
                 <DistributionRuleModal open={this.state.showDistribution} onClose={() => { }} inWhichNum={this.state.inWhichDimension} onOk={this.handlerConfirmDistribution} />
@@ -137,7 +140,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                     }
                     bodyClassName={() => "text-sm font-white font-med block p-3"}
                 />
-                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => console.log('asdsad')} onOk={() => this.setState({ ...this.state, showDialogMessage: false })} widthClass='w-3/12' >
+                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => console.log('asdsad')} onOk={() => this.setState({ ...this.state, showDialogMessage: false })} widthClass='w-[30rem]' >
                     <span className='text-sm'>{this.state.message}</span>
                 </Modal>
 
@@ -228,8 +231,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         });
     }
 
-    protected handlerOpenVendor() {
-        this.setState({ ...this.state, isOpenVendor: true })
+    protected handlerOpenVendor(type: VendorModalType) {
+        this.setState({ ...this.state, isOpenVendor: true, vendorType: type })
     }
 
     private handlerCloseVendor() {

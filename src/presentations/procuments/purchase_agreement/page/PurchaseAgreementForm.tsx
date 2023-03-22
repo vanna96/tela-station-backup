@@ -22,7 +22,8 @@ class PurchaseAgreementForm extends CoreFormDocument {
             agreementType: 'G',
             status: 'D',
             renewal: false,
-
+            startDate: null,
+            endDate: null
         } as any;
 
 
@@ -32,8 +33,6 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
     componentDidMount(): void {
-
-    
 
         DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie).then((res: any) => {
             this.setState({ ...this.state, series: res, })
@@ -63,17 +62,18 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
     async handlerSubmit(event: any) {
         event.preventDefault();
-
-        const form = new FormData(event.target);
-        const formData = Object.fromEntries(form.entries());
-        console.log(PurchaseAgreement.toCreate(this.state))
         this.setState({ ...this.state, isSubmitting: true });
 
-        
+        await new PurchaseAgreementRepository().post(this.state).then((res: any) => {
+            console.log(res)
+            this.showMessage('Success', 'Create Successfully');
+        }).catch((e: Error) => {
+            this.showMessage('Errors', e.message);
+        });
 
 
         setTimeout(() => {
-            this.showMessage('Success', 'Create Successfully');
+
         }, 2000)
     }
 
@@ -85,7 +85,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
                 <HeadingForm
                     data={this.state}
                     handlerOpenVendor={() => {
-                        this.handlerOpenVendor();
+                        this.handlerOpenVendor('supplier');
                     }}
                     handlerChange={(key, value) => this.handlerChange(key, value)}
                     handlerOpenProject={() => this.handlerOpenProject()}

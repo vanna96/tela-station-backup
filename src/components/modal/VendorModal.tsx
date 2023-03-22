@@ -125,8 +125,9 @@ import request from '../../utilies/request';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import { currencyFormat } from '../../utilies/index';
 import BusinessPartner from '../../models/BusinessParter';
+import { useMemo } from 'react';
 
-type VendorModalType = 'supplier' | 'customer';
+export type VendorModalType = 'supplier' | 'customer' | null;
 
 interface VendorModalProps {
   open: boolean,
@@ -136,7 +137,7 @@ interface VendorModalProps {
 }
 
 
-const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk }) => {
+const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
   const { data, isLoading }: any = useQuery({
     queryKey: ["venders"],
     queryFn: () => new BusinessPartnerRepository().get(),
@@ -175,6 +176,10 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk }) => {
     []
   );
 
+  console.log(type)
+
+  const items = useMemo(() => data?.filter((e: any) => e?.CardType?.slice(1)?.toLowerCase() === type), [data, type])
+
   return (
     <Modal
       open={open}
@@ -187,7 +192,7 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk }) => {
       <div className="data-table" >
         <MaterialReactTable
           columns={columns}
-          data={data ?? []}
+          data={items ?? []}
           enableStickyHeader={true}
           enableStickyFooter={true}
           enablePagination={true}

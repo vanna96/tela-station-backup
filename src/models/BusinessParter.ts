@@ -42,7 +42,7 @@ export default class BusinessPartner extends Model {
         super();
 
         this.cardCode = json['CardCode'];
-        this.cardCode = json['CardCode'];
+        this.cardName = json['CardName'];
         this.internalCode = json['InternalCode'];
         this.cardType = json['CardType'];
         this.groupCode = json['GroupCode'];

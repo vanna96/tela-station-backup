@@ -32,7 +32,7 @@ export default class BusinessPartnerRepository extends Repository<BusinessPartne
   ];
 
     async get<BusinessPartner>(query?: string | undefined): Promise<BusinessPartner[]> {
-        return await request('GET', this.url + "?$top=8&$select=" + this.queryList.join(',')).then((res: any) => res?.data?.value).catch((e) => {
+        return await request('GET', this.url + "?$select=" + this.queryList.join(',')).then((res: any) => res?.data?.value).catch((e) => {
             throw new Error(e);
         });
     }

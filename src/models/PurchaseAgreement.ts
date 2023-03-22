@@ -53,6 +53,8 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
     }
 
     public static toCreate(json: any) {
+        console.log(json)
+
         return {
             "BPCode": json['cardCode'],
             "BPName": json['cardName'],
@@ -75,7 +77,6 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             "PaymentTerms":  json['paymentTerms'],
             "SigningDate": json['signingDate'],
             "Series": json['serie'],
-            "DocNum": json['docNum'],
             "PaymentMethod": json['paymentMethod'],
             "ShippingType": json['shippingType'],
             "NumAtCard": json['numAtCard'],
@@ -152,22 +153,22 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
     public static toCreate(json: any) {
         
         return {
-            "ItemNo": json["itemCode"],
-            "ItemDescription": json['itemName'],
-            "ItemGroup": json["itemGroupCode"],
-            "PlannedQuantity": json['quantity'],
-            "UnitPrice": json['unitPrice'],
+            "ItemNo": json["ItemCode"],
+            "ItemDescription": json['ItemName'],
+            "ItemGroup": json["ItemsGroupCode"],
+            "PlannedQuantity": json['Quantity'],
+            "UnitPrice": json['UnitPrice'],
             "CumulativeQuantity": null,
             "CumulativeAmountLC": null,
             "CumulativeAmountFC": 0.0,
             "FreeText": json['freeText'] ?? null,
-            "InventoryUoM": null,
+            "InventoryUoM": json['InventoryUOM'],
             "PortionOfReturns": null,
             "EndOfWarranty": null,
             "PlannedAmountLC": 0.0,
             "PlannedAmountFC": 0.0,
             "LineDiscount": 0.0,
-            "UoMEntry": -1,
+            "UoMEntry": json['UoMGroupEntry'],
             "UoMCode": null,
             "UnitsOfMeasurement": 1.0,
             "UndeliveredCumulativeQuantity": null,

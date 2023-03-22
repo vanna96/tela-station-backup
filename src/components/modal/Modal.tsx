@@ -17,9 +17,10 @@ interface ModalProps {
     okLabel?: string,
     disableTitle?: boolean,
     disableFooter?: boolean,
+    titleClass?: string,
 }
 
-const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false , onOk}) => {
+const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false, onOk, titleClass }) => {
     return (
         <Transition appear show={open} as={Fragment}>
             <Dialog as="div" className="relative z-[100] " onClose={onClose}>
@@ -51,7 +52,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                                     as="h3"
                                     className="w-full flex justify-between items-center text-lg font-medium leading-6 text-gray-900"
                                 >
-                                    <span>{title ?? 'No Title'}</span>
+                                    <span className={titleClass}>{title ?? 'No Title'}</span>
                                     {disableClose ? <div role='button' className='text-xl hover:bg-gray-200 rounded'><IoClose /></div> : null}
 
                                 </Dialog.Title> : null}

@@ -10,8 +10,8 @@ export default class ItemGroup extends Model {
     constructor(json: any) {
         super()
 
-        this.id = json['Number'] ?? ''
-        this.name = json['GroupName'] ?? ''
+        this.id = json['Number']
+        this.name = json['GroupName']
         this.itemGroupWwarehouseInfos = json['ItemGroupsWarehouseInfos']
     } 
 
