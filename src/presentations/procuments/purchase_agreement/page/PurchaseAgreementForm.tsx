@@ -33,6 +33,8 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
     componentDidMount(): void {
 
+    
+
         DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie).then((res: any) => {
             this.setState({ ...this.state, series: res, })
         });
@@ -59,16 +61,19 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
 
-    handlerSubmit(event: any) {
+    async handlerSubmit(event: any) {
         event.preventDefault();
+
         const form = new FormData(event.target);
         const formData = Object.fromEntries(form.entries());
         console.log(PurchaseAgreement.toCreate(this.state))
         this.setState({ ...this.state, isSubmitting: true });
 
+        
+
+
         setTimeout(() => {
-            this.setState({ ...this.state, isSubmitting: false });
-            this.toast('Hello', 'error')
+            this.showMessage('Success', 'Create Successfully');
         }, 2000)
     }
 

@@ -81,7 +81,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             "NumAtCard": json['numAtCard'],
             "Project": json['project'],
             "BPCurrency": json['currency'],
-            "BlanketAgreements_ItemsLines": []
+            "BlanketAgreements_ItemsLines": json['items'].map((e:any) => PurchaseAgreementDocumentLine.toCreate(e))
         };
     }
 
@@ -149,11 +149,39 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
     
 
 
-    public static toUpdate(json: any) {
+    public static toCreate(json: any) {
         
         return {
-
-        }
+            "ItemNo": json["itemCode"],
+            "ItemDescription": json['itemName'],
+            "ItemGroup": json["itemGroupCode"],
+            "PlannedQuantity": json['quantity'],
+            "UnitPrice": json['unitPrice'],
+            "CumulativeQuantity": null,
+            "CumulativeAmountLC": null,
+            "CumulativeAmountFC": 0.0,
+            "FreeText": json['freeText'] ?? null,
+            "InventoryUoM": null,
+            "PortionOfReturns": null,
+            "EndOfWarranty": null,
+            "PlannedAmountLC": 0.0,
+            "PlannedAmountFC": 0.0,
+            "LineDiscount": 0.0,
+            "UoMEntry": -1,
+            "UoMCode": null,
+            "UnitsOfMeasurement": 1.0,
+            "UndeliveredCumulativeQuantity": null,
+            "UndeliveredCumulativeAmountLC": null,
+            "UndeliveredCumulativeAmountFC": 0.0,
+            "ShippingType": 1,
+            "Project": null,
+            "TaxCode": null,
+            "TAXRate": null,
+            "PlannedVATAmountLC": null,
+            "PlannedVATAmountFC": null,
+            "CumulativeVATAmountLC": null,
+            "CumulativeVATAmountFC": null,
+        };
     }
 }
 

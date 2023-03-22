@@ -14,6 +14,7 @@ import { Backdrop, CircularProgress } from '@mui/material';
 import Modal from '../modal/Modal';
 import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DistributionRuleModal from '../modal/DistributionRuleModal';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -23,6 +24,8 @@ const contextClass: any = {
     default: "bg-indigo-600",
     dark: "bg-white-600 font-gray-300",
 };
+
+type ModelDialog = 'success' | 'error'
 
 
 export interface CoreFormDocumentState {
@@ -59,6 +62,11 @@ export interface CoreFormDocumentState {
     serie: any,
     docNum: any,
     isSubmitting: boolean,
+    title: string,
+    message: string,
+    showDialogMessage: boolean,
+    inWhichDimension: number,
+    showDistribution: boolean,
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -98,11 +106,17 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             docNum: '',
             isLoadingSerie: true,
             isSubmitting: false,
+            message: '',
+            showDialogMessage: false,
+            title: '',
+            showDistribution: false,
+            inWhichDimension: 0,
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
         this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
+        this.handlerConfirmDistribution = this.handlerConfirmDistribution.bind(this)
     }
 
     abstract FormRender(): JSX.Element;
@@ -115,7 +129,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type='customer' />
                 <GLAccountModal open={this.state.isOpenAccount} onClose={() => this.handlerCloseAccount()} />
                 <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
-
+                <DistributionRuleModal open={this.state.showDistribution} onClose={() => { }} inWhichNum={this.state.inWhichDimension} onOk={this.handlerConfirmDistribution} />
 
                 <ToastContainer
                     toastClassName={({ type }: any) => contextClass[type || "default"] +
@@ -123,21 +137,19 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                     }
                     bodyClassName={() => "text-sm font-white font-med block p-3"}
                 />
-                {/* <Modal title='Success' open={true} onClose={() => { }} widthClass='w-3/12' >
-                    <span className='text-sm'>Create Purchase Agreement Successfully.</span>
-                </Modal> */}
+                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => console.log('asdsad')} onOk={() => this.setState({ ...this.state, showDialogMessage: false })} widthClass='w-3/12' >
+                    <span className='text-sm'>{this.state.message}</span>
+                </Modal>
 
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={this.state.isSubmitting}
-                // onClick={() => { }}
                 >
                     <CircularProgress color="inherit" />
                 </Backdrop>
                 <div className='bg-gray-100 flex flex-col  w-full h-full p-4 relative'>
                     <div className=" rounded-lg px-6 py-4 flex items-center justify-between sticky top-3 gap-3  border-b bg-white shadow-sm xl:text-sm font-bold z-20">
                         <div className="flex gap-3 items-center">
-                            {/* <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3"><FaArrowLeft /></div> */}
                             <BackButton />
                             <div>Purchase Agreement</div>
                         </div>
@@ -250,6 +262,22 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         });
     }
 
+    protected showDistribution(dimension: number) {
+
+        this.setState({
+            ...this.state,
+            showDistribution: true,
+            inWhichDimension: dimension
+        });
+    }
+
+    protected handlerConfirmDistribution(distribution: any) {
+        this.setState({
+            ...this.state,
+            showDistribution: false,
+        });
+    }
+
 
     protected handlerChange(key: string, value: any) {
         let temps: any = { ...this.state };
@@ -273,4 +301,16 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             icon: false,
         })
     }
+
+
+    protected showMessage(title: string, message: string) {
+        this.setState({
+            ...this.state,
+            title: title,
+            message: message,
+            showDialogMessage: true,
+            isSubmitting: false,
+        })
+    }
+
 }

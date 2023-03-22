@@ -1,4 +1,5 @@
 import axios, { AxiosError, ResponseType, AxiosResponse } from "axios";
+import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
 const axiosInstance = axios.create({

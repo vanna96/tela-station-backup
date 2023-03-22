@@ -105,4 +105,13 @@ export default class InitializeData {
 
         return response.data.value as [];
     }
+
+
+    public static async listDistribution(): Promise<[]> {
+        const response: any = await request('GET', '/DistributionRules?$select=FactorCode,FactorDescription,InWhichDimension,TotalFactor');
+
+        if (!response?.data) return [];
+
+        return response.data.value as [];
+    }
 }
