@@ -62,8 +62,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
         event.preventDefault();
         const form = new FormData(event.target);
         const formData = Object.fromEntries(form.entries());
-        console.log(formData)
-        console.log(this.state)
+        console.log(PurchaseAgreement.toCreate(this.state))
     }
 
 

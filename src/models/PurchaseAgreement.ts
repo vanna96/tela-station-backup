@@ -48,16 +48,81 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
     }
     
 
-
     toJson(update: boolean) {
         throw new Error('Method not implemented.');
+    }
+
+    public static toCreate(json: any) {
+        return {
+            "BPCode": json['cardCode'],
+            "BPName": json['cardName'],
+            "ContactPersonCode": json['contactPersonCode'],
+            "StartDate": json['startDate'],
+            "EndDate": json['endDate'],
+            "TerminateDate": json['terminateDate'],
+            "Description": json['description'],
+            "AgreementType": json['agreementType'],
+            "Status": json['status'],
+            "Owner": json['owner'],
+            "IgnorePricesInAgreement": json['inorePricesInAgreement'] ? 'Y' : 'N',
+            "Renewal": json['renewal'] ? 'Y' : 'N',
+            "RemindUnit": json['remindUnit'],
+            "RemindTime": json['remindTime'],
+            "Remarks": json['remarks'],
+            "AttachmentEntry": json['attachmentEntry'],
+            "SettlementProbability": json['settlementProbability'],
+            "AgreementMethod": json['agreementMethod'],
+            "PaymentTerms":  json['paymentTerms'],
+            "SigningDate": json['signingDate'],
+            "Series": json['serie'],
+            "DocNum": json['docNum'],
+            "PaymentMethod": json['paymentMethod'],
+            "ShippingType": json['shippingType'],
+            "NumAtCard": json['numAtCard'],
+            "Project": json['project'],
+            "BPCurrency": json['currency'],
+            "BlanketAgreements_ItemsLines": []
+        };
+    }
+
+
+    public static toUpdate(json: any) {
+        return {
+            "BPCode": json['cardCode'],
+            "BPName": json['cardName'],
+            "ContactPersonCode": json['contactPersonCode'],
+            "StartDate": json['startDate'],
+            "EndDate": json['endDate'],
+            "TerminateDate": json['terminateDate'],
+            "Description": json['description'],
+            "AgreementType": json['agreementType'],
+            "Status": json['status'],
+            "Owner": json['owner'],
+            "IgnorePricesInAgreement": json['inorePricesInAgreement'] ? 'Y' : 'N',
+            "Renewal": json['renewal'] ? 'Y' : 'N',
+            "RemindUnit": json['remindUnit'],
+            "RemindTime": json['remindTime'],
+            "Remarks": json['remarks'],
+            "AttachmentEntry": json['attachmentEntry'],
+            "SettlementProbability": json['settlementProbability'],
+            "AgreementMethod": json['agreementMethod'],
+            "PaymentTerms":  json['paymentTerms'],
+            "SigningDate": json['signingDate'],
+            "Series": json['serie'],
+            "DocNum": json['docNum'],
+            "PaymentMethod": json['paymentMethod'],
+            "ShippingType": json['shippingType'],
+            "NumAtCard": json['numAtCard'],
+            "Project": json['project'],
+            "BPCurrency": json['currency'],
+            "BlanketAgreements_ItemsLines": []
+        };
     }
     
 
 }
 
 export class PurchaseAgreementDocumentLine extends Model implements DocumentLine {
-    
     itemNo?: string | undefined;
     itemDescription?: string | undefined;
     itemGroup?: string | undefined;
@@ -78,6 +143,17 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
 
     toJson(update: boolean) {
         throw new Error('Method not implemented.');
+    }
+
+
+    
+
+
+    public static toUpdate(json: any) {
+        
+        return {
+
+        }
     }
 }
 
