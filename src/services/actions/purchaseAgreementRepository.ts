@@ -27,13 +27,13 @@ export default class PurchaseAgreementRepository extends Repository<PurchaseAgre
     }
 
 
-    async post(payload: any): Promise<PurchaseAgreement> {
-        throw new Error('Method not implemented.');
+    async post(payload: any): Promise<any> {
+        return await request('POST', this.url, PurchaseAgreement.toCreate(payload));
     }
 
 
-    async patch(id: any, payload: any): Promise<PurchaseAgreement> {
-        throw new Error('Method not implemented.');
+    async patch(id: any, payload: any): Promise<any> {
+         return await request('PATCH', this.url, PurchaseAgreement.toUpdate(payload));
     }
 
 

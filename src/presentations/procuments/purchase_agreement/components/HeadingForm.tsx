@@ -89,8 +89,12 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                             </label>
                             <div className="">
                                 <MUISelect
-                                    items={[]}
+                                    items={[{ name: 'Item Method', value: 'I' }, { name: 'Monetary Method', value: 'M' }]}
+                                    aliaslabel='name'
+                                    aliasvalue='value'
                                     name="AgreementMethod"
+                                    value={data.agreementMethod}
+                                    onChange={(e) => handlerChange('agreementMethod', e.target.value)}
                                 />
                             </div>
                         </div>

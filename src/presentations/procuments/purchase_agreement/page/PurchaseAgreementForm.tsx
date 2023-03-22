@@ -10,6 +10,7 @@ import AttachmentForm from '../components/AttachmentForm';
 import { CoreFormDocumentState } from '../../../../components/core/CoreFormDocument';
 import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
+import { ToastOptions } from 'react-toastify';
 
 class PurchaseAgreementForm extends CoreFormDocument {
 
@@ -63,6 +64,12 @@ class PurchaseAgreementForm extends CoreFormDocument {
         const form = new FormData(event.target);
         const formData = Object.fromEntries(form.entries());
         console.log(PurchaseAgreement.toCreate(this.state))
+        this.setState({ ...this.state, isSubmitting: true });
+
+        setTimeout(() => {
+            this.setState({ ...this.state, isSubmitting: false });
+            this.toast('Hello', 'error')
+        }, 2000)
     }
 
 

@@ -10,6 +10,20 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BackButton from '../button/BackButton';
 import Project from '@/models/Project';
 import Item from '@/models/Item';
+import { Backdrop, CircularProgress } from '@mui/material';
+import Modal from '../modal/Modal';
+import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const contextClass: any = {
+    success: "bg-blue-600",
+    error: "bg-red-600",
+    info: "bg-gray-600",
+    warning: "bg-orange-400",
+    default: "bg-indigo-600",
+    dark: "bg-white-600 font-gray-300",
+};
+
 
 export interface CoreFormDocumentState {
     collapse: boolean,
@@ -43,7 +57,8 @@ export interface CoreFormDocumentState {
     attachments?: any[],
     series: any[],
     serie: any,
-    docNum: any
+    docNum: any,
+    isSubmitting: boolean,
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -82,6 +97,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             serie: 0,
             docNum: '',
             isLoadingSerie: true,
+            isSubmitting: false,
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -100,8 +116,26 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 <GLAccountModal open={this.state.isOpenAccount} onClose={() => this.handlerCloseAccount()} />
                 <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
 
+
+                <ToastContainer
+                    toastClassName={({ type }: any) => contextClass[type || "default"] +
+                        " relative flex p-1 min-h-6 rounded-md justify-between overflow-hidden cursor-pointer"
+                    }
+                    bodyClassName={() => "text-sm font-white font-med block p-3"}
+                />
+                {/* <Modal title='Success' open={true} onClose={() => { }} widthClass='w-3/12' >
+                    <span className='text-sm'>Create Purchase Agreement Successfully.</span>
+                </Modal> */}
+
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={this.state.isSubmitting}
+                // onClick={() => { }}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
                 <div className='bg-gray-100 flex flex-col  w-full h-full p-4 relative'>
-                    <div className="rounded-lg px-6 py-4 flex items-center justify-between gap-3 sticky border-b top-2 backdrop-blur-md bg-white shadow-sm xl:text-sm font-bold z-20">
+                    <div className=" rounded-lg px-6 py-4 flex items-center justify-between sticky top-3 gap-3  border-b bg-white shadow-sm xl:text-sm font-bold z-20">
                         <div className="flex gap-3 items-center">
                             {/* <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3"><FaArrowLeft /></div> */}
                             <BackButton />
@@ -119,7 +153,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
                         <div role="button"
                             onClick={() => this.handlerCollapse()}
-                            className={`hover:border absolute left-[45%] -bottom-4 p-[8px] bg-white hover:bg-gray-200 border shadow rounded-full text-xl text-gray-600 transition-all transform duration-200 delay-100 ${this.state.collapse ? 'rotate-0' : 'rotate-180'}`}> <HiOutlineChevronDown /></div>
+                            className={`hover:border absolute left-[45%] -bottom-4 p-[8px] bg-white hover:bg-gray-200 border shadow rounded-full text-xl text-gray-600 transition-all transform duration-200 delay-100 ${this.state.collapse ? 'rotate-0' : 'rotate-180'}`}> <HiOutlineChevronDown />
+                        </div>
                     </div>
 
                     <div className={`w-full p-3 flex justify-between gap-3 stick ${this.state.collapse ? '' : 'hidden'} transition-transform  delay-100 duration-200  my-3 rounded-lg xl:text-sm font-bold bg-white shadow-sm border z-10`}>
@@ -133,9 +168,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                             <div role='button' className={`p-2 px-4 flex flex-col ${false ? 'border-b-[3px] border-blue-500' : ''}`}>Attachment</div>
                         </div>
                     </div>
-
-
-
 
                     <div className={`grow flex flex-col gap-4 w-full ${this.state.collapse ? '' : 'mt-4'}`}>
                         <this.FormRender />
@@ -230,5 +262,15 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         }
 
         this.setState(temps)
+    }
+
+
+    protected toast(message: string, type: TypeOptions) {
+        toast(message, {
+            position: 'top-right',
+            type: type,
+            theme: 'colored',
+            icon: false,
+        })
     }
 }
