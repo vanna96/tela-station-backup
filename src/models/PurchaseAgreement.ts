@@ -1,6 +1,55 @@
 import { dateFormat } from '../utilies';
 import Model from './Model';
 import { MasterDocument, DocumentLine } from './interface/index';
+import moment from 'moment';
+
+export interface PurchaseAgreementProps {
+    id: any;
+    docNum: any;
+    cardCode?: string;
+    cardName?: string;
+    constactPersonCode?: number;
+    startDate?: string;
+    endDate?: string;
+    terminateDate?: string;
+    description?: string;
+    agreementType?: string;
+    status?: string;
+    owner?: string;
+    renewal?: boolean;
+    remindUnit?: string;
+    remindTime?: string;
+    remark?: string;
+    attachmentEntry?: number;
+    settlementProbability?: number;
+    agreementMethod?: string;
+    paymentTerm?: string;
+    priceList?: number;
+    signeDate?: string;
+    serie: string;
+    paymentMethod?: string;
+    shippingType?: string | undefined;
+    documentLine: PurchaseAgreementDocumentLineProps[];
+}
+
+export interface PurchaseAgreementDocumentLineProps {
+    itemNo?: string | undefined;
+    itemDescription?: string | undefined;
+    itemGroup?: string | undefined;
+    quantity?: number | undefined;
+    unitPrice?: number | undefined;
+    currency?: string | undefined;
+    cumulativeQuantity?: number | undefined;
+    cumulativeAmount?: number | undefined;
+    plannedAmount?: number;
+    lineDiscount?: number;
+    uomEntry?: number | undefined;
+    uomCode?: string | undefined;
+    shippingType?: string | undefined;
+    project?: string | undefined;
+    taxCode?: string | undefined;
+    taxRate?: number | undefined;
+}
 
 
 export default class PurchaseAgreement extends Model implements MasterDocument {
@@ -33,24 +82,39 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
 
     constructor(json: any) {
         super();
-        this.id = json['AgreementNo'];
-        this.serie = json['Series'];
-        this.docNum = json['DocNum'];
-        this.cardName = json['BPName'];
-        this.cardCode = json['BPCode'];
-        this.constactPersonCode = json['ContactPersonCode'];
-        this.startDate = dateFormat(json['StartDate']);
-        this.endDate =  dateFormat(json['EnDate']);
-        this.terminateDate = dateFormat(json['TernimatedDate']);
-        this.signeDate = dateFormat(json['SignedDate']);
-        this.description = json['Description'];
-        this.documentLine = []
+        
+        this.id= json['AgreementNo'];
+        this.docNum= json['DocNum'];
+        this.cardCode= json['BPCode'];
+        this.cardName= json['BPName'];
+        this.constactPersonCode= json['ContactPersonCode'];
+        this.startDate= moment(json['StartDate']).format('DD-MM-YYYY');
+        this.endDate=moment(json['EndDate']).format('DD-MM-YYYY');
+        this.terminateDate= json['TerminateDate'];
+        this.description= json['Description'];
+        this.agreementType= json['AgreementType'];
+        this.status= json['Status'];
+        this.owner= json['Owner'];
+        this.renewal= json['Renewal'] === 'tYES';
+        this.remindUnit= json['RemindUnit'];
+        this.remindTime= json['RemindTime'];
+        this.remark= json['Remarks'];
+        this.attachmentEntry= json['AttachmentEntry'];
+        this.settlementProbability= json['SettlementProbability'];
+        this.agreementMethod= json['AgreementMethod'];
+        this.paymentTerm= json['PaymentTerms'];
+        this.priceList= json['PriceList'];
+        this.signeDate= json['SigningDate'];
+        this.serie= json['Series'];
+        this.paymentMethod= json['PaymentMethod'];
+        this.shippingType= json['ShippingType'];
+        this.documentLine= json['BlanketAgreements_ItemsLines']?.map((e:any) => new PurchaseAgreementDocumentLine(e));
     }
-    
 
     toJson(update: boolean) {
         throw new Error('Method not implemented.');
     }
+
 
     public static toCreate(json: any) {
         console.log(json)
@@ -119,6 +183,29 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
     }
     
 
+
+    get getRemindUnit(): string {
+        switch (this.remindUnit) {
+            case 'D':
+                return 'Days'
+            case 'W':
+                return 'Weeks'
+            case 'M':
+               return 'Months'
+            default:
+                return '';
+        }
+    } 
+
+    get getStatus(): string {
+        switch (this.status) {
+            case 'M':
+                return 'Monetary Method'
+            default:
+                return 'Items Method';
+        }
+    } 
+
 }
 
 export class PurchaseAgreementDocumentLine extends Model implements DocumentLine {
@@ -128,8 +215,8 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
     quantity?: number | undefined;
     unitPrice?: number | undefined;
     currency?: string | undefined;
-    cumilativeQuantity?: number | undefined;
-    cumilativeAmount?: number | undefined;
+    cumulativeQuantity?: number | undefined;
+    cumulativeAmount?: number | undefined;
     plannedAmount?: number;
     lineDiscount?: number;
     uomEntry?: number | undefined;
@@ -138,6 +225,26 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
     project?: string | undefined;
     taxCode?: string | undefined;
     taxRate?: number | undefined;
+
+    constructor(json: any) {
+        super();
+        this.itemNo = json['ItemNo'];
+        this.itemDescription = json['ItemDescription'];
+        this.itemGroup = json['ItemGroup'];
+        this.quantity = json['PlannedQuantity'];
+        this.unitPrice = json['UnitPrice'];
+        this.currency = json['PriceCurrency'];
+        this.cumulativeQuantity = json['CumulativeQuantity'];
+        this.cumulativeAmount = json['CumulativeAmountFC'];
+        this.plannedAmount = json['PlannedAmountFC'];
+        this.lineDiscount =json['LineDiscount'];
+        this.uomEntry = json['UoMEntry'];
+        this.uomCode = json['UoMCode'];
+        this.shippingType = json['ShippingType'];
+        this.project = json['Project'];
+        this.taxCode = json['TaxCode'];
+        this.taxRate = json['TAXRate'];
+    }
 
 
     toJson(update: boolean) {
@@ -169,7 +276,7 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
             "UndeliveredCumulativeQuantity": null,
             "UndeliveredCumulativeAmountLC": null,
             "UndeliveredCumulativeAmountFC": 0.0,
-            "ShippingType": 1,
+            "ShippingType": json['ShippingType'],
             "Project": null,
             "TaxCode": null,
             "TAXRate": null,

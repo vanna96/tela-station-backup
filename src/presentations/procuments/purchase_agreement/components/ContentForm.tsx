@@ -105,10 +105,8 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "Total",
                 header: "Total",
                 Cell: ({ cell }: any) => {
-
-                    console.log(cell.row.original.UnitPrice)
                     return <MUITextField
-                        startAdornment={'USD'}
+                        startAdornment={'%'}
                         value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
                     />;
                 },
@@ -137,6 +135,25 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                         startAdornment={'USD'}
                         type="number"
                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'PlannedAmount')}
+                    />;
+                },
+            },
+            {
+                accessorKey: "AccountNo",
+                header: "Account NO)", //uses the default width from defaultColumn prop
+                Cell: ({ cell }: any) => {
+                    return <AccountTextField
+                        value={cell.getValue()}
+                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'AccountNo')}
+                    />;
+                },
+            },
+            {
+                accessorKey: "AccountName",
+                header: "Account Name)", //uses the default width from defaultColumn prop
+                Cell: ({ cell }: any) => {
+                    return <MUITextField
+                        value={cell.getValue()}
                     />;
                 },
             },

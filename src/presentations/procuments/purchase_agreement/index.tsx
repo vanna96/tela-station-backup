@@ -37,20 +37,22 @@ export default function PurchaseAgreementLists() {
                 // size: 200, //increase the width of this column
             },
             {
-                accessorKey: "StartDate",
+                accessorKey: "startDate",
                 header: "Start Date",
-                Cell: ({ cell }: any) => (
-                    <>
-                        {moment(cell.getValue()).format('DD-MM-YYYY')}
-                    </>
-                ),
+                Cell: ({ cell }: any) => {
+                    return (
+                        <>
+                            {cell.getValue()}
+                        </>
+                    );
+                },
             },
             {
-                accessorKey: "EndDate",
+                accessorKey: "endDate",
                 header: "End Date",
                 Cell: ({ cell }) => (
                     <>
-                        {moment(cell.getValue()).format('DD-MM-YYYY')}
+                        {cell.getValue()}
                     </>
                 ),
 

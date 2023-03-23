@@ -13,8 +13,6 @@ export interface IGeneralFormProps {
     handlerChange: (key: string, value: any) => void
 }
 
-
-
 export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) {
     return (
         <FormCard title='General'>
@@ -37,7 +35,6 @@ export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) 
                     <div className='flex items-center gap-1 text-sm'>
                         <Checkbox />
                         <label htmlFor='Code' className='text-gray-500 text-[14px]'>Ignore Price Specified in blanket Agreement</label>
-
                     </div>
                 </div>
 

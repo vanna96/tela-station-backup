@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 html,
 body,
 #root {
@@ -13,7 +15,8 @@ body,
   box-sizing: content-box;
   margin: 0;
   background-color: #f4f6fa;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
+  font-family: "Roboto", sans-serif;
 }
 
 /* width */
