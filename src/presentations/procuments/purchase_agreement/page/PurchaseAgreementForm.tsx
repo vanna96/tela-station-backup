@@ -11,6 +11,7 @@ import { CoreFormDocumentState } from '../../../../components/core/CoreFormDocum
 import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import { ToastOptions } from 'react-toastify';
+import GLAccount from '@/models/GLAccount';
 
 class PurchaseAgreementForm extends CoreFormDocument {
 
@@ -53,7 +54,16 @@ class PurchaseAgreementForm extends CoreFormDocument {
     handlerAddItem({ value, record, field }: any) {
         let items = [...this.state.items ?? []];
         let item = this.state.items?.find((e: any) => e?.ItemCode === record?.ItemCode);
-        item[field] = value;
+
+        if (field === 'AccountNo') {
+            const account = value as GLAccount;
+            item['AccountNo'] = account.code;
+            item['AccountName'] = account.name;
+        } else {
+            item[field] = value;
+        }
+
+
         const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
         if (index > 0) items[index] = item;
         this.setState({ ...this.state, items: items })

@@ -78,6 +78,7 @@ const ProjectModal: FC<ProjectModalProps> = ({ open, onClose, onOk }) => {
           muiTableBodyRowProps={({ row }) => ({
             onClick: () => {
               onOk(new Project(row.original));
+              onClose();
             },
             sx: { cursor: 'pointer' },
           })}

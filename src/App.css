@@ -73,11 +73,11 @@ span.MuiLinearProgress-root {
 }
 
 .date-picker-error > div > div {
-  /* border: 0.8px solid red; */
+  border: 0.8px solid red;
 }
 
 .date-picker-error > div > div > div > button > svg {
-  /* color: rgba(212, 5, 5, 0.815); */
+  color: rgba(212, 5, 5, 0.815);
 }
 
 .date-picker > div > div > div > button > svg {

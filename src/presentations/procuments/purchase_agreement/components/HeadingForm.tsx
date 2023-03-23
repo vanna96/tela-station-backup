@@ -20,8 +20,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
             <FormCard title='Information'>
                 <div className="flex flex-col gap-2">
                     <div className="grid grid-cols-2 gap-3">
-                        <MUITextField label="Vendor Code" value={data?.cardCode} name="BPCode" onClick={handlerOpenVendor} endAdornment={true} />
-                        <MUITextField label="Vendor Name" value={data?.cardName} name="BPName" />
+                        <MUITextField required label="Vendor Code" value={data?.cardCode} name="BPCode" onClick={handlerOpenVendor} endAdornment={true} />
+                        <MUITextField required label="Vendor Name" value={data?.cardName} name="BPName" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -107,7 +107,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 Start Date
                             </label>
                             <div className="">
-                                <MUIDatePicker value={data.startDate} onChange={(e: any) => handlerChange('startDate', e)} />
+                                <MUIDatePicker error={data?.message?.includes('StartDate')} value={data.startDate} onChange={(e: any) => handlerChange('startDate', e)} />
                             </div>
                         </div>
 
@@ -116,7 +116,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 End Date
                             </label>
                             <div className="">
-                                <MUIDatePicker value={data.endDate} onChange={(e: any) => handlerChange('endDate', e)} />
+                                <MUIDatePicker error={data?.message?.includes('EndDate')} value={data.endDate} onChange={(e: any) => handlerChange('endDate', e)} />
                             </div>
                         </div>
                     </div>

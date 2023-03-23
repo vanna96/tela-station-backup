@@ -154,19 +154,19 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
             "ItemGroup": json["ItemsGroupCode"],
             "PlannedQuantity": json['Quantity'],
             "UnitPrice": json['UnitPrice'],
+            "UoMEntry": json['UoMGroupEntry'],
+            "UoMCode": null,
+            "UnitsOfMeasurement": 1.0,
+            "FreeText": json['freeText'] ?? null,
+            "InventoryUoM": json['InventoryUOM'],
             "CumulativeQuantity": null,
             "CumulativeAmountLC": null,
             "CumulativeAmountFC": 0.0,
-            "FreeText": json['freeText'] ?? null,
-            "InventoryUoM": json['InventoryUOM'],
             "PortionOfReturns": null,
             "EndOfWarranty": null,
             "PlannedAmountLC": 0.0,
             "PlannedAmountFC": 0.0,
             "LineDiscount": 0.0,
-            "UoMEntry": json['UoMGroupEntry'],
-            "UoMCode": null,
-            "UnitsOfMeasurement": 1.0,
             "UndeliveredCumulativeQuantity": null,
             "UndeliveredCumulativeAmountLC": null,
             "UndeliveredCumulativeAmountFC": 0.0,
@@ -183,6 +183,11 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
 
         if (type === 'M') {
             delete body.ItemNo;
+            delete body.ItemDescription;
+            delete body.ItemGroup;
+            delete body.UnitPrice;
+            delete body.UoMEntry;
+            delete body.InventoryUoM;
         }
         
         return body;
