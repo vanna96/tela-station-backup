@@ -86,7 +86,6 @@ export default function PurchaseAgreementLists() {
     });
 
 
-
     return (
         <>
             <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">

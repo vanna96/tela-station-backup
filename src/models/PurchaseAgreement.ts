@@ -82,15 +82,14 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             "NumAtCard": json['numAtCard'],
             "Project": json['project'],
             "BPCurrency": json['currency'],
-            "BlanketAgreements_ItemsLines": json['items'].map((e:any) => PurchaseAgreementDocumentLine.toCreate(e))
+            "BlanketAgreements_ItemsLines": json['items'].map((e:any) => PurchaseAgreementDocumentLine.toCreate(e, json['agreementMethod']))
         };
     }
 
 
     public static toUpdate(json: any) {
         return {
-            "BPCode": json['cardCode'],
-            "BPName": json['cardName'],
+     
             "ContactPersonCode": json['contactPersonCode'],
             "StartDate": json['startDate'],
             "EndDate": json['endDate'],
@@ -147,12 +146,9 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
     }
 
 
-    
-
-
-    public static toCreate(json: any) {
+    public static toCreate(json: any, type: string) {
         
-        return {
+        let body = {
             "ItemNo": json["ItemCode"],
             "ItemDescription": json['ItemName'],
             "ItemGroup": json["ItemsGroupCode"],
@@ -183,6 +179,13 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
             "CumulativeVATAmountLC": null,
             "CumulativeVATAmountFC": null,
         };
+
+
+        if (type === 'M') {
+            delete body.ItemNo;
+        }
+        
+        return body;
     }
 }
 

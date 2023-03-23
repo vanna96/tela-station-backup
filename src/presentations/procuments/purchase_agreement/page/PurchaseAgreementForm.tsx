@@ -79,7 +79,6 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
 
     FormRender = () => {
-
         return <>
             <form onSubmit={this.handlerSubmit} className='flex flex-col gap-4'>
                 <HeadingForm
