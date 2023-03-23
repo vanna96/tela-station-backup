@@ -26,13 +26,18 @@ export default function PurchaseRequestLists() {
                 size: 88,
             },
             {
-                accessorKey: "cardCode",
-                header: "Vendor Code",
+                accessorKey: "requester",
+                header: "Requester",
                 enableClickToCopy: true,
             },
             {
-                accessorKey: "cardName",
-                header: "Vender Name",
+                accessorKey: "requesterName",
+                header: "Requester Name",
+                // size: 200, //increase the width of this column
+            },
+            {
+                accessorKey: "requesterEmail",
+                header: "Requester Email",
                 // size: 200, //increase the width of this column
             },
             {
@@ -65,7 +70,7 @@ export default function PurchaseRequestLists() {
                 Cell: (cell: any) => (
                     <div className="flex gap-4">
                         <button onClick={() => {
-                            route('/procument/purchase-agreement/' + cell.row.original.id, { state: cell.row.original })
+                            route('/procument/purchase-request/' + cell.row.original.id, { state: cell.row.original })
                         }}>
                             <VisibilityIcon fontSize="small" className="text-gray-600 " />
                         </button>
@@ -90,9 +95,9 @@ export default function PurchaseRequestLists() {
         <>
             <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
                 <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full bg-white py-3">
-                    <h3 className="text-lg 2xl:text-base xl:text-sm">Procument / Purchase Agreement</h3>
+                    <h3 className="text-lg 2xl:text-base xl:text-sm">Procument / Purchase Request</h3>
                     <Button variant="outlined" disableElevation size="small"
-                        onClick={() => route('/procument/purchase-agreement/create')}
+                        onClick={() => route('/procument/purchase-request/create')}
                     >
                         <span className="text-xs">Create</span>
                     </Button>

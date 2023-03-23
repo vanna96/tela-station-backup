@@ -1,6 +1,5 @@
 import CoreFormDocument from '@/components/core/CoreFormDocument';
 import PurchaseRequest from '@/models/PurchaseRequest';
-import GeneralForm from "../components/GeneralForm";
 import HeadingForm from "../components/HeadingForm";
 import { withRouter } from '@/routes/withRouter';
 import ContentForm from '../components/ContentForm';
@@ -83,16 +82,15 @@ class PurchaseRequestForm extends CoreFormDocument {
             <form onSubmit={this.handlerSubmit} className='flex flex-col gap-4'>
                 <HeadingForm
                     data={this.state}
-                    handlerOpenVendor={() => {
-                        this.handlerOpenVendor('supplier');
+                    handlerOpenRequester={() => {
+                        this.handlerOpenRequester();
                     }}
                     handlerChange={(key, value) => this.handlerChange(key, value)}
-                    handlerOpenProject={() => this.handlerOpenProject()}
                 />
-                <GeneralForm
+                {/* <GeneralForm
                     data={this.state}
                     handlerChange={(key, value) => this.handlerChange(key, value)}
-                />
+                /> */}
                 <ContentForm
                     data={this.state}
                     handlerAddItem={() => this.handlerOpenItem()}

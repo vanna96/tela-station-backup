@@ -4,7 +4,7 @@ import PurchaseRequest from '../models/PurchaseRequest';
 
 export default class PurchaseRequestRepository extends Repository<PurchaseRequest> {
     
-    url: string = '/BlanketAgreements';
+    url: string = '/PurchaseRequests';
     
     public static documentSerie = {
         Document: "1250000025",

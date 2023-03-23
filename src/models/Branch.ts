@@ -1,7 +1,7 @@
 import Model from './Model';
 
 
-export default class VatGroup extends Model {
+export default class Branch extends Model {
     code: number;
     name: string;
     description: number;
