@@ -14,7 +14,7 @@ const ProcumentPage = () => {
     return <>
         <MainContainer title='Purchase'>
             <ItemCard title='Purchase Agreement' onClick={() => goTo('purchase-agreement')} icon={<AiOutlineFileProtect />} />
-            <ItemCard title='Purchase Request' icon={<AiOutlineFileAdd />} />
+            <ItemCard title='Purchase Request' onClick={() => goTo('purchase-request')} icon={<AiOutlineFileProtect />} />
             <ItemCard title='Purchase Order' icon={<AiOutlineShopping />} />
             <ItemCard title='Purchase Quoatation' icon={<AiOutlineFileUnknown />} />
             <ItemCard title='Down Payment Request' icon={<AiOutlineSnippets />} />
