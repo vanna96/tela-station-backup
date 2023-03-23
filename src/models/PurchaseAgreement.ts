@@ -89,7 +89,6 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
 
     public static toUpdate(json: any) {
         return {
-     
             "ContactPersonCode": json['contactPersonCode'],
             "StartDate": json['startDate'],
             "EndDate": json['endDate'],

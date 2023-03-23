@@ -13,6 +13,7 @@ import PurchaseAgreementRepository from '../../../../services/actions/purchaseAg
 import { ToastOptions } from 'react-toastify';
 import GLAccount from '@/models/GLAccount';
 
+
 class PurchaseAgreementForm extends CoreFormDocument {
 
     constructor(props: any) {
@@ -34,14 +35,16 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
     componentDidMount(): void {
+        console.log(this.props)
 
         DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie).then((res: any) => {
-            this.setState({ ...this.state, series: res, })
+            this.setState({ ...this.state, series: res, isLoadingSerie: false })
         });
 
-        DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie).then((res: any) => {
-            this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber, isLoadingSerie: false })
-        });
+        if (!this.props.edit)
+            DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie).then((res: any) => {
+                this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber, isLoadingSerie: false })
+            });
     }
 
     handlerRemoveItem(code: string) {
@@ -74,17 +77,14 @@ class PurchaseAgreementForm extends CoreFormDocument {
         event.preventDefault();
         this.setState({ ...this.state, isSubmitting: true });
 
-        await new PurchaseAgreementRepository().post(this.state).then((res: any) => {
+        const { id } = this.props?.match?.params
+
+        await new PurchaseAgreementRepository().post(this.state, this.props?.edit, id).then((res: any) => {
             console.log(res)
             this.showMessage('Success', 'Create Successfully');
         }).catch((e: Error) => {
             this.showMessage('Errors', e.message);
         });
-
-
-        setTimeout(() => {
-
-        }, 2000)
     }
 
 
