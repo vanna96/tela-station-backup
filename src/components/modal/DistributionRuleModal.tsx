@@ -4,6 +4,7 @@ import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
 import InitializeData from '@/services/actions';
 import { useMemo } from 'react';
+import DistributionRule from '@/models/DistributionRule';
 
 
 interface DistributionRuleModalProps {
@@ -80,7 +81,8 @@ const DistributionRuleModal: FC<DistributionRuleModalProps> = ({ open, onClose, 
           }}
           muiTableBodyRowProps={({ row }) => ({
             onClick: () => {
-              onOk(row.original);
+              onOk(new DistributionRule(row.original));
+              onClose();
             },
             sx: { cursor: 'pointer' },
           })}
