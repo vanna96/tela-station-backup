@@ -15,6 +15,8 @@ import TextField from '@mui/material/TextField';
 import MUITextField from '@/components/input/MUITextField';
 import Checkbox from '@mui/material/Checkbox';
 import Owner from "@/components/selectbox/Owner";
+import AccountTextField from "@/components/input/AccountTextField";
+import MUIDatePicker from "@/components/input/MUIDatePicker";
 
 interface ContentFormProps {
   handlerAddItem: () => void,
@@ -150,7 +152,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         Cell: ({ cell }: any) => {
           // return ;
           return <MUITextField
-            defaultValue={currencyFormat(cell.getValue())}
+            defaultValue={cell.getValue()}
            
             onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemDescription')}
           />;
@@ -160,9 +162,9 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         accessorKey: "RequiredDate",
         header: "	Required Date", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField
-            defaultValue={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'RequiredDate')}
+          return <MUIDatePicker
+            value={cell.row?.original?.PlannedAmount}
+            onChange={(e: any) => handlerChange('ShipDate', e)}
           />;
         },
       },
@@ -170,37 +172,43 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         accessorKey: "ShipDate",
         header: "Quoted Date", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField
+          return <MUIDatePicker
+            // disabled={true}
             value={cell.row?.original?.PlannedAmount}
-            disabled={true}
+            onChange={(e: any) => handlerChange('ShipDate', e)}
           />;
         },
       },
       {
-        accessorKey: "AccountCode",
-        header: "	G/L Account", //uses the default width from defaultColumn prop
+        accessorKey: "AccountNo",
+        header: "G/L Account", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <ShippingType
-            value={cell.getValue()}
-            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'AccountCode')}
-          />;
+          console.log(cell.getValue())
+          return (
+            <AccountTextField
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "AccountNo")
+              } />
+          );
         },
       },
       {
         accessorKey: "AccountName",
-        header: "G/L Account Name", //uses the default width from defaultColumn prop
+        header: "  G/L Account Name", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <ShippingType
-            value={cell.getValue()}
-            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'AccountName')}
-          />;
+          return (
+            <MUITextField
+              value={cell.getValue()}
+            />
+          );
         },
       },
       {
         accessorKey: "VatGroup",
         header: "Tax Code", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <ShippingType
+          return <MUITextField
             value={cell.getValue()}
             onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'VatGroup')}
           />;
@@ -210,7 +218,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         accessorKey: "LineTotal",
         header: "Total LC", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <ShippingType
+          return <MUITextField
             value={cell.getValue()}
             onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'LineTotal')}
           />;
@@ -220,7 +228,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         accessorKey: "BlanketAgreementNumber",
         header: "BlanketAgreementNumber", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <ShippingType
+          return <MUITextField
             value={cell.getValue()}
             onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'BlanketAgreementNumberal')}
           />;
@@ -231,6 +239,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
   );
 
   const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
+console.log(data);
 
   return (
     <FormCard title="Content" >
@@ -238,7 +247,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         <div className="flex flex-col my-5">
           <div className="grid grid-cols-2">
             <div>
-          <label htmlFor="AgreementMethod" className="text-gray-500 text-[14px]">
+              <label htmlFor=" Item/ServiceType" className="text-gray-500 text-[14px]">
             Item/Service Type
           </label>
           <div className="">

@@ -14,6 +14,7 @@ import { ToastOptions } from 'react-toastify';
 import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
 import Logistic from '../componnent/Logistis';
 import Accounting from '../componnent/Acccounting';
+import GLAccount from '@/models/GLAccount';
 
 class PurchaseQoutationForm extends CoreFormDocument {
 
@@ -21,12 +22,9 @@ class PurchaseQoutationForm extends CoreFormDocument {
     super(props)
     this.state = {
       ...this.state,
-      agreementMethod: 'I',
-      agreementType: 'G',
-      status: 'D',
-      renewal: false,
-      startDate: null,
-      endDate: null
+      docType: 'I',
+   
+   
     } as any;
 
 
@@ -60,6 +58,13 @@ class PurchaseQoutationForm extends CoreFormDocument {
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
     this.setState({ ...this.state, items: items })
+    if (field === 'AccountNo') {
+      const account = value as GLAccount;
+      item['AccountNo'] = account.code;
+      item['AccountName'] = account.name;
+    } else {
+      item[field] = value;
+    }
   }
 
 

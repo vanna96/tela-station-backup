@@ -104,7 +104,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
       "Remarks": json['remarks'],
       "AttachmentEntry": json['attachmentEntry'],
       "PaymentTerms": json['paymentTerms'],
-      "Series": json['serie'],
+      "Series": json['series'],
       "PaymentMethod": json['paymentMethod'],
       "TransportationCode": json['TransportationCode'],
       "Project": json['project'],
@@ -112,7 +112,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
       "DocCurrency": json['currency'],
       "TaxDate": json['taxDate'],
       "CreateQRCodeFrom": json['createQRCodeFrom'],
-      "DocumentLines": json['items'].map((e: any) => PurchaseQoutationDocumentLine.toCreate(e))
+      "DocumentLines": json['items'].map((e: any) => PurchaseQoutationDocumentLine.toCreate(e, json['docType']))
     };
   }
 
@@ -143,7 +143,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
       "Remarks": json['remarks'],
       "AttachmentEntry": json['attachmentEntry'],
       "PaymentTerms": json['paymentTerms'],
-      "Series": json['serie'],
+      "Series": json['series'],
       "docNum": json['DocNum'],
       "PaymentMethod": json['paymentMethod'],
       "ShippingType": json['shippingType'],
@@ -174,13 +174,18 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
   taxRate?: number | undefined;
   vatGroup?: string | undefined;
   lineTotal?: string | undefined;
+  requiredDate?: string | undefined
+  shipDate?: string | undefined;
+  accountCode?: string | undefined;
+  accountName?: string | undefined;
+  blanketAgreementNumber?: string | undefined
   toJson(update: boolean) {
     throw new Error('Method not implemented.');
   }
 
-  public static toCreate(json: any) {
+  public static toCreate(json: any,type: any) {
 
-    return {
+    let line = {
       "ItemCode": json["ItemCode"],
       "ItemDescription": json['ItemName'],
       "UnitPrice": json['UnitPrice'],
@@ -193,8 +198,22 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
       "TAXRate": null,
       "VatGroup": json["VatGroup"],
       "LineTotal": json["LineTotal"],
+      "RequiredDate": json["RequiredDate"],
+      "ShipDate": json["ShipDate"],
+      "AccountCode": json["AccountCode"],
+      "AccountName": json["AccountName"],
+      "BlanketAgreementNumber": json["BlanketAgreementNumber"]
     };
+
+    if (type === 'S') {
+      delete line.ItemCode;
+      delete line.UnitPrice;
+    }
+
+    return line;
   }
+
+  
 }
 
 

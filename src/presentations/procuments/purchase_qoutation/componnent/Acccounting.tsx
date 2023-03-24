@@ -65,13 +65,13 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
 
           </div>
           <div className='grid grid-cols-2 gap-3'>
-            <MUITextField label="Month +" value={data.extraMonth} />
-            <MUITextField label="Days" value={data.extraDays} />
+            <MUITextField label="Month +" value={data.extraMonth} name="ExtraMonth"/>
+            <MUITextField label="Days" value={data.extraDays} name="ExtraDays"/>
 
           </div>
         </div>
         <div className='grid grid-cols-1 gap-3'>
-          <MUITextField label="Cash Discount Date Offsetys" value={data.email} />
+          <MUITextField label="Cash Discount Date Offsetys" value={''} name="CashDiscountDateOffset"/>
 
         </div>
       </div>
@@ -103,7 +103,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
               Cancellation Date
             </label>
             <div className="">
-              <MUIDatePicker value={data.cancelDate} onChange={(e: any) => handlerChange('cancelDate', e)} />
+              <MUIDatePicker value={data.cancelDate} name="CancelDate" onChange={(e: any) => handlerChange('cancelDate', e)} />
             </div>
           </div>
           <div>
@@ -119,7 +119,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
             />
           </div>
           <div>
-            <MUITextField label="Order Number:" value={data.email} />
+            <MUITextField label="Order Number:" value={''} name="ImportFileNum"/>
           </div>
         </div>
       </div>
