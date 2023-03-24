@@ -18,7 +18,7 @@ const ProcumentPage = () => {
             <ItemCard title='Purchase Order' icon={<AiOutlineShopping />} />
             <ItemCard title='Purchase Quoatation' icon={<AiOutlineFileUnknown />} />
             <ItemCard title='Down Payment Request' icon={<AiOutlineSnippets />} />
-            <ItemCard title='Good Return Request' icon={<AiOutlineSolution />} />
+            <ItemCard title='Good Return Request' onClick={() => goTo('good-return-request')} icon={<AiOutlineFileProtect />} />
             <ItemCard title='Expanse' icon={<AiOutlineFileExcel />} />
         </MainContainer>
     </>
