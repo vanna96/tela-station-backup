@@ -15,6 +15,15 @@ div.data-table .css-80pr5n-MuiPaper-root {
   border: 1px solid rgb(233, 233, 233);
 }
 
+div.border-none .css-80pr5n-MuiPaper-root {
+  border: none !important;
+}
+
+div.p-0.css-80pr5n-MuiPaper-root {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
 div.data-table > div > div > table > thead > tr {
   border-radius: 10px;
 }

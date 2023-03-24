@@ -16,7 +16,7 @@ const Taps: React.FC<TapsProps> = (props: TapsProps) => {
 
     return <>
         <div className='w-full flex gap-4 text-sm border-b'>
-            {props.items.map((e: string, index: number) => <div role='button' onClick={() => handlerClick(index)} className={`p-2  hover:border-b-[3px] hover:border-b-blue-500 hover:text-blue-500 ${toggle === index ? 'border-b-[3px] border-b-blue-500 text-blue-500' : ''} `}>{e}</div>)}
+            {props.items.map((e: string, index: number) => <div key={Date.now() + index} role='button' onClick={() => handlerClick(index)} className={`p-2  hover:border-b-[3px] hover:border-b-blue-500 hover:text-blue-500 ${toggle === index ? 'border-b-[3px] border-b-blue-500 text-blue-500' : ''} `}>{e}</div>)}
 
         </div>
         {props.children[toggle]}

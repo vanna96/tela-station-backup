@@ -1,41 +1,65 @@
 import { withRouter } from '@/routes/withRouter';
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import PurchaseAgreement from '../../../../models/PurchaseAgreement';
 import { PurchaseAgreementProps, PurchaseAgreementDocumentLineProps } from '../../../../models/PurchaseAgreement';
 import EditIcon from "@mui/icons-material/Edit";
 import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
 import Taps from '@/components/button/Taps';
+import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
+import { useMemo } from 'react';
+import { currencyFormat, fileToBase64 } from '@/utilies';
+import { AttachmentLine } from '../../../../models/Attachment';
+import Modal from '@/components/modal/Modal';
+import PreviewAttachment from '@/components/attachment/PreviewAttachment';
+import { CircularProgress } from '@mui/material';
+import BackButton from '@/components/button/BackButton';
+import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 
 
-class PurchaseAgreementDetail extends Component<any, PurchaseAgreementProps> {
+class PurchaseAgreementDetail extends Component<any, any> {
 
     constructor(props: any) {
         super(props);
-
         this.state = {
-        } as PurchaseAgreement
+            loading: true,
+            isError: false,
+            message: '',
+        }
+
+        this.initData = this.initData.bind(this);
     }
 
 
     componentDidMount(): void {
+        this.initData()
+    }
+
+    initData() {
         const { id } = this.props.match.params;
         const data = this.props.location.state as PurchaseAgreement;
 
-
-
-        this.setState({
-            ...data
-        })
+        if (data) {
+            setTimeout(() => this.setState({ ...data, loading: false }), 500)
+        } else {
+            new PurchaseAgreementRepository().find(id).then((res: any) => {
+                this.setState({ ...res, loading: false });
+            }).catch((e: Error) => {
+                this.setState({ isError: true, message: e.message });
+            })
+        }
     }
 
     render() {
+
+
         return (
             <div className='w-full h-full flex flex-col p-4 gap-4'>
                 <div className='flex justify-between items-center bg-white p-2 rounded-lg px-6 shadow-sm'>
                     <div className='flex gap-2 items-center'>
+                        <BackButton />
                         <h1 className='font-bold'>Purchase Agreement</h1>
-                        <span className='text-[12px] border border-blue-400 font-medium  px-2 rounded '>{this.state.status?.replace('as', '')}</span>
+                        {/* <span className='text-[12px] border border-blue-400 font-medium  px-2 rounded '>{this.state.status?.replace('as', '')}</span> */}
                     </div>
                     <div className='text-[12px] flex gap-3'>
                         <div role="button" className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 border hover:text-blue-500 text-[12px]">Edit</div>
@@ -48,68 +72,80 @@ class PurchaseAgreementDetail extends Component<any, PurchaseAgreementProps> {
                         <div className='mx-2'></div>
                     </div>
                 </div>
-                <div className='min-h-[10rem] grid grid-cols-2 gap-2 w-full shadow-sm rounded-lg bg-white text-[12px] p-6'>
-                    <div className='flex flex-col gap-1'>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500'>BP Code</span>
-                            <span className='w-8/12 font-medium'>: {this.state.cardCode}</span>
-                        </div>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500'>BP Name</span>
-                            <span className='w-8/12 font-medium'>: {this.state.cardName}</span>
-                        </div>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500'>Contact Person Code</span>
-                            <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
-                        </div>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500'>Email</span>
-                            <span className='w-8/12 font-medium'>: example@email</span>
-                        </div>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500'>Phone</span>
-                            <span className='w-8/12 font-medium'>: +855 21 000 123</span>
-                        </div>
+
+                <Modal open={this.state.isError} title='Oop' onClose={() => { }} onOk={() => console.log(this.props.history.goBack())}>
+                    <span>
+                        {this.state?.message}
+                    </span>
+                </Modal>
+
+                {this.state.loading ? <div className='grow flex justify-center items-center'>
+                    <CircularProgress />
+                </div> :
+                    (<>
+                        <div className='min-h-[10rem] grid grid-cols-2 gap-2 w-full shadow-sm rounded-lg bg-white text-[12px] p-6'>
+                            <div className='flex flex-col gap-1'>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>BP Code</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.cardCode}</span>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>BP Name</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.cardName}</span>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>Contact Person Code</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>Email</span>
+                                    <span className='w-8/12 font-medium'>: example@email</span>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>Phone</span>
+                                    <span className='w-8/12 font-medium'>: +855 21 000 123</span>
+                                </div>
 
 
-                    </div>
-                    <div className='flex flex-col gap-1'>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500 '>Document Numbering</span>
-                            <span className='w-8/12 font-medium'>: {this.state.docNum}</span>
-                        </div>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500'>Agreement Type</span>
-                            <span className='w-8/12 font-medium'>: {this.state.agreementMethod?.replace('am', '')}</span>
-                        </div>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500'>Contact Person Code</span>
-                            <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
-                        </div>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500'>Start Date</span>
-                            <span className='w-8/12 font-medium'>: {this.state.startDate}</span>
-                        </div>
-                        <div className='flex gap-2'>
-                            <span className='w-4/12 text-gray-500'>End Date</span>
-                            <span className='w-8/12 font-medium'>: {this.state.endDate}</span>
-                        </div>
+                            </div>
+                            <div className='flex flex-col gap-1'>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500 '>Document Numbering</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.docNum}</span>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>Agreement Type</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.agreementMethod?.replace('am', '')}</span>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>Contact Person Code</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>Start Date</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.startDate}</span>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>End Date</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.endDate}</span>
+                                </div>
 
 
-                    </div>
-                </div>
-                <div className='grow flex flex-col gap-3 p-6 shadow-sm rounded-lg bg-white'>
-                    <Taps
-                        items={['General', 'Content', 'Attachment']}
-                    >
-                        <General data={this.state} />
-                        <Content data={this.state} />
-                        <Attachment data={this.state} />
-                    </Taps>
+                            </div>
+                        </div>
+                        <div className='grow flex flex-col gap-3 p-6 shadow-sm rounded-lg bg-white'>
+                            <Taps
+                                items={['General', 'Content', 'Attachment']}
+                            >
+                                <General data={this.state} />
+                                <Content data={this.state} />
+                                <PreviewAttachment attachmentEntry={this.state.attachmentEntry} />
+                            </Taps>
+                        </div>
+                    </>)
 
+                }
 
-
-                </div>
             </div>
         )
     }
@@ -143,32 +179,86 @@ function Content(props: any) {
 
     const { data } = props;
 
-    return <div className='w-full h-full my-4'>
-        <table className='table w-full'>
-            <thead>
-                <tr>
-                    <th className='text-left text-[12px] font-normal px-2 py-1 border'>Item No</th>
-                    <th className='text-left text-[12px] font-normal px-2 py-1 border'>Item Description</th>
-                    <th className='text-left text-[12px] font-normal px-2 py-1 border'>Item Group</th>
-                    <th className='text-left text-[12px] font-normal px-2 py-1 border'>UoM Group</th>
-                    <th className='text-left text-[12px] font-normal px-2 py-1 border'>Quantity</th>
-                    <th className='text-left text-[12px] font-normal px-2 py-1 border'>Unit Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                {data?.documentLine?.map((e: PurchaseAgreementDocumentLineProps) => <tr>
-                    <td className='text-[12px] font-normal px-2 py-1 border-b'>{e.itemNo}</td>
-                    <td className='text-[12px] font-normal px-2 py-1 border-b'>{e.itemDescription}</td>
-                    <td className='text-[12px] font-normal px-2 py-1 border-b'>{e.itemGroup}</td>
-                    <td className='text-[12px] font-normal px-2 py-1 border-b'>{e.uomCode}</td>
-                    <td className='text-[12px] font-normal px-2 py-1 border-b'>{e.quantity}</td>
-                    <td className='text-[12px] font-normal px-2 py-1 border-b'>{e.unitPrice}</td>
-                </tr>)}
-            </tbody>
-        </table>
-    </div>
-}
+    const itemColumn = useMemo(() => [
+        {
+            accessorKey: "itemNo",
+            header: "Item NO.", //uses the default width from defaultColumn prop
+            enableClickToCopy: true,
+            enableFilterMatchHighlighting: true,
+            size: 88,
+        },
+        {
+            accessorKey: "itemDescription",
+            header: "Item Description",
+            enableClickToCopy: true,
+        },
+        {
+            accessorKey: "itemGroup",
+            header: "Item Group",
+            Cell: ({ cell }: any) => cell.getValue(),
+        },
+        {
+            accessorKey: "quantity",
+            header: "Quantity",
+            Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        },
+        {
+            accessorKey: "unitPrice",
+            header: "Unit Price",
+            Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        },
+    ], [data]);
 
-function Attachment(props: any) {
-    return <div>Attachment</div>
+    const serviceColumns = React.useMemo(
+        () => [
+            {
+                accessorKey: "PlannedAmount",
+                header: "Planned Amount (LC)",
+                Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+            },
+            {
+                accessorKey: "LineDiscount",
+                header: "Line Discount",
+                Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+            },
+            {
+                accessorKey: "OpenAmount",
+                header: "Open Amount (LC)",
+                Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+            },
+            {
+                accessorKey: "ShppingType",
+                header: "Shipping Type",
+            },
+            {
+                accessorKey: "Project",
+                header: "Project",
+            },
+        ],
+        [data]
+    );
+
+    return <div className="data-table  border-none p-0 mt-3">
+        <MaterialReactTable
+            columns={data?.agreementMethod === 'amItem' ? itemColumn : serviceColumns}
+            data={data?.documentLine ?? []}
+            enableHiding={true}
+            initialState={{ density: "compact" }}
+            enableDensityToggle={false}
+            enableColumnResizing
+            enableStickyHeader={true}
+            enableStickyFooter={true}
+            enableTableHead={true}
+            enableTopToolbar={false}
+            enableColumnActions={false}
+            enableGlobalFilter={false}
+            enableFilters={false}
+            enableFullScreenToggle={false}
+            enablePagination={false}
+            getRowId={(row: any) => row.DocEntry}
+            state={{
+                // isLoading: true,
+            }}
+        />
+    </div>
 }

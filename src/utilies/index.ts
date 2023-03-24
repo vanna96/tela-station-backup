@@ -8,13 +8,7 @@ export const setItemToLocal = (key: string, data: any) => localStorage.setItem(k
 export const getItemFromLocal = (key: string) => localStorage.getItem(key);
 
 
-export const fileToBase64 = (file :any) => new Promise((resolve, reject) =>
-{
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-});
+
 
 export const currencyFormat = (value:any) =>
 {
@@ -25,3 +19,42 @@ export const currencyFormat = (value:any) =>
 
     return parseFloat(value).toFixed(2);
 }
+
+
+export const arrayBufferToBlob = async (arrayBuffer : any, type : any, fileName : string) : Promise<Blob> =>
+  new Promise((resolve, reject) =>
+  {
+
+    let blob: any = new Blob([arrayBuffer], {
+      type: type,
+    });
+
+    const dateNum = Date.now();
+    const dateStr = new Date();
+    const uuid = Date.now();
+
+    blob['lastModified '] = dateNum
+    blob['lastModifiedDate '] = dateStr;
+    blob['name'] = fileName;
+    blob['percent'] = 0;
+    blob['uid'] = uuid;
+
+    blob['originFileObj'] = new Blob([arrayBuffer], { type: type });
+    blob['originFileObj']['lastModified'] = dateNum;
+    blob['originFileObj']['lastModifiedDate'] = dateStr;
+    blob['originFileObj']['name'] = fileName;
+    blob['originFileObj']['uid'] = uuid;
+    blob['originFileObj']['webkitRelativePath'] = '';
+
+    resolve(blob);
+  });
+
+
+
+export const fileToBase64 =( file : any) => new Promise((resolve, reject) =>
+{
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = error => reject(error);
+});
