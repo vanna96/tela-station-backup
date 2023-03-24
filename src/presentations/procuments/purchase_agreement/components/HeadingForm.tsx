@@ -14,7 +14,7 @@ export interface IHeadingFormProps {
 
 export default function HeadingForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject }: IHeadingFormProps) {
 
-
+    console.log(data.endDate)
     return (
         <>
             <FormCard title='Information'>
@@ -116,7 +116,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 End Date
                             </label>
                             <div className="">
-                                <MUIDatePicker error={data?.message?.includes('EndDate')} value={data.endDate} onChange={(e: any) => handlerChange('endDate', e)} />
+                                <MUIDatePicker value={data.endDate} onChange={(e: any) => handlerChange('endDate', e)} />
                             </div>
                         </div>
                     </div>

@@ -220,7 +220,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             cardCode: record.cardCode,
             cardName: record.cardName,
             contactPersonCode: record.contactEmployee!.length > 0 ? record.contactEmployee![0].id : undefined,
-            contactPersonList: record.contactEmployee,
+            contactPersonList: record.contactEmployee ?? [],
             email: record.email,
             phone: record.phone,
             shippingType: record.shippingType,

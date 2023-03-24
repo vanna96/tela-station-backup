@@ -16,6 +16,10 @@ import { CircularProgress } from '@mui/material';
 import BackButton from '@/components/button/BackButton';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
+import DocumentStatus from '@/constants/documentStatus';
+import { ContactEmployee } from '@/models/BusinessParter';
+import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
+import BusinessPartner from '../../../../models/BusinessParter';
 
 
 class PurchaseAgreementDetail extends Component<any, any> {
@@ -41,7 +45,20 @@ class PurchaseAgreementDetail extends Component<any, any> {
         const data = this.props.location.state as PurchaseAgreement;
 
         if (data) {
-            setTimeout(() => this.setState({ ...data, loading: false }), 500)
+            setTimeout(() => {
+                let purchaseAgreement = data;
+                purchaseAgreement as PurchaseAgreement;
+                if (purchaseAgreement.contactPersonCode) {
+                    new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.cardCode!).then((res: BusinessPartner) => {
+                        purchaseAgreement.email = res.email;
+                        purchaseAgreement.phone = res.phone;
+                        purchaseAgreement.contactPersonList = res.contactEmployee ?? [];
+                        this.setState({ ...purchaseAgreement, loading: false })
+                    })
+                } else {
+                    this.setState({ ...purchaseAgreement, loading: false })
+                }
+            }, 500)
         } else {
             new PurchaseAgreementRepository().find(id).then((res: any) => {
                 this.setState({ ...res, loading: false });
@@ -52,8 +69,6 @@ class PurchaseAgreementDetail extends Component<any, any> {
     }
 
     render() {
-
-
         return (
             <div className='w-full h-full flex flex-col p-4 gap-4'>
                 <DocumentHeaderComponent data={this.state} />
@@ -80,15 +95,15 @@ class PurchaseAgreementDetail extends Component<any, any> {
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Contact Person Code</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state?.contactPersonList?.find((e: ContactEmployee) => e.id === this.state.contactPersonCode)?.name}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Email</span>
-                                    <span className='w-8/12 font-medium'>: example@email</span>
+                                    <span className='w-8/12 font-medium'>: {this.state?.email}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Phone</span>
-                                    <span className='w-8/12 font-medium'>: +855 21 000 123</span>
+                                    <span className='w-8/12 font-medium'>: {this.state?.phone}</span>
                                 </div>
 
 
@@ -100,11 +115,7 @@ class PurchaseAgreementDetail extends Component<any, any> {
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Agreement Type</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.agreementMethod?.replace('am', '')}</span>
-                                </div>
-                                <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>Contact Person Code</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
+                                    <span className='w-8/12 font-medium'>: {PurchaseAgreement.getType(this.state.agreementMethod)}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Start Date</span>
@@ -145,7 +156,7 @@ function General(props: any) {
 
     return <div className='grow w-full grid grid-cols-2 gap-2 text-[12px] py-2'>
         <div className='flex flex-col gap-2'>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Agreement Type</span> <span className='col-span-2 font-medium'>: {data.agreementType?.replace('at', '')}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Agreement Type</span> <span className='col-span-2 font-medium'>: {PurchaseAgreement.getType(data.agreementType)}</span></div>
             <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {data.paymentTerm}</span></div>
             <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Method</span> <span className='col-span-2 font-medium'>: {data.paymentMethod}</span></div>
             <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shipping Type</span> <span className='col-span-2 font-medium'>: {data.shippingType}</span></div>
@@ -153,7 +164,7 @@ function General(props: any) {
             <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Remark</span> <span className='col-span-2 font-medium'>: {data.remark}</span></div>
         </div>
         <div className='flex flex-col gap-2'>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {data.status?.replace('as', '')}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {DocumentStatus.getFullNameStatus(data?.status)}</span></div>
             <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Owner</span> <span className='col-span-2 font-medium'>: {data.owner}</span></div>
             <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Reminder</span> <span className='col-span-2 font-medium'>: {data.remindTime} {data.remindUnit?.replace('reu_', '')}</span></div>
         </div>
@@ -166,14 +177,14 @@ function Content(props: any) {
 
     const itemColumn = useMemo(() => [
         {
-            accessorKey: "itemNo",
+            accessorKey: "itemCode",
             header: "Item NO.", //uses the default width from defaultColumn prop
             enableClickToCopy: true,
             enableFilterMatchHighlighting: true,
             size: 88,
         },
         {
-            accessorKey: "itemDescription",
+            accessorKey: "itemName",
             header: "Item Description",
             enableClickToCopy: true,
         },
@@ -225,8 +236,8 @@ function Content(props: any) {
 
     return <div className="data-table  border-none p-0 mt-3">
         <MaterialReactTable
-            columns={data?.agreementMethod === 'amItem' ? itemColumn : serviceColumns}
-            data={data?.documentLine ?? []}
+            columns={data?.agreementMethod === 'I' ? itemColumn : serviceColumns}
+            data={data?.items ?? []}
             enableHiding={true}
             initialState={{ density: "compact" }}
             enableDensityToggle={false}

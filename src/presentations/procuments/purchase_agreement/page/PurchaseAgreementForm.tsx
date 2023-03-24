@@ -39,10 +39,12 @@ class PurchaseAgreementForm extends CoreFormDocument {
     componentDidMount(): void {
 
         if (!this.props?.edit) {
+
             setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
         }
 
         if (this.props.location.state) {
+            console.log(this.props.location.state)
             setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
         }
 
