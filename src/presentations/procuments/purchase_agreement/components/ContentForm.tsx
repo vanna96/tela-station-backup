@@ -39,9 +39,17 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 size: 40,
                 enableResizing: false,
                 Cell: ({ cell }: any) => {
-                    return <div role="button" className="flex justify-center items-center">
-                        <button type="button" className="border border-gray-200 p-1 rounded-sm" onClick={() => handlerRemoveRow(cell.row.original)}><AiOutlineDelete /></button>
-                    </div>;
+                    return (
+                        <div role="button" className="flex justify-center items-center">
+                            <button
+                                type="button"
+                                className="border border-gray-200 p-1 rounded-sm"
+                                onClick={() => handlerRemoveRow(cell.row.original)}
+                            >
+                                <AiOutlineDelete />
+                            </button>
+                        </div>
+                    );
                 },
             },
             {
@@ -49,68 +57,95 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 header: "Item No", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
                     // return ;
-                    return <MUITextField
-                        value={cell.getValue()}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
-                        onClick={() => { }}
-                    />;
+                    return (
+                        <MUITextField
+                            value={cell.getValue()}
+                            onBlur={(event) =>
+                                handlerChangeInput(event, cell?.row?.original, "ItemCode")
+                            }
+                            onClick={() => { }}
+                        />
+                    );
                 },
             },
 
             {
                 accessorKey: "ItemName",
                 header: "Description",
-                Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />
-            },
-            {
-                accessorKey: "UoMGroupName",
-                header: "UoM Group",
-                Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
-            },
-            {
-                accessorKey: "ItemsGroupName",
-                header: "Item Group",
-                Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
+                Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
             },
             {
                 accessorKey: "Quantity",
                 header: "Quanitity",
                 Cell: ({ cell }: any) => {
-                    return <MUITextField
-                        defaultValue={cell.getValue()}
-                        type="number"
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
-                    />;
+                    return (
+                        <MUITextField
+                            defaultValue={cell.getValue()}
+                            type="number"
+                            onBlur={(event) =>
+                                handlerChangeInput(event, cell?.row?.original, "Quantity")
+                            }
+                        />
+                    );
                 },
             },
             {
                 accessorKey: "UnitPrice",
                 header: "Unit Price",
                 Cell: ({ cell }: any) => {
-                    return <MUITextField
-                        startAdornment={'USD'}
-                        type="number"
-                        defaultValue={cell.getValue()}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
-                    />;
+                    return (
+                        <MUITextField
+                            startAdornment={"USD"}
+                            type="number"
+                            defaultValue={cell.getValue()}
+                            onBlur={(event) =>
+                                handlerChangeInput(event, cell?.row?.original, "UnitPrice")
+                            }
+                        />
+                    );
+                },
+            },
+            {
+                accessorKey: "DiscountPercent",
+                header: "Discount %",
+                Cell: ({ cell }: any) => {
+                    return (
+                        <MUITextField
+                            defaultValue={cell.getValue()}
+                            type="number"
+                            onBlur={(event) =>
+                                handlerChangeInput(event, cell?.row?.original, "DiscountPercent")
+                            }
+                        />
+                    );
                 },
             },
             {
                 accessorKey: "Total",
                 header: "Total",
                 Cell: ({ cell }: any) => {
-
-                    console.log(cell.row.original.UnitPrice)
-                    return <MUITextField
-                        startAdornment={'USD'}
-                        value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
-                    />;
+                    console.log(cell.row.original.UnitPrice);
+                    return (
+                        <MUITextField
+                            startAdornment={"USD"}
+                            value={Formular.findToTal(
+                                cell.row.original.Quantity,
+                                cell.row.original.UnitPrice
+                            )}
+                        />
+                    );
                 },
+            },
+            {
+                accessorKey: "UoMCode",
+                header: "UoM Code",
+                Cell: ({ cell }: any) => (
+                    <MUITextField defaultValue={cell.getValue()} />
+                ),
             },
         ],
         []
     );
-
     const serviceColumns = React.useMemo(
         () => [
             {

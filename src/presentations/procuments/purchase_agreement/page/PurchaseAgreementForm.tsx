@@ -11,6 +11,7 @@ import { CoreFormDocumentState } from '../../../../components/core/CoreFormDocum
 import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import { ToastOptions } from 'react-toastify';
+import Accounting from '../../purchase_qoutation/componnent/Acccounting';
 
 class PurchaseAgreementForm extends CoreFormDocument {
 
@@ -100,7 +101,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
                     handlerRemoveItem={this.handlerRemoveItem}
                     handlerChangeItem={this.handlerAddItem}
                 />
-
+   
                 <AttachmentForm />
 
                 <div className="sticky w-full bottom-4  mt-2">
