@@ -11,6 +11,8 @@ import { CoreFormDocumentState } from '../../../../components/core/CoreFormDocum
 import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import { ToastOptions } from 'react-toastify';
+import GLAccount from '@/models/GLAccount';
+
 
 class PurchaseAgreementForm extends CoreFormDocument {
 
@@ -33,14 +35,16 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
     componentDidMount(): void {
+        console.log(this.props)
 
         DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie).then((res: any) => {
-            this.setState({ ...this.state, series: res, })
+            this.setState({ ...this.state, series: res, isLoadingSerie: false })
         });
 
-        DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie).then((res: any) => {
-            this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber, isLoadingSerie: false })
-        });
+        if (!this.props.edit)
+            DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie).then((res: any) => {
+                this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber, isLoadingSerie: false })
+            });
     }
 
     handlerRemoveItem(code: string) {
@@ -53,7 +57,16 @@ class PurchaseAgreementForm extends CoreFormDocument {
     handlerAddItem({ value, record, field }: any) {
         let items = [...this.state.items ?? []];
         let item = this.state.items?.find((e: any) => e?.ItemCode === record?.ItemCode);
-        item[field] = value;
+
+        if (field === 'AccountNo') {
+            const account = value as GLAccount;
+            item['AccountNo'] = account.code;
+            item['AccountName'] = account.name;
+        } else {
+            item[field] = value;
+        }
+
+
         const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
         if (index > 0) items[index] = item;
         this.setState({ ...this.state, items: items })
@@ -64,22 +77,18 @@ class PurchaseAgreementForm extends CoreFormDocument {
         event.preventDefault();
         this.setState({ ...this.state, isSubmitting: true });
 
-        await new PurchaseAgreementRepository().post(this.state).then((res: any) => {
+        const { id } = this.props?.match?.params
+
+        await new PurchaseAgreementRepository().post(this.state, this.props?.edit, id).then((res: any) => {
             console.log(res)
             this.showMessage('Success', 'Create Successfully');
         }).catch((e: Error) => {
             this.showMessage('Errors', e.message);
         });
-
-
-        setTimeout(() => {
-
-        }, 2000)
     }
 
 
     FormRender = () => {
-
         return <>
             <form onSubmit={this.handlerSubmit} className='flex flex-col gap-4'>
                 <HeadingForm

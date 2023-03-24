@@ -130,7 +130,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             <>
                 <ItemModal open={this.state.isOpenItem} onClose={() => this.handlerCloseItem()} type='purchase' onOk={this.handlerConfirmItem} />
                 <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type={this.state.vendorType} />
-                <GLAccountModal open={this.state.isOpenAccount} onClose={() => this.handlerCloseAccount()} />
                 <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
                 <DistributionRuleModal open={this.state.showDistribution} onClose={() => { }} inWhichNum={this.state.inWhichDimension} onOk={this.handlerConfirmDistribution} />
 
@@ -285,6 +284,10 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     protected handlerChange(key: string, value: any) {
         let temps: any = { ...this.state };
         temps[key] = value;
+
+        if (key === 'agreementMethod') {
+            temps['items'] = [{}];
+        }
 
         if (key === 'serie') {
             const document = this.state.series.find((e: any) => e.Series === value);

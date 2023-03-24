@@ -22,12 +22,18 @@ export default class PurchaseAgreementRepository extends Repository<PurchaseAgre
         return response;
     }
 
-    async find<T>(query?: string | undefined): Promise<T> {
-        throw new Error('Method not implemented.');
+    async find<T>(id: any): Promise<any> {
+        return await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseAgreement(res.data))
+            .catch((e: Error) => {
+            throw new Error(e.message)
+        })
     }
 
 
-    async post(payload: any): Promise<any> {
+    async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
+
+        if(isUpdate) return await request('PATCH', this.url + "("+id+")", PurchaseAgreement.toUpdate(payload));
+
         return await request('POST', this.url, PurchaseAgreement.toCreate(payload));
     }
 
