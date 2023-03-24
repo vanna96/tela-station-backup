@@ -26,14 +26,14 @@ export default function HeadingForm({
             <MUITextField
               label="Vendor Code"
               value={data?.cardCode}
-              name="BPCode"
+              name="CardCode"
               onClick={handlerOpenVendor}
               endAdornment={true}
             />
             <MUITextField
               label="Vendor Name"
               value={data?.cardName}
-              name="BPName"
+              name="CardName"
             />
           </div>
 
@@ -113,118 +113,71 @@ export default function HeadingForm({
 
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
-              <label
-                htmlFor="AgreementMethod"
-                className="text-gray-500 text-[14px]"
-              >
-                Agreement Method
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Status
               </label>
               <div className="">
                 <MUISelect
+                  value={data?.documentStatus}
                   items={[
-                    { name: "Item Method", value: "I" },
-                    { name: "Monetary Method", value: "M" },
+                    { value: "O", label: "Open" },
+                    { value: "C", label: "Closed" },
                   ]}
-                  aliaslabel="name"
-                  aliasvalue="value"
-                  name="AgreementMethod"
-                  value={data.agreementMethod}
-                  onChange={(e) =>
-                    handlerChange("agreementMethod", e.target.value)
-                  }
+                  name="DocumentStatus"
+                  onChange={(e) => handlerChange("documentStatus", e.target.value)}
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-1 text-sm"></div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Start Date
+                Posting Date
               </label>
               <div className="">
                 <MUIDatePicker
-                  value={data.startDate}
-                  onChange={(e: any) => handlerChange("startDate", e)}
+                  value={data.creationDate}
+                  onChange={(e: any) => handlerChange("creationDate", e)}
                 />
               </div>
             </div>
 
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                End Date
+                Valid Until
               </label>
               <div className="">
                 <MUIDatePicker
-                  value={data.endDate}
-                  onChange={(e: any) => handlerChange("endDate", e)}
+                  value={data.docDueDate}
+                  onChange={(e: any) => handlerChange("docDueDate", e)}
                 />
               </div>
             </div>
           </div>
-        </div>
-        {/* <div className='col-span-2'></div> */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col gap-1 text-sm">
-            <MUITextField label="Tel. No" value={data.phone} />
-          </div>
-
-          <div className="flex flex-col gap-1 text-sm">
-            <MUITextField label="Email" value={data.email} />
-          </div>
-        </div>
-        <div className="flex flex-col gap-3">
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
-              <MUITextField
-                label="Project"
-                name="Project"
-                value={data.project}
-                endAdornment={true}
-                onClick={handlerOpenProject}
-              />
-            </div>
-
-            <div className="flex flex-col gap-1 text-sm">
-              <label
-                htmlFor="TerminateDate"
-                className="text-gray-500 text-[14px]"
-              >
-                Terminate Date
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Document Date
               </label>
               <div className="">
                 <MUIDatePicker
-                  onChange={(e: any) => console.log(e)}
-                  name="TerminateDate"
+                  value={data.docDate}
+                  onChange={(e: any) => handlerChange("docDate", e)}
                 />
               </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-1 text-sm">
-            <label htmlFor="SigningDate" className="text-gray-500 text-[14px]">
-              Signing Date
-            </label>
-            <div className="">
-              <MUIDatePicker
-                onChange={(e: any) => console.log(e)}
-                name="SigningDate"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-1 text-sm">
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Description
-            </label>
-            <div className="">
-              <TextField
-                size="small"
-                multiline
-                rows={4}
-                fullWidth
-                name="Description"
-                className="w-full "
-              />
+
+            <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Required Date
+              </label>
+              <div className="">
+                <MUIDatePicker
+                  value={data.requiredDate}
+                  onChange={(e: any) => handlerChange("requiredDate", e)}
+                />
+              </div>
             </div>
           </div>
         </div>

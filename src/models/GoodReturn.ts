@@ -36,8 +36,8 @@ export default class GoodReturn extends Model implements MasterDocument {
         this.id = json['AgreementNo'];
         this.serie = json['Series'];
         this.docNum = json['DocNum'];
-        this.cardName = json['BPName'];
-        this.cardCode = json['BPCode'];
+        this.cardName = json['CardName'];
+        this.cardCode = json['CardCode'];
         this.constactPersonCode = json['ContactPersonCode'];
         this.startDate = dateFormat(json['StartDate']);
         this.endDate =  dateFormat(json['EnDate']);
@@ -56,8 +56,8 @@ export default class GoodReturn extends Model implements MasterDocument {
         console.log(json)
 
         return {
-            "BPCode": json['cardCode'],
-            "BPName": json['cardName'],
+            "CardCode": json['cardCode'],
+            "CardName": json['cardName'],
             "ContactPersonCode": json['contactPersonCode'],
             "StartDate": json['startDate'],
             "EndDate": json['endDate'],
@@ -82,7 +82,7 @@ export default class GoodReturn extends Model implements MasterDocument {
             "NumAtCard": json['numAtCard'],
             "Project": json['project'],
             "BPCurrency": json['currency'],
-            "BlanketAgreements_ItemsLines": json['items'].map((e:any) => GoodReturnDocumentLine.toCreate(e))
+            "DocumentLines": json['items'].map((e:any) => GoodReturnDocumentLine.toCreate(e))
         };
     }
 
@@ -116,7 +116,7 @@ export default class GoodReturn extends Model implements MasterDocument {
             "NumAtCard": json['numAtCard'],
             "Project": json['project'],
             "BPCurrency": json['currency'],
-            "BlanketAgreements_ItemsLines": []
+            "DocumentLines": []
         };
     }
     
@@ -153,7 +153,7 @@ export class GoodReturnDocumentLine extends Model implements DocumentLine {
     public static toCreate(json: any) {
         
         return {
-            "ItemNo": json["ItemCode"],
+            "ItemCode": json["ItemCode"],
             "ItemDescription": json['ItemName'],
             "ItemGroup": json["ItemsGroupCode"],
             "PlannedQuantity": json['Quantity'],
