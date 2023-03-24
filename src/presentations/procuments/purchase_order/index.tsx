@@ -8,14 +8,13 @@ import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
 import { useQueryHook } from '../../../utilies/useQueryHook';
 import { UseQueryResult, useQuery } from "react-query";
-import PurchaseAgreementRepository from '../../../services/actions/purchaseAgreementRepository';
+import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
 
 
-
-export default function PurchaseAgreementLists() {
+export default function PurchaseOrderLists() {
     const route = useNavigate();
 
-    const { data, isLoading }: any = useQuery({ queryKey: ['pa'], queryFn: () => new PurchaseAgreementRepository().get() })
+    const { data, isLoading }: any = useQuery({ queryKey: ['pa'], queryFn: () => new PurchaseOrderRepository().get() })
 
     const columns = React.useMemo(
         () => [
@@ -27,18 +26,23 @@ export default function PurchaseAgreementLists() {
                 size: 88,
             },
             {
-                accessorKey: "cardCode",
-                header: "Vendor Code",
+                accessorKey: "docType",
+                header: "Document Type	",
                 enableClickToCopy: true,
             },
             {
-                accessorKey: "cardName",
-                header: "Vender Name",
+                accessorKey: "cardCode",
+                header: "Vendor Code",
                 // size: 200, //increase the width of this column
             },
             {
-                accessorKey: "StartDate",
-                header: "Start Date",
+                accessorKey: "journalMemo",
+                header: "JournalMemo",
+                enableClickToCopy: true,
+            },
+            {
+                accessorKey: "docDate",
+                header: "Posting Date",
                 Cell: ({ cell }: any) => (
                     <>
                         {moment(cell.getValue()).format('DD-MM-YYYY')}
@@ -46,14 +50,13 @@ export default function PurchaseAgreementLists() {
                 ),
             },
             {
-                accessorKey: "EndDate",
-                header: "End Date",
-                Cell: ({ cell }) => (
+                accessorKey: "docDueDate",
+                header: "Delivery  Date",
+                Cell: ({ cell } : any) => (
                     <>
                         {moment(cell.getValue()).format('DD-MM-YYYY')}
                     </>
                 ),
-
             },
             {
                 accessorKey: "id",
@@ -91,9 +94,9 @@ export default function PurchaseAgreementLists() {
         <>
             <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
                 <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full bg-white py-3">
-                    <h3 className="text-lg 2xl:text-base xl:text-sm">Procument / Purchase Agreement</h3>
+                    <h3 className="text-lg 2xl:text-base xl:text-sm">Procument / Purchase Order</h3>
                     <Button variant="outlined" disableElevation size="small"
-                        onClick={() => route('/procument/purchase-agreement/create')}
+                        onClick={() => route('/procument/purchase-order/create')}
                     >
                         <span className="text-xs">Create</span>
                     </Button>
@@ -122,7 +125,7 @@ export default function PurchaseAgreementLists() {
                         }}
                         renderTopToolbarCustomActions={({ table }) => {
                             return <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                                <h3 className="font-bold text-base xl:text-sm">Purchase Agreement</h3>
+                                <h3 className="font-bold text-base xl:text-sm">Purchase Order</h3>
                                 {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
                             </div>
                         }}

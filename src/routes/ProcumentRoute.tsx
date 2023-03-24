@@ -8,6 +8,9 @@ import PurchaseAgreementDetail from '../presentations/procuments/purchase_agreem
 import Form from '@/presentations/procuments/purchase_agreement/page/PurchaseAgreementForm';
 import PurchaseAgreementForm from '@/presentations/procuments/purchase_agreement/page/PurchaseAgreementForm';
 import ProcumentPage from '@/presentations/procuments';
+import PurchaseOrderLists from '@/presentations/procuments/purchase_order';
+import PurchaseOrderDetail from '@/presentations/procuments/purchase_order/page/PurchaseOrderDetail';
+import PurchaseorderForm from '@/presentations/procuments/purchase_order/page/PurchaseorderForm';
 
 export default function ProcumentRoute() {
     return (
@@ -17,6 +20,11 @@ export default function ProcumentRoute() {
                 <Route index element={<PurchaseAgreementLists />} />
                 <Route path=':id' element={<PurchaseAgreementDetail />} />
                 <Route path='create' element={<PurchaseAgreementForm />} />
+            </Route>
+            <Route path='/purchase-order' >
+                <Route index element={<PurchaseOrderLists />} />
+                <Route path=':id' element={<PurchaseOrderDetail />} />
+                <Route path='create' element={<PurchaseorderForm />} />
             </Route>
         </Routes>
     )
