@@ -16,12 +16,11 @@ class PurchaseRequestForm extends CoreFormDocument {
         super(props)
         this.state = {
             ...this.state,
-            agreementMethod: 'I',
-            agreementType: 'G',
-            status: 'D',
-            renewal: false,
-            startDate: null,
-            endDate: null
+            documentStatus: 'O',
+            requiredDate: null,
+            docDate: null,
+            creationDate: null,
+            docDueDate: null
         } as any;
 
 

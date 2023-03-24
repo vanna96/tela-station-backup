@@ -66,7 +66,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
 
   constructor(json: any) {
     super();
-    this.id = json["AgreementNo"];
+    this.id = json["DocNum"];
     this.requester = json["Requester"];
     this.requesterName = json["RequesterName"];
     this.requesterEmail = json["RequesterEmail"];
@@ -83,36 +83,6 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     console.log(json);
 
     return {
-      //   BPCode: json["cardCode"],
-      //   BPName: json["cardName"],
-      //   ContactPersonCode: json["contactPersonCode"],
-      //   StartDate: json["startDate"],
-      //   EndDate: json["endDate"],
-      //   TerminateDate: json["terminateDate"],
-      //   Description: json["description"],
-      //   AgreementType: json["agreementType"],
-      //   Status: json["status"],
-      //   Owner: json["owner"],
-      //   IgnorePricesInAgreement: json["inorePricesInAgreement"] ? "Y" : "N",
-      //   Renewal: json["renewal"] ? "Y" : "N",
-      //   RemindUnit: json["remindUnit"],
-      //   RemindTime: json["remindTime"],
-      //   Remarks: json["remarks"],
-      //   AttachmentEntry: json["attachmentEntry"],
-      //   SettlementProbability: json["settlementProbability"],
-      //   AgreementMethod: json["agreementMethod"],
-      //   PaymentTerms: json["paymentTerms"],
-      //   SigningDate: json["signingDate"],
-      //   Series: json["serie"],
-      //   PaymentMethod: json["paymentMethod"],
-      //   ShippingType: json["shippingType"],
-      //   NumAtCard: json["numAtCard"],
-      //   Project: json["project"],
-      //   BPCurrency: json["currency"],
-      //   DocumentLines: json["items"].map((e: any) =>
-      //     PurchaseRequestDocumentLine.toCreate(e)
-      //   ),
-      // };
       requester: json["Requester"],
       requesterName: json["RequesterName"],
       requesterEmail: json["requesterEmail"],
