@@ -15,6 +15,15 @@ div.data-table .css-80pr5n-MuiPaper-root {
   border: 1px solid rgb(233, 233, 233);
 }
 
+div.border-none .css-80pr5n-MuiPaper-root {
+  border: none !important;
+}
+
+div.p-0.css-80pr5n-MuiPaper-root {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
 div.data-table > div > div > table > thead > tr {
   border-radius: 10px;
 }
@@ -73,11 +82,11 @@ span.MuiLinearProgress-root {
 }
 
 .date-picker-error > div > div {
-  /* border: 0.8px solid red; */
+  border: 0.8px solid red;
 }
 
 .date-picker-error > div > div > div > button > svg {
-  /* color: rgba(212, 5, 5, 0.815); */
+  color: rgba(212, 5, 5, 0.815);
 }
 
 .date-picker > div > div > div > button > svg {
