@@ -112,7 +112,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
             "Project": json['project'],
             "AccountCode": json['AccountCode'],
             "DocCurrency": json['currency'],
-            "DocumentLines": json['items'].map((e:any) => PurchaseOrderDocumentLine.toCreate(e))
+            "DocumentLines": json['items'].map((e:any) => PurchaseOrderDocumentLine.toCreate(e, json['docType']))
         };
     }
 
@@ -167,23 +167,27 @@ export class PurchaseOrderDocumentLine extends Model implements DocumentLine {
     lineDiscount?: number;
     uomEntry?: number | undefined;
     uomCode?: string | undefined;
-    TransportationCode?: string | undefined;
+    transportationCode?: string | undefined;
     project?: string | undefined;
     taxCode?: string | undefined;
     taxRate?: number | undefined;
     vatGroup?: string | undefined;
     lineTotal?: string | undefined;
-    AccountCode?: string | undefined;
+    accountCode?: string | undefined;
+    accountName?: string | undefined;
+    discountPercent?: number | undefined;
     toJson(update: boolean) {
         throw new Error('Method not implemented.');
     }
 
-    public static toCreate(json: any) {
+    public static toCreate(json: any, type: string) {
         
-        return {
+        let body = {
             "ItemCode": json["ItemCode"],
-            "ItemDescription": json['ItemName'],
+            "ItemDescription": json['ItemDescription'],
             "UnitPrice": json['UnitPrice'],
+            "ItemGroup": json['ItemGroup'],
+            "DiscountPercent": json['DiscountPercent'],
             "LineDiscount": 0.0,
             "DocEntry": json['UoMGroupEntry'],
             "UoMCode": json["UoMCode"],
@@ -194,7 +198,18 @@ export class PurchaseOrderDocumentLine extends Model implements DocumentLine {
             "VatGroup": json["VatGroup"],
             "LineTotal": json["LineTotal"],
             "AccountCode": json["AccountCode"],
+            "AccountName": json["AccountName"],
         };
+
+        if (type === 'S') {
+            delete body.ItemCode;
+            // delete body.ItemDescription;
+            delete body.ItemGroup;
+            delete body.UnitPrice;
+            delete body.DiscountPercent;
+            delete body.UnitPrice;
+        }
+        return body;
     }
 }
 

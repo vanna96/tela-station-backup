@@ -12,17 +12,13 @@ import { ToastOptions } from "react-toastify";
 import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
 import LogisticForm from "../components/LogisticForm";
 import AccounttingForm from "../components/AccounttingForm";
+import GLAccount from "@/models/GLAccount";
 class PurchaseOrder extends CoreFormDocument {
   constructor(props: any) {
     super(props);
     this.state = {
       ...this.state,
-      agreementMethod: "I",
-      agreementType: "G",
-      status: "D",
-      renewal: false,
-      startDate: null,
-      endDate: null,
+      docType: "I",
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
@@ -61,7 +57,15 @@ class PurchaseOrder extends CoreFormDocument {
     let item = this.state.items?.find(
       (e: any) => e?.ItemCode === record?.ItemCode
     );
-    item[field] = value;
+
+    if (field === 'AccountNo') {
+      const account = value as GLAccount;
+      item['AccountNo'] = account.code;
+      item['AccountName'] = account.name;
+  } else {
+      item[field] = value;
+  }
+
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
     this.setState({ ...this.state, items: items });

@@ -13,6 +13,8 @@ import Formular from "@/utilies/formular";
 import MUISelect from "@/components/selectbox/MUISelect";
 import { ContactEmployee } from "@/models/BusinessParter";
 import Owner from "@/components/selectbox/Owner";
+import AccounttingForm from "./AccounttingForm";
+import AccountTextField from "../../../../components/input/AccountTextField";
 
 export interface ContentFormProps {
   handlerAddItem: () => void;
@@ -124,7 +126,11 @@ export default function ContentForm({
               defaultValue={cell.getValue()}
               type="number"
               onBlur={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "DiscountPercent")
+                handlerChangeInput(
+                  event,
+                  cell?.row?.original,
+                  "DiscountPercent"
+                )
               }
             />
           );
@@ -186,23 +192,28 @@ export default function ContentForm({
             <MUITextField
               defaultValue={currencyFormat(cell.getValue())}
               onBlur={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "ItemDescription")
+                handlerChangeInput(
+                  event,
+                  cell?.row?.original,
+                  "ItemDescription"
+                )
               }
             />
           );
         },
       },
       {
-        accessorKey: "AccountCode",
+        accessorKey: "AccountNo",
         header: "G/L Account", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
+          console.log(cell.getValue());
           return (
-            <MUITextField
-            name="AccountCode"
-            value={data.accountCode}
-            endAdornment={true}
-            onClick={handlerOpenGLAccount}
-          />
+            <AccountTextField
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "AccountNo")
+              }
+            />
           );
         },
       },
@@ -210,11 +221,7 @@ export default function ContentForm({
         accessorKey: "AccountName",
         header: "	G/L Account Name", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return (
-            <MUITextField
-              value={cell.row?.original?.PlannedAmount}
-            />
-          );
+          return <MUITextField value={cell.getValue()} />;
         },
       },
       {
@@ -235,9 +242,7 @@ export default function ContentForm({
         accessorKey: "LineTotal",
         header: "Total (LC)", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return (
-            <MUITextField defaultValue={cell.getValue()} onClick={() => {}} />
-          );
+          return <MUITextField value={cell.getValue()} />;
         },
       },
       {
@@ -248,7 +253,11 @@ export default function ContentForm({
             <MUITextField
               value={cell.getValue()}
               onChange={(event: any) =>
-                handlerChangeInput(event, cell?.row?.original, "BlanketAgreementNumber")
+                handlerChangeInput(
+                  event,
+                  cell?.row?.original,
+                  "BlanketAgreementNumber"
+                )
               }
             />
           );
@@ -261,6 +270,7 @@ export default function ContentForm({
   const [colVisibility, setColVisibility] = React.useState<
     Record<string, boolean>
   >({ Total: false, ItemsGroupName: false, UoMGroupName: false });
+  console.log(data);
 
   return (
     <FormCard title="Content">
@@ -383,7 +393,11 @@ export default function ContentForm({
       </div>
       <div className="flex flex-col gap-3">
         <div className="w-[100%] gap-3">
-          <MUITextField label="Total Before Discount" value={data.LineTotal} name="LineTotal"/>
+          <MUITextField
+            label="Total Before Discount"
+            value={data.LineTotal}
+            name="LineTotal"
+          />
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">

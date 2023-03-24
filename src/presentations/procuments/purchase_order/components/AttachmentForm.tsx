@@ -126,7 +126,7 @@ export default function AttachmentForm() {
                 <div className='col-span-2 data-table'>
                     <MaterialReactTable
                         columns={columns}
-                        data={data}
+                        data={data?? []}
                         enableStickyHeader={true}
                         enableColumnActions={false}
                         enableColumnFilters={false}
