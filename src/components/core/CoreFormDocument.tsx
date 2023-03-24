@@ -68,7 +68,8 @@ export interface CoreFormDocumentState {
     showDialogMessage: boolean,
     inWhichDimension: number,
     showDistribution: boolean,
-    vendorType: VendorModalType
+    vendorType: VendorModalType,
+    loading: boolean,
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -114,6 +115,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             showDistribution: false,
             inWhichDimension: 0,
             vendorType: 'customer',
+            loading: true,
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
