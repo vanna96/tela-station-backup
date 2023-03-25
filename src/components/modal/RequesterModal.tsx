@@ -43,17 +43,17 @@ const RequesterModal: FC<RequesterModalProps> = ({ open, onClose, onOk }) => {
 
 // console.log(departmentsData)
 // console.log(branchesData)
-// console.log(data)
+console.log(data)
 
 
-const usersWithNames = data?.map((user: any) => {
-    const departmentName = departmentsData.find((dept: any) => dept.Code === user.Department)?.Name ?? "";
-    const branchName = branchesData.find((branch: any) => branch.Code === user.Branch)?.Name ?? "";
+// const usersWithNames = data?.map((user: any) => {
+//     const departmentName = departmentsData.find((dept: any) => dept.Code === user.Department)?.Name ?? "";
+//     const branchName = branchesData.find((branch: any) => branch.Code === user.Branch)?.Name ?? "";
 
-    return {  key: Math.random(),Department: departmentName, Branch: branchName };
-  });
+//     return {  key: Math.random(),departmentName: departmentName, branchName: branchName };
+//   });
 
-console.log(usersWithNames)
+// console.log(usersWithNames)
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,

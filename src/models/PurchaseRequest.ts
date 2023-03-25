@@ -36,11 +36,11 @@ export default class PurchaseRequest extends Model implements MasterDocument {
   federalTaxID?: string;
   discountPercent?: string;
   creationDate?: string;
+  requriedDate?: string;
   updateDate?: string;
   userSign?: string;
   vatSum?: string;
   docTotalSys?: string;
-  requriedDate?: string;
   cancelDate?: string;
   rounding?: string;
   address2?: string;
@@ -72,6 +72,10 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     this.requesterEmail = json["RequesterEmail"];
     this.serie = json["Series"];
     this.docNum = json["DocNum"];
+    this.requriedDate = dateFormat(json["RequriedDate"]);
+    this.creationDate = dateFormat(json["CreationDate"]);
+    this.docDueDate = dateFormat(json["DocDueDate"]);
+    this.docDate = dateFormat(json["DocDate"]);
     this.documentLine = [];
   }
 
@@ -82,6 +86,107 @@ export default class PurchaseRequest extends Model implements MasterDocument {
   public static toCreate(json: any) {
     console.log(json);
 
+    return {
+      Requester: json["requester"],
+      RequesterName: json["requesterName"],
+      RequesterEmail: json["requesterEmail"],
+      RequesterBranch: json["requesterBranch"],
+      RequesterDepartment: json["requesterDepartment"],
+      DocDueDate: json["docDueDate"],
+      AttachmentEntry: ["attachmentEntry"],
+      DocCurrency: json["docCurrency"],
+      DocRate: json["docRate"],
+      Reference1: json["reference1"],
+      Reference2: json["reference2"],
+      Comments: json["comments"],
+      journalMemo: json["journalMemo"],
+      // paymentGroupCode: json["PaymentGroupCode"],
+      // salesPersonCode: json["SalesPersonCode"],
+      // transportationCode: json["TransportationCode"],
+      // confirmed: json["Confirmed"],
+      // contactPersonCode: json["ContactPersonCode"],
+      // series: json["Series"],
+      // taxDate: json["TaxDate"],
+      // partialSupply: json["PartialSupply"],
+      // docObjectCode: json["DocObjectCode"],
+      // indicator: json["Indicator"],
+      // federalTaxID: json["FederalTaxID"],
+      // discountPercent: json["DiscountPercent"],
+      // creationDate: json["CreationDate"],
+      // updateDate: json["UpdateDate"],
+      // userSign: json["UserSign"],
+      // vatSum: json["VatSum"],
+      // docTotalSys: json["DocTotalSys"],
+      // RequriedDate: json["RequriedDate"],
+      // cancelDate: json["CancelDate"],
+      // rounding: json["Rounding"],
+      // address2: json["Address2"],
+      // documentStatus: json["DocumentStatus"],
+      // periodIndicator: json["PeriodIndicator"],
+      // payToCode: json["PayToCode"],
+      // manualNumber: json["ManualNumber"],
+      // useShpdGoodsAct: json["UseShpdGoodsAct"],
+      // totalDiscount: json["TotalDiscount"],
+      // vatPercent: json["VatPercent"],
+      // extraMonth: json["ExtraMonth"],
+      // extraDays: json["ExtraDays"],
+      // startFrom: json["StartFrom"],
+      // downPaymentStatus: json["DownPaymentStatus"],
+      // bPLName: json["BPLName"],
+      // vatRegNum: json["VATRegNum"],
+      // paymentTerm: json["PaymentTerm"],
+      // priceList: json["PriceList"],
+      // serie: json["Serie"],
+      // paymentMethod: json["PaymentMethod"],
+      // shippingType: json["ShippingType"],
+
+      PriceList: json["priceList"],
+      Serie: json["serie"],
+      JournalMemo: json["JournalMemo"],
+      PaymentGroupCode: json["PaymentGroupCode"],
+      SalesPersonCode: json["SalesPersonCode"],
+      TransportationCode: json["TransportationCode"],
+      Confirmed: json["Confirmed"],
+      ContactPersonCode: json["ContactPersonCode"],
+      Series: json["Series"],
+      TaxDate: json["TaxDate"],
+      PartialSupply: json["PartialSupply"],
+      DocObjectCode: json["DocObjectCode"],
+      Indicator: json["Indicator"],
+      FederalTaxID: json["FederalTaxID"],
+      DiscountPercent: json["DiscountPercent"],
+      CreationDate: json["CreationDate"],
+      UpdateDate: json["UpdateDate"],
+      UserSign: json["UserSign"],
+      VatSum: json["VatSum"],
+      DocTotalSys: json["DocTotalSys"],
+      RequriedDate: json["requriedDate"],
+      CancelDate: json["CancelDate"],
+      Rounding: json["Rounding"],
+      Address2: json["Address2"],
+      DocumentStatus: json["DocumentStatus"],
+      PeriodIndicator: json["PeriodIndicator"],
+      PayToCode: json["PayToCode"],
+      ManualNumber: json["ManualNumber"],
+      UseShpdGoodsAct: json["UseShpdGoodsAct"],
+      TotalDiscount: json["TotalDiscount"],
+      VatPercent: json["VatPercent"],
+      ExtraMonth: json["ExtraMonth"],
+      ExtraDays: json["ExtraDays"],
+      StartFrom: json["StartFrom"],
+      DownPaymentStatus: json["DownPaymentStatus"],
+      BPLName: json["BPLName"],
+      VatRegNum: json["VATRegNum"],
+      PaymentTerm: json["PaymentTerm"],
+      PaymentMethod: json["PaymentMethod"],
+      ShippingType: json["ShippingType"],
+      DocumentLines: json["items"].map((e: any) =>
+        PurchaseRequestDocumentLine.toCreate(e)
+      ),
+    };
+  }
+
+  public static toUpdate(json: any) {
     return {
       requester: json["Requester"],
       requesterName: json["RequesterName"],
@@ -135,67 +240,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       serie: json["Serie"],
       paymentMethod: json["PaymentMethod"],
       shippingType: json["ShippingType"],
-      DocumentLines: json["items"].map((e: any) =>
-        PurchaseRequestDocumentLine.toCreate(e)
-      ),
-    };
-  }
-
-  public static toUpdate(json: any) {
-    return {
-     requester: json["Requester"],
-      requesterName: json["RequesterName"],
-      requesterEmail: json["requesterEmail"],
-      requesterBranch: json["requesterBranch"],
-      requesterDepartment: json["requesterDepartment"],
-      docDueDate: json["DocDueDate"],
-      attachmentEntry: ["AttachmentEntry"],
-      docCurrency: json["DocCurrency"],
-      docRate: json["DocRate"],
-      reference1: json["Reference1"],
-      reference2: json["Reference2"],
-      comments: json["Comments"],
-      journalMemo: json["JournalMemo"],
-      paymentGroupCode: json["PaymentGroupCode"],
-      salesPersonCode: json["SalesPersonCode"],
-      transportationCode: json["TransportationCode"],
-      confirmed: json["Confirmed"],
-      contactPersonCode: json["ContactPersonCode"],
-      series: json["Series"],
-      taxDate: json["TaxDate"],
-      partialSupply: json["PartialSupply"],
-      docObjectCode: json["DocObjectCode"],
-      indicator: json["Indicator"],
-      federalTaxID: json["FederalTaxID"],
-      discountPercent: json["DiscountPercent"],
-      creationDate: json["CreationDate"],
-      updateDate: json["UpdateDate"],
-      userSign: json["UserSign"],
-      vatSum: json["VatSum"],
-      docTotalSys: json["DocTotalSys"],
-      requiredDate: json["RequriedDate"],
-      cancelDate: json["CancelDate"],
-      rounding: json["Rounding"],
-      address2: json["Address2"],
-      documentStatus: json["DocumentStatus"],
-      periodIndicator: json["PeriodIndicator"],
-      payToCode: json["PayToCode"],
-      manualNumber: json["ManualNumber"],
-      useShpdGoodsAct: json["UseShpdGoodsAct"],
-      totalDiscount: json["TotalDiscount"],
-      vatPercent: json["VatPercent"],
-      extraMonth: json["ExtraMonth"],
-      extraDays: json["ExtraDays"],
-      startFrom: json["StartFrom"],
-      downPaymentStatus: json["DownPaymentStatus"],
-      bPLName: json["BPLName"],
-      vatRegNum: json["VATRegNum"],
-      paymentTerm: json["PaymentTerm"],
-      priceList: json["PriceList"],
-      serie: json["Serie"],
-      paymentMethod: json["PaymentMethod"],
-      shippingType: json["ShippingType"],
-      DocumentLines: []
+      DocumentLines: [],
     };
   }
 }
@@ -224,7 +269,7 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
 
   public static toCreate(json: any) {
     return {
-      ItemNo: json["ItemCode"],
+      ItemCode: json["ItemCode"],
       ItemDescription: json["ItemName"],
       ItemGroup: json["ItemsGroupCode"],
       PlannedQuantity: json["Quantity"],

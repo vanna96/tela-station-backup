@@ -18,7 +18,6 @@ class GoodReturnForm extends CoreFormDocument {
     super(props);
     this.state = {
       ...this.state,
-
       status: "O",
       renewal: false,
       startDate: null,

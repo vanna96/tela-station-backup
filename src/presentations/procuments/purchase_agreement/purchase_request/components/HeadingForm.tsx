@@ -193,8 +193,8 @@ export default function HeadingForm({
               </label>
               <div className="">
                 <MUIDatePicker
-                  value={data.requiredDate}
-                  onChange={(e: any) => handlerChange("requiredDate", e)}
+                  value={data.requriedDate}
+                  onChange={(e: any) => handlerChange("requriedDate", e)}
                 />
               </div>
             </div>

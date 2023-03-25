@@ -25,9 +25,9 @@ export default class GoodReturn extends Model implements MasterDocument {
 
   constructor(json: any) {
     super();
-    this.id = json["AgreementNo"];
+    this.id = json["DocNum"];
     this.serie = json["Series"];
-    // this.docNum = json["DocNum"];
+    this.docNum = json["DocNum"];
     this.cardName = json["CardName"];
     this.cardCode = json["CardCode"];
     this.constactPersonCode = json["ContactPersonCode"];

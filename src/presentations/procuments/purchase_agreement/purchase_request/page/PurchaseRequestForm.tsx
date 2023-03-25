@@ -86,10 +86,7 @@ class PurchaseRequestForm extends CoreFormDocument {
                     }}
                     handlerChange={(key, value) => this.handlerChange(key, value)}
                 />
-                {/* <GeneralForm
-                    data={this.state}
-                    handlerChange={(key, value) => this.handlerChange(key, value)}
-                /> */}
+               
                 <ContentForm
                     data={this.state}
                     handlerAddItem={() => this.handlerOpenItem()}
