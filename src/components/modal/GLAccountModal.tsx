@@ -3,15 +3,17 @@ import Modal from './Modal';
 import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
 import InitializeData from '@/services/actions';
+import GLAccount from '../../models/GLAccount';
 
 
 interface GLAccountProps {
   open: boolean,
   onClose: () => void,
+  onOk: (account: GLAccount) => void
 }
 
 
-const GLAccountModal: FC<GLAccountProps> = ({ open, onClose, }) => {
+const GLAccountModal: FC<GLAccountProps> = ({ open, onClose, onOk }) => {
   const { data, isLoading }: any = useQuery({
     queryKey: ["acciunts"],
     queryFn: () => InitializeData.listOfAccounts(),
@@ -60,7 +62,7 @@ const GLAccountModal: FC<GLAccountProps> = ({ open, onClose, }) => {
           enableTopToolbar={true}
           enableDensityToggle={false}
           initialState={{ density: "compact" }}
-          enableRowSelection={true}
+          // enableRowSelection={true}
           onPaginationChange={setPagination}
           onRowSelectionChange={setRowSelection}
           getRowId={(row: any) => row.ItemCode}
@@ -74,7 +76,10 @@ const GLAccountModal: FC<GLAccountProps> = ({ open, onClose, }) => {
             showLastButton: false,
           }}
           muiTableBodyRowProps={({ row }) => ({
-            onClick: row.getToggleSelectedHandler(),
+            onClick: () => {
+              onOk(new GLAccount(row.original));
+              onClose()
+            },
             sx: { cursor: 'pointer' },
           })}
           state={
@@ -94,7 +99,6 @@ const GLAccountModal: FC<GLAccountProps> = ({ open, onClose, }) => {
 }
 
 export default GLAccountModal;
-
 
 
 
