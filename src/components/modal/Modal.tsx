@@ -18,9 +18,11 @@ interface ModalProps {
     disableTitle?: boolean,
     disableFooter?: boolean,
     titleClass?: string,
+    pannelClass?: string;
+    disableShadow?: boolean
 }
 
-const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false, onOk, titleClass }) => {
+const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false, onOk, titleClass, pannelClass, disableShadow }) => {
     return (
         <Transition appear show={open} as={Fragment}>
             <Dialog as="div" className="relative z-[100] " onClose={onClose}>
@@ -36,8 +38,8 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 overflow-y-auto w-full">
-                    <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <div className="fixed inset-0 overflow-y-auto w-full ">
+                    <div className="flex min-h-full items-center justify-center p-4 text-center ">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -47,7 +49,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className={`${widthClass ?? 'max-w-md'} ${heightClass ?? ''} transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all`}>
+                            <Dialog.Panel className={`${widthClass ?? 'max-w-md'} ${heightClass ?? ''}  ${pannelClass ?? ''} ${disableShadow ? '' : 'shadow-xl'} transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle  transition-all`}>
                                 {!disableTitle ? <Dialog.Title
                                     as="h3"
                                     className="w-full flex justify-between items-center text-lg font-medium leading-6 text-gray-900"
@@ -80,4 +82,3 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
 }
 
 export default Modal;
-

@@ -2,6 +2,55 @@ import { dateFormat } from "../utilies";
 import Model from "./Model";
 import { MasterDocument, DocumentLine } from "./interface/index";
 
+export interface PurchaseRequestProps {
+  id: any;
+  docNum: any;
+  cardCode?: string;
+  cardName?: string;
+  constactPersonCode?: number;
+  startDate?: string;
+  endDate?: string;
+  terminateDate?: string;
+  description?: string;
+  agreementType?: string;
+  status?: string;
+  owner?: string;
+  renewal?: boolean;
+  remindUnit?: string;
+  remindTime?: string;
+  remark?: string;
+  attachmentEntry?: number;
+  settlementProbability?: number;
+  agreementMethod?: string;
+  paymentTerm?: string;
+  priceList?: number;
+  signeDate?: string;
+  serie: string;
+  paymentMethod?: string;
+  shippingType?: string | undefined;
+  documentLine: PurchaseRequestDocumentLineProps[];
+}
+
+export interface PurchaseRequestDocumentLineProps {
+  itemNo?: string | undefined;
+  itemDescription?: string | undefined;
+  itemGroup?: string | undefined;
+  quantity?: number | undefined;
+  unitPrice?: number | undefined;
+  currency?: string | undefined;
+  cumulativeQuantity?: number | undefined;
+  cumulativeAmount?: number | undefined;
+  plannedAmount?: number;
+  lineDiscount?: number;
+  uomEntry?: number | undefined;
+  uomCode?: string | undefined;
+  shippingType?: string | undefined;
+  project?: string | undefined;
+  taxCode?: string | undefined;
+  taxRate?: number | undefined;
+}
+
+
 export default class PurchaseRequest extends Model implements MasterDocument {
   id: any;
   docNum: any;
