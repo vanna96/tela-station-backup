@@ -6,12 +6,12 @@ import { ContactEmployee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
 import Department from "@/models/Department";
 import Branch from "@/models/Branch";
-import MUICheckBox from "@/components/input/MUICheckBox";
 import ShippingType from "@/models/ShippingType";
 import DepartmentSelect from "../../../../../components/selectbox/Department";
 import BranchSelect from "../../../../../components/selectbox/Branch";
 import Owner from "../../../../../models/FactoringIndicator";
 import OwnerModal from "../../../../../components/modal/OwnerModal";
+import Checkbox from "@mui/material/Checkbox";
 
 export interface IHeadingFormProps {
   handlerOpenRequester: () => void;
@@ -88,17 +88,29 @@ export default function HeadingForm({
             </div>
           </div>
           <div className="flex flex-col gap-1 text-sm">
-            <div> <MUICheckBox
+            {/* <div> <MUICheckBox
               label="Send E-Mail if PO or GPRO is Added"
               defaultChecked
               name="RequesterEmail"
             /></div>
-           
-              <MUITextField
-                label="Email"
-                value={data?.email}
-                name="RequesterEmail"
-              />
+            */}
+            <div className="grid grid-cols-1 gap-3">
+              <div className="flex flex-col gap-1 text-sm">
+                <div className="flex items-center gap-1 text-sm">
+                  <Checkbox />
+                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                    Send E-Mail if PO or GPRO is Added
+                  </label>
+                </div>
+                <div>
+                  <MUITextField
+                    label="Email"
+                    value={data?.email}
+                    name="RequesterEmail"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -143,7 +155,9 @@ export default function HeadingForm({
                     { value: "C", label: "Closed" },
                   ]}
                   name="DocumentStatus"
-                  onChange={(e) => handlerChange("documentStatus", e.target.value)}
+                  onChange={(e) =>
+                    handlerChange("documentStatus", e.target.value)
+                  }
                 />
               </div>
             </div>
