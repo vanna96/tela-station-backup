@@ -85,48 +85,53 @@ class PurchaseRequestDetail extends Component<any, any> {
                     (<>
                         <div className='min-h-[10rem] grid grid-cols-2 gap-2 w-full shadow-sm rounded-lg bg-white text-[12px] p-6'>
                             <div className='flex flex-col gap-1'>
+                            <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500 '>Document Numbering</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.docNum}</span>
+                                </div>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>BP Code</span>
+                                    <span className='w-4/12 text-gray-500'>Requester</span>
                                     <span className='w-8/12 font-medium'>: {this.state.cardCode}</span>
                                 </div>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>BP Name</span>
+                                    <span className='w-4/12 text-gray-500'>Requester Name</span>
                                     <span className='w-8/12 font-medium'>: {this.state.cardName}</span>
                                 </div>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>Contact Person Code</span>
+                                    <span className='w-4/12 text-gray-500'>Branch</span>
                                     <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
                                 </div>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>Email</span>
+                                    <span className='w-4/12 text-gray-500'>Department</span>
                                     <span className='w-8/12 font-medium'>: example@email</span>
                                 </div>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>Phone</span>
+                                    <span className='w-4/12 text-gray-500'>E-mail Address</span>
                                     <span className='w-8/12 font-medium'>: +855 21 000 123</span>
                                 </div>
 
 
                             </div>
                             <div className='flex flex-col gap-1'>
+                               
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500 '>Document Numbering</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.docNum}</span>
-                                </div>
-                                <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>Agreement Type</span>
+                                    <span className='w-4/12 text-gray-500'>Status</span>
                                     <span className='w-8/12 font-medium'>: {this.state.agreementMethod?.replace('am', '')}</span>
                                 </div>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>Contact Person Code</span>
+                                    <span className='w-4/12 text-gray-500'>Posting Date</span>
                                     <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
                                 </div>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>Start Date</span>
+                                    <span className='w-4/12 text-gray-500'>Valid Until</span>
                                     <span className='w-8/12 font-medium'>: {this.state.startDate}</span>
                                 </div>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>End Date</span>
+                                    <span className='w-4/12 text-gray-500'>Document Date</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.endDate}</span>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <span className='w-4/12 text-gray-500'>Required Date</span>
                                     <span className='w-8/12 font-medium'>: {this.state.endDate}</span>
                                 </div>
 
@@ -160,17 +165,17 @@ function General(props: any) {
 
     return <div className='grow w-full grid grid-cols-2 gap-2 text-[12px] py-2'>
         <div className='flex flex-col gap-2'>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Agreement Type</span> <span className='col-span-2 font-medium'>: {data.agreementType?.replace('at', '')}</span></div>
+            {/* <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Agreement Type</span> <span className='col-span-2 font-medium'>: {data.agreementType?.replace('at', '')}</span></div>
             <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {data.paymentTerm}</span></div>
             <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Method</span> <span className='col-span-2 font-medium'>: {data.paymentMethod}</span></div>
             <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shipping Type</span> <span className='col-span-2 font-medium'>: {data.shippingType}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Settlement Probability %</span> <span className='col-span-2 font-medium'>: {data.settlementProbability}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Remark</span> <span className='col-span-2 font-medium'>: {data.remark}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Settlement Probability %</span> <span className='col-span-2 font-medium'>: {data.settlementProbability}</span></div> */}
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Owner</span> <span className='col-span-2 font-medium'>: {data.remark}</span></div>
         </div>
         <div className='flex flex-col gap-2'>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {data.status?.replace('as', '')}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Owner</span> <span className='col-span-2 font-medium'>: {data.owner}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Reminder</span> <span className='col-span-2 font-medium'>: {data.remindTime} {data.remindUnit?.replace('reu_', '')}</span></div>
+            {/* <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {data.status?.replace('as', '')}</span></div> */}
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Remark</span> <span className='col-span-2 font-medium'>: {data.owner}</span></div>
+            {/* <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Reminder</span> <span className='col-span-2 font-medium'>: {data.remindTime} {data.remindUnit?.replace('reu_', '')}</span></div> */}
         </div>
     </div>
 }
