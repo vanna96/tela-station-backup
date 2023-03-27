@@ -1,14 +1,11 @@
 import moment from 'moment';
 
 
-export const dateFormat = (str: string): string => moment(str).isValid() ? moment(str).format('DD/MM/YYYY') : 'N/A';
+export const dateFormat = (str: string): string => moment(str).isValid() ? moment(str).format('DD-MM-YYYY') : 'N/A';
 
 
-export const setItemToLocal = (key: string, data: any) => localStorage.setItem(key,JSON.stringify(data)); 
-export const getItemFromLocal = (key: string) => localStorage.getItem(key);
-
-
-
+export const setItemToLocal = (key: string, data: any) => localStorage.setItem(key, JSON.stringify(data)); 
+export const getItemFromLocal = (key: string) => JSON.parse(localStorage.getItem(key) ?? '{}');
 
 export const currencyFormat = (value:any) =>
 {

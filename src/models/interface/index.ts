@@ -6,7 +6,7 @@ export  interface MasterDocument {
     paymentMethod?: string;
     paymentTerm?: string;
     shippingType?: string;
-    documentLine: Array<any>;
+    items: Array<any>;
 }
 
 

@@ -22,10 +22,12 @@ interface MUITextFieldProps {
     type?: string,
     endAdornment?: boolean,
     required?: boolean,
+    placeholder?: string,
 }
 
 
-const MUITextField: FC<MUITextFieldProps> = ({ error, label, name, size, onChange, onClick, value, defaultValue, onBlur, disabled, startAdornment, type, endAdornment = false, required = false }: MUITextFieldProps) => {
+const MUITextField: FC<MUITextFieldProps> = (
+    { error, label, name, size, onChange, onClick, value, defaultValue, onBlur, disabled, startAdornment, type, endAdornment = false, required = false, placeholder }: MUITextFieldProps) => {
     return <>
         <FormControl fullWidth error={error}>
             <div className="flex flex-col gap-1 text-sm">
@@ -39,12 +41,12 @@ const MUITextField: FC<MUITextFieldProps> = ({ error, label, name, size, onChang
                         fullWidth
                         className={`w-full text-field pr-0 ${disabled ? 'bg-gray-100' : ''}`}
                         name={name}
-                        defaultValue={defaultValue}
-                        value={value}
+                        value={value ?? ''}
                         onChange={onChange}
                         onBlur={onBlur}
                         disabled={disabled}
                         type={type}
+                        placeholder={placeholder}
                         required={required}
                         startAdornment={startAdornment ? <span className="text-[13px] px-2 pr-4 mr-3 bg-gray-100 overflow-hidden border-r ">{startAdornment}</span> : null}
                         endAdornment={endAdornment ?

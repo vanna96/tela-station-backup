@@ -56,7 +56,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 },
             },
             {
-                accessorKey: "ItemCode",
+                accessorKey: "itemCode",
                 header: "Item No", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
                     // return ;
@@ -73,12 +73,27 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
             },
 
             {
-                accessorKey: "ItemName",
+                accessorKey: "itemName",
                 header: "Description",
-                Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
+                Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />
             },
             {
-                accessorKey: "Quantity",
+                accessorKey: "uoMGroupName",
+                header: "UoM Group",
+                Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
+            },
+            {
+                accessorKey: "itemsGroupName",
+                header: "Item Group",
+                Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
+            },
+            {
+                accessorKey: "itemsGroupName",
+                header: "Item Group",
+                Cell: ({ cell }: any) => <AccountTextField value={cell.getValue()} onChange={(e) => handlerChangeInput(e, cell.row.original, 'AccountNo')} />
+            },
+            {
+                accessorKey: "quantity",
                 header: "Quanitity",
                 Cell: ({ cell }: any) => {
 
@@ -91,7 +106,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 },
             },
             {
-                accessorKey: "UnitPrice",
+                accessorKey: "unitPrice",
                 header: "Unit Price",
                 Cell: ({ cell }: any) => {
                     return <MUITextField
@@ -104,7 +119,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 },
             },
             {
-                accessorKey: "Total",
+                accessorKey: "total",
                 header: "Total",
                 Cell: ({ cell }: any) => {
                     return <MUITextField
@@ -147,31 +162,12 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 },
             },
             {
-                accessorKey: "AccountNo",
-                header: "Account NO)", //uses the default width from defaultColumn prop
-                Cell: ({ cell }: any) => {
-                    return <AccountTextField
-                        value={cell.getValue()}
-                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'AccountNo')}
-                    />;
-                },
-            },
-            {
-                accessorKey: "AccountName",
-                header: "Account Name)", //uses the default width from defaultColumn prop
-                Cell: ({ cell }: any) => {
-                    return <MUITextField
-                        value={cell.getValue()}
-                    />;
-                },
-            },
-            {
-                accessorKey: "LineDiscount",
+                accessorKey: "lineDiscount",
                 header: "Line Discount", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
                     return <MUITextField
                         defaultValue={cell.getValue()}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'LineDiscount')}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'lineDiscount')}
                     />;
                 },
             },
