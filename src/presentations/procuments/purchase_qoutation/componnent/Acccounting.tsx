@@ -40,7 +40,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
           <div>
             <label htmlFor='Code' className='text-gray-500 text-[14px]'>Payment Method </label>
             <div className=''>
-              <PaymentMethod type='incoming' name="PaymentMethod" value={data.paymentMethod} onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
+              <PaymentMethod type='outgoing' name="PaymentMethod" value={data.paymentMethod} onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
             </div>
           </div>
         </div>

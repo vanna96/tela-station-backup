@@ -44,7 +44,7 @@ export interface PurchaseQoutationProps {
 }
 
 export interface PurchaseQoutationDocumentLineProps {
-  itemNo?: string | undefined;
+  itemCode?: string | undefined;
   itemDescription?: string | undefined;
   quantity?: number | undefined;
   unitPrice?: number | undefined;
@@ -231,7 +231,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
 
 
 export class PurchaseQoutationDocumentLine extends Model implements DocumentLine {
-  itemNo?: string | undefined;
+  itemCode?: string | undefined;
   itemDescription?: string | undefined;
   quantity?: number | undefined;
   unitPrice?: number | undefined;
@@ -254,7 +254,7 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
   requriedDate?: string;
   constructor(json: any) {
     super();
-    this.itemNo = json['ItemCode'];
+    this.itemCode = json['ItemCode'];
     this.itemDescription = json['ItemDescription'];
     this.quantity = json['Quantity'];
     this.unitPrice = json['UnitPrice'];
@@ -279,7 +279,7 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
   public static toCreate(json: any, type: any) {
 
     let line = {
-      "ItemNo": json["ItemCode"],
+      "ItemCode": json["ItemCode"],
       "ItemDescription": json['ItemDescription'],
       "UnitPrice": json['UnitPrice'],
       "LineDiscount": 0.0,
@@ -300,7 +300,7 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
     };
 
     if (type === 'S') {
-      delete line.ItemNo;
+      delete line.ItemCode;
       delete line.UnitPrice;
     }
 
