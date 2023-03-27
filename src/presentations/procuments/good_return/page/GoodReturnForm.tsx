@@ -101,6 +101,7 @@ class GoodReturnForm extends CoreFormDocument {
             handlerAddItem={() => this.handlerOpenItem()}
             handlerRemoveItem={this.handlerRemoveItem}
             handlerChangeItem={this.handlerAddItem}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
           />
           <LogisticsForm
             data={this.state}
