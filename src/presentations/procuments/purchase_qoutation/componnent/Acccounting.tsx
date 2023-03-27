@@ -119,7 +119,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
             />
           </div>
           <div>
-            <MUITextField label="Order Number:" value={''} name="ImportFileNum"/>
+            <MUITextField label="Order Number:" value={data?.ImportFileNum} name="importFileNum"/>
           </div>
         </div>
       </div>
