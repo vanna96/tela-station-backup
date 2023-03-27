@@ -246,7 +246,7 @@ export default function AccounttingForm({
       <div className="mt-2">
         <div>
           <MUITextField
-            label="Project"
+            label="Business Partner Project"
             name="Project"
             value={data.project}
             endAdornment={true}
@@ -268,7 +268,7 @@ export default function AccounttingForm({
             />
           </div>
         </div>
-        <div className="flex gap-5">
+        {/* <div className="flex gap-5">
           <div className="w-[48%]">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Cancellation Date
@@ -293,7 +293,7 @@ export default function AccounttingForm({
               />
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="mt-2">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Indicator
