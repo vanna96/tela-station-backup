@@ -623,7 +623,7 @@ export default function ContentForm({
       <div className="flex flex-col gap-3">
         <div className="w-[100%] gap-3">
           <MUITextField
-            label="Total Before Discount"
+            label="Total Credit"
             value={data.LineTotal}
             name="LineTotal"
           />
