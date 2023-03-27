@@ -1,10 +1,5 @@
-import { getItemFromLocal } from "../../utilies";
 import request from '@/utilies/request';
-import ShippingType from "@/models/ShippingType";
 import Owner from "@/models/Owner";
-import GLAccount from "@/models/GLAccount";
-import { setItemToLocal } from '../../utilies/index';
-import { AES, enc } from 'crypto-js';
 import Encryption from "@/utilies/encryption";
 
 export default class InitializeData {
@@ -13,7 +8,6 @@ export default class InitializeData {
     }
 
     public static async shippingType(): Promise<any[]> {
-
 
         const response: any = await request('GET', '/ShippingTypes?$select=Code,Name&$orderby=Name asc');
         if (!response?.data) return [];

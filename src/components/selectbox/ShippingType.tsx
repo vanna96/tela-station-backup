@@ -22,8 +22,6 @@ function ShippingType(props: ShippingTypeProps) {
     });
 
 
-    console.log(data)
-
     return <MUISelect
         {...props}
         aliaslabel="Name"
