@@ -37,8 +37,8 @@ export default function HeadingForm({
               <div className="">
                 <MUISelect
                   items={[
-                    { name: "User", value: "U" },
-                    { name: "Employee", value: "E" },
+                    { name: "User", value: 12 },
+                    { name: "Employee", value: 171 },
                   ]}
                   onChange={(e) => handlerChange("reqType", e.target.value)}
                   value={data?.reqType}
