@@ -50,7 +50,6 @@ export interface PurchaseRequestDocumentLineProps {
   taxRate?: number | undefined;
 }
 
-
 export default class PurchaseRequest extends Model implements MasterDocument {
   id: any;
   docNum: any;
@@ -149,6 +148,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       Reference2: json["reference2"],
       Comments: json["comments"],
       journalMemo: json["journalMemo"],
+      documentStatus: json["documentStatus"],
       // paymentGroupCode: json["PaymentGroupCode"],
       // salesPersonCode: json["SalesPersonCode"],
       // transportationCode: json["TransportationCode"],
@@ -230,7 +230,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       PaymentMethod: json["PaymentMethod"],
       ShippingType: json["ShippingType"],
       DocumentLines: json["items"].map((e: any) =>
-        PurchaseRequestDocumentLine.toCreate(e)
+        PurchaseRequestDocumentLine.toCreate(e, json["docType"])
       ),
     };
   }
@@ -297,56 +297,53 @@ export default class PurchaseRequest extends Model implements MasterDocument {
 export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
   itemNo?: string | undefined;
   itemDescription?: string | undefined;
-  itemGroup?: string | undefined;
   quantity?: number | undefined;
   unitPrice?: number | undefined;
   currency?: string | undefined;
-  cumilativeQuantity?: number | undefined;
-  cumilativeAmount?: number | undefined;
-  plannedAmount?: number;
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  shippingType?: string | undefined;
+  transportationCode?: string | undefined;
   project?: string | undefined;
   taxCode?: string | undefined;
   taxRate?: number | undefined;
-
+  vatGroup?: string | undefined;
+  lineTotal?: string | undefined;
+  accountCode?: string | undefined;
+  accountName?: string | undefined;
+  discountPercent?: number | undefined;
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
   }
 
-  public static toCreate(json: any) {
-    return {
+  public static toCreate(json: any, type: string) {
+    let body = {
       ItemCode: json["ItemCode"],
-      ItemDescription: json["ItemName"],
-      ItemGroup: json["ItemsGroupCode"],
-      PlannedQuantity: json["Quantity"],
+      ItemDescription: json["ItemDescription"],
       UnitPrice: json["UnitPrice"],
-      CumulativeQuantity: null,
-      CumulativeAmountLC: null,
-      CumulativeAmountFC: 0.0,
-      FreeText: json["freeText"] ?? null,
-      InventoryUoM: json["InventoryUOM"],
-      PortionOfReturns: null,
-      EndOfWarranty: null,
-      PlannedAmountLC: 0.0,
-      PlannedAmountFC: 0.0,
+      ItemGroup: json["ItemGroup"],
+      DiscountPercent: json["DiscountPercent"],
       LineDiscount: 0.0,
-      UoMEntry: json["UoMGroupEntry"],
-      UoMCode: null,
-      UnitsOfMeasurement: 1.0,
-      UndeliveredCumulativeQuantity: null,
-      UndeliveredCumulativeAmountLC: null,
-      UndeliveredCumulativeAmountFC: 0.0,
-      ShippingType: 1,
+      DocEntry: json["UoMGroupEntry"],
+      UoMCode: json["UoMCode"],
+      TransportationCode: 1,
       Project: null,
       TaxCode: null,
       TAXRate: null,
-      PlannedVATAmountLC: null,
-      PlannedVATAmountFC: null,
-      CumulativeVATAmountLC: null,
-      CumulativeVATAmountFC: null,
+      VatGroup: json["VatGroup"],
+      LineTotal: json["LineTotal"],
+      AccountCode: json["AccountCode"],
+      AccountName: json["AccountName"],
     };
+
+    if (type === "S") {
+      delete body.ItemCode;
+      // delete body.ItemDescription;
+      delete body.ItemGroup;
+      delete body.UnitPrice;
+      delete body.DiscountPercent;
+      delete body.UnitPrice;
+    }
+    return body;
   }
 }

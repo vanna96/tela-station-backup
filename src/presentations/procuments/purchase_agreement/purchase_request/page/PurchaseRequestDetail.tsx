@@ -16,6 +16,7 @@ import BackButton from '@/components/button/BackButton';
 import PurchaseRequestRepository from '@/services/purchaseRequestRepository';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { PurchaseRequestProps , PurchaseRequestDocumentLineProps} from '../../../../../models/PurchaseRequest';
+import Department from '../../../../../models/Department';
 
 class PurchaseRequestDetail extends Component<any, any> {
 
@@ -91,23 +92,23 @@ class PurchaseRequestDetail extends Component<any, any> {
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Requester</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.cardCode}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.requester}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Requester Name</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.cardName}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.requesterName}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Branch</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.requesterBranch}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Department</span>
-                                    <span className='w-8/12 font-medium'>: example@email</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.requesterDepartment}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>E-mail Address</span>
-                                    <span className='w-8/12 font-medium'>: +855 21 000 123</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.requesterEmail}</span>
                                 </div>
 
 
@@ -116,23 +117,23 @@ class PurchaseRequestDetail extends Component<any, any> {
                                
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Status</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.agreementMethod?.replace('am', '')}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.documentStatus?.replace('am', '')}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Posting Date</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.constactPersonCode}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.creationDate}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Valid Until</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.startDate}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.docDueDate}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Document Date</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.endDate}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.docDate}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Required Date</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.endDate}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.requriedDate}</span>
                                 </div>
 
 
