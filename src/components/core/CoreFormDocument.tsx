@@ -70,6 +70,7 @@ export interface CoreFormDocumentState {
     showDistribution: boolean,
     vendorType: VendorModalType,
     loading: boolean,
+    isEditable: boolean,
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -105,7 +106,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             renewal: false,
             items: [],
             series: [],
-            serie: 0,
+            serie: '',
             docNum: null,
             isLoadingSerie: true,
             isSubmitting: false,
@@ -116,6 +117,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             inWhichDimension: 0,
             vendorType: 'customer',
             loading: true,
+            isEditable: true,
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -141,7 +143,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                     }
                     bodyClassName={() => "text-sm font-white font-med block p-3"}
                 />
-                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => console.log('asdsad')} onOk={() => this.setState({ ...this.state, showDialogMessage: false })} widthClass='w-[30rem]' >
+                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => { }} onOk={() => this.handlerCloseDialogMessage()} widthClass='w-[30rem]' >
                     <span className='text-sm'>{this.state.message}</span>
                 </Modal>
 
@@ -318,6 +320,14 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             message: message,
             showDialogMessage: true,
             isSubmitting: false,
+        })
+    }
+
+    protected handlerCloseDialogMessage() {
+        // this.props.history.goBack();
+        this.setState({
+            ...this.state,
+            showDialogMessage: false,
         })
     }
 

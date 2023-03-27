@@ -76,6 +76,11 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
             },
             {
+                accessorKey: "itemsGroupName",
+                header: "Item Group",
+                Cell: ({ cell }: any) => <AccountTextField value={cell.getValue()} onChange={(e) => handlerChangeInput(e, cell.row.original, 'AccountNo')} />
+            },
+            {
                 accessorKey: "quantity",
                 header: "Quanitity",
                 Cell: ({ cell }: any) => {

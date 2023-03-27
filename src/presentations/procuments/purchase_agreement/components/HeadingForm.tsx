@@ -14,14 +14,13 @@ export interface IHeadingFormProps {
 
 export default function HeadingForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject }: IHeadingFormProps) {
 
-    console.log(data.endDate)
     return (
         <>
             <FormCard title='Information'>
                 <div className="flex flex-col gap-2">
                     <div className="grid grid-cols-2 gap-3">
-                        <MUITextField required label="Vendor Code" value={data?.cardCode} name="BPCode" onClick={handlerOpenVendor} endAdornment={true} />
-                        <MUITextField required label="Vendor Name" value={data?.cardName} name="BPName" />
+                        <MUITextField required label="Vendor Code" value={data?.cardCode} disabled={data?.isEditable} name="BPCode" onClick={handlerOpenVendor} endAdornment={true} />
+                        <MUITextField required label="Vendor Name" value={data?.cardName} disabled={data?.isEditable} name="BPName" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -50,12 +49,11 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 Currency
                             </label>
                             <div className="grid grid-cols-2 gap-3">
-                                <TextField
+                                <MUITextField
                                     size="small"
-                                    fullWidth
-                                    className="w-full text-field bg-gray-100"
                                     name="BPCurrency"
                                     value={data.currency}
+                                    disabled
                                 // disabled
                                 />
                                 <div></div>
@@ -76,9 +74,10 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 name="Series"
                                 loading={data?.isLoadingSerie}
                                 value={data?.serie}
+                                disabled={data?.isEditable}
                                 onChange={(e: any) => handlerChange('serie', e.target.value)}
                             />
-                            <TextField size="small" name="DocNum" key={data?.docNum} defaultValue={data?.docNum} disabled={data?.isLoadingSerie} placeholder='Document No' fullWidth className="w-full text-field" />
+                            <MUITextField size="small" name="DocNum" value={data?.docNum} disabled={data?.isEditable} placeholder='Document No' />
                         </div>
                     </div>
 
@@ -93,6 +92,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                     aliaslabel='name'
                                     aliasvalue='value'
                                     name="AgreementMethod"
+                                    disabled={data?.isEditable}
                                     value={data.agreementMethod}
                                     onChange={(e) => handlerChange('agreementMethod', e.target.value)}
                                 />

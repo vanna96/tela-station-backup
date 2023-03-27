@@ -4,6 +4,7 @@ import { MasterDocument, DocumentLine } from './interface/index';
 import moment from 'moment';
 import { IContactPersonList } from '../astractions/index';
 import { ContactEmployee } from './BusinessParter';
+import ShippingTypeRepository from '../services/actions/shippingTypeRepository';
 
 export interface PurchaseAgreementProps {
     id: any;
@@ -83,7 +84,10 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
     items: PurchaseAgreementDocumentLine[];
     email?: string | undefined | null;
     phone?: string | undefined | null;
-    contactPersonList?: ContactEmployee[]
+    project?: string | undefined | null;
+    contactPersonList?: ContactEmployee[];
+    isEditable?: boolean;
+    shippingTypeName: string | null | undefined;
 
     constructor(json: any) {
         super();
@@ -115,7 +119,10 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
         this.shippingType = json['ShippingType'];
         this.email = json['Email'];
         this.phone = json['Phone'];
-        this.contactPersonList = json['contactPersonList']
+        this.contactPersonList = json['contactPersonList'];
+        this.project = json['Project'];
+        this.shippingTypeName = new ShippingTypeRepository().find(json['ShippingType'])?.Name;
+        this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
         this.items= json['BlanketAgreements_ItemsLines']?.map((e:any) => new PurchaseAgreementDocumentLine(e));
     }
 
@@ -184,6 +191,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             "NumAtCard": json['numAtCard'],
             "Project": json['project'],
             "BPCurrency": json['currency'],
+            
             // "BlanketAgreements_ItemsLines": json['items'].map((e:any) => PurchaseAgreementDocumentLine.toCreate(e, json['agreementMethod']))
         };
     }

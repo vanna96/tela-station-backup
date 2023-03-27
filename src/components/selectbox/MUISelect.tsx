@@ -46,7 +46,7 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
     <FormControl error={error} fullWidth>
       <div className="w-full mui-select">
         <Select
-          value={value ?? ''}
+          value={value === -1 ? '' : (value ?? '')}
           defaultValue={defaultValue ?? ''}
           className={`w-full ${className}`}
           name={name}
