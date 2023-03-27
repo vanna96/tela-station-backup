@@ -164,7 +164,7 @@ export default function AccounttingForm({
       <div className="mt-2">
         <MUITextField
           label="Journal Remarks"
-          value={ `Good Return - ${data?.vendor?.CardCode ?? ""}`
+          value={ `Good Return Request - ${data?.vendor?.CardCode ?? ""}`
         }
           name="DocumentStatus"
         />
