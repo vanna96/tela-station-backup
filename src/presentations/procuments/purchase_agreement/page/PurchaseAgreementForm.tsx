@@ -10,6 +10,7 @@ import PurchaseAgreementRepository from '../../../../services/actions/purchaseAg
 import GLAccount from '@/models/GLAccount';
 import { CircularProgress } from '@mui/material';
 import { UpdateDataSuccess } from '../../../../utilies/ClientError';
+import PurchaseAgreement from '../../../../models/PurchaseAgreement';
 
 
 class PurchaseAgreementForm extends CoreFormDocument {
@@ -99,6 +100,8 @@ class PurchaseAgreementForm extends CoreFormDocument {
         const { id } = this.props?.match?.params
 
         await new PurchaseAgreementRepository().post(this.state, this.props?.edit, id).then((res: any) => {
+            const purchaseAgreement = new PurchaseAgreement(res?.data)
+            this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.id), purchaseAgreement);
             this.dialog.current?.success("Create Successfully.");
         }).catch((e: any) => {
             if (e instanceof UpdateDataSuccess) {

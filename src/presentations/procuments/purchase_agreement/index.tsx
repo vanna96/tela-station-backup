@@ -112,6 +112,7 @@ export default function PurchaseAgreementLists() {
                         enableStickyHeader={true}
                         enableStickyFooter={true}
                         enablePagination={true}
+                        enableColumnFilters={false}
                         muiTablePaginationProps={{
                             rowsPerPageOptions: [5, 10, 15],
                         }}
