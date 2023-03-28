@@ -41,7 +41,6 @@ class PurchaseAgreementForm extends CoreFormDocument {
         if (this.props.edit) {
             if (this.props.location.state) {
                 const routeState = this.props.location.state;
-                console.log(routeState)
                 setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
             } else {
                 new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
@@ -72,7 +71,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
     handlerAddItem({ value, record, field }: any) {
         let items = [...this.state.items ?? []];
-        let item = this.state.items?.find((e: any) => e?.ItemCode === record?.ItemCode);
+        let item = this.state.items?.find((e: any) => e?.itemCode === record?.itemCode);
 
         if (field === 'AccountNo') {
             const account = value as GLAccount;

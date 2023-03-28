@@ -46,6 +46,7 @@ const MUITextField: FC<MUITextFieldProps> = (
                         onChange={onChange}
                         onBlur={onBlur}
                         disabled={disabled}
+                        defaultValue={defaultValue}
                         type={type}
                         placeholder={placeholder}
                         required={required}
