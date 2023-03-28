@@ -28,6 +28,8 @@ export default function ProcumentRoute() {
                 <Route index element={<PurchaseRequestLists />} />
                 <Route path=':id' element={<PurchaseRequestDetail />} />
                 <Route path='create' element={<PurchaseRequestForm />} />
+                <Route path=':id/edit' element={<PurchaseRequestForm edit={true} />} />
+
             </Route>
             <Route path='/good-return-request' >
                 <Route index element={<GoodReturnLists />} />

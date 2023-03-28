@@ -27,7 +27,11 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
     }
 
 
-    async post(payload: any): Promise<any> {
+   
+    async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
+
+        if(isUpdate) return await request('PATCH', this.url + "("+id+")", PurchaseRequest.toUpdate(payload));
+
         return await request('POST', this.url, PurchaseRequest.toCreate(payload));
     }
 

@@ -94,8 +94,6 @@ export interface CoreFormDocumentState {
   userName ?: string | undefined | null;
   branch ?: any[];
   department ?: any[];
-    loading: boolean,
-    isApproved: boolean,
 }
 
 export default abstract class CoreFormDocument extends React.Component<
@@ -408,7 +406,7 @@ protected handlerConfirmRequesterEmployee(record: EmployeesInfo) {
         record.contactEmployee!.length > 0
           ? record.contactEmployee![0].id
           : undefined,
-      contactPersonList: record.contactEmployee,
+      // contactPersonList: record.contactEmployee[0],
       email: record.email,
       phone: record.phone,
       shippingType: record.shippingType,
@@ -500,22 +498,4 @@ protected handlerConfirmRequesterEmployee(record: EmployeesInfo) {
       isSubmitting: false,
     });
   }
-    protected showMessage(title: string, message: string) {
-        this.setState({
-            ...this.state,
-            title: title,
-            message: message,
-            showDialogMessage: true,
-            isSubmitting: false,
-        })
-    }
-
-    protected handlerCloseDialogMessage() {
-        // this.props.history.goBack();
-        this.setState({
-            ...this.state,
-            showDialogMessage: false,
-        })
-    }
-
 }
