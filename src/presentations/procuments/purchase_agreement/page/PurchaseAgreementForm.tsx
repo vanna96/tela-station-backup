@@ -112,7 +112,10 @@ class PurchaseAgreementForm extends CoreFormDocument {
                     <HeadingForm
                         data={this.state}
                         handlerOpenVendor={() => {
-                            this.handlerOpenVendor('supplier');
+                            console.log(this.state.isEditable)
+                            if (this.state.isEditable) {
+                                this.handlerOpenVendor('supplier');
+                            }
                         }}
                         handlerChange={(key, value) => this.handlerChange(key, value)}
                         handlerOpenProject={() => this.handlerOpenProject()}

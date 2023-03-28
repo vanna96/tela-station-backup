@@ -1,10 +1,7 @@
-import LocalData from "@/astractions/localData";
 import Repository from "@/astractions/repository";
 import ShippingType from "@/models/ShippingType";
-import { getItemFromLocal } from "@/utilies";
 import Encryption from "@/utilies/encryption";
 import request from "@/utilies/request";
-
 
 export default class ShippingTypeRepository extends Repository<ShippingType> {
    
@@ -18,7 +15,6 @@ export default class ShippingTypeRepository extends Repository<ShippingType> {
         if (data) {
             const shippingTypes = JSON.parse(Encryption.decrypt(this.key, data));
             return JSON.parse(shippingTypes);
-            // return shippingTypes?.map((e: any) => new ShippingType(e));
         }
 
         const shippingTypes = await request('GET', this.url).then((res: any) => res?.data?.value);
@@ -26,7 +22,6 @@ export default class ShippingTypeRepository extends Repository<ShippingType> {
         localStorage.setItem(this.key, enc);
 
         return shippingTypes;
-        // return shippingTypes?.map((e: any) => new ShippingType(e));
     }
 
 

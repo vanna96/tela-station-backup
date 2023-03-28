@@ -5,6 +5,8 @@ import moment from 'moment';
 import { IContactPersonList } from '../astractions/index';
 import { ContactEmployee } from './BusinessParter';
 import ShippingTypeRepository from '../services/actions/shippingTypeRepository';
+import PaymentTermTypeRepository from '../services/actions/paymentTermTypeRepository';
+import OwnerRepository from '../services/actions/ownerRepository';
 
 export interface PurchaseAgreementProps {
     id: any;
@@ -75,7 +77,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
     attachmentEntry?: number;
     settlementProbability?: number;
     agreementMethod?: string;
-    paymentTerm?: string;
+    paymentTermType?: string;
     priceList?: number;
     signeDate?: string;
     serie: string;
@@ -87,7 +89,6 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
     project?: string | undefined | null;
     contactPersonList?: ContactEmployee[];
     isEditable?: boolean;
-    shippingTypeName: string | null | undefined;
 
     constructor(json: any) {
         super();
@@ -111,7 +112,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
         this.attachmentEntry= json['AttachmentEntry'];
         this.settlementProbability= json['SettlementProbability'];
         this.agreementMethod= json['AgreementMethod']?.replace('am',"")?.charAt(0);;
-        this.paymentTerm= json['PaymentTerms'];
+        this.paymentTermType= json['PaymentTerms'];
         this.priceList= json['PriceList'];
         this.signeDate= json['SigningDate'];
         this.serie= json['Series'];
@@ -121,7 +122,6 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
         this.phone = json['Phone'];
         this.contactPersonList = json['contactPersonList'];
         this.project = json['Project'];
-        this.shippingTypeName = new ShippingTypeRepository().find(json['ShippingType'])?.Name;
         this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
         this.items= json['BlanketAgreements_ItemsLines']?.map((e:any) => new PurchaseAgreementDocumentLine(e));
     }
@@ -132,7 +132,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
 
 
     public static toCreate(json: any) {
-        console.log(json)
+       
 
         return {
             "BPCode": json['cardCode'],
@@ -153,7 +153,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             "AttachmentEntry": json['attachmentEntry'],
             "SettlementProbability": json['settlementProbability'],
             "AgreementMethod": json['agreementMethod'],
-            "PaymentTerms":  json['paymentTerms'],
+            "PaymentTerms":  json['paymentTermType'],
             "SigningDate": json['signingDate'],
             "Series": json['serie'],
             "PaymentMethod": json['paymentMethod'],
@@ -184,7 +184,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             "AttachmentEntry": json['attachmentEntry'],
             "SettlementProbability": json['settlementProbability'],
             "AgreementMethod": json['agreementMethod'],
-            "PaymentTerms":  json['paymentTerms'],
+            "PaymentTerms":  json['paymentTermType'],
             "SigningDate": json['signingDate'],
             "PaymentMethod": json['paymentMethod'],
             "ShippingType": json['shippingType'],
