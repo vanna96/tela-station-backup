@@ -6,6 +6,9 @@ import { useCookies } from "react-cookie";
 import Alert from '@mui/material/Alert';
 import request from '../../../utilies/request';
 import AuthLogin from '../../../models/AuthLogin';
+import ItemGroupRepository from '../../../services/actions/itemGroupRepository';
+import UnitOfMeasurementRepository from '../../../services/actions/unitOfMeasurementRepository';
+import DepartmentRepository from '@/services/actions/departmentRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -21,9 +24,8 @@ export default function Login() {
       setLoading(true)
       const auth = new AuthLogin('SBODemoAU', 'manager', 'manager');
       const response: any = await request('POST', '/Login', auth.toJson());
-
-      console.log(response);
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
+      await fetchAllDate()
       navigate("/");
     } catch (e: any) {
       setMessage(e?.message)
@@ -33,23 +35,15 @@ export default function Login() {
   }
 
 
-  // async function fetchAllDate(): Promise<void> {
-  //   setLoading(true);
-  //   Promise.allSettled([
-  //     InitializeData.shippingType(),
-  //     InitializeData.unitOfMeasurement(),
-  //     InitializeData.branches(),
-  //     InitializeData.department(),
-  //     InitializeData.factoringIndicator(),
-  //     // InitializeData.owner(),
-  //     InitializeData.paymentTermType(),
-  //     InitializeData.vatGroups(),
-  //     InitializeData.listItemGroup(),
-  //   ]).then((res: any[]) => {
-  //     const lists = ['shippingType', 'uom', 'branch', 'department', '']
-  //     // setItemToLocal('',res);
-  //   }).finally(() => setLoading(false))
-  // }
+  async function fetchAllDate(): Promise<void> {
+    setLoading(true);
+    Promise.allSettled([
+      new ItemGroupRepository().get(),
+      new UnitOfMeasurementRepository().get(),
+      new DepartmentRepository().get(),
+    ]).then((res: any[]) => {
+    }).finally(() => setLoading(false))
+  }
 
   return (
     <div className='w-full h-full flex justify-center items-center'>

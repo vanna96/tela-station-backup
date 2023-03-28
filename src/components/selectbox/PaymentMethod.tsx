@@ -7,11 +7,6 @@ import InitializeData from "@/services/actions";
 import { useQuery } from "react-query";
 import PaymentMethodRepository from "@/services/actions/paymentMethodRepository";
 
-// type PAYMENT_TYPE = {
-//     INCOMING: 'boptIncoming',
-//     OUTGOING: 'boptOutgoing',
-// }
-
 type PaymentMethodType = 'outgoing' | 'incoming';
 
 
@@ -21,9 +16,10 @@ interface PaymentMethodProps<T = unknown> {
     defaultValue?: any,
     value?: any,
     onChange?: SelectInputProps<T>['onChange'],
+    disabled?: boolean,
 }
 
-const PaymentMethod: FC<PaymentMethodProps> = ({ type, name, defaultValue, value, onChange }: PaymentMethodProps) => {
+const PaymentMethod: FC<PaymentMethodProps> = ({ type, name, defaultValue, value, onChange, disabled }: PaymentMethodProps) => {
 
     const { data, isLoading }: any = useQuery({
         queryKey: ["payment-methods"],
@@ -34,6 +30,7 @@ const PaymentMethod: FC<PaymentMethodProps> = ({ type, name, defaultValue, value
     const items = React.useMemo(() => data?.filter((e: any) => e?.Type?.replace("bopt", "")?.toLowerCase() === type), [data])
 
     return <MUISelect
+        disabled={disabled}
         aliaslabel="PaymentMethodCode"
         aliasvalue="PaymentMethodCode"
         items={items ?? []}

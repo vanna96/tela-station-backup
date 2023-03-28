@@ -10,6 +10,7 @@ interface ShippingTypeProps<T = unknown> {
     defaultValue?: any,
     value?: any,
     onChange?: SelectInputProps<T>['onChange'],
+    disabled?: boolean,
 }
 
 

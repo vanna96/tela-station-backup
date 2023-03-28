@@ -28,7 +28,7 @@ export default class ItemGroupRepository extends Repository<ItemGroup> {
     find<ItemGroup>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
         const itemGroups: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-        return itemGroups.find((e: any) => e?.Number == code);
+        return new ItemGroup(itemGroups.find((e: any) => e?.Number == code) ?? {});
     }
 
     post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<ItemGroup> {
