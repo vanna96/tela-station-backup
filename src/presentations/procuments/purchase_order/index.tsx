@@ -27,7 +27,7 @@ export default function PurchaseOrderLists() {
             },
             {
                 accessorKey: "docType",
-                header: "Document Type	",
+                header: "Document Type",
                 enableClickToCopy: true,
             },
             {
@@ -69,7 +69,7 @@ export default function PurchaseOrderLists() {
                 Cell: (cell: any) => (
                     <div className="flex gap-4">
                         <button onClick={() => {
-                            route('/procument/purchase-agreement/' + cell.row.original.id, { state: cell.row.original })
+                            route('/procument/purchase-order/' + cell.row.original.id, { state: cell.row.original })
                         }}>
                             <VisibilityIcon fontSize="small" className="text-gray-600 " />
                         </button>

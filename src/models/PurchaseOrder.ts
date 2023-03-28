@@ -36,6 +36,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
     importFileNum?: string;
     serie: string;
     paymentMethod?: string;
+    docCurrency?: string;
     documentLine: PurchaseOrderDocumentLine[];
 
     constructor(json: any) {
@@ -46,6 +47,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
         this.owner = json['DocumentsOwner'];
         this.comments = json['Comments'];
         this.ship = json['TransportationCode'];
+        this.docCurrency = json['DocCurrency'];
         this.paymentTerm = json['PaymentGroupCode'];
         this.paymentMethod = json['PaymentMethod'];
         this.federalTaxID = json['FederalTaxID'];
@@ -62,7 +64,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
         this.address2 = json['Address2'];
         this.extraMonth = json['ExtraMonth'];
         this.extraDays = json['ExtraDays'];
-        this.docType = json['DocType'];
+        this.docType = json['DocType']?.split("_")[1];
         this.salesPersonCode = json['TaxDate'];
         this.cardName = json['BPName'];
         this.journalMemo = json['JournalMemo'];
@@ -93,6 +95,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
             "ExtraMonth": json['extraMonth'],
             "ExtraDays": json['extraDays'],
             "CashDiscountDateOffset": json['cashDiscountDateOffset'],
+            "DocCurrency": json['docCurrency'],
             "CreateQRCodeFrom": json['createQRCodeFrom'],
             "CancelDate": json['cancelDate'],
             "RequiredDate": json['requiredDate'],
@@ -111,7 +114,6 @@ export default class PurchaseOrder extends Model implements MasterDocument {
             "TransportationCode": json['transportationCode'],
             "Project": json['project'],
             "AccountCode": json['AccountCode'],
-            "DocCurrency": json['currency'],
             "DocumentLines": json['items'].map((e:any) => PurchaseOrderDocumentLine.toCreate(e, json['docType']))
         };
     }
