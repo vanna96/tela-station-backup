@@ -37,9 +37,20 @@ export default class BusinessPartnerRepository extends Repository<BusinessPartne
         });
     }
 
-    async find<T>(query?: string | undefined): Promise<T> {
-        throw new Error("Method not implemented.");
+    async find<T>(id: string, query?: string[]): Promise<any> {
+        return await request('GET', `${this.url}('${id}')?$select=${query?.join(',')}`).then((res: any) => new BusinessPartner(res.data))
+            .catch((e: Error) => {
+                throw new Error(e.message);
+        })
     }
+
+    async findContactEmployee<T>(id: string): Promise<any> {
+        return await request('GET', `${this.url}('${id}')?$select=${['EmailAddress', 'Phone1', 'ContactEmployees'].join(',')}`).then((res: any) => new BusinessPartner(res.data))
+            .catch((e: Error) => {
+                throw new Error(e.message);
+        })
+    }
+    
 
     post(payload: any): Promise<BusinessPartner> {
         throw new Error("Method not implemented.");

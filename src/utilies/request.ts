@@ -11,7 +11,7 @@ axiosInstance.interceptors.response.use(
     (response) => {
         if (response.data) {
             if (response.status === 200 || response.status === 201) {
-                return Promise.resolve(response.data)
+                return Promise.resolve(response)
             }
         }
 
@@ -28,6 +28,7 @@ const request = async (method: string, url: string, data?: any, responseType?: R
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             try {
+                
                 axiosInstance({
                     method,
                     url,
@@ -42,15 +43,23 @@ const request = async (method: string, url: string, data?: any, responseType?: R
                     // timeout: 20000,
                 })
                     .then((response) => {
-                        resolve({ data: response, headers: response.headers } );
+                        resolve({ data: response.data, headers: response.headers } );
                     })
                     .catch((e) => {
                         if (!(e instanceof AxiosError)) {
 
-                            if (window.location.pathname !== "/login")
+                            console.log(e)
+
+                            if (window.location.pathname !== "/login" && e?.status !== 204) {
                                 window.location.href = '/login';
-                            else
+                            }
+                            else if (e?.status === 204) {
+                                 reject(new Error('Update Successfully'));
+                            }
+                            else {
                                 reject(new Error('Internal Server Error'));
+                            
+                            }
 
                             return;
                         }
@@ -61,18 +70,22 @@ const request = async (method: string, url: string, data?: any, responseType?: R
                         }
 
                         if (
-                            e?.response?.status === 401 &&
+                            e?.status === 401 &&
                             window.location.pathname !== "/login"
                         ) {
                             window.location.href = "/login";
                             return;
                         }
 
+                        if (e?.status === 204) {
+                            reject(new Error('Update Successfully'));
+                        }
+
                         let error = e?.response?.data?.error?.message?.value;
                         reject(new Error(error ?? 'Invalid request'));
                     });
             } catch (e) {
-                window.location.href = '/login';
+                // window.location.href = '/login';
             }
         }, 1000);
     });

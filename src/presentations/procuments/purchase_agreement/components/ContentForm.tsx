@@ -10,6 +10,10 @@ import { currencyFormat } from "@/utilies";
 import ItemModal from "@/components/modal/ItemModal";
 import FormCard from "@/components/card/FormCard";
 import Formular from "@/utilies/formular";
+import AccountTextField from '../../../../components/input/AccountTextField';
+import ProjectionTextField from "@/components/input/ProjectionTextField";
+import ItemGroupRepository from '../../../../services/actions/itemGroupRepository';
+import UnitOfMeasurementRepository from '../../../../services/actions/unitOfMeasurementRepository';
 
 
 interface ContentFormProps {
@@ -24,10 +28,15 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
     const [tableKey, setTableKey] = React.useState(Date.now())
 
     const handlerChangeInput = (event: any, row: any, field: any) => {
-        handlerChangeItem({ value: event.target.value, record: row, field })
+        if (data?.isApproved) return;
+
+        let value = event.target.value;
+        handlerChangeItem({ value: value, record: row, field })
     }
 
     const handlerRemoveRow = (row: any) => {
+        if (data?.isApproved) return;
+
         handlerRemoveItem(row.ItemCode);
     }
 
@@ -45,12 +54,13 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 },
             },
             {
-                accessorKey: "ItemCode",
+                accessorKey: "itemCode",
                 header: "Item No", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
                     // return ;
                     return <MUITextField
                         value={cell.getValue()}
+                        disabled={data?.isApproved}
                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
                         onClick={() => { }}
                     />;
@@ -58,52 +68,56 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
             },
 
             {
-                accessorKey: "ItemName",
+                accessorKey: "itemName",
                 header: "Description",
-                Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />
+                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={cell.getValue()} />
             },
             {
-                accessorKey: "UoMGroupName",
+                accessorKey: "uomEntry",
                 header: "UoM Group",
-                Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
+                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={new UnitOfMeasurementRepository().find(cell.getValue())?.name} />
             },
             {
-                accessorKey: "ItemsGroupName",
+                accessorKey: "itemGroup",
                 header: "Item Group",
-                Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
+                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={new ItemGroupRepository().find(cell.getValue())?.name} />
             },
             {
-                accessorKey: "Quantity",
-                header: "Quanitity",
+                accessorKey: "quantity",
+                header: "Quantity",
                 Cell: ({ cell }: any) => {
+
                     return <MUITextField
-                        defaultValue={cell.getValue()}
+                        value={cell.getValue()}
                         type="number"
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
+                        error={(cell.getValue() as number) <= 0}
+                        disabled={data?.isApproved}
+                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'quantity')}
                     />;
                 },
             },
             {
-                accessorKey: "UnitPrice",
+                accessorKey: "unitPrice",
                 header: "Unit Price",
                 Cell: ({ cell }: any) => {
                     return <MUITextField
                         startAdornment={'USD'}
                         type="number"
-                        defaultValue={cell.getValue()}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
+                        disabled={data?.isApproved}
+                        error={(cell.getValue() as number) <= 0}
+                        value={cell.getValue()}
+                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
                     />;
                 },
             },
             {
-                accessorKey: "Total",
+                accessorKey: "total",
                 header: "Total",
                 Cell: ({ cell }: any) => {
-
-                    console.log(cell.row.original.UnitPrice)
                     return <MUITextField
-                        startAdornment={'USD'}
-                        value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
+                        startAdornment={'%'}
+                        disabled={data?.isApproved}
+                        value={Formular.findToTal(cell.row.original.quantity, cell.row.original.unitPrice)}
                     />;
                 },
             },
@@ -111,15 +125,15 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
         []
     );
 
+
     const serviceColumns = React.useMemo(
         () => [
             {
                 accessorKey: "Action",
                 header: "",
-                size: 40,
+                size: 60,
                 enableResizing: false,
                 Cell: ({ cell }: any) => {
-                    // return ;
                     return <Button size="small" color="error" onClick={() => handlerRemoveRow(cell.row.original)}><AiOutlineDelete /></Button>;
                 },
             },
@@ -127,22 +141,23 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "PlannedAmount",
                 header: "Planned Amount (LC)", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
-                    // return ;
                     return <MUITextField
                         defaultValue={currencyFormat(cell.getValue())}
                         startAdornment={'USD'}
                         type="number"
+                        disabled={data?.isApproved}
                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'PlannedAmount')}
                     />;
                 },
             },
             {
-                accessorKey: "LineDiscount",
+                accessorKey: "lineDiscount",
                 header: "Line Discount", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
                     return <MUITextField
                         defaultValue={cell.getValue()}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'LineDiscount')}
+                        disabled={data?.isApproved}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'lineDiscount')}
                     />;
                 },
             },
@@ -163,6 +178,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => {
                     return <ShippingType
                         value={cell.getValue()}
+                        disabled={data?.isApproved}
                         onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'ShppingType')}
                     />;
                 },
@@ -171,10 +187,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "Project",
                 header: "Project", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
-                    return <MUITextField
-                        defaultValue={cell.getValue()}
-                        onClick={() => { }}
-                    />;
+                    return <ProjectionTextField value={cell.getValue()} onChange={(project) => handlerChangeInput(project, cell?.row?.original, 'Project')} />;
                 },
             },
         ],
@@ -218,9 +231,14 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     }}
                     renderTopToolbarCustomActions={({ table }) => {
                         return <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                            <Button variant="outlined" size="small"
-                                onClick={handlerAddItem}
-                            ><span className="text-xs  capitalize font-normal">+ Add New</span></Button>
+                            {!data?.isApproved ?
+                                <>
+                                    <Button variant="outlined" size="small"
+                                        onClick={handlerAddItem}
+                                    ><span className="text-xs  capitalize font-normal">+ Add New</span></Button>
+                                </>
+                                : null}
+
                         </div>
                     }}
                 />

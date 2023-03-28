@@ -3,20 +3,22 @@ import MUISelect from "./MUISelect";
 import { useQuery } from "react-query";
 import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
+import PaymentTermTypeRepository from '../../services/actions/paymentTermTypeRepository';
 
 interface PaymentTermTypeProps<T = unknown> {
     name?: string,
     defaultValue?: any,
     value?: any,
     onChange?: SelectInputProps<T>['onChange'],
+    disabled?: boolean,
 }
 
 
 function PaymentTerm(props: PaymentTermTypeProps) {
 
-    const { data, isLoading }: any = useQuery({
+    const { data, isLoading  }: any = useQuery({
         queryKey: ["payment-term-types"],
-        queryFn: () => InitializeData.paymentTermType(),
+        queryFn: () => new PaymentTermTypeRepository().get(),
         staleTime: Infinity,
     });
 

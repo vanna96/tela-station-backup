@@ -6,7 +6,7 @@ import { OutlinedInput, TextField } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from '@mui/material/CircularProgress';
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-
+import shortid from 'shortid'
 
 interface MUISelectProps<T = unknown> {
   error?: boolean,
@@ -46,9 +46,9 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
     <FormControl error={error} fullWidth>
       <div className="w-full mui-select">
         <Select
-          value={value ?? ''}
+          value={value === -1 ? '-1' : (value ?? '')}
           defaultValue={defaultValue ?? ''}
-          className={`w-full ${className}`}
+          className={`w-full ${className} ${disabled ? 'bg-gray-100' : ''}`}
           name={name}
           onChange={onChange}
           disabled={disabled}
@@ -57,11 +57,7 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
             items?.map((e) => {
               return (
                 <MenuItem
-                  key={
-                    e?.value ??
-                    e?.[aliasvalue ?? ''] + "_" + e?.label ??
-                    e?.[aliaslabel ?? '']
-                  }
+                  key={shortid.generate()}
                   value={e?.value ?? e?.[aliasvalue ?? '']}
                 >
                   {e?.label ?? e?.[aliaslabel ?? '']}

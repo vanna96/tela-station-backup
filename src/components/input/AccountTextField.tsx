@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import MUITextField from './MUITextField';
+import MUITextField from './MUITextField'
 import GLAccountModal from '../modal/GLAccountModal';
 import GLAccount from '@/models/GLAccount';
 
@@ -25,4 +25,5 @@ const AccountTextField: FC<AccountTextField> = ({ value, onChange }: AccountText
 }
 
 
+export default AccountTextField;
 export default AccountTextField;

@@ -11,11 +11,12 @@ interface MUIDatePickerProps {
   error?: boolean,
   value?: any,
   name?: string | undefined,
-  onChange: (value: string) => void
+  onChange: (value: string) => void,
+  disabled?: boolean,
 }
 
 const MUIDatePicker: React.FC<MUIDatePickerProps> = (props: MUIDatePickerProps) => {
-  const { error, value, name, onChange } = props;
+  const { error, value, name, onChange, disabled } = props;
 
   return (
     <div className={`date-picker ${error ? 'date-picker-error' : ''}`}>
@@ -23,6 +24,8 @@ const MUIDatePicker: React.FC<MUIDatePickerProps> = (props: MUIDatePickerProps) 
         <DesktopDatePicker
           inputFormat="DD-MM-YYYY"
           value={value}
+          disabled={disabled}
+          className={disabled ? 'bg-gray-100' : ''}
           onChange={(e: any, inputVal: any) => {
             onChange(dayjs(e).format('YYYY-MM-DD'))
           }}

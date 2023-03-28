@@ -4,8 +4,8 @@ import React, { FC, useMemo } from 'react'
 import Modal from '../modal/Modal';
 import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
-import { fileToBase64 } from '@/utilies';
 import AttachmentRepository from '@/services/actions/attachmentRepository';
+import { fileToBase64 } from '@/utilies';
 
 interface PreviewAttachmentProps {
     attachmentEntry?: number;

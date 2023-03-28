@@ -6,8 +6,13 @@ import { useCookies } from "react-cookie";
 import Alert from '@mui/material/Alert';
 import request from '../../../utilies/request';
 import AuthLogin from '../../../models/AuthLogin';
-import InitializeData from '../../../services/actions';
-import { setItemToLocal } from '@/utilies';
+import ItemGroupRepository from '../../../services/actions/itemGroupRepository';
+import UnitOfMeasurementRepository from '../../../services/actions/unitOfMeasurementRepository';
+import DepartmentRepository from '@/services/actions/departmentRepository';
+import PaymentMethodRepository from '../../../services/actions/paymentMethodRepository';
+import PaymentTermTypeRepository from '../../../services/actions/paymentTermTypeRepository';
+import OwnerRepository from '@/services/actions/ownerRepository';
+import ShippingTypeRepository from '../../../services/actions/shippingTypeRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -23,9 +28,8 @@ export default function Login() {
       setLoading(true)
       const auth = new AuthLogin('SBODemoAU', 'manager', 'manager');
       const response: any = await request('POST', '/Login', auth.toJson());
-
-      console.log(response);
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
+      await fetchAllDate()
       navigate("/");
     } catch (e: any) {
       setMessage(e?.message)
@@ -35,23 +39,17 @@ export default function Login() {
   }
 
 
-  // async function fetchAllDate(): Promise<void> {
-  //   setLoading(true);
-  //   Promise.allSettled([
-  //     InitializeData.shippingType(),
-  //     InitializeData.unitOfMeasurement(),
-  //     InitializeData.branches(),
-  //     InitializeData.department(),
-  //     InitializeData.factoringIndicator(),
-  //     // InitializeData.owner(),
-  //     InitializeData.paymentTermType(),
-  //     InitializeData.vatGroups(),
-  //     InitializeData.listItemGroup(),
-  //   ]).then((res: any[]) => {
-  //     const lists = ['shippingType', 'uom', 'branch', 'department', '']
-  //     // setItemToLocal('',res);
-  //   }).finally(() => setLoading(false))
-  // }
+  async function fetchAllDate(): Promise<void> {
+    Promise.all([
+      await new ItemGroupRepository().get(),
+      await new UnitOfMeasurementRepository().get(),
+      await new DepartmentRepository().get(),
+      await new PaymentMethodRepository().get(),
+      await new PaymentTermTypeRepository().get(),
+      await new OwnerRepository().get(),
+      await new ShippingTypeRepository().get(),
+    ]);
+  }
 
   return (
     <div className='w-full h-full flex justify-center items-center'>
