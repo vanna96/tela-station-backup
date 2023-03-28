@@ -12,6 +12,7 @@ import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import { ToastOptions } from 'react-toastify';
 import GLAccount from '@/models/GLAccount';
+import { CircularProgress } from '@mui/material';
 
 
 class PurchaseAgreementForm extends CoreFormDocument {
@@ -25,7 +26,8 @@ class PurchaseAgreementForm extends CoreFormDocument {
             status: 'D',
             renewal: false,
             startDate: null,
-            endDate: null
+            endDate: null,
+            loading: true
         } as any;
 
 
@@ -35,16 +37,32 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
     componentDidMount(): void {
-        console.log(this.props)
+
+        if (!this.props?.edit) {
+            setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
+        }
+
+        if (this.props.edit) {
+            if (this.props.location.state) {
+                setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
+            } else {
+                new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
+                    this.setState({ ...res, loading: false });
+                }).catch((e: Error) => {
+                    this.setState({ message: e.message });
+                })
+            }
+        }
 
         DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie).then((res: any) => {
             this.setState({ ...this.state, series: res, isLoadingSerie: false })
         });
 
-        if (!this.props.edit)
+        if (!this.props.edit) {
             DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie).then((res: any) => {
                 this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber, isLoadingSerie: false })
             });
+        }
     }
 
     handlerRemoveItem(code: string) {
@@ -60,7 +78,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
         if (field === 'AccountNo') {
             const account = value as GLAccount;
-            item['AccountNo'] = account.code;
+            item[field] = account.code;
             item['AccountName'] = account.name;
         } else {
             item[field] = value;
@@ -80,7 +98,6 @@ class PurchaseAgreementForm extends CoreFormDocument {
         const { id } = this.props?.match?.params
 
         await new PurchaseAgreementRepository().post(this.state, this.props?.edit, id).then((res: any) => {
-            console.log(res)
             this.showMessage('Success', 'Create Successfully');
         }).catch((e: Error) => {
             this.showMessage('Errors', e.message);
@@ -90,40 +107,45 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
     FormRender = () => {
         return <>
-            <form onSubmit={this.handlerSubmit} className='flex flex-col gap-4'>
-                <HeadingForm
-                    data={this.state}
-                    handlerOpenVendor={() => {
-                        this.handlerOpenVendor('supplier');
-                    }}
-                    handlerChange={(key, value) => this.handlerChange(key, value)}
-                    handlerOpenProject={() => this.handlerOpenProject()}
-                />
-                <GeneralForm
-                    data={this.state}
-                    handlerChange={(key, value) => this.handlerChange(key, value)}
-                />
-                <ContentForm
-                    data={this.state}
-                    handlerAddItem={() => this.handlerOpenItem()}
-                    handlerRemoveItem={this.handlerRemoveItem}
-                    handlerChangeItem={this.handlerAddItem}
-                />
+            <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
+                {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
+                    <HeadingForm
+                        data={this.state}
+                        handlerOpenVendor={() => {
+                            console.log(this.state.isEditable)
+                            if (this.state.isEditable) {
+                                this.handlerOpenVendor('supplier');
+                            }
+                        }}
+                        handlerChange={(key, value) => this.handlerChange(key, value)}
+                        handlerOpenProject={() => this.handlerOpenProject()}
+                    />
+                    <GeneralForm
+                        data={this.state}
+                        handlerChange={(key, value) => this.handlerChange(key, value)}
+                    />
+                    <ContentForm
+                        data={this.state}
+                        handlerAddItem={() => this.handlerOpenItem()}
+                        handlerRemoveItem={this.handlerRemoveItem}
+                        handlerChangeItem={this.handlerAddItem}
+                    />
 
-                <AttachmentForm />
+                    <AttachmentForm />
 
-                <div className="sticky w-full bottom-4  mt-2">
-                    <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
-                        <div className="flex ">
-                            <LoadingButton size="small" sx={{ height: '25px' }} variant="contained" disableElevation><span className="px-3 text-[11px] py-1">Copy To</span></LoadingButton>
-                        </div>
-                        <div className="flex items-center">
-                            <LoadingButton type="submit" sx={{ height: '25px' }} className='bg-white' loading={false} size="small" variant="contained" disableElevation>
-                                <span className="px-3 text-[11px] py-1">Save & New</span>
-                            </LoadingButton>
+                    <div className="sticky w-full bottom-4  mt-2">
+                        <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
+                            <div className="flex ">
+                                <LoadingButton size="small" sx={{ height: '25px' }} variant="contained" disableElevation><span className="px-3 text-[11px] py-1">Copy To</span></LoadingButton>
+                            </div>
+                            <div className="flex items-center">
+                                <LoadingButton type="submit" sx={{ height: '25px' }} className='bg-white' loading={false} size="small" variant="contained" disableElevation>
+                                    <span className="px-3 text-[11px] py-1">Save & New</span>
+                                </LoadingButton>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </>}
             </form>
         </>
     }

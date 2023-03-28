@@ -1,6 +1,9 @@
+import BusinessPartner from '@/models/BusinessParter';
 import Repository from '../../astractions/repository';
 import PurchaseAgreement from '../../models/PurchaseAgreement';
 import request from '../../utilies/request';
+import BusinessPartnerRepository from './bussinessPartnerRepository';
+import { IContactPersonList } from '../../astractions/index';
 
 export default class PurchaseAgreementRepository extends Repository<PurchaseAgreement> {
     
@@ -15,20 +18,27 @@ export default class PurchaseAgreementRepository extends Repository<PurchaseAgre
         const response: any = await request('GET', this.url).then((res: any) => {
             const data = res?.data?.value?.map((e: any) => new PurchaseAgreement(e));
             return data;
-        }).catch((e) => {
-            throw new Error(e);
+        }).catch((e : Error) => {
+            throw new Error(e.message);
         });
 
         return response;
     }
 
     async find<T>(id: any): Promise<any> {
-        return await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseAgreement(res.data))
+        const purchaseAgreement = await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseAgreement(res.data))
             .catch((e: Error) => {
             throw new Error(e.message)
-        })
-    }
+            })
+        
+        const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.cardCode!);
 
+        purchaseAgreement.email = businessPartner.email;
+        purchaseAgreement.phone = businessPartner.phone;
+        purchaseAgreement.contactPersonList = businessPartner.contactEmployee ?? [];
+
+        return purchaseAgreement;
+    }
 
     async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 

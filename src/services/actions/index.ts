@@ -1,10 +1,6 @@
-import { getItemFromLocal } from "../../utilies";
 import request from '@/utilies/request';
-import ShippingType from "@/models/ShippingType";
 import Owner from "@/models/Owner";
-import GLAccount from "@/models/GLAccount";
-
-
+import Encryption from "@/utilies/encryption";
 
 export default class InitializeData {
 
@@ -15,6 +11,10 @@ export default class InitializeData {
 
         const response: any = await request('GET', '/ShippingTypes?$select=Code,Name&$orderby=Name asc');
         if (!response?.data) return [];
+
+        const enc = Encryption.encrypt('shipping_types', response.data.value);
+        localStorage.setItem('shipping_types', enc);
+        const dec = Encryption.decrypt('shipping_types', enc)
 
         return response.data.value;
     }

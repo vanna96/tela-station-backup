@@ -96,11 +96,10 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
 
             return ({
                 ...e,
-                ItemsGroupName: itemG.name,
-                UoMGroupName: unitOfMasurement.name,
-                Quantity: 0,
-                UnitPrice: 0,
-
+                itemsGroupName: itemG.name,
+                uoMGroupName: unitOfMasurement.name,
+                quantity: 0,
+                unitPrice: 0,
             })
         });
 

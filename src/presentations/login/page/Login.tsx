@@ -6,8 +6,6 @@ import { useCookies } from "react-cookie";
 import Alert from '@mui/material/Alert';
 import request from '../../../utilies/request';
 import AuthLogin from '../../../models/AuthLogin';
-import InitializeData from '../../../services/actions';
-import { setItemToLocal } from '@/utilies';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);

@@ -2,6 +2,11 @@ import { dateFormat } from '../utilies';
 import Model from './Model';
 import { MasterDocument, DocumentLine } from './interface/index';
 import moment from 'moment';
+import { IContactPersonList } from '../astractions/index';
+import { ContactEmployee } from './BusinessParter';
+import ShippingTypeRepository from '../services/actions/shippingTypeRepository';
+import PaymentTermTypeRepository from '../services/actions/paymentTermTypeRepository';
+import OwnerRepository from '../services/actions/ownerRepository';
 
 export interface PurchaseAgreementProps {
     id: any;
@@ -57,7 +62,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
     docNum: any;
     cardCode?: string;
     cardName?: string;
-    constactPersonCode?: number;
+    contactPersonCode?: number;
     startDate?: string;
     endDate?: string;
     terminateDate?: string;
@@ -72,13 +77,18 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
     attachmentEntry?: number;
     settlementProbability?: number;
     agreementMethod?: string;
-    paymentTerm?: string;
+    paymentTermType?: string;
     priceList?: number;
     signeDate?: string;
     serie: string;
     paymentMethod?: string;
     shippingType?: string | undefined;
-    documentLine: PurchaseAgreementDocumentLine[];
+    items: PurchaseAgreementDocumentLine[];
+    email?: string | undefined | null;
+    phone?: string | undefined | null;
+    project?: string | undefined | null;
+    contactPersonList?: ContactEmployee[];
+    isEditable?: boolean;
 
     constructor(json: any) {
         super();
@@ -87,28 +97,33 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
         this.docNum= json['DocNum'];
         this.cardCode= json['BPCode'];
         this.cardName= json['BPName'];
-        this.constactPersonCode= json['ContactPersonCode'];
-        this.startDate= moment(json['StartDate']).format('DD-MM-YYYY');
-        this.endDate=moment(json['EndDate']).format('DD-MM-YYYY');
+        this.contactPersonCode= json['ContactPersonCode'];
+        this.startDate= json['StartDate'];
+        this.endDate= json['EndDate'];
         this.terminateDate= json['TerminateDate'];
         this.description= json['Description'];
-        this.agreementType= json['AgreementType'];
-        this.status= json['Status'];
+        this.agreementType= json['AgreementType']?.replace('at',"")?.charAt(0);
+        this.status= json['Status']?.replace('as',"")?.charAt(0);
         this.owner= json['Owner'];
         this.renewal= json['Renewal'] === 'tYES';
-        this.remindUnit= json['RemindUnit'];
+        this.remindUnit= json['RemindUnit']?.replace('reu_',"")?.charAt(0);
         this.remindTime= json['RemindTime'];
         this.remark= json['Remarks'];
         this.attachmentEntry= json['AttachmentEntry'];
         this.settlementProbability= json['SettlementProbability'];
-        this.agreementMethod= json['AgreementMethod'];
-        this.paymentTerm= json['PaymentTerms'];
+        this.agreementMethod= json['AgreementMethod']?.replace('am',"")?.charAt(0);;
+        this.paymentTermType= json['PaymentTerms'];
         this.priceList= json['PriceList'];
         this.signeDate= json['SigningDate'];
         this.serie= json['Series'];
         this.paymentMethod= json['PaymentMethod'];
-        this.shippingType= json['ShippingType'];
-        this.documentLine= json['BlanketAgreements_ItemsLines']?.map((e:any) => new PurchaseAgreementDocumentLine(e));
+        this.shippingType = json['ShippingType'];
+        this.email = json['Email'];
+        this.phone = json['Phone'];
+        this.contactPersonList = json['contactPersonList'];
+        this.project = json['Project'];
+        this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
+        this.items= json['BlanketAgreements_ItemsLines']?.map((e:any) => new PurchaseAgreementDocumentLine(e));
     }
 
     toJson(update: boolean) {
@@ -117,7 +132,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
 
 
     public static toCreate(json: any) {
-        console.log(json)
+       
 
         return {
             "BPCode": json['cardCode'],
@@ -138,7 +153,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             "AttachmentEntry": json['attachmentEntry'],
             "SettlementProbability": json['settlementProbability'],
             "AgreementMethod": json['agreementMethod'],
-            "PaymentTerms":  json['paymentTerms'],
+            "PaymentTerms":  json['paymentTermType'],
             "SigningDate": json['signingDate'],
             "Series": json['serie'],
             "PaymentMethod": json['paymentMethod'],
@@ -169,23 +184,22 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             "AttachmentEntry": json['attachmentEntry'],
             "SettlementProbability": json['settlementProbability'],
             "AgreementMethod": json['agreementMethod'],
-            "PaymentTerms":  json['paymentTerms'],
+            "PaymentTerms":  json['paymentTermType'],
             "SigningDate": json['signingDate'],
-            "Series": json['serie'],
-            "DocNum": json['docNum'],
             "PaymentMethod": json['paymentMethod'],
             "ShippingType": json['shippingType'],
             "NumAtCard": json['numAtCard'],
             "Project": json['project'],
             "BPCurrency": json['currency'],
-            "BlanketAgreements_ItemsLines": []
+            
+            // "BlanketAgreements_ItemsLines": json['items'].map((e:any) => PurchaseAgreementDocumentLine.toCreate(e, json['agreementMethod']))
         };
     }
     
 
 
-    get getRemindUnit(): string {
-        switch (this.remindUnit) {
+    public static getRemindUnit(remindUnit : string | null): string {
+        switch (remindUnit) {
             case 'D':
                 return 'Days'
             case 'W':
@@ -197,20 +211,19 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
         }
     } 
 
-    get getStatus(): string {
-        switch (this.status) {
+    public static getType(status: string | null): string {
+        switch (status) {
             case 'M':
                 return 'Monetary Method'
             default:
                 return 'Items Method';
         }
     } 
-
 }
 
 export class PurchaseAgreementDocumentLine extends Model implements DocumentLine {
-    itemNo?: string | undefined;
-    itemDescription?: string | undefined;
+    itemCode?: string | undefined;
+    itemName?: string | undefined;
     itemGroup?: string | undefined;
     quantity?: number | undefined;
     unitPrice?: number | undefined;
@@ -228,8 +241,8 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
 
     constructor(json: any) {
         super();
-        this.itemNo = json['ItemNo'];
-        this.itemDescription = json['ItemDescription'];
+        this.itemCode = json['ItemNo'];
+        this.itemName = json['ItemDescription'];
         this.itemGroup = json['ItemGroup'];
         this.quantity = json['PlannedQuantity'];
         this.unitPrice = json['UnitPrice'];
@@ -255,16 +268,16 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
     public static toCreate(json: any, type: string) {
         
         let body = {
-            "ItemNo": json["ItemCode"],
-            "ItemDescription": json['ItemName'],
-            "ItemGroup": json["ItemsGroupCode"],
-            "PlannedQuantity": json['Quantity'],
-            "UnitPrice": json['UnitPrice'],
-            "UoMEntry": json['UoMGroupEntry'],
+            "ItemNo": json["itemCode"],
+            "ItemDescription": json['itemName'],
+            "ItemGroup": json["itemsGroupCode"],
+            "PlannedQuantity": json['quantity'],
+            "UnitPrice": json['unitPrice'],
+            "UoMEntry": json['uoMGroupEntry'],
             "UoMCode": null,
             "UnitsOfMeasurement": 1.0,
             "FreeText": json['freeText'] ?? null,
-            "InventoryUoM": json['InventoryUOM'],
+            "InventoryUoM": json['inventoryUOM'],
             "CumulativeQuantity": null,
             "CumulativeAmountLC": null,
             "CumulativeAmountFC": 0.0,
@@ -276,7 +289,7 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
             "UndeliveredCumulativeQuantity": null,
             "UndeliveredCumulativeAmountLC": null,
             "UndeliveredCumulativeAmountFC": 0.0,
-            "ShippingType": json['ShippingType'],
+            "ShippingType": json['shippingType'],
             "Project": null,
             "TaxCode": null,
             "TAXRate": null,
@@ -286,15 +299,14 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
             "CumulativeVATAmountFC": null,
         };
 
-
-        if (type === 'M') {
-            delete body.ItemNo;
-            delete body.ItemDescription;
-            delete body.ItemGroup;
-            delete body.UnitPrice;
-            delete body.UoMEntry;
-            delete body.InventoryUoM;
-        }
+        // if (type === 'M') {
+        //     delete body.ItemNo;
+        //     delete body.ItemDescription;
+        //     delete body.ItemGroup;
+        //     delete body.UnitPrice;
+        //     delete body.UoMEntry;
+        //     delete body.InventoryUoM;
+        // }
         
         return body;
     }

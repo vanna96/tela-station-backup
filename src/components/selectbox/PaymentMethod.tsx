@@ -5,6 +5,7 @@ import { SelectInputProps } from "@mui/material/Select/SelectInput";
 import QueryHook from "@/utilies/useQueryHook";
 import InitializeData from "@/services/actions";
 import { useQuery } from "react-query";
+import PaymentMethodRepository from "@/services/actions/paymentMethodRepository";
 
 // type PAYMENT_TYPE = {
 //     INCOMING: 'boptIncoming',
@@ -26,7 +27,7 @@ const PaymentMethod: FC<PaymentMethodProps> = ({ type, name, defaultValue, value
 
     const { data, isLoading }: any = useQuery({
         queryKey: ["payment-methods"],
-        queryFn: () => InitializeData.listPaymentMethod(),
+        queryFn: () => new PaymentMethodRepository().get(),
         staleTime: Infinity,
     });
 
