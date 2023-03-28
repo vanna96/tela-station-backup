@@ -28,6 +28,7 @@ import {
   PurchaseRequestDocumentLineProps,
 } from "../../../../../models/PurchaseRequest";
 import Department from "../../../../../models/Department";
+import { DocumentLine } from '../../../../../models/interface/index';
 
 class PurchaseRequestDetail extends Component<any, any> {
   constructor(props: any) {
@@ -51,6 +52,7 @@ class PurchaseRequestDetail extends Component<any, any> {
 
     if (data) {
       setTimeout(() => this.setState({ ...data, loading: false }), 500);
+      console.log(data);
     } else {
       new PurchaseRequestRepository()
         .find(id)
@@ -179,7 +181,7 @@ class PurchaseRequestDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Status</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.documentStatus?.replace("am", "")}
+                    : {this.state.documentStatus?.replace("bost_", "")}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -225,13 +227,26 @@ class PurchaseRequestDetail extends Component<any, any> {
 
 export default withRouter(PurchaseRequestDetail);
 
-
-
 function Content(props: any) {
   const { data } = props;
 
+  console.log(data)
+  console.log(data.documentLine)
+
+  const subTotal = data.documentLines ? data.documentLines.reduce((accumulator: number, currentLine: any) => {
+    // console.log(currentLine.lineTotal);
+    
+    return accumulator + currentLine.lineTotal;
+  }, 0) : 0;
+
+  console.log(subTotal)
   const itemColumn = useMemo(
     () => [
+      // {
+      //     accessorKey: "lineNum",
+      //     header: "No.",
+
+      //   },
       {
         accessorKey: "itemNo",
         header: "Item NO.", //uses the default width from defaultColumn prop
@@ -241,24 +256,57 @@ function Content(props: any) {
       },
       {
         accessorKey: "itemDescription",
-        header: "Item Description",
+        header: "Item Description", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
-      },
-      {
-        accessorKey: "itemGroup",
-        header: "Item Group",
-        Cell: ({ cell }: any) => cell.getValue(),
+        enableFilterMatchHighlighting: true,
+        size: 88,
       },
       {
         accessorKey: "quantity",
-        header: "Quantity",
-        Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        header: "Required Qty.",
+        enableClickToCopy: true,
       },
       {
         accessorKey: "unitPrice",
-        header: "Unit Price",
-        Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        header: "Info Price",
+        enableClickToCopy: true,
+        // Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
+      {
+        accessorKey: "discountPercent",
+        header: "Discount %	",
+        enableClickToCopy: true,
+      },
+      {
+        accessorKey: "vatGroup",
+        header: "Tax Code",
+        enableClickToCopy: true,
+      },
+      {
+        accessorKey: "lineTotal",
+        header: "Total (LC)	",
+        enableClickToCopy: true,
+        // Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+      },
+      {
+        accessorKey: "uomCode",
+        header: "UoM Code",
+        enableClickToCopy: true,
+      },
+    //   {
+    //     accessorKey: "Discount %	",
+    //     header: "Item Group",
+    //     Cell: ({ cell }: any) => cell.getValue(),
+    //   },
+      //   {
+      //     accessorKey: "quantity",
+      //     header: "Quantity",
+      //   },
+      //   {
+      //     accessorKey: "unitPrice",
+      //     header: "Unit Price",
+      //     Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+      //   },
     ],
     [data]
   );
@@ -295,9 +343,7 @@ function Content(props: any) {
   return (
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
-        columns={
-          data?.agreementMethod === "amItem" ? itemColumn : serviceColumns
-        }
+        columns={data?.docType === "I" ? itemColumn : serviceColumns}
         data={data?.documentLine ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
@@ -323,15 +369,30 @@ function Content(props: any) {
         <div className="flex flex-col gap-2">
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Owner</span>
-            <span className="col-span-2 font-medium">: {data.remark}</span>
+            <span className="col-span-2 font-medium">: {data.DocumentsOwner}</span>
           </div>
-        </div>
-        <div className="flex flex-col gap-2">
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Remark</span>
-            <span className="col-span-2 font-medium">: {data.comments}</span>
+            <span className="col-span-2 font-medium">: {data.Comments}</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <span className="text-gray-500">Total Before Discount</span>
+            <span className="col-span-2 font-medium">: {data.price}</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <span className="text-gray-500">Freight</span>
+            <span className="col-span-2 font-medium">: {data.Freight}</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <span className="text-gray-500">Tax</span>
+            <span className="col-span-2 font-medium">: {data.vatSumSys}</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <span className="text-gray-500">Total Payment Due</span>
+            <span className="col-span-2 font-medium">: {data.docTotalSys}</span>
           </div>
         </div>
+        
       </div>
     </div>
   );

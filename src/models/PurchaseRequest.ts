@@ -38,16 +38,12 @@ export interface PurchaseRequestDocumentLineProps {
   quantity?: number | undefined;
   unitPrice?: number | undefined;
   currency?: string | undefined;
-  cumulativeQuantity?: number | undefined;
-  cumulativeAmount?: number | undefined;
-  plannedAmount?: number;
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
   shippingType?: string | undefined;
   project?: string | undefined;
-  taxCode?: string | undefined;
-  taxRate?: number | undefined;
+  vatGroup?: string | undefined;
 }
 
 export default class PurchaseRequest extends Model implements MasterDocument {
@@ -112,6 +108,10 @@ export default class PurchaseRequest extends Model implements MasterDocument {
   shippingType?: string | undefined;
   documentLine: PurchaseRequestDocumentLine[];
   DocTotalSys?: number;
+  documentowner?: string;
+  vatSumSys?: string;
+  price?: number;
+
 
   constructor(json: any) {
     super();
@@ -119,14 +119,25 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     this.requester = json["Requester"];
     this.requesterName = json["RequesterName"];
     this.requesterEmail = json["RequesterEmail"];
+    this.requesterDepartment = json["RequesterDepartment"];
+    this.requesterBranch = json["RequesterBranch"];
     this.serie = json["Series"];
     this.docTotalSys = json["DocTotalSys"];
+    this.documentowner = json["DocumentOwner"];
+    this.documentStatus = json["DocumentStatus"];
+    this.vatSumSys = json["VatSumSys"];
+    this.price = json["Price"];
     this.docNum = json["DocNum"];
     this.requriedDate = dateFormat(json["RequriedDate"]);
     this.creationDate = dateFormat(json["CreationDate"]);
     this.docDueDate = dateFormat(json["DocDueDate"]);
     this.docDate = dateFormat(json["DocDate"]);
-    this.documentLine = [];
+    this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
+    // this.documentLine = [];
+    // this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
+    this.documentLine = json["DocumentLines"]?.map(
+      (e: any) => new PurchaseRequestDocumentLine(e)
+    );
   }
 
   toJson(update: boolean) {
@@ -151,46 +162,6 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       Comments: json["comments"],
       journalMemo: json["journalMemo"],
       documentStatus: json["documentStatus"],
-      // paymentGroupCode: json["PaymentGroupCode"],
-      // salesPersonCode: json["SalesPersonCode"],
-      // transportationCode: json["TransportationCode"],
-      // confirmed: json["Confirmed"],
-      // contactPersonCode: json["ContactPersonCode"],
-      // series: json["Series"],
-      // taxDate: json["TaxDate"],
-      // partialSupply: json["PartialSupply"],
-      // docObjectCode: json["DocObjectCode"],
-      // indicator: json["Indicator"],
-      // federalTaxID: json["FederalTaxID"],
-      // discountPercent: json["DiscountPercent"],
-      // creationDate: json["CreationDate"],
-      // updateDate: json["UpdateDate"],
-      // userSign: json["UserSign"],
-      // vatSum: json["VatSum"],
-      // docTotalSys: json["DocTotalSys"],
-      // RequriedDate: json["RequriedDate"],
-      // cancelDate: json["CancelDate"],
-      // rounding: json["Rounding"],
-      // address2: json["Address2"],
-      // documentStatus: json["DocumentStatus"],
-      // periodIndicator: json["PeriodIndicator"],
-      // payToCode: json["PayToCode"],
-      // manualNumber: json["ManualNumber"],
-      // useShpdGoodsAct: json["UseShpdGoodsAct"],
-      // totalDiscount: json["TotalDiscount"],
-      // vatPercent: json["VatPercent"],
-      // extraMonth: json["ExtraMonth"],
-      // extraDays: json["ExtraDays"],
-      // startFrom: json["StartFrom"],
-      // downPaymentStatus: json["DownPaymentStatus"],
-      // bPLName: json["BPLName"],
-      // vatRegNum: json["VATRegNum"],
-      // paymentTerm: json["PaymentTerm"],
-      // priceList: json["PriceList"],
-      // serie: json["Serie"],
-      // paymentMethod: json["PaymentMethod"],
-      // shippingType: json["ShippingType"],
-
       PriceList: json["priceList"],
       Serie: json["serie"],
       JournalMemo: json["JournalMemo"],
@@ -231,8 +202,8 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       PaymentTerm: json["PaymentTerm"],
       PaymentMethod: json["PaymentMethod"],
       ShippingType: json["ShippingType"],
-      DocumentLines: json["items"].map((e: any) =>
-        PurchaseRequestDocumentLine.toCreate(e, json["docType"])
+      DocumentLines: json["DocumentLines"].map((e: any) =>
+        PurchaseRequestDocumentLine.toCreate(e, json["DocType"])
       ),
     };
   }
@@ -292,6 +263,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       paymentMethod: json["PaymentMethod"],
       shippingType: json["ShippingType"],
       DocTotalSys: json["DocTotalSys"],
+      docType: json["DocType"],
       DocumentLines: [],
     };
   }
@@ -300,6 +272,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
 export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
   itemNo?: string | undefined;
   itemDescription?: string | undefined;
+  itemGroup?: string | undefined;
   quantity?: number | undefined;
   unitPrice?: number | undefined;
   currency?: string | undefined;
@@ -308,13 +281,34 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
   uomCode?: string | undefined;
   transportationCode?: string | undefined;
   project?: string | undefined;
-  taxCode?: string | undefined;
   taxRate?: number | undefined;
-  vatGroup?: string | undefined;
-  lineTotal?: string | undefined;
+  lineTotal?: number | undefined;
   accountCode?: string | undefined;
   accountName?: string | undefined;
   discountPercent?: number | undefined;
+  vatGroup?: string | undefined;
+
+
+  constructor(json: any) {
+    super();
+    this.itemNo = json["ItemCode"];
+    this.itemDescription = json["ItemDescription"];
+    this.itemGroup = json["ItemGroup"];
+    this.quantity = json["Quantity"];
+    this.unitPrice = json["Price"];
+    this.currency = json["Currency"];
+    this.lineDiscount = json["LineDiscount"];
+    this.uomEntry = json["UoMEntry"];
+    this.uomCode = json["UoMCode"];
+    this.taxRate = json["Rate"];
+    this.lineTotal = json["LineTotal"];
+    this.accountCode = json["AccountCode"];
+    this.uomCode = json["UoMCode"];
+    this.accountName = json["AccountName"];
+    this.discountPercent = json["DiscountPercent"];
+    this.vatGroup = json["VatGroup"]
+  }
+
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
   }
