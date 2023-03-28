@@ -26,7 +26,7 @@ export const withRouter = <P extends object>(Component: ComponentType<P>) => {
             back: () => navigate(-1),
             goBack: () => navigate(-1),
             location,
-          
+
             push: (url: string, state?: any) => navigate(url, { state }),
             replace: (url: string, state?: any) => navigate(url, {
                 replace: true,

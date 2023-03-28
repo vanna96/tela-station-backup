@@ -17,6 +17,10 @@ export default class DocumentStatus {
                 return 'Cancelled';
             case 'T':
                 return 'Terminated';
+            case 'F':
+                return 'On Hold';
+            case 'O':
+                return 'On Hold';
             default:
                 return '';
         }

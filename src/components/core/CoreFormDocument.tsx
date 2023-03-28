@@ -16,6 +16,7 @@ import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify
 import 'react-toastify/dist/ReactToastify.css';
 import DistributionRuleModal from '../modal/DistributionRuleModal';
 import { VendorModalType } from '../modal/VendorModal';
+import FormMessageModal from '../modal/FormMessageModal';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -75,6 +76,8 @@ export interface CoreFormDocumentState {
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
 
+    dialog = React.createRef<FormMessageModal>();
+
     protected constructor(props: any) {
         super(props);
 
@@ -120,10 +123,16 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             isApproved: false,
         }
 
-        this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
+
+
+
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
         this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
         this.handlerConfirmDistribution = this.handlerConfirmDistribution.bind(this)
+
+
+        // ref
+
     }
 
     abstract FormRender(): JSX.Element;
@@ -143,9 +152,11 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                     }
                     bodyClassName={() => "text-sm font-white font-med block p-3"}
                 />
-                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => { }} onOk={() => this.handlerCloseDialogMessage()} widthClass='w-[30rem]' >
+                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => { }} onOk={() => { }} widthClass='w-[30rem]' >
                     <span className='text-sm'>{this.state.message}</span>
                 </Modal>
+
+                <FormMessageModal ref={this.dialog} />
 
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -208,7 +219,10 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     }
 
     protected handlerConfirmItem(data: any[]) {
-        this.setState({ ...this.state, isOpenItem: false, items: [...data] })
+        let oldItems = [...this.state.items ?? []];
+
+
+        this.setState({ ...this.state, isOpenItem: false, items: [...oldItems, ...data] })
     }
 
     private handlerCloseItem() {
@@ -323,12 +337,15 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         })
     }
 
-    protected handlerCloseDialogMessage() {
-        // this.props.history.goBack();
+    protected handlerCloseDialogMessage(cb?: Function) {
         this.setState({
             ...this.state,
             showDialogMessage: false,
-        })
+        });
+
+        if (cb) {
+            cb();
+        }
     }
 
 }

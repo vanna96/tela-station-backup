@@ -7,6 +7,7 @@ import { ContactEmployee } from './BusinessParter';
 import ShippingTypeRepository from '../services/actions/shippingTypeRepository';
 import PaymentTermTypeRepository from '../services/actions/paymentTermTypeRepository';
 import OwnerRepository from '../services/actions/ownerRepository';
+import { getValueDocumentStatus } from '@/constants';
 
 export interface PurchaseAgreementProps {
     id: any;
@@ -30,7 +31,7 @@ export interface PurchaseAgreementProps {
     agreementMethod?: string;
     paymentTerm?: string;
     priceList?: number;
-    signeDate?: string;
+    signingDate?: string;
     serie: string;
     paymentMethod?: string;
     shippingType?: string | undefined;
@@ -79,7 +80,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
     agreementMethod?: string;
     paymentTermType?: string;
     priceList?: number;
-    signeDate?: string;
+    signingDate?: string;
     serie: string;
     paymentMethod?: string;
     shippingType?: string | undefined;
@@ -103,7 +104,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
         this.terminateDate= json['TerminateDate'];
         this.description= json['Description'];
         this.agreementType= json['AgreementType']?.replace('at',"")?.charAt(0);
-        this.status= json['Status']?.replace('as',"")?.charAt(0);
+        this.status= getValueDocumentStatus(json['Status']);
         this.owner= json['Owner'];
         this.renewal= json['Renewal'] === 'tYES';
         this.remindUnit= json['RemindUnit']?.replace('reu_',"")?.charAt(0);
@@ -114,7 +115,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
         this.agreementMethod= json['AgreementMethod']?.replace('am',"")?.charAt(0);;
         this.paymentTermType= json['PaymentTerms'];
         this.priceList= json['PriceList'];
-        this.signeDate= json['SigningDate'];
+        this.signingDate= json['SigningDate'];
         this.serie= json['Series'];
         this.paymentMethod= json['PaymentMethod'];
         this.shippingType = json['ShippingType'];
@@ -132,8 +133,6 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
 
 
     public static toCreate(json: any) {
-       
-
         return {
             "BPCode": json['cardCode'],
             "BPName": json['cardName'],

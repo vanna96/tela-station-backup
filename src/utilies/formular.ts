@@ -6,13 +6,10 @@ export default class Formular {
 
     }
 
-
-
     public static findToTal(qty:  string, price:  string) {
         const total = parseFloat(price) * parseFloat(qty);
 
         if (isNaN(total)) return 0;
-
         return total;
     }
 
