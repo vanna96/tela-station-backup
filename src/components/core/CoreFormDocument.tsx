@@ -117,7 +117,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             inWhichDimension: 0,
             vendorType: 'customer',
             loading: true,
-            isApproved: true,
+            isApproved: false,
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
