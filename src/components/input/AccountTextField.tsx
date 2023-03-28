@@ -26,4 +26,3 @@ const AccountTextField: FC<AccountTextField> = ({ value, onChange }: AccountText
 
 
 export default AccountTextField;
-export default AccountTextField;

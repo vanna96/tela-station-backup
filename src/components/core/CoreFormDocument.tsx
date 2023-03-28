@@ -93,7 +93,7 @@ export interface CoreFormDocumentState {
   userCode ?: string | undefined | null;
   userName ?: string | undefined | null;
   branch ?: any[];
-  department ?: any[];,
+  department ?: any[];
     loading: boolean,
     isApproved: boolean,
 }
