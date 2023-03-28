@@ -29,6 +29,8 @@ import {
 } from "../../../../../models/PurchaseRequest";
 import Department from "../../../../../models/Department";
 import { DocumentLine } from '../../../../../models/interface/index';
+import { PurchaseRequestDocumentLine } from '../../../../../models/PurchaseRequest';
+import Formular from '../../../../../utilies/formular';
 
 class PurchaseRequestDetail extends Component<any, any> {
   constructor(props: any) {
@@ -230,16 +232,8 @@ export default withRouter(PurchaseRequestDetail);
 function Content(props: any) {
   const { data } = props;
 
-  console.log(data)
-  console.log(data.documentLine)
 
-  const subTotal = data.documentLines ? data.documentLines.reduce((accumulator: number, currentLine: any) => {
-    // console.log(currentLine.lineTotal);
-    
-    return accumulator + currentLine.lineTotal;
-  }, 0) : 0;
 
-  console.log(subTotal)
   const itemColumn = useMemo(
     () => [
       // {
@@ -377,7 +371,7 @@ function Content(props: any) {
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Total Before Discount</span>
-            <span className="col-span-2 font-medium">: {data.price}</span>
+            <span className="col-span-2 font-medium">: {Formular.findItemTotal(data?.documentLine)}</span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Freight</span>

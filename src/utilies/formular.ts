@@ -1,29 +1,35 @@
-
-
-
 export default class Formular {
-    constructor() {
+  constructor() {}
 
-    }
+  public static findItemTotal(items: any[]): number {
+    const total = items.reduce((accumulator: number, currentItem: any) => {
+      return accumulator + currentItem.lineTotal;
+    }, 0);
+    if (isNaN(total)) return 0;
 
+    return total;
+  }
 
+  public static findToTal(qty: string, price: string) {
+    const total = parseFloat(price) * parseFloat(qty);
 
-    public static findToTal(qty:  string, price:  string) {
-        const total = parseFloat(price) * parseFloat(qty);
+    if (isNaN(total)) return 0;
 
-        if (isNaN(total)) return 0;
+    return total;
+  }
 
-        return total;
-    }
+  public static findToTalDiscountPercent(
+    qty: string,
+    price: string,
+    discount: string
+  ) {
+    let total = parseFloat(price) * parseFloat(qty);
+    const totalDiscount = (total * parseFloat(discount)) / 100;
 
-    public static findToTalDiscountPercent(qty:  string, price:  string, discount: string) {
-        let total = parseFloat(price) * parseFloat(qty);
-        const totalDiscount = (total * parseFloat(discount)) / 100;
-        
-        total = total - totalDiscount;
-        
-        if (isNaN(total)) return 0;
+    total = total - totalDiscount;
 
-        return total;
-    }
+    if (isNaN(total)) return 0;
+
+    return total;
+  }
 }
