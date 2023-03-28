@@ -9,10 +9,11 @@ export interface IHeadingFormProps {
   handlerOpenVendor: () => void,
   handlerChange: (key: string, value: any) => void;
   data: any,
+  edit?: boolean
   handlerOpenProject?: () => void,
 }
 
-export default function HeadingForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject }: IHeadingFormProps) {
+export default function HeadingForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject,edit }: IHeadingFormProps) {
 
 
   return (
@@ -20,8 +21,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
       <FormCard title='Information'>
         <div className="flex flex-col gap-2">
           <div className="grid grid-cols-2 gap-3">
-            <MUITextField label="Vendor Code" value={data?.cardCode} name="BPCode" onClick={handlerOpenVendor} endAdornment={true} />
-            <MUITextField label="Vendor Name" value={data?.cardName} name="BPName" />
+            <MUITextField label="Vendor Code" disabled={edit} value={data?.cardCode} name="BPCode" onClick={handlerOpenVendor} endAdornment={true} />
+            <MUITextField label="Vendor Name" disabled={edit} value={data?.cardName} name="BPName" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -76,9 +77,12 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 name="Series"
                 loading={data?.isLoadingSerie}
                 value={data?.serie}
+                disabled={edit}
                 onChange={(e: any) => handlerChange('serie', e.target.value)}
               />
-              <TextField size="small" name="DocNum" key={data?.docNum} defaultValue={data?.docNum} disabled={data?.isLoadingSerie} placeholder='Document No' fullWidth className="w-full text-field" />
+              <div className='-mt-1'>
+                <MUITextField size="small" name="DocNum" value={data?.docNum} disabled={edit} placeholder='Document No' />
+              </div>
             </div>
           </div>
 
@@ -91,7 +95,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                   value={data.agreementMethod}
                   onChange={(e) => handlerChange('agreementMethod', e.target.value)}
                 /> */}
-            <MUITextField label="Status" value={'open'} name="DocumentStatus" />
+            <MUITextField label="Status" disabled={edit} value={'open'} name="DocumentStatus" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -100,7 +104,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 Posting Date
               </label>
               <div className="">
-                <MUIDatePicker value={data.docDate} onChange={(e: any) => handlerChange('docDate', e)} />
+                <MUIDatePicker error={data?.message?.includes('DocDate')} value={data.docDate} onChange={(e: any) => handlerChange('docDate', e)} />
               </div>
             </div>
 
@@ -109,7 +113,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 Valid Until
               </label>
               <div className="">
-                <MUIDatePicker value={data.docDueDate} onChange={(e: any) => handlerChange('docDueDate', e)} />
+                <MUIDatePicker error={data?.message?.includes('DocDueDate')} value={data.docDueDate} onChange={(e: any) => handlerChange('docDueDate', e)} />
               </div>
             </div>
           </div>
@@ -120,7 +124,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 Document Date
               </label>
               <div className="">
-                <MUIDatePicker value={data.taxDate} onChange={(e: any) => handlerChange('taxDate', e)} />
+                <MUIDatePicker error={data?.message?.includes('TaxDate')} value={data.taxDate} onChange={(e: any) => handlerChange('taxDate', e)} />
               </div>
             </div>
 
@@ -129,9 +133,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 Requried Date
               </label>
               <div className="">
-                <MUIDatePicker
-                  value={data.requriedDate}
-                  onChange={(e: any) => handlerChange('requriedDate', e)} />
+                <MUIDatePicker error={data?.message?.includes('RequriedDate')} value={data.requriedDate} onChange={(e: any) => handlerChange('requriedDate', e)} />
+
               </div>
             </div>
           </div>

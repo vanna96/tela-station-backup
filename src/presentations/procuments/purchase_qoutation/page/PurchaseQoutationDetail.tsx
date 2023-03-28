@@ -18,6 +18,7 @@ import PurchaseAgreementRepository from '../../../../services/actions/purchaseAg
 import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
 import PurchaseQouatation from '@/models/PurchaseQouatation';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
+import OwnerRepository from '@/services/actions/ownerRepository';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -161,6 +162,11 @@ function Content(props: any) {
       size: 88,
     },
     {
+      accessorKey: "itemDescription",
+      header: "Descriptions",
+  
+    },
+    {
       accessorKey: "quantity",
       header: "	Required Qty.",
       enableClickToCopy: true,
@@ -181,15 +187,15 @@ function Content(props: any) {
       Cell: ({ cell }: any) => cell.getValue(),
     },
     {
-      accessorKey: "LineTotal",
+      accessorKey: "lineTotal",
       header: "Total (LC)",
       Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
     },
     {
-      accessorKey: "uomCode ",
+      accessorKey: "uomCode",
       header: "UoM Code",
-      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
-    }
+      Cell: ({ cell }: any) => cell.getValue(),
+    },
   ], [data]);
 
   const serviceColumns = React.useMemo(
@@ -240,8 +246,8 @@ function Content(props: any) {
 
   return <div className="data-table  border-none p-0 mt-3">
     <MaterialReactTable
-      columns={data?.docType === 'dDocument_Items' ? itemColumn : serviceColumns}
-      data={data?.documentLine ?? []}
+      columns={data?.docType === 'I' ? itemColumn : serviceColumns}
+      data={data?.items ?? []}
       enableHiding={true}
       initialState={{ density: "compact" }}
       enableDensityToggle={false}
@@ -267,7 +273,7 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Owner</span>
-        <span className='w-8/12 font-medium text-sm'>: </span>
+        <span className='w-8/12 font-medium text-sm'>:  {new OwnerRepository().find(data.owner)?.name}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>

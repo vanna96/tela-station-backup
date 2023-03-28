@@ -15,6 +15,7 @@ import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRep
 import Logistic from '../componnent/Logistis';
 import Accounting from '../componnent/Acccounting';
 import GLAccount from '@/models/GLAccount';
+import PurchaseQoutationRepository from './../../../../services/actions/purchaseQoutationRepository';
 
 class PurchaseQoutationForm extends CoreFormDocument {
 
@@ -23,7 +24,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
     this.state = {
       ...this.state,
       docType: 'I',
-      loading: true
+      loading: true,
    
     } as any;
 
@@ -41,9 +42,10 @@ class PurchaseQoutationForm extends CoreFormDocument {
 
     if (this.props.edit) {
       if (this.props.location.state) {
-        setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
+        const routeState = this.props.location.state;
+        setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
       } else {
-        new purchaseQoutationRepository().find(this.props.match.params.id).then((res: any) => {
+        new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
           this.setState({ ...res, loading: false });
         }).catch((e: Error) => {
           this.setState({ message: e.message });
@@ -74,10 +76,10 @@ class PurchaseQoutationForm extends CoreFormDocument {
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
     this.setState({ ...this.state, items: items })
-    if (field === 'AccountNo') {
+    if (field === 'accountNo') {
       const account = value as GLAccount;
-      item['AccountNo'] = account.code;
-      item['AccountName'] = account.name;
+      item['accountNo'] = account.code;
+      item['accountName'] = account.name;
     } else {
       item[field] = value;
     }
@@ -88,18 +90,15 @@ class PurchaseQoutationForm extends CoreFormDocument {
     event.preventDefault();
     this.setState({ ...this.state, isSubmitting: true });
 
-    await new purchaseQoutationRepository().post(this.state).then((res: any) => {
-      console.log(res)
+    const { id } = this.props?.match?.params
+
+    await new PurchaseQoutationRepository().post(this.state, this.props?.edit, id).then((res: any) => {
       this.showMessage('Success', 'Create Successfully');
     }).catch((e: Error) => {
       this.showMessage('Errors', e.message);
     });
-
-
-    setTimeout(() => {
-
-    }, 2000)
   }
+
 
 
   FormRender = () => {
@@ -108,6 +107,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
       <form onSubmit={this.handlerSubmit} className='flex flex-col gap-4'>
         <HeadingForm
           data={this.state}
+          edit={this.props?.edit}
           handlerOpenVendor={() => {
             this.handlerOpenVendor('supplier');
           }}
@@ -116,6 +116,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
         />
      
         <ContentForm
+          edit={this.props?.edit}
           data={this.state}
           handlerAddItem={() => this.handlerOpenItem()}
           handlerRemoveItem={this.handlerRemoveItem}

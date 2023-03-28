@@ -24,10 +24,11 @@ interface ContentFormProps {
   handlerRemoveItem: (record: string) => void,
   handlerChange: (key: string, value: any) => void;
   data: any,
+  edit? : boolean
 }
 
 
-export default function ContentForm({ data, handlerChangeItem, handlerChange, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
+export default function ContentForm({ edit,data, handlerChangeItem, handlerChange, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
   const [tableKey, setTableKey] = React.useState(Date.now())
 
   const handlerChangeInput = (event: any, row: any, field: any) => {
@@ -67,21 +68,32 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
       {
         accessorKey: "itemName",
         header: "Description",
-        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />
+        Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={cell.getValue()} />
       },
       {
         accessorKey: "quantity",
         header: "	Quantity",
-        Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
+        Cell: ({ cell }: any) => {
+
+          return <MUITextField
+            value={cell.getValue()}
+            type="number"
+            error={(cell.getValue() as number) <= 0}
+            disabled={data?.DocumentDtatus}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'quantity')}
+          />;
+        },
       },
       {
         accessorKey: "discountPercent",
         header: "Discount",
         Cell: ({ cell }: any) => {
           return <MUITextField
-            defaultValue={cell.getValue()}
+            value={cell.getValue()}
             type="number"
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
+            error={(cell.getValue() as number) <= 0}
+            disabled={data?.DocumentDtatus}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'discountPercent')}
           />;
         },
       },
@@ -90,32 +102,40 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         header: "Unit Price",
         Cell: ({ cell }: any) => {
           return <MUITextField
-            startAdornment={'USD'}
-            type="number"
-            defaultValue={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
+            value={cell.getValue()}
+            disabled={data?.DocumentDtatus}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
           />;
         },
       },
+      // {
+      //   accessorKey: "saleVatGroup",
+      //   header: "Tax Code",
+      //   Cell: ({ cell }: any) => {
+      //     return <MUITextField
+      //       value={cell.getValue()}
+      //       onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'saleVatGroup')}
+      //     />;
+      //   },
+      // },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "saleVatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => {
-
-          console.log(cell.row.original.UnitPrice)
           return <MUITextField
-            defaultValue={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'VatGroup')}
+            value={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'saleVatGroup')}
           />;
         },
       },
       {
-        accessorKey: "total",
+        accessorKey: "lineTotal",
         header: "Total (LC)",
         Cell: ({ cell }: any) => {
+
           return <MUITextField
-            defaultValue={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Total')}
+            value={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'total')}
           />;
         },
       },
@@ -123,11 +143,9 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         accessorKey: "uomCode",
         header: "UoM Code",
         Cell: ({ cell }: any) => {
-
-          console.log(cell.row.original.UnitPrice)
           return <MUITextField
-            defaultValue={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UoMCode')}
+            value={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'uomCode')}
           />;
         },
       },
@@ -148,40 +166,40 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         },
       },
       {
-        accessorKey: "ItemDescription",
+        accessorKey: "itemDescription",
         header: "Descriptions", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           // return ;
           return <MUITextField
-            defaultValue={cell.getValue()}
+            value={cell.getValue()}
            
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemDescription')}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'itemDescription')}
           />;
         },
       },
       {
-        accessorKey: "RequiredDate",
+        accessorKey: "requiredDate",
         header: "	Required Date", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return <MUIDatePicker
             value={cell.row?.original?.PlannedAmount}
-            onChange={(e: any) => handlerChange('ShipDate', e)}
+            onChange={(e: any) => handlerChange('requiredDate', e)}
           />;
         },
       },
       {
-        accessorKey: "ShipDate",
+        accessorKey: "shipDate",
         header: "Quoted Date", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return <MUIDatePicker
             // disabled={true}
             value={cell.row?.original?.PlannedAmount}
-            onChange={(e: any) => handlerChange('ShipDate', e)}
+            onChange={(e: any) => handlerChange('shipDate', e)}
           />;
         },
       },
       {
-        accessorKey: "AccountNo",
+        accessorKey: "accountNo",
         header: "G/L Account", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           console.log(cell.getValue())
@@ -189,49 +207,52 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
             <AccountTextField
               value={cell.getValue()}
               onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "AccountNo")
+                handlerChangeInput(event, cell?.row?.original, "accountNo")
               } />
           );
         },
       },
       {
-        accessorKey: "AccountName",
+        accessorKey: "accountName",
         header: "  G/L Account Name", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
               value={cell.getValue()}
-            />
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "accountName")
+              } />
+
           );
         },
       },
       {
-        accessorKey: "VatGroup",
+        accessorKey: "vatGroup",
         header: "Tax Code", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return <MUITextField
             value={cell.getValue()}
-            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'VatGroup')}
+            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'atGroup')}
           />;
         },
       },
       {
-        accessorKey: "LineTotal",
+        accessorKey: "lineTotal",
         header: "Total LC", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return <MUITextField
             value={cell.getValue()}
-            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'LineTotal')}
+            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'lineTotal')}
           />;
         },
       },
       {
-        accessorKey: "BlanketAgreementNumber",
+        accessorKey: "blanketAgreementNumber",
         header: "BlanketAgreementNumber", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return <MUITextField
             value={cell.getValue()}
-            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'BlanketAgreementNumberal')}
+            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'blanketAgreementNumber')}
           />;
         },
       },
@@ -252,14 +273,15 @@ console.log(data);
             Item/Service Type
           </label>
           <div className="">
-            <MUISelect
-                  items={[{ name: 'Item Type', value: 'I' }, { name: 'Service Type', value: 'S' }]}
-              aliaslabel='name'
-              aliasvalue='value'
-              name="DocType"
-              value={data.docType}
+                <MUISelect
+                  items={[{ name: 'Item Method', value: 'I' }, { name: 'Monetary Method', value: 'S' }]}
+                  aliaslabel='name'
+                  aliasvalue='value'
+                  name="DocType"
+                  disabled={edit}
+                  value={data.docType}
                   onChange={(e) => handlerChange('docType', e.target.value)}
-              />
+                />
               </div>
             </div>
           </div>
@@ -267,7 +289,7 @@ console.log(data);
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.docType === 'S' ? serviceColumns :  itemColumns}
+          columns={data?.docType === "S" ? serviceColumns :  itemColumns}
           data={data.items ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
@@ -348,7 +370,7 @@ console.log(data);
               fullWidth
               name="Comments"
               className="w-full "
-              value={data?.comments}
+              defaultValue={data?.comments}
             />
           </div>
         </div>

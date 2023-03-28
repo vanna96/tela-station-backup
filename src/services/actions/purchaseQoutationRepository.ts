@@ -27,16 +27,16 @@ export default class PurchaseQoutationRepository extends Repository<PurchaseQoua
   }
 
   async find<T>(id: any): Promise<any> {
-    const purchaseQoutation = await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseAgreement(res.data))
+    const purchaseQoutation = await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseQouatation(res.data))
       .catch((e: Error) => {
         throw new Error(e.message)
       })
 
     const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseQoutation.cardCode!);
 
-    purchaseQoutation.email = businessPartner.email;
-    purchaseQoutation.phone = businessPartner.phone;
-    purchaseQoutation.contactPersonList = businessPartner.contactEmployee ?? [];
+    // purchaseQoutation.email = businessPartner.email;
+    // purchaseQoutation.phone = businessPartner.phone;
+    // purchaseQoutation.contactPersonList = businessPartner.contactEmployee ?? [];
 
     return purchaseQoutation;
   }

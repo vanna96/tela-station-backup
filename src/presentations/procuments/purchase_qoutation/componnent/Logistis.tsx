@@ -25,7 +25,7 @@ export default function Logistic({ data, handlerChange }: ILogisticFormProps) {
           <div className="">
             <TextField
               size="small"
-              value={data?.address2 ?? "Level 1 - 168 Walker Street''"}
+              defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
               multiline
               rows={4}
               fullWidth
@@ -46,7 +46,7 @@ export default function Logistic({ data, handlerChange }: ILogisticFormProps) {
               fullWidth
               name="Description"
               className="w-full "
-              value={data?.address}
+              defaultValue={data?.address}
             />
           </div>
         </div>
