@@ -12,6 +12,7 @@ import DepartmentRepository from '@/services/actions/departmentRepository';
 import PaymentMethodRepository from '../../../services/actions/paymentMethodRepository';
 import PaymentTermTypeRepository from '../../../services/actions/paymentTermTypeRepository';
 import OwnerRepository from '@/services/actions/ownerRepository';
+import ShippingTypeRepository from '../../../services/actions/shippingTypeRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -46,6 +47,7 @@ export default function Login() {
       await new PaymentMethodRepository().get(),
       await new PaymentTermTypeRepository().get(),
       await new OwnerRepository().get(),
+      await new ShippingTypeRepository().get(),
     ]);
   }
 

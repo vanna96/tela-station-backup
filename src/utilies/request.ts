@@ -48,6 +48,8 @@ const request = async (method: string, url: string, data?: any, responseType?: R
                     .catch((e) => {
                         if (!(e instanceof AxiosError)) {
 
+                            console.log(e)
+
                             if (window.location.pathname !== "/login" && e?.status !== 204) {
                                 window.location.href = '/login';
                             }
