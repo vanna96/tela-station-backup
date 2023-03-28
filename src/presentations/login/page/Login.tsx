@@ -9,6 +9,9 @@ import AuthLogin from '../../../models/AuthLogin';
 import ItemGroupRepository from '../../../services/actions/itemGroupRepository';
 import UnitOfMeasurementRepository from '../../../services/actions/unitOfMeasurementRepository';
 import DepartmentRepository from '@/services/actions/departmentRepository';
+import PaymentMethodRepository from '../../../services/actions/paymentMethodRepository';
+import PaymentTermTypeRepository from '../../../services/actions/paymentTermTypeRepository';
+import OwnerRepository from '@/services/actions/ownerRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -36,13 +39,14 @@ export default function Login() {
 
 
   async function fetchAllDate(): Promise<void> {
-    setLoading(true);
-    Promise.allSettled([
-      new ItemGroupRepository().get(),
-      new UnitOfMeasurementRepository().get(),
-      new DepartmentRepository().get(),
-    ]).then((res: any[]) => {
-    }).finally(() => setLoading(false))
+    Promise.all([
+      await new ItemGroupRepository().get(),
+      await new UnitOfMeasurementRepository().get(),
+      await new DepartmentRepository().get(),
+      await new PaymentMethodRepository().get(),
+      await new PaymentTermTypeRepository().get(),
+      await new OwnerRepository().get(),
+    ]);
   }
 
   return (
