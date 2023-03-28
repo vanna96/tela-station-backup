@@ -91,13 +91,13 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
 
         selectItems = selectItems.map((e: any) => {
 
-            const itemG = new ItemGroup(itemGroup.data?.find((ig: any) => ig.Number === e?.ItemsGroupCode));
-            const unitOfMasurement = new UnitOfMeasurement(uomGroup.data?.find((ig: any) => ig.AbsEntry === e?.UoMGroupEntry));
-
             return ({
-                ...e,
-                itemsGroupName: itemG.name,
-                uoMGroupName: unitOfMasurement.name,
+                itemCode: e?.ItemCode,
+                itemName: e?.ItemName,
+                uomEntry: e?.UoMGroupEntry,
+                itemGroup: e?.ItemsGroupCode,
+                saleVatGroup: e?.SalesVATGroup,
+                purchaseVatGroup: e?.PurchaseVATGroup,
                 quantity: 0,
                 unitPrice: 0,
             })

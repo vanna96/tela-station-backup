@@ -48,7 +48,7 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
         <Select
           value={value === -1 ? '-1' : (value ?? '')}
           defaultValue={defaultValue ?? ''}
-          className={`w-full ${className}`}
+          className={`w-full ${className} ${disabled ? 'bg-gray-100' : ''}`}
           name={name}
           onChange={onChange}
           disabled={disabled}

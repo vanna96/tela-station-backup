@@ -10,12 +10,13 @@ interface PaymentTermTypeProps<T = unknown> {
     defaultValue?: any,
     value?: any,
     onChange?: SelectInputProps<T>['onChange'],
+    disabled?: boolean,
 }
 
 
 function PaymentTerm(props: PaymentTermTypeProps) {
 
-    const { data, isLoading }: any = useQuery({
+    const { data, isLoading  }: any = useQuery({
         queryKey: ["payment-term-types"],
         queryFn: () => new PaymentTermTypeRepository().get(),
         staleTime: Infinity,

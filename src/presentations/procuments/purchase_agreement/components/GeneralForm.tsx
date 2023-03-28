@@ -4,6 +4,7 @@ import Owner from '@/components/selectbox/Owner';
 import PaymentMethod from '@/components/selectbox/PaymentMethod';
 import PaymentTerm from '@/components/selectbox/PaymentTerm';
 import ShippingType from '@/components/selectbox/ShippingType';
+import { documentStatusList } from '@/constants';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import * as React from 'react';
@@ -24,6 +25,7 @@ export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) 
                             <MUISelect
                                 items={[{ value: 'G', label: 'General' }, { value: 'S', label: 'Specific' }]}
                                 name="AgreementType"
+                                disabled={data?.isApproved}
                                 value={data?.agreementType}
                                 onChange={(e) => handlerChange('agreementType', e.target.value)}
                             />
@@ -33,7 +35,7 @@ export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) 
 
                 <div className='grid grid-cols-1 gap-3'>
                     <div className='flex items-center gap-1 text-sm'>
-                        <Checkbox />
+                        <Checkbox disabled={data?.isApproved} />
                         <label htmlFor='Code' className='text-gray-500 text-[14px]'>Ignore Price Specified in blanket Agreement</label>
                     </div>
                 </div>
@@ -42,14 +44,14 @@ export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) 
                     <div className='flex flex-col gap-1 text-sm'>
                         <label htmlFor='PayTermsGrpCode' className='text-gray-500 text-[14px]'>Payment Terms</label>
                         <div className=''>
-                            <PaymentTerm name="PaymentTerms" value={data.paymentTermType} onChange={(e) => handlerChange('paymentTermType', e.target.value)} />
+                            <PaymentTerm name="PaymentTerms" disabled={data?.isApproved} value={data.paymentTermType} onChange={(e) => handlerChange('paymentTermType', e.target.value)} />
                         </div>
                     </div>
 
                     <div className='flex flex-col gap-1 text-sm'>
                         <label htmlFor='Code' className='text-gray-500 text-[14px]'>Payment Method </label>
                         <div className=''>
-                            <PaymentMethod type='outgoing' name="PaymentMethod" value={data.paymentMethod} onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
+                            <PaymentMethod type='outgoing' disabled={data?.isApproved} name="PaymentMethod" value={data.paymentMethod} onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
                         </div>
                     </div>
                 </div>
@@ -58,7 +60,7 @@ export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) 
                     <div className='flex flex-col gap-1 text-sm'>
                         <label htmlFor='Code' className='text-gray-500 text-[14px]'>Shipping Type</label>
                         <div className=''>
-                            <ShippingType name="ShippingType" value={data.shippingType} onChange={(e) => handlerChange('shippingType', e.target.value)} />
+                            <ShippingType name="ShippingType" disabled={data?.isApproved} value={data.shippingType} onChange={(e) => handlerChange('shippingType', e.target.value)} />
                         </div>
                     </div>
                     <div className='flex flex-col gap-1 text-sm'>
@@ -76,7 +78,7 @@ export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) 
                         <div className=''>
                             <MUISelect
                                 value={data?.status}
-                                items={[{ value: 'D', label: 'Draft' }, { value: 'A', label: 'Approved' }]}
+                                items={documentStatusList(data?.isApproved)}
                                 name="Status"
                                 onChange={(e) => handlerChange('status', e.target.value)}
                             />
@@ -110,6 +112,7 @@ export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) 
                             className={`w-full text-field ${data.renewal ? '' : 'bg-gray-100'}`}
                             onBlur={(e) => handlerChange('remindTime', e.target.value)}
                             value={data?.remindTime}
+
                         />
                         <div className='col-span-2'>
                             <MUISelect
@@ -118,6 +121,7 @@ export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) 
                                 disabled={!data.renewal}
                                 onChange={(e) => handlerChange('remindUnit', e.target.value)}
                                 value={data?.remindUnit}
+
                                 items={[
                                     { label: 'Day(s)', value: 'D' },
                                     { label: 'Month(s)', value: 'M' },
