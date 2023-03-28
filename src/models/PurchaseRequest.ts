@@ -123,7 +123,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     this.requesterBranch = json["RequesterBranch"];
     this.serie = json["Series"];
     this.docTotalSys = json["DocTotalSys"];
-    this.documentowner = json["DocumentOwner"];
+    this.documentowner = json["DocumentsOwner"];
     this.documentStatus = json["DocumentStatus"];
     this.vatSumSys = json["VatSumSys"];
     this.price = json["Price"];
@@ -133,6 +133,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     this.docDueDate = dateFormat(json["DocDueDate"]);
     this.docDate = dateFormat(json["DocDate"]);
     this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
+    this.comments = json["Comments"];
     // this.documentLine = [];
     // this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
     this.documentLine = json["DocumentLines"]?.map(

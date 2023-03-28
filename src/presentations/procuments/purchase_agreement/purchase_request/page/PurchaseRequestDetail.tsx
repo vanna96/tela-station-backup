@@ -28,9 +28,9 @@ import {
   PurchaseRequestDocumentLineProps,
 } from "../../../../../models/PurchaseRequest";
 import Department from "../../../../../models/Department";
-import { DocumentLine } from '../../../../../models/interface/index';
-import { PurchaseRequestDocumentLine } from '../../../../../models/PurchaseRequest';
-import Formular from '../../../../../utilies/formular';
+import { DocumentLine } from "../../../../../models/interface/index";
+import { PurchaseRequestDocumentLine } from "../../../../../models/PurchaseRequest";
+import Formular from "../../../../../utilies/formular";
 
 class PurchaseRequestDetail extends Component<any, any> {
   constructor(props: any) {
@@ -54,7 +54,6 @@ class PurchaseRequestDetail extends Component<any, any> {
 
     if (data) {
       setTimeout(() => this.setState({ ...data, loading: false }), 500);
-      console.log(data);
     } else {
       new PurchaseRequestRepository()
         .find(id)
@@ -231,8 +230,7 @@ export default withRouter(PurchaseRequestDetail);
 
 function Content(props: any) {
   const { data } = props;
-
-
+  console.log(data);
 
   const itemColumn = useMemo(
     () => [
@@ -287,11 +285,11 @@ function Content(props: any) {
         header: "UoM Code",
         enableClickToCopy: true,
       },
-    //   {
-    //     accessorKey: "Discount %	",
-    //     header: "Item Group",
-    //     Cell: ({ cell }: any) => cell.getValue(),
-    //   },
+      //   {
+      //     accessorKey: "Discount %	",
+      //     header: "Item Group",
+      //     Cell: ({ cell }: any) => cell.getValue(),
+      //   },
       //   {
       //     accessorKey: "quantity",
       //     header: "Quantity",
@@ -363,15 +361,19 @@ function Content(props: any) {
         <div className="flex flex-col gap-2">
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Owner</span>
-            <span className="col-span-2 font-medium">: {data.DocumentsOwner}</span>
+            <span className="col-span-2 font-medium">
+              : {data.documentowner}
+            </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Remark</span>
-            <span className="col-span-2 font-medium">: {data.Comments}</span>
+            <span className="col-span-2 font-medium">: {data.comments}</span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Total Before Discount</span>
-            <span className="col-span-2 font-medium">: {Formular.findItemTotal(data?.documentLine)}</span>
+            <span className="col-span-2 font-medium">
+              : {Formular.findItemTotal(data?.documentLine)}
+            </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Freight</span>
@@ -386,7 +388,6 @@ function Content(props: any) {
             <span className="col-span-2 font-medium">: {data.docTotalSys}</span>
           </div>
         </div>
-        
       </div>
     </div>
   );
