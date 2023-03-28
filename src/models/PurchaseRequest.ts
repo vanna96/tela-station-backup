@@ -111,6 +111,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
   paymentMethod?: string;
   shippingType?: string | undefined;
   documentLine: PurchaseRequestDocumentLine[];
+  DocTotalSys?: number;
 
   constructor(json: any) {
     super();
@@ -119,6 +120,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     this.requesterName = json["RequesterName"];
     this.requesterEmail = json["RequesterEmail"];
     this.serie = json["Series"];
+    this.docTotalSys = json["DocTotalSys"];
     this.docNum = json["DocNum"];
     this.requriedDate = dateFormat(json["RequriedDate"]);
     this.creationDate = dateFormat(json["CreationDate"]);
@@ -198,6 +200,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       Confirmed: json["Confirmed"],
       ContactPersonCode: json["ContactPersonCode"],
       Series: json["Series"],
+      DocTotalSys: json["DocTotalSys"],
       TaxDate: json["TaxDate"],
       PartialSupply: json["PartialSupply"],
       DocObjectCode: json["DocObjectCode"],
@@ -208,7 +211,6 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       UpdateDate: json["UpdateDate"],
       UserSign: json["UserSign"],
       VatSum: json["VatSum"],
-      DocTotalSys: json["DocTotalSys"],
       RequriedDate: json["requriedDate"],
       CancelDate: json["CancelDate"],
       Rounding: json["Rounding"],
@@ -289,6 +291,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       serie: json["Serie"],
       paymentMethod: json["PaymentMethod"],
       shippingType: json["ShippingType"],
+      DocTotalSys: json["DocTotalSys"],
       DocumentLines: [],
     };
   }
