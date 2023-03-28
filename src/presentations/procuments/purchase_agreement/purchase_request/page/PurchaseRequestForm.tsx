@@ -15,6 +15,7 @@ class PurchaseRequestForm extends CoreFormDocument {
     super(props);
     this.state = {
       ...this.state,
+      docType: "I",
       documentStatus: "O",
       requiredDate: null,
       docDate: null,
@@ -89,6 +90,9 @@ class PurchaseRequestForm extends CoreFormDocument {
             data={this.state}
             handlerOpenRequester={() => {
               this.handlerOpenRequester();
+            }}
+            handlerOpenRequesterEmployee={() => {
+              this.handlerOpenRequesterEmployee();
             }}
             handlerChange={(key, value) => this.handlerChange(key, value)}
           />

@@ -31,6 +31,8 @@ import DistributionRuleModal from "../modal/DistributionRuleModal";
 import { VendorModalType } from "../modal/VendorModal";
 import RequesterModal from "../modal/RequesterModal";
 import Users from "../../models/Users";
+import RequesterEmployeeModal from "../modal/RequesterEmployeeModal";
+import EmployeesInfo from '@/models/EmployeesInfo';
 
 const contextClass: any = {
   success: "bg-blue-600",
@@ -48,6 +50,7 @@ export interface CoreFormDocumentState {
   isOpenItem: boolean;
   isOpenVendor: boolean;
   isOpenRequester: boolean;
+  isOpenRequesterEmployee: boolean;
   isOpenAccount: boolean;
   isOpenProject: boolean;
   isLoadingSerie: boolean;
@@ -122,6 +125,7 @@ export default abstract class CoreFormDocument extends React.Component<
       isOpenAccount: false,
       isOpenProject: false,
       isOpenRequester: false,
+      isOpenRequesterEmployee: false,
       name: null,
       userCode: null,
       userName: null,
@@ -149,6 +153,7 @@ export default abstract class CoreFormDocument extends React.Component<
     this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this);
     this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this);
     this.handlerConfirmRequester = this.handlerConfirmRequester.bind(this);
+    this.handlerConfirmRequesterEmployee = this.handlerConfirmRequesterEmployee.bind(this);
     this.handlerConfirmItem = this.handlerConfirmItem.bind(this);
     this.handlerConfirmDistribution =
       this.handlerConfirmDistribution.bind(this);
@@ -178,10 +183,17 @@ export default abstract class CoreFormDocument extends React.Component<
           onClose={() => this.handlerCloseVendor()}
           //   type={this.state.vendorType}
         />
-        <GLAccountModal
+         <RequesterEmployeeModal
+          open={this.state.isOpenRequesterEmployee}
+          onOk={this.handlerConfirmRequesterEmployee}
+          //   onOk={(requester) => this.handlerConfirmProject(requester)}
+          onClose={() => this.handlerCloseVendor()}
+          //   type={this.state.vendorType}
+        />
+        {/* <GLAccountModal
           open={this.state.isOpenAccount}
           onClose={() => this.handlerCloseAccount()}
-        />
+        /> */}
         <ProjectModal
           open={this.state.isOpenProject}
           onClose={() => this.handlerCloseProject()}
@@ -351,6 +363,26 @@ protected handlerConfirmRequester(record: Users) {
       this.setState({
         ...this.state,
         isOpenRequester: false,
+        userCode: record.userCode,
+        userName: record.userName,
+        branch: record.branch,
+        department: record.department,
+        email: record.email,
+      });
+    }
+
+
+  //handler Requester Employee
+  protected handlerOpenRequesterEmployee() {
+    this.setState({ ...this.state, isOpenRequesterEmployee: true });
+  }
+
+
+protected handlerConfirmRequesterEmployee(record: EmployeesInfo) {
+   
+      this.setState({
+        ...this.state,
+        isOpenRequesterEmployee: false,
         userCode: record.userCode,
         userName: record.userName,
         branch: record.branch,

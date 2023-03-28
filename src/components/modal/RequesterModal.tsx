@@ -27,6 +27,9 @@ const RequesterModal: FC<RequesterModalProps> = ({ open, onClose, onOk }) => {
     staleTime: Infinity,
   });
 
+console.log(data);
+
+
   const departmentsQuery = useQuery({
     queryKey: ["departments"],
     queryFn: () => InitializeData.department(),

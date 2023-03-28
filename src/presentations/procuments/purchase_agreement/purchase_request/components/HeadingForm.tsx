@@ -15,12 +15,14 @@ import Checkbox from "@mui/material/Checkbox";
 
 export interface IHeadingFormProps {
   handlerOpenRequester: () => void;
+  handlerOpenRequesterEmployee: () => void;
   handlerChange: (key: string, value: any) => void;
   data: any;
 }
 
 export default function HeadingForm({
   handlerOpenRequester,
+  handlerOpenRequesterEmployee,
   handlerChange,
   data,
 }: IHeadingFormProps) {
@@ -49,13 +51,42 @@ export default function HeadingForm({
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
-              <MUITextField
+              {/* <MUITextField
                 label="Requester Name"
                 value={data?.userName}
                 name="BPCode"
                 onClick={handlerOpenRequester}
+                key={Math.random()}
                 endAdornment={true}
               />
+              <MUITextField
+                label="Requester Name"
+                value={data?.userName}
+                name="BPCode"
+                onClick={handlerOpenRequesterEmployee}
+                key={Math.random()}
+
+                endAdornment={true}
+              /> */}
+              {data?.reqType === 12 ? (
+                <MUITextField
+                  label="Requester Name"
+                  value={data?.userName}
+                  name="BPCode"
+                  onClick={handlerOpenRequester}
+                  key={Math.random()}
+                  endAdornment={true}
+                />
+              ) : (
+                <MUITextField
+                  label="Requester Name"
+                  value={data?.userName}
+                  name="BPCode"
+                  onClick={handlerOpenRequesterEmployee}
+                  key={Math.random()}
+                  endAdornment={true}
+                />
+              )}
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <div className="flex flex-col gap-1 text-sm">

@@ -175,7 +175,7 @@ function General(props: any) {
         </div>
         <div className='flex flex-col gap-2'>
             {/* <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {data.status?.replace('as', '')}</span></div> */}
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Remark</span> <span className='col-span-2 font-medium'>: {data.owner}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Remark</span> <span className='col-span-2 font-medium'>: {data.comments}</span></div>
             {/* <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Reminder</span> <span className='col-span-2 font-medium'>: {data.remindTime} {data.remindUnit?.replace('reu_', '')}</span></div> */}
         </div>
     </div>
