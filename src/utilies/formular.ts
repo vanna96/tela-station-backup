@@ -2,7 +2,7 @@ export default class Formular {
   constructor() {}
 
   public static findItemTotal(items: any[]): number {
-    const total = items.reduce((accumulator: number, currentItem: any) => {
+    const total = items?.reduce((accumulator: number, currentItem: any) => {
       return accumulator + currentItem.lineTotal;
     }, 0);
     if (isNaN(total)) return 0;

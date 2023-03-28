@@ -1,6 +1,7 @@
 import Repository from '@/astractions/repository';
 import request from '@/utilies/request';
 import PurchaseRequest from '../models/PurchaseRequest';
+import PurchaseAgreement from '../models/PurchaseAgreement';
 
 export default class PurchaseRequestRepository extends Repository<PurchaseRequest> {
     
@@ -22,9 +23,21 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
         return response;
     }
 
-    async find<T>(query?: string | undefined): Promise<T> {
-        throw new Error('Method not implemented.');
+    async find<T>(id: any): Promise<any> {
+        const purchasRequest = await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseRequest(res.data))
+            .catch((e: Error) => {
+            throw new Error(e.message)
+            })
+        
+        // const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.cardCode!);
+
+        // purchaseAgreement.email = businessPartner.email;
+        // purchaseAgreement.phone = businessPartner.phone;
+        // purchaseAgreement.contactPersonList = businessPartner.contactEmployee ?? [];
+
+        return PurchaseRequest;
     }
+
 
 
    

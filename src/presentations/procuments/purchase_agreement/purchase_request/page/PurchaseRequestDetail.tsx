@@ -32,6 +32,8 @@ import { DocumentLine } from "../../../../../models/interface/index";
 import { PurchaseRequestDocumentLine } from "../../../../../models/PurchaseRequest";
 import Formular from "../../../../../utilies/formular";
 import DocumentHeaderComponent from '../../../../../components/DocumenHeaderComponent';
+import OwnerRepository from '@/services/actions/ownerRepository';
+import DepartmentRepository from '@/services/actions/departmentRepository';
 
 class PurchaseRequestDetail extends Component<any, any> {
   constructor(props: any) {
@@ -113,12 +115,15 @@ class PurchaseRequestDetail extends Component<any, any> {
                   <span className="w-4/12 text-gray-500">Branch</span>
                   <span className="w-8/12 font-medium">
                     : {this.state.requesterBranch}
+                    {/* : {new Branchrepository().find(this.state.requesterBranch)?.name} */}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Department</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.requesterDepartment}
+                    {/* : {this.state.requesterDepartment} */}
+                    : {new DepartmentRepository().find(this.state.requesterDepartment)?.Name}
+
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -312,8 +317,8 @@ function Content(props: any) {
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Owner</span>
             <span className="col-span-2 font-medium">
-              : {data.documentowner}
-             {/* : {new OwnerRepository().find(data.documentowner)?.name} */}
+              {/* : {data.documentowner} */}
+             : {new OwnerRepository().find(data.documentowner)?.name}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
@@ -323,7 +328,7 @@ function Content(props: any) {
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Total Before Discount</span>
             <span className="col-span-2 font-medium">
-              : {Formular.findItemTotal(data?.documentLine)}
+              : {Formular.findItemTotal(data?.documentLine) ?? ""}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
