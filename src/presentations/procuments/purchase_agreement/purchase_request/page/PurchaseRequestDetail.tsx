@@ -363,6 +363,7 @@ function Content(props: any) {
             <span className="text-gray-500">Owner</span>
             <span className="col-span-2 font-medium">
               : {data.documentowner}
+             {/* : {new OwnerRepository().find(data.documentowner)?.name} */}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
