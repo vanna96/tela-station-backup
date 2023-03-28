@@ -1,16 +1,12 @@
 import CoreFormDocument from '@/components/core/CoreFormDocument';
-import PurchaseAgreement from '../../../../models/PurchaseAgreement';
 import GeneralForm from "../components/GeneralForm";
 import HeadingForm from "../components/HeadingForm";
 import { withRouter } from '@/routes/withRouter';
 import ContentForm from '../components/ContentForm';
 import { LoadingButton } from '@mui/lab';
-import { FormEventHandler } from 'react';
 import AttachmentForm from '../components/AttachmentForm';
-import { CoreFormDocumentState } from '../../../../components/core/CoreFormDocument';
 import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
-import { ToastOptions } from 'react-toastify';
 import GLAccount from '@/models/GLAccount';
 import { CircularProgress } from '@mui/material';
 
@@ -44,7 +40,9 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
         if (this.props.edit) {
             if (this.props.location.state) {
-                setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
+                const routeState = this.props.location.state;
+                console.log(routeState)
+                setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
             } else {
                 new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
                     this.setState({ ...res, loading: false });
@@ -111,11 +109,9 @@ class PurchaseAgreementForm extends CoreFormDocument {
                 {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
                     <HeadingForm
                         data={this.state}
+                        edit={this.props?.edit}
                         handlerOpenVendor={() => {
-                            console.log(this.state.isEditable)
-                            if (this.state.isEditable) {
-                                this.handlerOpenVendor('supplier');
-                            }
+                            this.handlerOpenVendor('supplier');
                         }}
                         handlerChange={(key, value) => this.handlerChange(key, value)}
                         handlerOpenProject={() => this.handlerOpenProject()}

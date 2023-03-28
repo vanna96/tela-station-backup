@@ -10,7 +10,7 @@ export default class Owner extends Model {
         super()
 
         this.id = json['EmployeeID']
-        this.name = `${json['FirstName']}, ${ json['LastName']} `
+        this.name = `${json['FirstName'] ?? ''} ${ json['LastName'] ?? ''} `
     }
     
     toJson(update?: boolean) {
