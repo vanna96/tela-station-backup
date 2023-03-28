@@ -1,8 +1,12 @@
+import BusinessPartner from '@/models/BusinessParter';
 import Repository from '../../astractions/repository';
-import PurchaseQouatation from '@/models/PurchaseQouatation';
+import PurchaseAgreement from '../../models/PurchaseAgreement';
 import request from '../../utilies/request';
+import BusinessPartnerRepository from './bussinessPartnerRepository';
+import { IContactPersonList } from '../../astractions/index';
+import PurchaseQouatation from '@/models/PurchaseQouatation';
 
-export default class purchaseQoutationRepository extends Repository<PurchaseQouatation> {
+export default class PurchaseQoutationRepository extends Repository<PurchaseQouatation> {
 
   url: string = '/PurchaseQuotations';
 
@@ -15,19 +19,32 @@ export default class purchaseQoutationRepository extends Repository<PurchaseQoua
     const response: any = await request('GET', this.url).then((res: any) => {
       const data = res?.data?.value?.map((e: any) => new PurchaseQouatation(e));
       return data;
-    }).catch((e) => {
-      throw new Error(e);
+    }).catch((e: Error) => {
+      throw new Error(e.message);
     });
 
     return response;
   }
 
-  async find<T>(query?: string | undefined): Promise<T> {
-    throw new Error('Method not implemented.');
+  async find<T>(id: any): Promise<any> {
+    const purchaseAgreement = await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseAgreement(res.data))
+      .catch((e: Error) => {
+        throw new Error(e.message)
+      })
+
+    const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.cardCode!);
+
+    purchaseAgreement.email = businessPartner.email;
+    purchaseAgreement.phone = businessPartner.phone;
+    purchaseAgreement.contactPersonList = businessPartner.contactEmployee ?? [];
+
+    return purchaseAgreement;
   }
 
+  async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 
-  async post(payload: any): Promise<any> {
+    if (isUpdate) return await request('PATCH', this.url + "(" + id + ")", PurchaseQouatation.toUpdate(payload));
+
     return await request('POST', this.url, PurchaseQouatation.toCreate(payload));
   }
 

@@ -104,7 +104,8 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
 
           console.log(cell.row.original.UnitPrice)
           return <MUITextField
-            value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
+            defaultValue={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'VatGroup')}
           />;
         },
       },
@@ -112,10 +113,9 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         accessorKey: "Total",
         header: "Total (LC)",
         Cell: ({ cell }: any) => {
-
-          console.log(cell.row.original.UnitPrice)
           return <MUITextField
-            value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
+            defaultValue={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Total')}
           />;
         },
       },
@@ -126,7 +126,8 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
 
           console.log(cell.row.original.UnitPrice)
           return <MUITextField
-            value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
+            defaultValue={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UoMCode')}
           />;
         },
       },

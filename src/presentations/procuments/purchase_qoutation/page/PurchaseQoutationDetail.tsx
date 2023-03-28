@@ -17,6 +17,7 @@ import BackButton from '@/components/button/BackButton';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
 import PurchaseQouatation from '@/models/PurchaseQouatation';
+import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -58,23 +59,7 @@ class PurchaseQoutationDetail extends Component<any, any> {
 
     return (
       <div className='w-full h-full flex flex-col p-4 gap-4'>
-        <div className='flex justify-between items-center bg-white p-2 rounded-lg px-6 shadow-sm'>
-          <div className='flex gap-2 items-center'>
-            <BackButton />
-            <h1 className='font-bold'>Purchase Qoutation</h1>
-            {/* <span className='text-[12px] border border-blue-400 font-medium  px-2 rounded '>{this.state.status?.replace('as', '')}</span> */}
-          </div>
-          <div className='text-[12px] flex gap-3'>
-            <div role="button" className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 border hover:text-blue-500 text-[12px]">Edit</div>
-            <div role="button" className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 border hover:text-blue-500 text-[12px]">Copy To</div>
-            <div role="button" className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiOutlineDocumentAdd className="" /></div>
-            <div role="button" className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiChevronDoubleLeft className="" /></div>
-            <div role="button" className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiChevronLeft className="" /></div>
-            <div role="button" className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiChevronRight className="" /></div>
-            <div role="button" className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiChevronDoubleRight className="" /></div>
-            <div className='mx-2'></div>
-          </div>
-        </div>
+        <DocumentHeaderComponent data={this.state} />
 
         <Modal open={this.state.isError} title='Oop' onClose={() => { }} onOk={() => console.log(this.props.history.goBack())}>
           <span>

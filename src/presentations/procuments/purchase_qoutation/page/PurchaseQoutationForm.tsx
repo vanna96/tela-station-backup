@@ -23,7 +23,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
     this.state = {
       ...this.state,
       docType: 'I',
-   
+      loading: true
    
     } as any;
 
@@ -34,6 +34,22 @@ class PurchaseQoutationForm extends CoreFormDocument {
   }
 
   componentDidMount(): void {
+
+    if (!this.props?.edit) {
+      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
+    }
+
+    if (this.props.edit) {
+      if (this.props.location.state) {
+        setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
+      } else {
+        new purchaseQoutationRepository().find(this.props.match.params.id).then((res: any) => {
+          this.setState({ ...res, loading: false });
+        }).catch((e: Error) => {
+          this.setState({ message: e.message });
+        })
+      }
+    }
 
     DocumentSerieRepository.getDocumentSeries(purchaseQoutationRepository?.documentSerie).then((res: any) => {
       this.setState({ ...this.state, series: res, })

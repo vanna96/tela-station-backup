@@ -86,7 +86,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   paymentMethod?: string;
   shippingType?: string | undefined;
   journalMemo?: string;
-  documentLine: PurchaseQoutationDocumentLine[];
+  items: PurchaseQoutationDocumentLine[];
   taxDate: string;
   comments: string;
   docType: string;
@@ -102,7 +102,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   importFileNum: string;
   docCurrency: string;
   documentStatus: string;
-  project:string
+  project: string;
   constructor(json: any) {
     super();
     this.id = json['DocEntry'];
@@ -131,7 +131,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     this.address = json['Address'];
     this.address2 = json['Address2'];
     this.cashDiscountDateOffset = json['CashDiscountDateOffset'];
-    this.documentLine = json['DocumentLines']?.map((e: any) => new PurchaseQoutationDocumentLine(e));
+    this.items = json['DocumentLines']?.map((e: any) => new PurchaseQoutationDocumentLine(e));
     this.createQRCodeFrom = json['CreateQRCodeFrom'];
     this.cancelDate = json['CancelDate'];
     this.indicator = json['Indicator'];
