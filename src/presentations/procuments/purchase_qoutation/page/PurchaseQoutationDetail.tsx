@@ -154,7 +154,7 @@ function Content(props: any) {
 
   const itemColumn = useMemo(() => [
     {
-      accessorKey: "itemNo",
+      accessorKey: "itemCode",
       header: "Item NO.", //uses the default width from defaultColumn prop
       enableClickToCopy: true,
       enableFilterMatchHighlighting: true,

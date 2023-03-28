@@ -52,7 +52,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         },
       },
       {
-        accessorKey: "ItemCode",
+        accessorKey: "itemCode",
         header: "Item No", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           // return ;
@@ -65,17 +65,17 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
       },
 
       {
-        accessorKey: "ItemName",
+        accessorKey: "itemName",
         header: "Description",
         Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />
       },
       {
-        accessorKey: "Quantity",
+        accessorKey: "quantity",
         header: "	Quantity",
         Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
       },
       {
-        accessorKey: "DiscountPercent",
+        accessorKey: "discountPercent",
         header: "Discount",
         Cell: ({ cell }: any) => {
           return <MUITextField
@@ -86,7 +86,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         },
       },
       {
-        accessorKey: "UnitPrice",
+        accessorKey: "unitPrice",
         header: "Unit Price",
         Cell: ({ cell }: any) => {
           return <MUITextField
@@ -98,7 +98,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         },
       },
       {
-        accessorKey: "VatGroup",
+        accessorKey: "vatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => {
 
@@ -110,7 +110,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         },
       },
       {
-        accessorKey: "Total",
+        accessorKey: "total",
         header: "Total (LC)",
         Cell: ({ cell }: any) => {
           return <MUITextField
@@ -120,7 +120,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ha
         },
       },
       {
-        accessorKey: "UoMCode",
+        accessorKey: "uomCode",
         header: "UoM Code",
         Cell: ({ cell }: any) => {
 

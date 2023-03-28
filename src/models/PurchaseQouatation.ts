@@ -8,7 +8,7 @@ export interface PurchaseQoutationProps {
   docNum: any;
   cardCode?: string;
   cardName?: string;
-  constactPersonCode?: number;
+  contactPersonCode?: number;
   docDate?: string;
   docDueDate?: string;
   requriedDate?: string
@@ -279,30 +279,30 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
   public static toCreate(json: any, type: any) {
 
     let line = {
-      "ItemCode": json["ItemCode"],
-      "ItemDescription": json['ItemDescription'],
-      "UnitPrice": json['UnitPrice'],
+      "ItemCode": json["itemCode"],
+      "ItemDescription": json['itemDescription'],
+      "UnitPrice": json['unitPrice'],
       "LineDiscount": 0.0,
-      "DocEntry": json['UoMGroupEntry'],
-      "UoMCode": json["UoMCode"],
+      "DocEntry": json['uomGroupEntry'],
+      "UoMCode": json["uomCode"],
       "TransportationCode": 1,
       "Project": null,
       "TaxCode": null,
       "TAXRate": null,
-      "VatGroup": json["VatGroup"],
-      "LineTotal": json["LineTotal"],
-      "RequiredDate": json["RequiredDate"],
-      "ShipDate": json["ShipDate"],
-      "AccountCode": json["AccountCode"],
-      "AccountName": json["AccountName"],
-      "BlanketAgreementNumber": json["BlanketAgreementNumber"],
-      "DiscountPercent": json["DiscountPercent"],
+      "VatGroup": json["vatGroup"],
+      "LineTotal": json["lineTotal"],
+      "RequiredDate": json["requiredDate"],
+      "ShipDate": json["shipDate"],
+      "AccountCode": json["accountCode"],
+      "AccountName": json["accountName"],
+      "BlanketAgreementNumber": json["blanketAgreementNumber"],
+      "DiscountPercent": json["discountPercent"],
     };
 
-    if (type === 'S') {
-      delete line.ItemCode;
-      delete line.UnitPrice;
-    }
+    // if (type === 'S') {
+    //   delete line.ItemCode;
+    //   delete line.UnitPrice;
+    // }
 
     return line;
   }
