@@ -17,7 +17,7 @@ export default function ProcumentRoute() {
             <Route index element={<ProcumentPage />} />
             <Route path='/purchase-agreement' >
                 <Route index element={<PurchaseAgreementLists />} />
-                {/* <Route path=':id' element={<PurchaseAgreementDetail />} /> */}
+                <Route path=':id' element={<PurchaseAgreementDetail />} />
                 <Route path='create' element={<PurchaseAgreementForm />} />
                 <Route path=':id/edit' element={<PurchaseAgreementForm edit={true} />} />
             </Route>

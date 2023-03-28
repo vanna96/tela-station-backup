@@ -1,6 +1,7 @@
-import { dateFormat } from '../utilies';
+import { format } from 'path';
 import Model from './Model';
 import { MasterDocument, DocumentLine } from './interface/index';
+import { dateFormat } from '../utilies/index';
 
 
 export default class PurchaseOrder extends Model implements MasterDocument {
@@ -9,11 +10,12 @@ export default class PurchaseOrder extends Model implements MasterDocument {
     cardCode?: string;
     docType?: string;
     cardName?: string;
+    documentStatus?: string;
     journalMemo?: string;
     constactPersonCode?: number;
-    docDate?: number;
-    docDueDate?: number;
-    taxDate?: number;
+    docDate?: string;
+    docDueDate?: string;
+    taxDate?: string;
     description?: string;
     indicator?: number;
     status?: string;
@@ -36,6 +38,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
     importFileNum?: string;
     serie: string;
     paymentMethod?: string;
+    numAtCard?: string;
     docCurrency?: string;
     documentLine: PurchaseOrderDocumentLine[];
 
@@ -44,6 +47,8 @@ export default class PurchaseOrder extends Model implements MasterDocument {
         this.id = json['DocEntry'];
         this.serie = json['Series'];
         this.docNum = json['DocNum'];
+        this.documentStatus = json['DocumentStatus'];
+        this.numAtCard = json['NumAtCard'];
         this.owner = json['DocumentsOwner'];
         this.comments = json['Comments'];
         this.ship = json['TransportationCode'];
@@ -57,19 +62,18 @@ export default class PurchaseOrder extends Model implements MasterDocument {
         this.requiredDate = json['RequiredDate'];
         this.indicator = json['Indicator'];
         this.importFileNum = json['ImportFileNum'];
-        this.docDate = json['DocDate'];
-        this.docDueDate = json['DocDueDate'];
-        this.taxDate = json['TaxDate'];
+        this.docDate = dateFormat(json['docDate']);
+        this.docDueDate = dateFormat(json['DocDueDate']);
+        this.taxDate = dateFormat(json['TaxDate']);
         this.address = json['Address'];
         this.address2 = json['Address2'];
         this.extraMonth = json['ExtraMonth'];
         this.extraDays = json['ExtraDays'];
         this.docType = json['DocType']?.split("_")[1];
         this.salesPersonCode = json['TaxDate'];
-        this.cardName = json['BPName'];
         this.journalMemo = json['JournalMemo'];
         this.cardCode = json['CardCode'];
-        this.cardName = json['cardName'],
+        this.cardName = json['CardName'],
         this.constactPersonCode = json['SalesPersonCode'];
         this.description = json['Description'];
         this.documentLine = []
@@ -87,6 +91,8 @@ export default class PurchaseOrder extends Model implements MasterDocument {
             "CardCode": json['cardCode'],
             "CardName": json['cardName'],
             "LineTotal": json['lineTotal'],
+            "DocumentStatus": json['documentStatus'],
+            "NumAtCard": json['numAtCard'],
             "ContactPersonCode": json['contactPersonCode'],
             "JournalMemo": json['journalMemo'],
             "Description": json['description'],
@@ -124,6 +130,8 @@ export default class PurchaseOrder extends Model implements MasterDocument {
             "CardCode": json['cardCode'],
             "CardName": json['cardName'],
             "LineTotal": json['lineTotal'],
+            "DocumentStatus": json['documentStatus'],
+            "NumAtCard": json['numAtCard'],
             "ContactPersonCode": json['contactPersonCode'],
             "JournalMemo": json['journalMemo'],
             "Description": json['description'],
@@ -149,7 +157,6 @@ export default class PurchaseOrder extends Model implements MasterDocument {
             "DocNum": json['docNum'],
             "PaymentMethod": json['paymentMethod'],
             "TransportationCode": json['TransportationCode'],
-            "NumAtCard": json['numAtCard'],
             "Project": json['project'],
             "AccountCode": json['AccountCode'],
             "DocCurrency": json['currency'],

@@ -117,7 +117,7 @@ class PurchaseOrder extends CoreFormDocument {
              handlerChange={(key, value) => this.handlerChange(key, value)}
              handlerOpenProject={() => this.handlerOpenProject()}
           />
-          <AttachmentForm />
+          {/* <AttachmentForm /> */}
 
           <div className="sticky w-full bottom-4  mt-2">
             <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">

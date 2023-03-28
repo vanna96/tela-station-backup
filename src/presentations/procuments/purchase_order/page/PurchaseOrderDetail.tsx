@@ -161,7 +161,7 @@ class PurchaseOrderDetail extends Component<any, any> {
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Vendor Ref .No</span>
-                  <span className="w-8/12 font-medium">: N/A</span>
+                  <span className="w-8/12 font-medium"> : {this.state.numAtCard}</span>
                 </div>
               </div>
               <div className="flex flex-col gap-1">
@@ -184,7 +184,7 @@ class PurchaseOrderDetail extends Component<any, any> {
                   </span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="w-4/12 text-gray-500">Valid Until</span>
+                  <span className="w-4/12 text-gray-500">Delivery Date</span>
                   <span className="w-8/12 font-medium">
                     : {this.state.docDueDate}
                   </span>
@@ -193,12 +193,6 @@ class PurchaseOrderDetail extends Component<any, any> {
                   <span className="w-4/12 text-gray-500">Document Date</span>
                   <span className="w-8/12 font-medium">
                     : {this.state.taxDate}
-                  </span>
-                </div>
-                <div className="flex gap-2">
-                  <span className="w-4/12 text-gray-500">Required Date</span>
-                  <span className="w-8/12 font-medium">
-                    : {this.state.requriedDate}
                   </span>
                 </div>
               </div>
@@ -319,7 +313,7 @@ function Content(props: any) {
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
         columns={
-          data?.docType === "dDocument_Items" ? itemColumn : serviceColumns
+          data?.docType === "dDocument_Items" ? serviceColumns : itemColumn
         }
         data={data?.documentLine ?? []}
         enableHiding={true}
