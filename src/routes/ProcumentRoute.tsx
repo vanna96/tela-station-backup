@@ -13,6 +13,9 @@ import PurchaseRequestDetail from '@/presentations/procuments/purchase_agreement
 import GoodReturnLists from '@/presentations/procuments/good_return/page/list';
 import GoodReturnDetail from '@/presentations/procuments/good_return/page/GoodReturnDetail';
 import GoodReturnForm from '@/presentations/procuments/good_return/page/GoodReturnForm';
+import PurchaseQoutationLists from '@/presentations/procuments/purchase_qoutation';
+import PurchaseQoutationForm from '@/presentations/procuments/purchase_qoutation/page/PurchaseQoutationForm';
+import PurchaseQoutationDetail from '@/presentations/procuments/purchase_qoutation/page/PurchaseQoutationDetail';
 
 export default function ProcumentRoute() {
     return (
@@ -35,6 +38,13 @@ export default function ProcumentRoute() {
                 <Route index element={<GoodReturnLists />} />
                 <Route path=':id' element={<GoodReturnDetail />} />
                 <Route path='create' element={<GoodReturnForm />} />
+            </Route>
+            <Route path='/purchase-qoutation' >
+                <Route index element={<PurchaseQoutationLists />} />
+                <Route path=':id' element={<PurchaseQoutationDetail />} />
+                <Route path='create' element={<PurchaseQoutationForm />} />
+                <Route path=':id/edit' element={<PurchaseQoutationForm edit={true} />} />
+
             </Route>
         </Routes>
     )

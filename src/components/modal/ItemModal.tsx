@@ -93,13 +93,16 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
 
             return ({
                 itemCode: e?.ItemCode,
-                itemName: e?.ItemName,
+                itemDescription: e?.ItemName,
                 uomEntry: e?.UoMGroupEntry,
                 itemGroup: e?.ItemsGroupCode,
                 saleVatGroup: e?.SalesVATGroup,
                 purchaseVatGroup: e?.PurchaseVATGroup,
+                vatGroup: e?.PurchaseVATGroup,
                 quantity: 0,
                 unitPrice: 0,
+                discountPercent: 0,
+                total: 0
             })
         });
 
