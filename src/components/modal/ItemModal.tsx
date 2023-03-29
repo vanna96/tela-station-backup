@@ -93,6 +93,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
 
             return ({
                 itemCode: e?.ItemCode,
+                itemName: e?.ItemName,
                 itemDescription: e?.ItemName,
                 uomEntry: e?.UoMGroupEntry,
                 itemGroup: e?.ItemsGroupCode,
