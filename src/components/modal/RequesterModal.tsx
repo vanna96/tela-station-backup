@@ -8,7 +8,7 @@ import BusinessPartnerRepository from '@/services/actions/bussinessPartnerReposi
 import { currencyFormat } from '../../utilies/index';
 import BusinessPartner from '../../models/BusinessParter';
 import { useMemo } from 'react';
-import Users from '@/models/Users';
+import Users from '@/models/User';
 import requesterRepository from '@/services/actions/requesterRepository';
 import InitializeData from '../../services/actions/index';
 
@@ -27,7 +27,7 @@ const RequesterModal: FC<RequesterModalProps> = ({ open, onClose, onOk }) => {
     staleTime: Infinity,
   });
 
-// console.log(data);
+  // console.log(data);
 
 
   const departmentsQuery = useQuery({
@@ -44,19 +44,19 @@ const RequesterModal: FC<RequesterModalProps> = ({ open, onClose, onOk }) => {
   });
   const branchesData = branchesQuery?.data ?? [];
 
-// console.log(departmentsData)
-// console.log(branchesData)
-// console.log(data)
+  // console.log(departmentsData)
+  // console.log(branchesData)
+  // console.log(data)
 
 
-// const usersWithNames = data?.map((user: any) => {
-//     const departmentName = departmentsData.find((dept: any) => dept.Code === user.Department)?.Name ?? "";
-//     const branchName = branchesData.find((branch: any) => branch.Code === user.Branch)?.Name ?? "";
+  // const usersWithNames = data?.map((user: any) => {
+  //     const departmentName = departmentsData.find((dept: any) => dept.Code === user.Department)?.Name ?? "";
+  //     const branchName = branchesData.find((branch: any) => branch.Code === user.Branch)?.Name ?? "";
 
-//     return {  key: Math.random(),departmentName: departmentName, branchName: branchName };
-//   });
+  //     return {  key: Math.random(),departmentName: departmentName, branchName: branchName };
+  //   });
 
-// console.log(usersWithNames)
+  // console.log(usersWithNames)
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
@@ -83,7 +83,7 @@ const RequesterModal: FC<RequesterModalProps> = ({ open, onClose, onOk }) => {
         accessorKey: "UserCode",
         header: "User Code",
       },
-     
+
     ],
     []
   );

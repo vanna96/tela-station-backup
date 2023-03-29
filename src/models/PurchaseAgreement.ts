@@ -190,8 +190,7 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             "NumAtCard": json['numAtCard'],
             "Project": json['project'],
             "BPCurrency": json['currency'],
-            
-            // "BlanketAgreements_ItemsLines": json['items'].map((e:any) => PurchaseAgreementDocumentLine.toCreate(e, json['agreementMethod']))
+            "BlanketAgreements_ItemsLines": json['items'].map((e:any) => PurchaseAgreementDocumentLine.toCreate(e, json['agreementMethod']))
         };
     }
     

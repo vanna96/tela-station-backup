@@ -1,5 +1,5 @@
 import Repository from "@/astractions/repository";
-import Users from "@/models/Users";
+import Users from "@/models/User";
 import request from "@/utilies/request";
 
 export default class requesterRepository extends Repository<Users> {

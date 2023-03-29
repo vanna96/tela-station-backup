@@ -170,7 +170,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     console.log(json);
 
     return {
-      Requester: json["requester"],
+      Requester: json["cardCode"],
       RequesterName: json["requesterName"],
       RequesterEmail: json["requesterEmail"],
       RequesterBranch: json["requesterBranch"],

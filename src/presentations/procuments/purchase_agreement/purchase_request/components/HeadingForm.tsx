@@ -15,14 +15,12 @@ import Checkbox from "@mui/material/Checkbox";
 
 export interface IHeadingFormProps {
   handlerOpenRequester: () => void;
-  handlerOpenRequesterEmployee: () => void;
   handlerChange: (key: string, value: any) => void;
   data: any;
 }
 
 export default function HeadingForm({
   handlerOpenRequester,
-  handlerOpenRequesterEmployee,
   handlerChange,
   data,
 }: IHeadingFormProps) {
@@ -68,26 +66,29 @@ export default function HeadingForm({
 
                 endAdornment={true}
               /> */}
-              {data?.reqType === 12 ? (
-                <MUITextField
-                  label="Requester Name"
-                  value={data?.userName}
-                  name="BPCode"
-                  onClick={handlerOpenRequester}
-                  key={Math.random()}
-                  endAdornment={true}
-                />
-              ) : (
-                <MUITextField
-                  label="Requester Name"
-                  value={data?.userName}
-                  name="BPCode"
-                  onClick={handlerOpenRequesterEmployee}
-                  key={Math.random()}
-                  endAdornment={true}
-                />
-              )}
+              <MUITextField
+                label="Requester Name"
+                value={data?.cardCode}
+                name="BPCode"
+                onClick={handlerOpenRequester}
+                endAdornment={true}
+              />
             </div>
+
+            <div className="flex flex-col gap-1 text-sm">
+              <div className="flex flex-col gap-1 text-sm">
+                <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                  Requester name
+                </label>
+                <div className="">
+                  <MUITextField
+                    name="CardName"
+                    value={data.cardName}
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="flex flex-col gap-1 text-sm">
               <div className="flex flex-col gap-1 text-sm">
                 <label htmlFor="Code" className="text-gray-500 text-[14px]">

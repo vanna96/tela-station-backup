@@ -14,6 +14,7 @@ import MUISelect from "@/components/selectbox/MUISelect";
 import { ContactEmployee } from "@/models/BusinessParter";
 import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "@/components/input/AccountTextField";
+import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRepository";
 
 export interface ContentFormProps {
   handlerAddItem: () => void;
@@ -75,7 +76,7 @@ export default function ContentForm({
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "ItemCode")
               }
-              onClick={() => {}}
+              onClick={() => { }}
             />
           );
         },
@@ -153,14 +154,14 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "purchaseVatGroup",
         header: "Vat Group",
         Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
       },
       {
         accessorKey: "uomCode",
         header: "UoM Code",
-        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
+        Cell: ({ cell }: any) => <MUITextField value={new UnitOfMeasurementRepository().find(cell.getValue())?.name} />,
       },
     ],
     []

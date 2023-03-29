@@ -1,11 +1,10 @@
 import Model from './Model';
 
-export default class Users extends Model {
+export default class User extends Model {
     
     id: number;
-    name: string;
-    userCode : string;
-    userName : string;
+    code : string;
+    name : string;
     email: string;
     branch: any[];
     department: any[];
@@ -13,10 +12,9 @@ export default class Users extends Model {
     constructor(json : any) {
         super()
 
-        this.id = json['EmployeeID']
-        this.name = `${json['FirstName']}, ${ json['LastName']} `
-        this.userCode = json['UserCode']
-        this.userName= json['UserName']
+        this.id = json['InternalKey']
+        this.name = json['UserName']
+        this.code = json['UserCode']
         this.email = json['eMail']
         this.branch = json['Branch']
         this.department = json['Department']
@@ -27,8 +25,8 @@ export default class Users extends Model {
         return {
             id: this.id,
             name: this.name,
-            userCode: this.userCode,
-            userName: this.userName,
+            userCode: this.code,
+            userName: this.name,
             email: this.email,
             branch: this.branch,
             department: this.department
