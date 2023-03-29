@@ -28,6 +28,10 @@ import BackButton from "@/components/button/BackButton";
 // import PurchaseQouatation from '@/models/PurchaseQouatation';
 import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
 import PurchaseOrder from "@/models/PurchaseOrder";
+import OwnerRepository from "@/services/actions/ownerRepository";
+import PaymentTermTypeRepository from "@/services/actions/paymentTermTypeRepository";
+import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
+import DocumentHeaderComponent from "@/components/DocumenHeaderComponent";
 
 class PurchaseOrderDetail extends Component<any, any> {
   constructor(props: any) {
@@ -67,58 +71,7 @@ class PurchaseOrderDetail extends Component<any, any> {
   render() {
     return (
       <div className="w-full h-full flex flex-col p-4 gap-4">
-        <div className="flex justify-between items-center bg-white p-2 rounded-lg px-6 shadow-sm">
-          <div className="flex gap-2 items-center">
-            <BackButton />
-            <h1 className="font-bold">Purchase Qoutation</h1>
-            {/* <span className='text-[12px] border border-blue-400 font-medium  px-2 rounded '>{this.state.status?.replace('as', '')}</span> */}
-          </div>
-          <div className="text-[12px] flex gap-3">
-            <div
-              role="button"
-              className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 border hover:text-blue-500 text-[12px]"
-            >
-              Edit
-            </div>
-            <div
-              role="button"
-              className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 border hover:text-blue-500 text-[12px]"
-            >
-              Copy To
-            </div>
-            <div
-              role="button"
-              className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"
-            >
-              <HiOutlineDocumentAdd className="" />
-            </div>
-            <div
-              role="button"
-              className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"
-            >
-              <HiChevronDoubleLeft className="" />
-            </div>
-            <div
-              role="button"
-              className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"
-            >
-              <HiChevronLeft className="" />
-            </div>
-            <div
-              role="button"
-              className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"
-            >
-              <HiChevronRight className="" />
-            </div>
-            <div
-              role="button"
-              className=" hover:bg-gray-200 hover:shadow-sm rounded-lg p-2 px-3 text-base border hover:text-blue-500"
-            >
-              <HiChevronDoubleRight className="" />
-            </div>
-            <div className="mx-2"></div>
-          </div>
-        </div>
+        <DocumentHeaderComponent data={this.state} />
 
         <Modal
           open={this.state.isError}
@@ -161,7 +114,10 @@ class PurchaseOrderDetail extends Component<any, any> {
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Vendor Ref .No</span>
-                  <span className="w-8/12 font-medium"> : {this.state.numAtCard}</span>
+                  <span className="w-8/12 font-medium">
+                    {" "}
+                    : {this.state.numAtCard}
+                  </span>
                 </div>
               </div>
               <div className="flex flex-col gap-1">
@@ -198,7 +154,9 @@ class PurchaseOrderDetail extends Component<any, any> {
               </div>
             </div>
             <div className="grow flex flex-col gap-3 p-6 shadow-sm rounded-lg bg-white">
-              <Taps items={["Content", "Logistic", "Accountting", "Attachment"]}>
+              <Taps
+                items={["Content", "Logistic", "Accountting", "Attachment"]}
+              >
                 <Content data={this.state} />
                 <Logistic data={this.state} />
                 <Account data={this.state} />
@@ -223,16 +181,17 @@ function Content(props: any) {
   const itemColumn = useMemo(
     () => [
       {
-        accessorKey: "itemNo",
+        accessorKey: "itemCode",
         header: "Item NO.", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
-        size: 88,
+        size: 95,
       },
       {
         accessorKey: "quantity",
         header: "  Required Qty.",
         enableClickToCopy: true,
+        size: 150,
       },
       {
         accessorKey: "unitPrice",
@@ -250,14 +209,14 @@ function Content(props: any) {
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "LineTotal",
+        accessorKey: "lineTotal",
         header: "Total (LC)",
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
         accessorKey: "uomCode ",
         header: "UoM Code",
-        Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        Cell: ({ cell }: any) => cell.getValue(),
       },
     ],
     [data]
@@ -267,17 +226,7 @@ function Content(props: any) {
     () => [
       {
         accessorKey: "itemDescription",
-        header: "  Descrition",
-        Cell: ({ cell }: any) => cell.getValue(),
-      },
-      {
-        accessorKey: "shipDate",
-        header: "Qouted date",
-        Cell: ({ cell }: any) => cell.getValue(),
-      },
-      {
-        accessorKey: "requiredDate",
-        header: "Required Date",
+        header: "Descrition",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
@@ -313,9 +262,9 @@ function Content(props: any) {
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
         columns={
-          data?.docType === "dDocument_Items" ? serviceColumns : itemColumn
+          data?.docType === "I" ? itemColumn : serviceColumns
         }
-        data={data?.documentLine ?? []}
+        data={data?.items ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
         enableDensityToggle={false}
@@ -343,13 +292,17 @@ function Content(props: any) {
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Owner</span>
-          <span className="w-8/12 font-medium text-sm">: </span>
+          <span className="w-8/12 font-medium text-sm">
+            : {new OwnerRepository().find(data.owner)?.name}
+          </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">
             Total Before Discount
           </span>
-          <span className="w-8/12 font-medium text-sm">: </span>
+          <span className="w-8/12 font-medium text-sm">
+            : {data?.lineTotal}
+          </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Freight</span>
@@ -357,13 +310,15 @@ function Content(props: any) {
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Tax</span>
-          <span className="w-8/12 font-medium text-sm">:</span>
+          <span className="w-8/12 font-medium text-sm">: {data?.vatSum}</span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">
             Total Payment Due
           </span>
-          <span className="w-8/12 font-medium text-sm">: </span>
+          <span className="w-8/12 font-medium text-sm">
+            : {data?.docTotalSys}
+          </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Remark</span>
@@ -385,17 +340,16 @@ function Account(props: any) {
             : {data.journalMemo?.replace("at", "")}
           </span>
         </div>
+        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data.paymentTermType)?.PaymentTermsGroupName}</span></div>
         <div className="grid grid-cols-3 gap-2">
-          <span className="text-gray-500">Payment Terms</span>{" "}
-          <span className="col-span-2 font-medium">: {data.paymentTerm}</span>
-        </div>
-        <div className="grid grid-cols-3 gap-2">
-          <span className="text-gray-500">Payment Methods</span>{" "}
-          <span className="col-span-2 font-medium">: {data.paymentMethod}</span>
+          <span className="text-gray-500">Payment Methods</span>
+          <span className="col-span-2 font-medium">
+            : {data.paymentMethod ?? "N/A"}
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Manually Recalulate Due Date</span>{" "}
-          <span className="col-span-2 font-medium">: {data.paymentMethod}</span>
+          <span className="col-span-2 font-medium">: {data.ManualNumber}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Cash Discount Date Offset</span>{" "}
@@ -417,13 +371,11 @@ function Account(props: any) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Cancellation Date</span>{" "}
-          <span className="col-span-2 font-medium">: {data.owner}</span>
+          <span className="col-span-2 font-medium">: {data.cancelDate}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Indicator</span>{" "}
-          <span className="col-span-2 font-medium">
-            : {data.remindTime} {data.remindUnit?.replace("reu_", "")}
-          </span>
+          <span className="col-span-2 font-medium">: {data.Indicator}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Federal Tax ID</span>{" "}
@@ -431,9 +383,7 @@ function Account(props: any) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Order Number</span>{" "}
-          <span className="col-span-2 font-medium">
-            : {data.remindTime} {data.remindUnit?.replace("reu_", "")}
-          </span>
+          <span className="col-span-2 font-medium">: {data.importFileNum}</span>
         </div>
       </div>
     </div>
@@ -456,7 +406,9 @@ function Logistic(props: any) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Shiping Type</span>{" "}
-          <span className="col-span-2 font-medium">: {data.paymentMethod}</span>
+          <span className="col-span-2 font-medium">
+            : {new ShippingTypeRepository().find(data.shippingType)?.Name}
+          </span>
         </div>
       </div>
     </div>

@@ -58,7 +58,7 @@ export default function HeadingForm({
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
-              <MUITextField label="Vender Ref.No" name="" />
+              <MUITextField label="Vender Ref.No" name="" value={data?.numAtCard} />
             </div>
           </div>
 
@@ -73,7 +73,7 @@ export default function HeadingForm({
                   fullWidth
                   className="w-full text-field bg-gray-100"
                   name="BPCurrency"
-                  value={data.currency}
+                  value={data.docCurrency}
                   // disabled
                 />
                 <div></div>
@@ -117,10 +117,7 @@ export default function HeadingForm({
                 Posting Date
               </label>
               <div className="">
-                <MUIDatePicker
-                  value={data.startDate}
-                  onChange={(e: any) => handlerChange("startDate", e)}
-                />
+                <MUIDatePicker error={data?.message?.includes('DocDate')} value={data.docDate} onChange={(e: any) => handlerChange('docDate', e)} />
               </div>
             </div>
 

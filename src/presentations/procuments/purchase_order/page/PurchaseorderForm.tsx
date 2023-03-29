@@ -1,8 +1,8 @@
 import CoreFormDocument from "@/components/core/CoreFormDocument";
 // import GeneralForm from '../../purchase_agreement/components/GeneralForm';
-import HeadingForm from "../components/HeadingForm";
-import ContentForm from "../components/ContentForm";
-import AttachmentForm from "../components/AttachmentForm";
+import HeadingForm from "../components/Heading";
+import ContentForm from "../components/Content";
+import AttachmentForm from "../components/Attachment";
 import { withRouter } from "@/routes/withRouter";
 import { LoadingButton } from "@mui/lab";
 import { FormEventHandler } from "react";
@@ -10,8 +10,8 @@ import { CoreFormDocumentState } from "../../../../components/core/CoreFormDocum
 import DocumentSerieRepository from "@/services/actions/documentSerie";
 import { ToastOptions } from "react-toastify";
 import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
-import LogisticForm from "../components/LogisticForm";
-import AccounttingForm from "../components/AccounttingForm";
+import LogisticForm from "../components/Logistic";
+import AccounttingForm from "../components/Accountting";
 import GLAccount from "@/models/GLAccount";
 class PurchaseOrder extends CoreFormDocument {
   constructor(props: any) {
@@ -27,22 +27,52 @@ class PurchaseOrder extends CoreFormDocument {
   }
 
   componentDidMount(): void {
+    if (!this.props?.edit) {
+      setTimeout(() => this.setState({ ...this.state, loading: false }), 500);
+    }
+
+    if (this.props.edit) {
+      if (this.props.location.state) {
+        const routeState = this.props.location.state;
+        setTimeout(
+          () =>
+            this.setState({
+              ...this.props.location.state,
+              isApproved: routeState?.status === "A",
+              loading: false,
+            }),
+          500
+        );
+      } else {
+        new PurchaseOrderRepository()
+          .find(this.props.match.params.id)
+          .then((res: any) => {
+            this.setState({ ...res, loading: false });
+          })
+          .catch((e: Error) => {
+            this.setState({ message: e.message });
+          });
+      }
+    }
+
     DocumentSerieRepository.getDocumentSeries(
       PurchaseOrderRepository.documentSerie
     ).then((res: any) => {
-      this.setState({ ...this.state, series: res });
+      this.setState({ ...this.state, series: res, isLoadingSerie: false });
     });
 
-    DocumentSerieRepository.getDefaultDocumentSerie(
-      PurchaseOrderRepository.documentSerie
-    ).then((res: any) => {
-      this.setState({
-        ...this.state,
-        serie: res?.Series,
-        docNum: res?.NextNumber,
-        isLoadingSerie: false,
+    if (!this.props.edit) {
+      DocumentSerieRepository.getDefaultDocumentSerie(
+        PurchaseOrderRepository.documentSerie
+      ).then((res: any) => {
+        this.setState({
+          ...this.state,
+          serie: res?.Series,
+          docNum: res?.NextNumber,
+          isLoadingSerie: false,
+        });
       });
-    });
+    }
   }
 
   handlerRemoveItem(code: string) {
@@ -58,13 +88,13 @@ class PurchaseOrder extends CoreFormDocument {
       (e: any) => e?.ItemCode === record?.ItemCode
     );
 
-    if (field === 'AccountNo') {
+    if (field === "accountCode") {
       const account = value as GLAccount;
-      item['AccountNo'] = account.code;
-      item['AccountName'] = account.name;
-  } else {
+      item["accountCode"] = account.code;
+      item["AccountName"] = account.name;
+    } else {
       item[field] = value;
-  }
+    }
 
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
@@ -75,18 +105,14 @@ class PurchaseOrder extends CoreFormDocument {
     event.preventDefault();
     this.setState({ ...this.state, isSubmitting: true });
 
-    await new PurchaseOrderRepository()
-      .post(this.state)
-      .then((res: any) => {
-        console.log(res);
-        this.showMessage("Success", "Create Successfully");
-      })
-      .catch((e: Error) => {
-        this.showMessage("Errors", e.message);
-      });
+    const { id } = this.props?.match?.params
 
-    setTimeout(() => {}, 2000);
-  }
+    await new PurchaseOrderRepository().post(this.state, this.props?.edit, id).then((res: any) => {
+        this.showMessage('Success', 'Create Successfully');
+    }).catch((e: Error) => {
+        this.showMessage('Errors', e.message);
+    });
+}
 
   FormRender = () => {
     return (
@@ -110,12 +136,11 @@ class PurchaseOrder extends CoreFormDocument {
           <LogisticForm
             data={this.state}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-            
           />
           <AccounttingForm
-             data={this.state}
-             handlerChange={(key, value) => this.handlerChange(key, value)}
-             handlerOpenProject={() => this.handlerOpenProject()}
+            data={this.state}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            handlerOpenProject={() => this.handlerOpenProject()}
           />
           {/* <AttachmentForm /> */}
 

@@ -31,7 +31,7 @@ export default function GeneralForm({
             fullWidth
             name="Address2"
             defaultValue={
-              data?.Address2 ?? "Level 1 - 168 Walker Street''"
+              data?.address2 ?? "Level 1 - 168 Walker Street''"
             }
           />
         </div>
@@ -45,8 +45,8 @@ export default function GeneralForm({
               multiline
               rows={4}
               fullWidth
-              name="Description"
-              defaultValue={data?.Address}
+              name="Address"
+              defaultValue={data?.address}
             />
           </div>
         </div>
@@ -56,8 +56,8 @@ export default function GeneralForm({
           </label>
           <ShippingType
             name="TransportationCode"
-            value={data?.ship}
-            onChange={(e: any) => handlerChange("ship", e.target.value)}
+            value={data?.shippingType}
+            onChange={(e) => handlerChange('shippingType', e.target.value)}
           />
         </div>
       </div>

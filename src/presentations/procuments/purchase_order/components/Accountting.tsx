@@ -35,25 +35,15 @@ export default function AccounttingForm({
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Payment Terms
             </label>
-            <PaymentTerm
-              name="PaymentGroupCode"
-              value={data?.paymentterm}
-              onChange={(e: any) =>
-                handlerChange("paymentterm", e.target.value)
-              }
-            />
+            <PaymentTerm name="PaymentTerms" value={data.paymentGroupCode} onChange={(e) => handlerChange('paymentGroupCode', e.target.value)} />
+
           </div>
           <div className="w-[50%]">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Payment Method{" "}
+              Payment Method
             </label>
             <div className="">
-              <PaymentMethod
-                type="incoming"
-                name="PaymentMethod"
-                value={data.paymentMethod}
-                onChange={(e) => handlerChange("paymentMethod", e.target.value)}
-              />
+            <PaymentMethod type='outgoing' name="PaymentMethod" value={data.paymentMethod} onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
             </div>
           </div>
         </div>
@@ -84,14 +74,14 @@ export default function AccounttingForm({
             <div className="w-[24%] -mt-6">
               <MUITextField
                 label="Month+"
-                defaultValue={data?.extraMonth}
+                value={data?.extraMonth}
                 name="ExtraMonth"
               />
             </div>
             <div className="w-[24%] -mt-6">
               <MUITextField
                 label="Days+"
-                defaultValue={data?.extraDays}
+                value={data?.extraDays}
                 name="ExtraDays"
               />
             </div>
@@ -100,8 +90,9 @@ export default function AccounttingForm({
         <div className="mt-3">
           <MUITextField
             label="Cash Discount Date Offset"
-            defaultValue={data?.cashDiscountDateOffset}
+            value={data?.cashDiscountDateOffset}
             name="CashDiscountDateOffset"
+            onChange={(e) => handlerChange('cashDiscountDateOffset', e.target.value)}
           />
         </div>
       </div>
