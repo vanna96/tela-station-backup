@@ -397,7 +397,7 @@ export default function ContentForm({
         <div className="w-[100%] gap-3">
           <MUITextField
             label="Total Before Discount"
-            value={data.LineTotal}
+            value={Formular.findItemTotal(data.items ?? [])}
             name="LineTotal"
           />
         </div>
