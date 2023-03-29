@@ -393,15 +393,28 @@ console.log(data);
             Remarks
           </label>
           <div className="">
-            <TextField
-              size="small"
-              multiline
-              rows={4}
-              fullWidth
-              name="Comments"
-              className="w-full "
-              defaultValue={data?.comments}
-            />
+            {data.documentStatus === "bost_Open" ?
+              <TextField
+                size="small"
+                multiline
+                rows={4}
+                fullWidth
+                name="Comments"
+                className="w-full "
+                defaultValue={data?.comments}
+              /> : <TextField
+                size="small"
+                multiline
+                rows={4}
+                disabled={edit}
+                fullWidth
+                name="Comments"
+                className="w-full "
+                defaultValue={data?.comments}
+              />
+              
+            }
+      
           </div>
         </div>
       </div>
