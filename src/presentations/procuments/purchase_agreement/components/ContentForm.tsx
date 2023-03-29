@@ -203,7 +203,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     key={tableKey}
                     // columns={itemColumns}
                     columns={data?.agreementMethod === 'M' ? serviceColumns : itemColumns}
-                    data={data.items ?? []}
+                    data={data?.items ?? []}
                     enableStickyHeader={true}
                     enableColumnActions={false}
                     enableColumnFilters={false}

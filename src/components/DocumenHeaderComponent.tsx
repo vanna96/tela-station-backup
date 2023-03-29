@@ -20,7 +20,7 @@ const DocumentHeaderComponent: React.FC<DocumentHeaderComponentProps> = (props: 
     const { id } = useParams();
 
     const handlerGoToEdit = () => {
-        navigate(location.pathname + "/edit", { state: props.data });
+        navigate(location.pathname + "/edit", { state: props.data, replace: true });
     }
 
     const handlerGoToCreate = () => {

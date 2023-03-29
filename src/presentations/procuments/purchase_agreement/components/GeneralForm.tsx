@@ -11,10 +11,11 @@ import * as React from 'react';
 
 export interface IGeneralFormProps {
     data: any,
-    handlerChange: (key: string, value: any) => void
+    handlerChange: (key: string, value: any) => void,
+    edit?: boolean,
 }
 
-export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) {
+export default function GeneralForm({ data, handlerChange, edit }: IGeneralFormProps) {
     return (
         <FormCard title='General'>
             <div className='flex flex-col gap-2'>
@@ -78,8 +79,9 @@ export default function GeneralForm({ data, handlerChange }: IGeneralFormProps) 
                         <div className=''>
                             <MUISelect
                                 value={data?.status}
-                                items={documentStatusList(data?.isApproved)}
+                                items={documentStatusList(data?.status, edit)}
                                 name="Status"
+                                disabled={data?.status === 'T' && edit && data?.isApproved}
                                 onChange={(e) => handlerChange('status', e.target.value)}
                             />
                         </div>

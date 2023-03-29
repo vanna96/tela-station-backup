@@ -9,6 +9,9 @@ import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import GLAccount from '@/models/GLAccount';
 import { CircularProgress } from '@mui/material';
+import { UpdateDataSuccess } from '../../../../utilies/ClientError';
+import PurchaseAgreement from '../../../../models/PurchaseAgreement';
+import { QueryClient, useMutation } from 'react-query';
 
 
 class PurchaseAgreementForm extends CoreFormDocument {
@@ -22,13 +25,15 @@ class PurchaseAgreementForm extends CoreFormDocument {
             status: 'D',
             renewal: false,
             startDate: null,
+            terminateDate: null,
+            signingDate: null,
             endDate: null,
             loading: true
         } as any;
 
 
         this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-        this.handlerAddItem = this.handlerAddItem.bind(this);
+        this.handlerItemChange = this.handlerItemChange.bind(this);
         this.handlerSubmit = this.handlerSubmit.bind(this);
     }
 
@@ -41,10 +46,11 @@ class PurchaseAgreementForm extends CoreFormDocument {
         if (this.props.edit) {
             if (this.props.location.state) {
                 const routeState = this.props.location.state;
-                setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
+
+                setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A' || routeState?.status === 'T', loading: false, }), 500)
             } else {
                 new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
-                    this.setState({ ...res, loading: false });
+                    this.setState({ ...res, loading: false, isApproved: res?.status === 'A' || res?.status === 'T', });
                 }).catch((e: Error) => {
                     this.setState({ message: e.message });
                 })
@@ -57,7 +63,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
         if (!this.props.edit) {
             DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie).then((res: any) => {
-                this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber, isLoadingSerie: false })
+                this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber })
             });
         }
     }
@@ -69,7 +75,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
         this.setState({ ...this.state, items: items })
     }
 
-    handlerAddItem({ value, record, field }: any) {
+    handlerItemChange({ value, record, field }: any) {
         let items = [...this.state.items ?? []];
         let item = this.state.items?.find((e: any) => e?.itemCode === record?.itemCode);
 
@@ -90,14 +96,26 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
     async handlerSubmit(event: any) {
         event.preventDefault();
-        this.setState({ ...this.state, isSubmitting: true });
 
+        this.setState({ ...this.state, isSubmitting: true });
         const { id } = this.props?.match?.params
 
         await new PurchaseAgreementRepository().post(this.state, this.props?.edit, id).then((res: any) => {
-            this.showMessage('Success', 'Create Successfully');
-        }).catch((e: Error) => {
-            this.showMessage('Errors', e.message);
+            const purchaseAgreement = new PurchaseAgreement(res?.data)
+
+            this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.id), purchaseAgreement);
+
+            this.dialog.current?.success("Create Successfully.");
+        }).catch((e: any) => {
+            if (e instanceof UpdateDataSuccess) {
+                this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.documentStatus === 'A' });
+                this.dialog.current?.success(e.message);
+                const query = this.props.query.query as QueryClient;
+                return;
+            }
+            this.dialog.current?.error(e.message);
+        }).finally(() => {
+            this.setState({ ...this.state, isSubmitting: false })
         });
     }
 
@@ -117,13 +135,14 @@ class PurchaseAgreementForm extends CoreFormDocument {
                     />
                     <GeneralForm
                         data={this.state}
+                        edit={this.props?.edit}
                         handlerChange={(key, value) => this.handlerChange(key, value)}
                     />
                     <ContentForm
                         data={this.state}
                         handlerAddItem={() => this.handlerOpenItem()}
                         handlerRemoveItem={this.handlerRemoveItem}
-                        handlerChangeItem={this.handlerAddItem}
+                        handlerChangeItem={this.handlerItemChange}
                     />
 
                     <AttachmentForm />
@@ -135,7 +154,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
                             </div>
                             <div className="flex items-center">
                                 <LoadingButton type="submit" sx={{ height: '25px' }} className='bg-white' loading={false} size="small" variant="contained" disableElevation>
-                                    <span className="px-3 text-[11px] py-1">Save & New</span>
+                                    <span className="px-3 text-[11px] py-1">Save </span>
                                 </LoadingButton>
                             </div>
                         </div>
