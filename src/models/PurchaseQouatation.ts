@@ -15,10 +15,10 @@ export interface PurchaseQoutationProps {
   terminateDate?: string;
   description?: string;
   status?: string;
-  owner?: string;
+  documentsOwner?: string;
   remark?: string;
   attachmentEntry?: number;
-  paymentTerm?: string;
+  paymentGroupCode?: string;
   priceList?: number;
   serie: string;
   paymentMethod?: string;
@@ -44,6 +44,7 @@ export interface PurchaseQoutationProps {
   discountPercent?: string;
   itemName?: string;
   uomCode?: string
+  transportationCode?:string
 }
 
 export interface PurchaseQoutationDocumentLineProps {
@@ -63,7 +64,7 @@ export interface PurchaseQoutationDocumentLineProps {
   lineTotal?: string | undefined;
   requiredDate?: string | undefined
   shipDate?: string | undefined;
-  accountCode?: string | undefined;
+  accountCode?: number | undefined;
   accountName?: string | undefined;
   blanketAgreementNumber?: string | undefined;
   discountPercent?: string;
@@ -83,10 +84,10 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   terminateDate?: string;
   description?: string;
   status?: string;
-  owner?: string;
+  documentsOwner?: string;
   remark?: string;
   attachmentEntry?: number;
-  paymentTerm?: string;
+  paymentGroupCode?: string;
   priceList?: number;
   serie: string;
   paymentMethod?: string;
@@ -111,7 +112,8 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   project: string;
   discountPercent?: string;
   itemName?: string;
-  uomCode?: string
+  uomCode?: string;
+  transportationCode?: string;
   constructor(json: any) {
     super();
     this.id = json['DocEntry'];
@@ -125,7 +127,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     this.journalMemo = json['JournalMemo']
     this.cardName = json['CardName'];
     this.cardCode = json['CardCode'];
-    this.owner = json['DocumentsOwner'];
+    this.documentsOwner = json['DocumentsOwner'];
     this.cardCode = json['CardCode'];
     this.constactPersonCode = json['ContactPersonCode'];
     this.docDate = (json['DocDate']);
@@ -133,7 +135,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     this.terminateDate = (json['TernimatedDate']);
     this.description = json['Description'];
     this.shippingType = json['TransportationCode'];
-    this.paymentTerm = json['PaymentGroupCode'];
+    this.paymentGroupCode = json['PaymentGroupCode'];
     this.taxDate = (json['TaxDate']);
     this.requriedDate = (json['RequriedDate']);
     this.comments = json['Comments'];
@@ -150,7 +152,8 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     this.project = json['Project'];
     this.discountPercent = json['DiscountPercent'];
     this.itemName = json['ItemDescription'];
-    this.uomCode = json['UoMCode']
+    this.uomCode = json['UoMCode'];
+    this.transportationCode = json['TransportationCode']
 
   }
   toJson(update: boolean) {
@@ -161,6 +164,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     console.log(json)
 
     return {
+      "DocumentsOwner": json['documentsOwner'],
       "DocumentStatus": json['documentStatus'],
       "ImportFileNum": json['importFileNum'],
       "FederalTaxID": json['federalTaxID'],
@@ -186,12 +190,11 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
       "Owner": json['owner'],
       "Remarks": json['remarks'],
       "AttachmentEntry": json['attachmentEntry'],
-      "PaymentTerms": json['paymentTerms'],
+      "PaymentGroupCode": json['paymentGroupCode'],
       "Series": json['series'],
       "PaymentMethod": json['paymentMethod'],
-      "TransportationCode": json['TransportationCode'],
+      "TransportationCode": json['transportationCode'],
       "Project": json['project'],
-      "DocNum": json['docNum'],
       "DocCurrency": json['docCurrency'],
       "TaxDate": json['taxDate'],
       "CreateQRCodeFrom": json['createQRCodeFrom'],
@@ -202,6 +205,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
 
   public static toUpdate(json: any) {
     return {
+      "DocumentsOwner": json['documentsOwner'],
       "DocumentStatus": json['documentStatus'],
       "ImportFileNum": json['importFileNum'],
       "FederalTaxID": json['federalTaxID'],
@@ -227,12 +231,11 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
       "Owner": json['owner'],
       "Remarks": json['remarks'],
       "AttachmentEntry": json['attachmentEntry'],
-      "PaymentTerms": json['paymentTerms'],
+      "PaymentGroupCode": json['paymentGroupCode'],
       "Series": json['series'],
       "PaymentMethod": json['paymentMethod'],
-      "TransportationCode": json['TransportationCode'],
+      "TransportationCode": json['transportationCode'],
       "Project": json['project'],
-      "DocNum": json['docNum'],
       "DocCurrency": json['docCurrency'],
       "TaxDate": json['taxDate'],
       "CreateQRCodeFrom": json['createQRCodeFrom'],
@@ -262,10 +265,10 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
   lineTotal?: string | undefined;
   requiredDate?: string | undefined
   shipDate?: string | undefined;
-  accountCode?: string | undefined;
+  accountCode?: number | undefined;
   accountName?: string | undefined;
   blanketAgreementNumber?: string | undefined;
-  discountPercent?: string;
+  discountPercent?: number;
   requriedDate?: string;
   itemName?: string;
   saleVatGroup?: string
@@ -298,6 +301,7 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
   public static toCreate(json: any, type: any) {
 
     let line = {
+      "Quantity": json['quantity'],
       "ItemCode": json["itemCode"],
       "ItemDescription": json['itemDescription'],
       "ItemName": json['itemName'],
@@ -319,10 +323,10 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
       "DiscountPercent": json["discountPercent"],
     };
 
-    // if (type === 'S') {
-    //   delete line.ItemCode;
-    //   delete line.UnitPrice;
-    // }
+    if (type === 'S') {
+      delete line.ItemCode;
+      delete line.UnitPrice;
+    }
 
     return line;
   }

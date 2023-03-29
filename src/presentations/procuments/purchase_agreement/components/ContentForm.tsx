@@ -98,6 +98,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     return <MUITextField
                         value={cell.getValue()}
                         type="number"
+                        name="Quantity"
                         error={(cell.getValue() as number) <= 0}
                         disabled={data?.isApproved}
                         onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'quantity')}
@@ -111,6 +112,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     return <MUITextField
                         startAdornment={'USD'}
                         type="number"
+                        name="UnitPrice"
                         disabled={data?.isApproved}
                         error={(cell.getValue() as number) <= 0}
                         value={cell.getValue()}

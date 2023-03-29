@@ -33,7 +33,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
             </label>
             <PaymentTerm
               onChange={(e) => handlerChange('paymentTerm', e.target.value)}
-              value={data?.paymentTerm}
+              value={data?.paymentGroupCode}
               name="PaymentGroupCode"
             />
           </div>
@@ -65,13 +65,13 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
 
           </div>
           <div className='grid grid-cols-2 gap-3'>
-            <MUITextField label="Month +" value={data.extraMonth} name="ExtraMonth"/>
-            <MUITextField label="Days" value={data.extraDays} name="ExtraDays"/>
+            <MUITextField label="Month +" value={data.extraMonth} name="ExtraMonth" />
+            <MUITextField label="Days" value={data.extraDays} name="ExtraDays" />
 
           </div>
         </div>
         <div className='grid grid-cols-1 gap-3'>
-          <MUITextField label="Cash Discount Date Offsetys" value={''} name="CashDiscountDateOffset"/>
+          <MUITextField label="Cash Discount Date Offsetys" value={''} name="CashDiscountDateOffset" />
 
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
                 fullWidth
                 name="CreateQRCodeFrom"
                 className="w-full "
-                value={data?.createQRCodeFrom }
+                value={data?.createQRCodeFrom}
               />
             </div>
           </div>
@@ -119,7 +119,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
             />
           </div>
           <div>
-            <MUITextField label="Order Number:" value={data?.ImportFileNum} name="importFileNum"/>
+            <MUITextField label="Order Number:" value={data?.importFileNum} name="ImportFileNum" />
           </div>
         </div>
       </div>

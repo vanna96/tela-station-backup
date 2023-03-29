@@ -19,6 +19,7 @@ import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRep
 import PurchaseQouatation from '@/models/PurchaseQouatation';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
 import OwnerRepository from '@/services/actions/ownerRepository';
+import PaymentTermTypeRepository from '@/services/actions/paymentTermTypeRepository';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -305,8 +306,8 @@ function Account(props: any) {
   return <div className='grow w-full grid grid-cols-2 gap-2 text-sm py-2'>
     <div className='flex flex-col gap-2'>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Jounral Remark</span> <span className='col-span-2 font-medium'>: {data.journalMemo?.replace('at', '')}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {data.paymentTerm}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Methods</span> <span className='col-span-2 font-medium'>: {data.paymentMethod}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data.paymentTermType)?.PaymentTermsGroupName}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Methods</span> <span className='col-span-2 font-medium'>: {data.paymentMethod ?? "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalulate Due Date</span> <span className='col-span-2 font-medium'>: {data.paymentMethod}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cash Discount Date Offset</span> <span className='col-span-2 font-medium'>: {data.cashDiscountDateOffset}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Bussiness partner Projec</span> <span className='col-span-2 font-medium'>: {data.project}</span></div>
@@ -328,7 +329,7 @@ function Logistic(props: any) {
     <div className='flex flex-col gap-2'>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500 '>Ship To</span> <span className='col-span-2 font-medium'>: {data.address2}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Pay To</span> <span className='col-span-2 font-medium'>: {data.address}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shiping Type</span> <span className='col-span-2 font-medium'>: {data.paymentMethod}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shiping Type</span> <span className='col-span-2 font-medium'>: {data.transportationCode}</span></div>
      
     </div>
   </div>

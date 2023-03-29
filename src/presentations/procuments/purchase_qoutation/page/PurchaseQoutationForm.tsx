@@ -76,9 +76,9 @@ class PurchaseQoutationForm extends CoreFormDocument {
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
     this.setState({ ...this.state, items: items })
-    if (field === 'accountNo') {
+    if (field === 'accountCode') {
       const account = value as GLAccount;
-      item['accountNo'] = account.code;
+      item['accountCode'] = account.code;
       item['accountName'] = account.name;
     } else {
       item[field] = value;
