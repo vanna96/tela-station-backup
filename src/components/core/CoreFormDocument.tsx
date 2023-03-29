@@ -17,6 +17,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import DistributionRuleModal from '../modal/DistributionRuleModal';
 import { VendorModalType } from '../modal/VendorModal';
 import FormMessageModal from '../modal/FormMessageModal';
+import RequesterEmployeeModal from '../modal/RequesterEmployeeModal';
+import EmployeesInfo from '@/models/EmployeesInfo';
+import Users from '../../models/User';
+import RequesterModal from '../modal/RequesterModal';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -38,8 +42,8 @@ export interface CoreFormDocumentState {
     isOpenProject: boolean,
     isLoadingSerie: boolean,
     renewal: boolean,
-    cardCode?: string | undefined | null,
-    cardName?: string | undefined | null,
+    cardCode?: any,
+    cardName?: any,
     contactPersonCode?: number | undefined | null,
     phone?: string | undefined | null,
     email?: string | undefined | null,
@@ -72,6 +76,10 @@ export interface CoreFormDocumentState {
     vendorType: VendorModalType,
     loading: boolean,
     isApproved: boolean,
+    isOpenRequester: boolean,
+    isOpenRequesterEmployee: boolean,
+    department: any,
+    branch: any,
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -121,18 +129,17 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             vendorType: 'customer',
             loading: true,
             isApproved: false,
+            isOpenRequester: false,
+            isOpenRequesterEmployee: false,
+            department: null,
+            branch: null
         }
-
-
-
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
         this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
         this.handlerConfirmDistribution = this.handlerConfirmDistribution.bind(this)
-
-
-        // ref
-
+        this.handlerConfirmRequestEmployee = this.handlerConfirmRequestEmployee.bind(this)
+        this.handlerConfirmRequester = this.handlerConfirmRequester.bind(this)
     }
 
     abstract FormRender(): JSX.Element;
@@ -145,6 +152,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type={this.state.vendorType} />
                 <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
                 <DistributionRuleModal open={this.state.showDistribution} onClose={() => { }} inWhichNum={this.state.inWhichDimension} onOk={this.handlerConfirmDistribution} />
+                <RequesterEmployeeModal open={this.state.isOpenRequesterEmployee} onOk={this.handlerConfirmRequestEmployee} onClose={() => { }} />
+                <RequesterModal open={this.state.isOpenRequesterEmployee} onOk={this.handlerConfirmRequester} onClose={() => { }} />
 
                 <ToastContainer
                     toastClassName={({ type }: any) => contextClass[type || "default"] +
@@ -347,5 +356,30 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             cb();
         }
     }
+
+    protected handlerConfirmRequestEmployee(record: EmployeesInfo) {
+        this.setState({
+            ...this.state,
+            isOpenRequesterEmployee: false,
+            cardCode: record.id,
+            cardName: record.name,
+            branch: record.branch,
+            department: record.department,
+            email: record.email,
+        });
+    }
+
+    protected handlerConfirmRequester(record: Users) {
+        this.setState({
+            ...this.state,
+            isOpenRequester: false,
+            cardCode: record.code,
+            cardName: record.name,
+            branch: record.branch,
+            department: record.department,
+            email: record.email,
+        });
+    }
+
 
 }

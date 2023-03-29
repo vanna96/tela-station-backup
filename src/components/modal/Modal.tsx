@@ -83,4 +83,3 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
 }
 
 export default Modal;
-

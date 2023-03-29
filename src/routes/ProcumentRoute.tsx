@@ -7,6 +7,12 @@ import PurchaseAgreementLists from '../presentations/procuments/purchase_agreeme
 import PurchaseAgreementDetail from '../presentations/procuments/purchase_agreement/page/PurchaseAgreementDetail';
 import PurchaseAgreementForm from '@/presentations/procuments/purchase_agreement/page/PurchaseAgreementForm';
 import ProcumentPage from '@/presentations/procuments';
+import PurchaseRequestLists from '../presentations/procuments/purchase_agreement/purchase_request/PurchaseRequestLists';
+import PurchaseRequestForm from '@/presentations/procuments/purchase_agreement/purchase_request/page/PurchaseRequestForm';
+import PurchaseRequestDetail from '@/presentations/procuments/purchase_agreement/purchase_request/page/PurchaseRequestDetail';
+import GoodReturnLists from '@/presentations/procuments/good_return/page/list';
+import GoodReturnDetail from '@/presentations/procuments/good_return/page/GoodReturnDetail';
+import GoodReturnForm from '@/presentations/procuments/good_return/page/GoodReturnForm';
 
 export default function ProcumentRoute() {
     return (
@@ -17,6 +23,18 @@ export default function ProcumentRoute() {
                 <Route path=':id' element={<PurchaseAgreementDetail />} />
                 <Route path='create' element={<PurchaseAgreementForm />} />
                 <Route path=':id/edit' element={<PurchaseAgreementForm edit={true} />} />
+            </Route>
+            <Route path='/purchase-request' >
+                <Route index element={<PurchaseRequestLists />} />
+                <Route path=':id' element={<PurchaseRequestDetail />} />
+                <Route path='create' element={<PurchaseRequestForm />} />
+                <Route path=':id/edit' element={<PurchaseRequestForm edit={true} />} />
+
+            </Route>
+            <Route path='/good-return-request' >
+                <Route index element={<GoodReturnLists />} />
+                <Route path=':id' element={<GoodReturnDetail />} />
+                <Route path='create' element={<GoodReturnForm />} />
             </Route>
         </Routes>
     )

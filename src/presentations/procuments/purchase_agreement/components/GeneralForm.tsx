@@ -52,7 +52,7 @@ export default function GeneralForm({ data, handlerChange, edit }: IGeneralFormP
                     <div className='flex flex-col gap-1 text-sm'>
                         <label htmlFor='Code' className='text-gray-500 text-[14px]'>Payment Method </label>
                         <div className=''>
-                            <PaymentMethod type='outgoing' disabled={data?.isApproved} name="PaymentMethod" value={data.paymentMethod} onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
+                            <PaymentMethod type='outgoing' name="PaymentMethod" value={data.paymentMethod} onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
                         </div>
                     </div>
                 </div>
