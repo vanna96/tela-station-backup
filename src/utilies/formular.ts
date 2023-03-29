@@ -3,7 +3,7 @@ export default class Formular {
 
   public static findItemTotal(items: any[]): number {
     const total = items?.reduce((accumulator: number, currentItem: any) => {
-      return accumulator + currentItem.lineTotal;
+      return accumulator + (currentItem.quantity * currentItem.unitPrice);
     }, 0);
     if (isNaN(total)) return 0;
 

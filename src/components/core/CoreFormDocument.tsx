@@ -81,6 +81,11 @@ export interface CoreFormDocumentState {
     department: any,
     branch: any,
     reqType: number,
+    docTotal: number,
+    docDiscountPercent: number | any,
+    docDiscountPrice: number | any,
+    docTaxTotal: number | any,
+    rounded: boolean
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -135,6 +140,11 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             department: null,
             branch: null,
             reqType: 12,
+            docTaxTotal: 0,
+            docTotal: 0,
+            docDiscountPercent: 0,
+            docDiscountPrice: 0,
+            rounded: false
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -314,7 +324,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let temps: any = { ...this.state };
         temps[key] = value;
 
-        if (key === 'agreementMethod') {
+        if (key === 'agreementMethod' || key === 'docType') {
             temps['items'] = [{}];
         }
 
