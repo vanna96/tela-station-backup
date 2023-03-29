@@ -1,5 +1,3 @@
-
-
 import React, { useCallback } from "react";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import MaterialReactTable from "material-react-table";
@@ -43,6 +41,7 @@ export default function ContentForm({
   const handlerRemoveRow = (row: any) => {
     handlerRemoveItem(row.ItemCode);
   };
+  // console.log(data?.items)
 
   const itemColumns = React.useMemo(
     () => [
@@ -66,7 +65,7 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "ItemCode",
+        accessorKey: "itemCode",
         header: "Item No", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           // return ;
@@ -83,54 +82,54 @@ export default function ContentForm({
       },
 
       {
-        accessorKey: "ItemName",
+        accessorKey: "itemName",
         header: "Description",
         Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
       },
       {
-        accessorKey: "Quantity",
+        accessorKey: "quantity",
         header: "Quanitity",
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               type="number"
-              onBlur={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "Quantity")
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "quantity")
               }
             />
           );
         },
       },
       {
-        accessorKey: "UnitPrice",
+        accessorKey: "unitPrice",
         header: "Unit Price",
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
               startAdornment={"USD"}
               type="number"
-              defaultValue={cell.getValue()}
-              onBlur={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "UnitPrice")
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "unitPrice")
               }
             />
           );
         },
       },
       {
-        accessorKey: "DiscountPercent",
+        accessorKey: "discountPercent",
         header: "Discount %",
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               type="number"
               onBlur={(event) =>
                 handlerChangeInput(
                   event,
                   cell?.row?.original,
-                  "DiscountPercent"
+                  "discountPercent"
                 )
               }
             />
@@ -138,7 +137,7 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "Total",
+        accessorKey: "total",
         header: "Total",
         Cell: ({ cell }: any) => {
           console.log(cell.row.original.UnitPrice);
@@ -146,19 +145,22 @@ export default function ContentForm({
             <MUITextField
               startAdornment={"USD"}
               value={Formular.findToTal(
-                cell.row.original.Quantity,
-                cell.row.original.UnitPrice
+                cell.row.original.quantity,
+                cell.row.original.unitPrice
               )}
             />
           );
         },
       },
       {
-        accessorKey: "UoMCode",
+        accessorKey: "vatGroup",
+        header: "Vat Group",
+        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
+      },
+      {
+        accessorKey: "uomCode",
         header: "UoM Code",
-        Cell: ({ cell }: any) => (
-          <MUITextField defaultValue={cell.getValue()} />
-        ),
+        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
       },
     ],
     []
@@ -185,7 +187,7 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "ItemDescription",
+        accessorKey: "itemDescription",
         header: "Description", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           // return ;
@@ -204,7 +206,7 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "AccountNo",
+        accessorKey: "accountNo",
         header: "G/L Account", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           console.log(cell.getValue());
@@ -302,7 +304,7 @@ export default function ContentForm({
           key={tableKey}
           // columns={itemColumns}
           columns={data?.docType === "S" ? serviceColumns : itemColumns}
-          data={data.items ?? []}
+          data={data?.items ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
           enableColumnFilters={false}
@@ -346,7 +348,7 @@ export default function ContentForm({
         />
       </div>
       <div className="flex flex-col gap-3">
-          {/* <div className="w-[48%] gap-3">
+        {/* <div className="w-[48%] gap-3">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Buyer
             </label>
@@ -364,16 +366,16 @@ export default function ContentForm({
               name="ContactPersonCode"
             />
           </div> */}
-          <div className="">
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Owner
-            </label>
-            <Owner
-              name="DocumentsOwner"
-              value={data?.owner}
-              onChange={(e: any) => handlerChange("owner", e.target.value)}
-            />
-          </div>
+        <div className="">
+          <label htmlFor="Code" className="text-gray-500 text-[14px]">
+            Owner
+          </label>
+          <Owner
+            name="DocumentsOwner"
+            value={data?.owner}
+            onChange={(e: any) => handlerChange("owner", e.target.value)}
+          />
+        </div>
         <div className="flex flex-col gap-1 text-sm">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Remarks

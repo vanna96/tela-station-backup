@@ -119,6 +119,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
   status?: string;
   email?: string;
   owner?: string;
+  documentLine?: PurchaseRequestDocumentLine[];
 
   constructor(json: any) {
     super();
@@ -145,6 +146,9 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     // this.documentLine = [];
     // this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
     this.items = json["DocumentLines"]?.map(
+      (e: any) => new PurchaseRequestDocumentLine(e)
+    );
+    this.documentLine = json["DocumentLines"]?.map(
       (e: any) => new PurchaseRequestDocumentLine(e)
     );
     this.userCode = json["Requester"];
@@ -286,82 +290,85 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     };
   }
 }
-
 export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
-  itemNo?: string | undefined;
+  itemCode?: string | undefined;
   itemDescription?: string | undefined;
-  itemGroup?: string | undefined;
   quantity?: number | undefined;
   unitPrice?: number | undefined;
   currency?: string | undefined;
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  transportationCode?: string | undefined;
+  TransportationCode?: string | undefined;
   project?: string | undefined;
+  taxCode?: string | undefined;
   taxRate?: number | undefined;
-  lineTotal?: number | undefined;
-  accountCode?: string | undefined;
-  accountName?: string | undefined;
-  discountPercent?: number | undefined;
   vatGroup?: string | undefined;
-  itemCode?: string | undefined;
-  itemName?: string | undefined;
-
+  lineTotal?: string | undefined;
+  requiredDate?: string | undefined;
+  shipDate?: string | undefined;
+  accountCode?: number | undefined;
+  accountName?: string | undefined;
+  blanketAgreementNumber?: string | undefined;
+  discountPercent?: number;
+  requriedDate?: string;
+  itemName?: string;
+  saleVatGroup?: string;
   constructor(json: any) {
     super();
-    this.itemNo = json["ItemCode"];
+    this.saleVatGroup = json["VatGroup"];
     this.itemCode = json["ItemCode"];
-    this.itemName = json["ItemName"];
     this.itemDescription = json["ItemDescription"];
-    this.itemGroup = json["ItemGroup"];
     this.quantity = json["Quantity"];
-    this.unitPrice = json["Price"];
-    this.currency = json["Currency"];
+    this.unitPrice = json["UnitPrice"];
+    this.currency = json["PriceCurrency"];
     this.lineDiscount = json["LineDiscount"];
     this.uomEntry = json["UoMEntry"];
     this.uomCode = json["UoMCode"];
-    this.taxRate = json["Rate"];
-    this.lineTotal = json["LineTotal"];
-    this.accountCode = json["AccountCode"];
-    this.uomCode = json["UoMCode"];
-    this.accountName = json["AccountName"];
-    this.discountPercent = json["DiscountPercent"];
+    this.project = json["Project"];
     this.vatGroup = json["VatGroup"];
+    this.requriedDate = json["RequriedDate"];
+    this.discountPercent = json["DiscountPercent"];
+    this.shipDate = json["ShipDate"];
+    this.accountCode = json["AccountCode"];
+    this.accountName = json["AccountName"];
+    this.lineTotal = json["LineTotal"];
+    this.itemName = json["ItemDescription"];
+    this.blanketAgreementNumber = json["BlanketAgreementNumber"];
   }
-
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
   }
 
-  public static toCreate(json: any, type: string) {
-    let body = {
-      ItemCode: json["ItemCode"],
-      ItemDescription: json["ItemDescription"],
-      UnitPrice: json["UnitPrice"],
-      ItemGroup: json["ItemGroup"],
-      DiscountPercent: json["DiscountPercent"],
+  public static toCreate(json: any, type: any) {
+    let line = {
+      Quantity: json["quantity"],
+      ItemCode: json["itemCode"],
+      ItemDescription: json["itemDescription"],
+      ItemName: json["itemName"],
+      UnitPrice: json["unitPrice"],
       LineDiscount: 0.0,
-      DocEntry: json["UoMGroupEntry"],
-      UoMCode: json["UoMCode"],
+      DocEntry: json["uomGroupEntry"],
+      UoMCode: json["uomCode"],
       TransportationCode: 1,
       Project: null,
       TaxCode: null,
       TAXRate: null,
-      VatGroup: json["VatGroup"],
-      LineTotal: json["LineTotal"],
-      AccountCode: json["AccountCode"],
-      AccountName: json["AccountName"],
+      VatGroup: json["vatGroup"],
+      LineTotal: json["lineTotal"],
+      RequiredDate: json["requiredDate"],
+      ShipDate: json["shipDate"],
+      AccountCode: json["accountCode"],
+      AccountName: json["accountName"],
+      BlanketAgreementNumber: json["blanketAgreementNumber"],
+      DiscountPercent: json["discountPercent"],
     };
 
     if (type === "S") {
-      delete body.ItemCode;
-      // delete body.ItemDescription;
-      delete body.ItemGroup;
-      delete body.UnitPrice;
-      delete body.DiscountPercent;
-      delete body.UnitPrice;
+      delete line.ItemCode;
+      delete line.UnitPrice;
     }
-    return body;
+
+    return line;
   }
 }

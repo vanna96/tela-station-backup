@@ -195,7 +195,7 @@ function Content(props: any) {
 
       //   },
       {
-        accessorKey: "itemNo",
+        accessorKey: "itemCode",
         header: "Item NO.", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
@@ -261,27 +261,35 @@ function Content(props: any) {
   const serviceColumns = React.useMemo(
     () => [
       {
-        accessorKey: "PlannedAmount",
-        header: "Planned Amount (LC)",
+        accessorKey: "itemDescription",
+        header: "Description",
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "LineDiscount",
-        header: "Line Discount",
+        accessorKey: "RequiredDate",
+        header: "Required Date",
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "OpenAmount",
-        header: "Open Amount (LC)",
+        accessorKey: "Vendor",
+        header: "Vendor",
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "ShppingType",
-        header: "Shipping Type",
+        accessorKey: "accountCode",
+        header: "G/L Account",
       },
       {
-        accessorKey: "Project",
-        header: "Project",
+        accessorKey: "G/L Account Name",
+        header: "G/L Account Name",
+      },
+      {
+        accessorKey: "vatGroup",
+        header: "Tax Code",
+      },
+      {
+        accessorKey: "lineTotal",
+        header: "Total (LC)",
       },
     ],
     [data]
@@ -318,7 +326,7 @@ function Content(props: any) {
             <span className="text-gray-500">Owner</span>
             <span className="col-span-2 font-medium">
               {/* : {data.documentowner} */}
-             : {new OwnerRepository().find(data.documentowner)?.name}
+             : {new OwnerRepository().find(data.owner)?.name}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
