@@ -32,7 +32,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
               Payment Term
             </label>
             <PaymentTerm
-              onChange={(e) => handlerChange('paymentTerm', e.target.value)}
+              onChange={(e) => handlerChange('paymentGroupCode', e.target.value)}
               value={data?.paymentGroupCode}
               name="PaymentGroupCode"
             />

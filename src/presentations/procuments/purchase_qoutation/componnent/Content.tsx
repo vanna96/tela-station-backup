@@ -370,19 +370,9 @@ console.log(data);
             />
           </div>
           <div className="w-[48%]">
-            {/* <label htmlFor="Code" className="text-gray-500 text-[14px]">Owner</label>
-            <MUISelect
-              items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-              onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
-              value={data?.contactPersonCode}
-              aliasvalue="id"
-              aliaslabel="name"
-              name="ContactPersonCode"
-            /> */}
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Owner</label>
-
             <Owner
-              onChange={(e) => handlerChange('owner', e.target.value)}
+              onChange={(e) => handlerChange('documentsOwner', e.target.value)}
               value={data?.documentsOwner}
               name="DocumentsOwner"
             />

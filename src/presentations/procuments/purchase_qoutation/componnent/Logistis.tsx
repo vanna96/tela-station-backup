@@ -55,7 +55,7 @@ export default function Logistic({ data, handlerChange }: ILogisticFormProps) {
             Shipping Type
           </label>
           <ShippingType
-            onChange={(e) => handlerChange('shippingType', e.target.value)}
+            onChange={(e) => handlerChange('transportationCode', e.target.value)}
             value={data?.transportationCode}
             name="TransportationCode"
           />
