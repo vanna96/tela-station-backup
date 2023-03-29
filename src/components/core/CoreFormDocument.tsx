@@ -80,6 +80,7 @@ export interface CoreFormDocumentState {
     isOpenRequesterEmployee: boolean,
     department: any,
     branch: any,
+    reqType: number,
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -132,7 +133,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             isOpenRequester: false,
             isOpenRequesterEmployee: false,
             department: null,
-            branch: null
+            branch: null,
+            reqType: 12,
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -153,7 +155,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
                 <DistributionRuleModal open={this.state.showDistribution} onClose={() => { }} inWhichNum={this.state.inWhichDimension} onOk={this.handlerConfirmDistribution} />
                 <RequesterEmployeeModal open={this.state.isOpenRequesterEmployee} onOk={this.handlerConfirmRequestEmployee} onClose={() => { }} />
-                <RequesterModal open={this.state.isOpenRequesterEmployee} onOk={this.handlerConfirmRequester} onClose={() => { }} />
+                <RequesterModal open={this.state.isOpenRequester} onOk={this.handlerConfirmRequester} onClose={() => { }} />
 
                 <ToastContainer
                     toastClassName={({ type }: any) => contextClass[type || "default"] +
@@ -322,6 +324,13 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             temps['docNum'] = document?.NextNumber;
         }
 
+        if (key === 'reqType') {
+            temps['department'] = null;
+            temps['branch'] = null;
+            temps['cardCode'] = null
+            temps['cardName'] = null
+        }
+
         this.setState(temps)
     }
 
@@ -357,6 +366,10 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         }
     }
 
+    protected handlerOpenRequester() {
+        this.setState({ ... this.state, isOpenRequester: true })
+    }
+
     protected handlerConfirmRequestEmployee(record: EmployeesInfo) {
         this.setState({
             ...this.state,
@@ -367,6 +380,11 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             department: record.department,
             email: record.email,
         });
+    }
+
+
+    protected handlerOpenRequesterEmployee() {
+        this.setState({ ... this.state, isOpenRequesterEmployee: true })
     }
 
     protected handlerConfirmRequester(record: Users) {
@@ -380,6 +398,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             email: record.email,
         });
     }
+
 
 
 }

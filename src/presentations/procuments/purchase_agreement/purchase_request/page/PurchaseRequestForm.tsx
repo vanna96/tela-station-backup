@@ -95,6 +95,7 @@ class PurchaseRequestForm extends CoreFormDocument {
       docDate: null,
       creationDate: null,
       docDueDate: null,
+
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
@@ -104,9 +105,10 @@ class PurchaseRequestForm extends CoreFormDocument {
 
   componentDidMount(): void {
     if (!this.props?.edit) {
-      setTimeout(() => this.setState({ ...this.state,
+      setTimeout(() => this.setState({
+        ...this.state,
         //  loading: false
-         }), 500);
+      }), 500);
     }
 
     if (this.props.edit) {
@@ -202,12 +204,17 @@ class PurchaseRequestForm extends CoreFormDocument {
           <HeadingForm
             data={this.state}
             handlerOpenRequester={() => {
-              this.handlerOpenRequester();
+              const { reqType }: any = this.state;
+              if (reqType == 12) {
+                this.handlerOpenRequester();
+              } else {
+                this.handlerOpenRequesterEmployee();
+              }
             }}
-            handlerOpenRequesterEmployee={() => {
-              this.handlerOpenRequesterEmployee();
+            handlerChange={(key, value) => {
+              this.handlerChange(key, value);
+            
             }}
-            handlerChange={(key, value) => this.handlerChange(key, value)}
           />
 
           <ContentForm
@@ -216,7 +223,7 @@ class PurchaseRequestForm extends CoreFormDocument {
             handlerRemoveItem={this.handlerRemoveItem}
             handlerChangeItem={this.handlerAddItem}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-            // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
+          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
 
           <AttachmentForm />
