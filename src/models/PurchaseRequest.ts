@@ -151,7 +151,9 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     this.userName = json["RequesterName"];
     this.department = json["RequesterDepartment"];
     this.branch = json["RequesterBranch"];
-    this.documentStatus = json["DocumentStatus"].replace("bost_","")?.charAt(0);
+    this.documentStatus = json["DocumentStatus"]
+      .replace("bost_", "")
+      ?.charAt(0);
     this.email = json["RequesterEmail"];
     this.reqType = json["ReqType"];
   }
@@ -303,10 +305,14 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
   accountName?: string | undefined;
   discountPercent?: number | undefined;
   vatGroup?: string | undefined;
+  itemCode?: string | undefined;
+  itemName?: string | undefined;
 
   constructor(json: any) {
     super();
     this.itemNo = json["ItemCode"];
+    this.itemCode = json["ItemCode"];
+    this.itemName = json["ItemName"];
     this.itemDescription = json["ItemDescription"];
     this.itemGroup = json["ItemGroup"];
     this.quantity = json["Quantity"];

@@ -27,7 +27,7 @@ const RequesterModal: FC<RequesterModalProps> = ({ open, onClose, onOk }) => {
     staleTime: Infinity,
   });
 
-console.log(data);
+// console.log(data);
 
 
   const departmentsQuery = useQuery({
@@ -46,7 +46,7 @@ console.log(data);
 
 // console.log(departmentsData)
 // console.log(branchesData)
-console.log(data)
+// console.log(data)
 
 
 // const usersWithNames = data?.map((user: any) => {
