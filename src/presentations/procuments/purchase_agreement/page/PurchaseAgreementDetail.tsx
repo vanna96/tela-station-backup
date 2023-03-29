@@ -23,6 +23,7 @@ import BusinessPartner from '../../../../models/BusinessParter';
 import OwnerRepository from '@/services/actions/ownerRepository';
 import PaymentTermTypeRepository from '../../../../services/actions/paymentTermTypeRepository';
 import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
+import { QueryClient } from 'react-query';
 
 
 class PurchaseAgreementDetail extends Component<any, any> {

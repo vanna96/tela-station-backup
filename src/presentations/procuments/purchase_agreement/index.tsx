@@ -7,7 +7,7 @@ import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { useQueryHook } from '../../../utilies/useQueryHook';
-import { UseQueryResult, useQuery } from "react-query";
+import { UseQueryResult, useQuery, useQueryClient } from "react-query";
 import PurchaseAgreementRepository from '../../../services/actions/purchaseAgreementRepository';
 
 
@@ -15,7 +15,7 @@ import PurchaseAgreementRepository from '../../../services/actions/purchaseAgree
 export default function PurchaseAgreementLists() {
     const route = useNavigate();
 
-    const { data, isLoading }: any = useQuery({ queryKey: ['pa'], queryFn: () => new PurchaseAgreementRepository().get() })
+    const { data, isLoading }: any = useQuery({ queryKey: ['pa'], queryFn: () => new PurchaseAgreementRepository().get() });
 
     const columns = React.useMemo(
         () => [

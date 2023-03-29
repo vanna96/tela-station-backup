@@ -11,6 +11,7 @@ import GLAccount from '@/models/GLAccount';
 import { CircularProgress } from '@mui/material';
 import { UpdateDataSuccess } from '../../../../utilies/ClientError';
 import PurchaseAgreement from '../../../../models/PurchaseAgreement';
+import { QueryClient, useMutation } from 'react-query';
 
 
 class PurchaseAgreementForm extends CoreFormDocument {
@@ -101,12 +102,15 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
         await new PurchaseAgreementRepository().post(this.state, this.props?.edit, id).then((res: any) => {
             const purchaseAgreement = new PurchaseAgreement(res?.data)
+
             this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.id), purchaseAgreement);
+
             this.dialog.current?.success("Create Successfully.");
         }).catch((e: any) => {
             if (e instanceof UpdateDataSuccess) {
                 this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.documentStatus === 'A' });
                 this.dialog.current?.success(e.message);
+                const query = this.props.query.query as QueryClient;
                 return;
             }
             this.dialog.current?.error(e.message);
