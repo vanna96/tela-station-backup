@@ -126,6 +126,7 @@ class PurchaseOrder extends CoreFormDocument {
             handlerChange={(key, value) => this.handlerChange(key, value)}
           />
           <ContentForm
+            edit
             data={this.state}
             handlerAddItem={() => this.handlerOpenItem()}
             handlerRemoveItem={this.handlerRemoveItem}

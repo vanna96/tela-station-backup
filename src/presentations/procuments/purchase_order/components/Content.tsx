@@ -23,6 +23,7 @@ export interface ContentFormProps {
   handlerChange: (key: string, value: any) => void;
   handlerOpenGLAccount?: () => void;
   data: any;
+  edit: boolean;
 }
 
 export default function ContentForm({
@@ -31,6 +32,7 @@ export default function ContentForm({
   handlerAddItem,
   handlerRemoveItem,
   handlerChange,
+  edit,
   handlerOpenGLAccount,
 }: ContentFormProps) {
   const [tableKey, setTableKey] = React.useState(Date.now());
@@ -275,6 +277,7 @@ export default function ContentForm({
               aliaslabel="name"
               aliasvalue="value"
               name="DocType"
+              disabled={edit}
               value={data.docType}
               onChange={(e) => handlerChange("docType", e.target.value)}
             />
