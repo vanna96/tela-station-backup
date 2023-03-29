@@ -346,8 +346,7 @@ export default function ContentForm({
         />
       </div>
       <div className="flex flex-col gap-3">
-        <div className="flex justify-between">
-          <div className="w-[48%] gap-3">
+          {/* <div className="w-[48%] gap-3">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Buyer
             </label>
@@ -364,8 +363,8 @@ export default function ContentForm({
               aliaslabel="name"
               name="ContactPersonCode"
             />
-          </div>
-          <div className="w-[48%]">
+          </div> */}
+          <div className="">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Owner
             </label>
@@ -375,7 +374,6 @@ export default function ContentForm({
               onChange={(e: any) => handlerChange("owner", e.target.value)}
             />
           </div>
-        </div>
         <div className="flex flex-col gap-1 text-sm">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Remarks

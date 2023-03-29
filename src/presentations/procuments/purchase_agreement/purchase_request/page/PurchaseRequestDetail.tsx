@@ -291,7 +291,7 @@ function Content(props: any) {
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
         columns={data?.docType === "I" ? itemColumn : serviceColumns}
-        data={data?.documentLine ?? []}
+        data={data?.items ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
         enableDensityToggle={false}
@@ -328,7 +328,7 @@ function Content(props: any) {
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Total Before Discount</span>
             <span className="col-span-2 font-medium">
-              : {Formular.findItemTotal(data?.documentLine) ?? ""}
+              : {Formular.findItemTotal(data?.items) ?? ""}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2">

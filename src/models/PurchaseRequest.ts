@@ -1,6 +1,7 @@
 import { dateFormat } from "../utilies";
 import Model from "./Model";
 import { MasterDocument, DocumentLine } from "./interface/index";
+import Department from "./Department";
 
 export interface PurchaseRequestProps {
   id: any;
@@ -28,7 +29,7 @@ export interface PurchaseRequestProps {
   serie: string;
   paymentMethod?: string;
   shippingType?: string | undefined;
-  documentLine: PurchaseRequestDocumentLineProps[];
+  items: PurchaseRequestDocumentLineProps[];
 }
 
 export interface PurchaseRequestDocumentLineProps {
@@ -106,39 +107,53 @@ export default class PurchaseRequest extends Model implements MasterDocument {
   serie: string;
   paymentMethod?: string;
   shippingType?: string | undefined;
-  documentLine: PurchaseRequestDocumentLine[];
+  items: PurchaseRequestDocumentLine[];
   DocTotalSys?: number;
   documentowner?: string;
   vatSumSys?: string;
   price?: number;
-
+  userCode?: string;
+  userName?: string;
+  department?: string;
+  branch?: string;
+  status?: string;
+  email?: string;
+  owner?: string;
 
   constructor(json: any) {
     super();
     this.id = json["DocNum"];
     this.requester = json["Requester"];
+    this.reqType = json["ReqType"];
     this.requesterName = json["RequesterName"];
     this.requesterEmail = json["RequesterEmail"];
     this.requesterDepartment = json["RequesterDepartment"];
     this.requesterBranch = json["RequesterBranch"];
     this.serie = json["Series"];
     this.docTotalSys = json["DocTotalSys"];
-    this.documentowner = json["DocumentsOwner"];
+    this.owner = json["DocumentsOwner"];
     this.documentStatus = json["DocumentStatus"];
     this.vatSumSys = json["VatSumSys"];
     this.price = json["Price"];
     this.docNum = json["DocNum"];
-    this.requriedDate = dateFormat(json["RequriedDate"]);
-    this.creationDate = dateFormat(json["CreationDate"]);
-    this.docDueDate = dateFormat(json["DocDueDate"]);
-    this.docDate = dateFormat(json["DocDate"]);
+    this.requriedDate = json["RequriedDate"];
+    this.creationDate = json["CreationDate"];
+    this.docDueDate = json["DocDueDate"];
+    this.docDate = json["DocDate"];
     this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
     this.comments = json["Comments"];
     // this.documentLine = [];
     // this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
-    this.documentLine = json["DocumentLines"]?.map(
+    this.items = json["DocumentLines"]?.map(
       (e: any) => new PurchaseRequestDocumentLine(e)
     );
+    this.userCode = json["Requester"];
+    this.userName = json["RequesterName"];
+    this.department = json["RequesterDepartment"];
+    this.branch = json["RequesterBranch"];
+    this.documentStatus = json["DocumentStatus"].replace("bost_","")?.charAt(0);
+    this.email = json["RequesterEmail"];
+    this.reqType = json["ReqType"];
   }
 
   toJson(update: boolean) {
@@ -203,7 +218,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       PaymentTerm: json["PaymentTerm"],
       PaymentMethod: json["PaymentMethod"],
       ShippingType: json["ShippingType"],
-      DocumentLines: json["DocumentLines"].map((e: any) =>
+      items: json["DocumentLines"].map((e: any) =>
         PurchaseRequestDocumentLine.toCreate(e, json["DocType"])
       ),
     };
@@ -211,11 +226,11 @@ export default class PurchaseRequest extends Model implements MasterDocument {
 
   public static toUpdate(json: any) {
     return {
-      requester: json["Requester"],
-      requesterName: json["RequesterName"],
-      requesterEmail: json["requesterEmail"],
-      requesterBranch: json["requesterBranch"],
-      requesterDepartment: json["requesterDepartment"],
+      Requester: json["userCode"],
+      RequesterName: json["userName"],
+      RequesterEmail: json["requesterEmail"],
+      RequesterBranch: json["requesterBranch"],
+      RequesterDepartment: json["requesterDepartment"],
       docDueDate: json["DocDueDate"],
       attachmentEntry: ["AttachmentEntry"],
       docCurrency: json["DocCurrency"],
@@ -265,7 +280,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       shippingType: json["ShippingType"],
       DocTotalSys: json["DocTotalSys"],
       docType: json["DocType"],
-      DocumentLines: [],
+      items: [],
     };
   }
 }
@@ -289,7 +304,6 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
   discountPercent?: number | undefined;
   vatGroup?: string | undefined;
 
-
   constructor(json: any) {
     super();
     this.itemNo = json["ItemCode"];
@@ -307,7 +321,7 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
     this.uomCode = json["UoMCode"];
     this.accountName = json["AccountName"];
     this.discountPercent = json["DiscountPercent"];
-    this.vatGroup = json["VatGroup"]
+    this.vatGroup = json["VatGroup"];
   }
 
   toJson(update: boolean) {
