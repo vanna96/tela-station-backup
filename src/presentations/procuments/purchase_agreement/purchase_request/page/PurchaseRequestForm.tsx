@@ -11,6 +11,8 @@ import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
 import { ToastOptions } from "react-toastify";
 import GLAccount from "../../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
+import Formular from "@/utilies/formular";
+import VatGroupRepository from "@/services/actions/VatGroupRepository";
 
 class PurchaseRequestForm extends CoreFormDocument {
   constructor(props: any) {
@@ -21,9 +23,9 @@ class PurchaseRequestForm extends CoreFormDocument {
       docType: "I",
       documentStatus: "O",
       requiredDate: null,
-      docDate: null,
-      creationDate: null,
-      docDueDate: null,
+      docDate: new Date().toISOString(),
+      creationDate: new Date().toISOString(),
+      docDueDate: new Date().toISOString(),
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
@@ -108,9 +110,18 @@ class PurchaseRequestForm extends CoreFormDocument {
       item[field] = value;
     }
 
+    if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
+      const total = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
+      item['lineTotal'] = total;
+    }
+
+    if (field === 'purchaseVatGroup')
+      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
-    this.setState({ ...this.state, items: items });
+
+    this.setState({ ...this.state, items: items, docTotal: Formular.findTotalBeforeDiscount(items) });
   }
 
   // async handlerSubmit(event: any) {
@@ -192,7 +203,7 @@ class PurchaseRequestForm extends CoreFormDocument {
             handlerRemoveItem={this.handlerRemoveItem}
             handlerChangeItem={this.handlerAddItem}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-            // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
+          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
 
           <AttachmentForm />

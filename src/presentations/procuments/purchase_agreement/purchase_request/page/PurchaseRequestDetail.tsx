@@ -35,6 +35,7 @@ import DocumentHeaderComponent from '../../../../../components/DocumenHeaderComp
 import OwnerRepository from '@/services/actions/ownerRepository';
 import DepartmentRepository from '@/services/actions/departmentRepository';
 import { dateFormat } from '../../../../../utilies/index';
+import BranchRepository from '../../../../../services/actions/branchRepository';
 
 class PurchaseRequestDetail extends Component<any, any> {
   constructor(props: any) {
@@ -50,6 +51,7 @@ class PurchaseRequestDetail extends Component<any, any> {
 
   componentDidMount(): void {
     this.initData();
+
   }
 
   initData() {
@@ -78,7 +80,7 @@ class PurchaseRequestDetail extends Component<any, any> {
         <Modal
           open={this.state.isError}
           title="Oop"
-          onClose={() => {}}
+          onClose={() => { }}
           onOk={() => console.log(this.props.history.goBack())}
         >
           <span>{this.state?.message}</span>
@@ -115,7 +117,7 @@ class PurchaseRequestDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Branch</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.requesterBranch}
+                    : {new BranchRepository().find(this.state.requesterBranch)?.Name}
                     {/* : {new Branchrepository().find(this.state.requesterBranch)?.name} */}
                   </span>
                 </div>
@@ -330,12 +332,12 @@ function Content(props: any) {
             <span className="text-gray-500">Owner</span>
             <span className="col-span-2 font-medium">
               {/* : {data.documentowner} */}
-             : {(new OwnerRepository().find(data.owner)?.name) || "N/A"}
+              : {(new OwnerRepository().find(data.owner)?.name) || "N/A"}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Remark</span>
-            <span className="col-span-2 font-medium">: {data?.comments ?? "N/A" }</span>
+            <span className="col-span-2 font-medium">: {data?.comments ?? "N/A"}</span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Total Before Discount</span>

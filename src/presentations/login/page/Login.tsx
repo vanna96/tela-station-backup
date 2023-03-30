@@ -16,6 +16,7 @@ import ShippingTypeRepository from '../../../services/actions/shippingTypeReposi
 import SalePersonRepository from '@/services/actions/salePersonRepository';
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
+import BranchRepository from '../../../services/actions/branchRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -54,6 +55,7 @@ export default function Login() {
       await new SalePersonRepository().get(),
       await new GLAccountRepository().get(),
       await new VatGroupRepository().get(),
+      await new BranchRepository().get(),
     ]);
   }
 

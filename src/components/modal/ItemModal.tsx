@@ -8,6 +8,8 @@ import { useMemo } from 'react';
 import Item from '@/models/Item';
 import ItemGroup from '@/models/ItemGroup';
 import UnitOfMeasurement from '@/models/UnitOfMeasurement';
+import VatGroupRepository from '../../services/actions/VatGroupRepository';
+import VatGroup from '@/models/VatGroup';
 
 
 type ItemType = 'purchase' | 'sale' | 'inventory';
@@ -90,6 +92,21 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
         let selectItems = keys.map((e: any) => items.find((ele: any) => ele?.ItemCode === e));
 
         selectItems = selectItems.map((e: any) => {
+            let vatRate: any = 0;
+            switch (type) {
+                case 'purchase':
+                    vatRate = (new VatGroupRepository().find(e?.PurchaseVATGroup) as VatGroup).vatRate;
+                    break;
+                case 'sale':
+                    vatRate = (new VatGroupRepository().find(e?.SalesVATGroup) as VatGroup).vatRate;
+                    break;
+                // case 'inventory':
+                //     vatRate = (new VatGroupRepository().find(e?.SalesVATGroup) as VatGroup).vatRate;
+                //     break;
+                default:
+                    vatRate = 0;
+                    break;
+            }
 
             return ({
                 itemCode: e?.ItemCode,
@@ -100,6 +117,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 saleVatGroup: e?.SalesVATGroup,
                 purchaseVatGroup: e?.PurchaseVATGroup,
                 vatGroup: e?.PurchaseVATGroup,
+                vatRate: vatRate,
                 quantity: 0,
                 unitPrice: 0,
                 discountPercent: 0,

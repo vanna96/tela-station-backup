@@ -93,17 +93,17 @@ export default function HeadingForm({
                 </label>
               </div>
             </div> */}
-              <div className="flex flex-col gap-1 text-sm">
-                <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                  Branch
-                </label>
+            <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Branch
+              </label>
 
-                <BranchSelect
-                  name="Branch"
-                  value={data.branch}
-                  onChange={(e) => handlerChange("branch", e.target.value)}
-                />
-              </div>
+              <BranchSelect
+                name="Branch"
+                value={data.branch}
+                onChange={(e) => handlerChange("branch", e.target.value)}
+              />
+            </div>
             <MUITextField
               label="Email"
               value={data?.email}
@@ -226,8 +226,8 @@ export default function HeadingForm({
               </label>
               <div className="">
                 <MUIDatePicker
-                  value={data.requriedDate}
-                  onChange={(e: any) => handlerChange("requriedDate", e)}
+                  value={data.requiredDate}
+                  onChange={(e: any) => handlerChange("requiredDate", e)}
                 />
               </div>
             </div>
