@@ -21,6 +21,7 @@ import SalePerson from "@/components/selectbox/SalePerson";
 import VatGroup from "@/components/selectbox/VatGroup";
 import BuyerSelect from "@/components/selectbox/buyer";
 import Item from './../../../../models/Item';
+import { documentStatusList } from '@/constants';
 
 interface ContentFormProps {
   handlerAddItem: () => void,
@@ -246,7 +247,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         },
       },
       {
-        accessorKey: "accountName",
+        accessorKey: "accountNameD",
         header: "  G/L Account Name", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return (
@@ -254,7 +255,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
               name="AccountName"
               value={cell.getValue()}
               onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "accountName")
+                handlerChangeInput(event, cell?.row?.original, "accountNameD")
               } />
 
           );
@@ -410,44 +411,82 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-3">
+      {data?.documentStatus === "bost_Open" ? 
+        <div className="flex flex-col gap-3">
 
-        <div className="w-[100%] gap-3">
-          <MUITextField label="Total Before Discount:" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)}
-/>
-        </div>
-        <div className="flex justify-between">
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Discount:" value={""} />
+          <div className="w-[100%] gap-3">
+            <MUITextField label="Total Before Discount:" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
           </div>
-          <div className="w-[48%] gap-3 mt-5">
-            <MUITextField label="" value={""} />
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Discount:" value={""} />
+            </div>
+            <div className="w-[48%] gap-3 mt-5">
+              <MUITextField label="" value={""} />
+            </div>
           </div>
-        </div>
-        <div className="flex justify-between">
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Fright:" value={""} />
-          </div>
-
-          <div className="w-[48%] gap-3 mt-5">
-            <div className='flex items-center gap-1 text-sm'>
-
-              <Checkbox name='Renewal' checked={data.renewal} onChange={(e) => handlerChange('renewal', !data.renewal)} />
-              <label htmlFor='Renewal' className='text-gray-500 text-[14px]'>Rounding</label>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Fright:" value={""} />
             </div>
 
-          </div>
-        </div>
-        <div className="flex justify-between">
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Tax:" startAdornment={'USD'} value={Formular.taxItems(data.items ?? []).toFixed(2)} />
-          </div>
+            <div className="w-[48%] gap-3 mt-5">
+              <div className='flex items-center gap-1 text-sm'>
 
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due::" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
+                <Checkbox name='Renewal' checked={data.renewal} onChange={(e) => handlerChange('renewal', !data.renewal)} />
+                <label htmlFor='Renewal' className='text-gray-500 text-[14px]'>Rounding</label>
+              </div>
+
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Tax:" startAdornment={'USD'} value={Formular.taxItems(data.items ?? []).toFixed(2)} />
+            </div>
+
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Total Payment Due:" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
+            </div>
+          </div>
+        </div> :
+        <div className="flex flex-col gap-3">
+
+          <div className="w-[100%] gap-3">
+            <MUITextField label="Total Before Discount:" disabled={edit} startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Discount:" disabled={edit} value={""} />
+            </div>
+            <div className="w-[48%] gap-3 mt-5">
+              <MUITextField label="" disabled={edit} value={""} />
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Fright:" disabled={edit} value={""} />
+            </div>
+
+            <div className="w-[48%] gap-3 mt-5">
+              <div className='flex items-center gap-1 text-sm'>
+
+                <Checkbox name='Renewal' disabled={edit} checked={data.renewal} onChange={(e) => handlerChange('renewal', !data.renewal)} />
+                <label htmlFor='Renewal' className='text-gray-500 text-[14px]'>Rounding</label>
+              </div>
+
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Tax:" disabled={edit} startAdornment={'USD'} value={Formular.taxItems(data.items ?? []).toFixed(2)} />
+            </div>
+
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Total Payment Due:" disabled={edit} startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
+            </div>
           </div>
         </div>
-      </div>
+    }
     </FormCard>
   );
 }

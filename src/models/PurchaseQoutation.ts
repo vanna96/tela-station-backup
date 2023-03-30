@@ -3,6 +3,7 @@ import Model from './Model';
 import { MasterDocument, DocumentLine } from './interface/index';
 import moment from 'moment';
 import { ContactEmployee } from './BusinessParter';
+import GLAccountRepository from '@/services/actions/GLAccountRepository';
 
 export interface PurchaseQoutationProps {
   id: any;
@@ -50,7 +51,8 @@ export interface PurchaseQoutationProps {
   numAtCard?: string;
   vatSum?: number;
   docTotalSys?: number;
-  salesPersonCode?: number
+  salesPersonCode?: number;
+  accountNameD?: string;
 }
 
 export interface PurchaseQoutationDocumentLineProps {
@@ -125,7 +127,8 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   contactPersonCode?: number;
   numAtCard?: string;
   vatSum?: number;
-  docTotalSys?: number
+  docTotalSys?: number;
+  accountNameD?: string;
   constructor(json: any) {
     super();
     this.salesPersonCode = json['SalesPersonCode']
@@ -170,7 +173,8 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     this.discountPercent = json['DiscountPercent'];
     this.itemName = json['ItemDescription'];
     this.uomCode = json['UoMCode'];
-    this.transportationCode = json['TransportationCode']
+    this.transportationCode = json['TransportationCode'];
+    this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
 
   }
   toJson(update: boolean) {
@@ -295,7 +299,8 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
   discountPercent?: number;
   requriedDate?: string;
   itemName?: string;
-  saleVatGroup?: string
+  saleVatGroup?: string;
+ 
   constructor(json: any) {
     super();
     this.saleVatGroup = json['VatGroup']
@@ -316,7 +321,8 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
     this.accountName = json['AccountName'];
     this.lineTotal = json['LineTotal'];
     this.itemName = json['ItemDescription'];
-    this.blanketAgreementNumber = json['BlanketAgreementNumber']
+    this.blanketAgreementNumber = json['BlanketAgreementNumber'];
+ 
   }
   toJson(update: boolean) {
     throw new Error('Method not implemented.');

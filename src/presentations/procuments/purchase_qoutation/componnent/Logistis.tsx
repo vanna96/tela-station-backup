@@ -10,46 +10,88 @@ import ShippingType from '@/components/selectbox/ShippingType';
 export interface ILogisticFormProps {
   data: any,
   handlerChange: (key: string, value: any) => void
+  edit: boolean
 }
 
 
 
-export default function Logistic({ data, handlerChange }: ILogisticFormProps) {
+export default function Logistic({ data, handlerChange,edit }: ILogisticFormProps) {
   return (
     <FormCard title='Logistic'>
       <div className='flex flex-col gap-3 mt-2'>
-        <div className='grid grid-col-1 '>
-          <label htmlFor="Code" className="text-gray-500 text-[14px]">
-            Ship To
-          </label>
-          <div className="">
-            <TextField
-              size="small"
-              defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
-              multiline
-              rows={4}
-              fullWidth
-              name="Description"
-              className="w-full "
-            />
-          </div>
-        </div>
-        <div className='grid grid-col-1'>
-          <label htmlFor="Code" className="text-gray-500 text-[14px]">
-            Pay To
-          </label>
-          <div className="">
-            <TextField
-              size="small"
-              multiline
-              rows={4}
-              fullWidth
-              name="Description"
-              className="w-full "
-              defaultValue={data?.address}
-            />
-          </div>
-        </div>
+        {data.documentStatus === "bost_Open" ?
+          <>
+            <div className='grid grid-col-1 '>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Ship To
+              </label>
+              <div className="">
+                <TextField
+                  size="small"
+                  defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
+                  multiline
+                  rows={4}
+                  fullWidth
+                  name="Description"
+                  className="w-full "
+                />
+              </div>
+            </div>
+            <div className='grid grid-col-1'>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Pay To
+              </label>
+              <div className="">
+                <TextField
+                  size="small"
+                  multiline
+                  rows={4}
+                  fullWidth
+                  name="Description"
+                  className="w-full "
+                  defaultValue={data?.address}
+                />
+              </div>
+            </div>
+          </> :
+          <>
+            <div className='grid grid-col-1 '>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Ship To
+              </label>
+              <div className="">
+                <TextField
+                  size="small"
+                  defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
+                  multiline
+                  rows={4}
+                  fullWidth
+                  name="Description"
+                  className="w-full "
+                  disabled={edit}
+                />
+              </div>
+            </div>
+            <div className='grid grid-col-1'>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Pay To
+              </label>
+              <div className="">
+                <TextField
+                  size="small"
+                  multiline
+                  rows={4}
+                  fullWidth
+                  name="Description"
+                  className="w-full "
+                  defaultValue={data?.address}
+                  disabled={edit}
+                />
+              </div>
+            </div>
+          </>
+        } 
+    
         <div className='grid grid-col-1'>
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Shipping Type

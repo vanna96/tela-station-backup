@@ -147,8 +147,10 @@ class PurchaseQoutationForm extends CoreFormDocument {
         <Logistic
           data={this.state}
           handlerChange={(key, value) => this.handlerChange(key, value)}
+          edit={this.props.edit}
         />
         <Accounting
+          edit={this.props.edit}
           data={this.state}
           handlerChange={(key, value) => this.handlerChange(key, value)}
           handlerOpenProject={() => this.handlerOpenProject()}
