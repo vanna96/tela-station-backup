@@ -27,6 +27,7 @@ export default class PaymentTermTypeRepository extends Repository<PaymentTermTyp
 
     find<PaymentTermType>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
+        if (!data) return {};
         const paymentTermTypes: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
         return paymentTermTypes.find((e: any) => e?.GroupNumber == code);
     }

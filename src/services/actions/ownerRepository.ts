@@ -27,9 +27,8 @@ export default class OwnerRepository extends Repository<Owner> {
 
     find<Owner>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
+        if (!data) return {};
         const owners: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-
-   
         return new Owner(owners.find((e: any) => e?.EmployeeID === code) ?? {});
     }
 

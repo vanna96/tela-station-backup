@@ -48,9 +48,17 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 size: 40,
                 enableResizing: false,
                 Cell: ({ cell }: any) => {
-                    return <div role="button" className="flex justify-center items-center">
-                        <button type="button" className="border border-gray-200 p-1 rounded-sm" onClick={() => handlerRemoveRow(cell.row.original)}><AiOutlineDelete /></button>
-                    </div>;
+                    return (
+                        <div role="button" className="flex justify-center items-center">
+                            <button
+                                type="button"
+                                className="border border-gray-200 p-1 rounded-sm"
+                                onClick={() => handlerRemoveRow(cell.row.original)}
+                            >
+                                <AiOutlineDelete />
+                            </button>
+                        </div>
+                    );
                 },
             },
             {
@@ -90,6 +98,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     return <MUITextField
                         value={cell.getValue()}
                         type="number"
+                        name="Quantity"
                         error={(cell.getValue() as number) <= 0}
                         disabled={data?.isApproved}
                         onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'quantity')}
@@ -103,6 +112,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     return <MUITextField
                         startAdornment={'USD'}
                         type="number"
+                        name="UnitPrice"
                         disabled={data?.isApproved}
                         error={(cell.getValue() as number) <= 0}
                         value={cell.getValue()}
@@ -120,6 +130,13 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                         value={Formular.findToTal(cell.row.original.quantity, cell.row.original.unitPrice)}
                     />;
                 },
+            },
+            {
+                accessorKey: "UoMCode",
+                header: "UoM Code",
+                Cell: ({ cell }: any) => (
+                    <MUITextField defaultValue={cell.getValue()} />
+                ),
             },
         ],
         []
@@ -203,7 +220,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     key={tableKey}
                     // columns={itemColumns}
                     columns={data?.agreementMethod === 'M' ? serviceColumns : itemColumns}
-                    data={data.items ?? []}
+                    data={data?.items ?? []}
                     enableStickyHeader={true}
                     enableColumnActions={false}
                     enableColumnFilters={false}

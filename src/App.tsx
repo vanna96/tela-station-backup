@@ -1,5 +1,5 @@
 
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider, useQueryClient } from 'react-query'
 import { CookiesProvider } from 'react-cookie';
 import Router from './routes'
 

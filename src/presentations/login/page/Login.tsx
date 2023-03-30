@@ -12,6 +12,10 @@ import DepartmentRepository from '@/services/actions/departmentRepository';
 import PaymentMethodRepository from '../../../services/actions/paymentMethodRepository';
 import PaymentTermTypeRepository from '../../../services/actions/paymentTermTypeRepository';
 import OwnerRepository from '@/services/actions/ownerRepository';
+import ShippingTypeRepository from '../../../services/actions/shippingTypeRepository';
+import SalePersonRepository from '@/services/actions/salePersonRepository';
+import GLAccountRepository from '@/services/actions/GLAccountRepository';
+import VatGroupRepository from '@/services/actions/VatGroupRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -46,13 +50,18 @@ export default function Login() {
       await new PaymentMethodRepository().get(),
       await new PaymentTermTypeRepository().get(),
       await new OwnerRepository().get(),
+      await new ShippingTypeRepository().get(),
+      await new SalePersonRepository().get(),
+      await new GLAccountRepository().get(),
+      await new VatGroupRepository().get(),
     ]);
   }
 
   return (
     <div className='w-full h-full flex justify-center items-center'>
       <div className='w-[28rem] flex flex-col gap-5 p-10 rounded-xl shadow-lg bg-white'>
-        <h2 className='font-bold text-2xl text-center'>LOGIN</h2>
+        <h2 className=
+          'font-bold text-2xl text-center'>LOGIN</h2>
         <div className='my-2'>
           {message && <Alert severity='error' onClose={() => setMessage("")}>{message}</Alert>}
         </div>

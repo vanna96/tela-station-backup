@@ -99,6 +99,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 itemGroup: e?.ItemsGroupCode,
                 saleVatGroup: e?.SalesVATGroup,
                 purchaseVatGroup: e?.PurchaseVATGroup,
+                vatGroup: e?.PurchaseVATGroup,
                 quantity: 0,
                 unitPrice: 0,
                 discountPercent: 0,

@@ -19,10 +19,11 @@ interface ModalProps {
     disableFooter?: boolean,
     titleClass?: string,
     pannelClass?: string;
-    disableShadow?: boolean
+    disableShadow?: boolean,
+    renderTitle?: JSX.Element,
 }
 
-const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false, onOk, titleClass, pannelClass, disableShadow }) => {
+const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false, onOk, titleClass, pannelClass, disableShadow, renderTitle }) => {
     return (
         <Transition appear show={open} as={Fragment}>
             <Dialog as="div" className="relative z-[100] " onClose={onClose}>
@@ -82,4 +83,3 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
 }
 
 export default Modal;
-

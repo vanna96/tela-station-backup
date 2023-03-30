@@ -27,6 +27,8 @@ export default class ShippingTypeRepository extends Repository<ShippingType> {
 
     find<ShippingType>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
+        if (!data) return {};
+     
         const shippingTypes: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
         return shippingTypes.find((e: any) => e?.Code == code);
     }

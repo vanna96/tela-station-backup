@@ -4,6 +4,7 @@ import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
 import InitializeData from '@/services/actions';
 import GLAccount from '../../models/GLAccount';
+import GLAccountRepository from '@/services/actions/GLAccountRepository';
 
 
 interface GLAccountProps {
@@ -15,8 +16,8 @@ interface GLAccountProps {
 
 const GLAccountModal: FC<GLAccountProps> = ({ open, onClose, onOk }) => {
   const { data, isLoading }: any = useQuery({
-    queryKey: ["acciunts"],
-    queryFn: () => InitializeData.listOfAccounts(),
+    queryKey: ["accounts"],
+    queryFn: () => new GLAccountRepository().get(),
     staleTime: Infinity,
   });
 
@@ -24,9 +25,6 @@ const GLAccountModal: FC<GLAccountProps> = ({ open, onClose, onOk }) => {
     pageIndex: 0,
     pageSize: 8,
   });
-
-  const handlerConfirm = () => {
-  }
 
   const [rowSelection, setRowSelection] = React.useState({});
   const columns = React.useMemo(
@@ -99,7 +97,6 @@ const GLAccountModal: FC<GLAccountProps> = ({ open, onClose, onOk }) => {
 }
 
 export default GLAccountModal;
-
 
 
 

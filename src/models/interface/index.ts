@@ -27,5 +27,8 @@ export interface DocumentLine {
     project?: string;
     taxCode?: string;
     taxRate?: number;
-    
+    discountPercent?: number;
+    vatGroup?: string;
+    accountName?: string;
+    accountCode?: number;
 }

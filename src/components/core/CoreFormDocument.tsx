@@ -16,6 +16,11 @@ import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify
 import 'react-toastify/dist/ReactToastify.css';
 import DistributionRuleModal from '../modal/DistributionRuleModal';
 import { VendorModalType } from '../modal/VendorModal';
+import FormMessageModal from '../modal/FormMessageModal';
+import RequesterEmployeeModal from '../modal/RequesterEmployeeModal';
+import EmployeesInfo from '@/models/EmployeesInfo';
+import Users from '../../models/User';
+import RequesterModal from '../modal/RequesterModal';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -37,8 +42,8 @@ export interface CoreFormDocumentState {
     isOpenProject: boolean,
     isLoadingSerie: boolean,
     renewal: boolean,
-    cardCode?: string | undefined | null,
-    cardName?: string | undefined | null,
+    cardCode?: any,
+    cardName?: any,
     contactPersonCode?: number | undefined | null,
     phone?: string | undefined | null,
     email?: string | undefined | null,
@@ -71,9 +76,21 @@ export interface CoreFormDocumentState {
     vendorType: VendorModalType,
     loading: boolean,
     isApproved: boolean,
+    isOpenRequester: boolean,
+    isOpenRequesterEmployee: boolean,
+    department: any,
+    branch: any,
+    reqType: number,
+    docTotal: number,
+    docDiscountPercent: number | any,
+    docDiscountPrice: number | any,
+    docTaxTotal: number | any,
+    rounded: boolean
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
+
+    dialog = React.createRef<FormMessageModal>();
 
     protected constructor(props: any) {
         super(props);
@@ -118,12 +135,23 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             vendorType: 'customer',
             loading: true,
             isApproved: false,
+            isOpenRequester: false,
+            isOpenRequesterEmployee: false,
+            department: null,
+            branch: null,
+            reqType: 12,
+            docTaxTotal: 0,
+            docTotal: 0,
+            docDiscountPercent: 0,
+            docDiscountPrice: 0,
+            rounded: false
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
-        this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
         this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
         this.handlerConfirmDistribution = this.handlerConfirmDistribution.bind(this)
+        this.handlerConfirmRequestEmployee = this.handlerConfirmRequestEmployee.bind(this)
+        this.handlerConfirmRequester = this.handlerConfirmRequester.bind(this)
     }
 
     abstract FormRender(): JSX.Element;
@@ -136,6 +164,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type={this.state.vendorType} />
                 <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
                 <DistributionRuleModal open={this.state.showDistribution} onClose={() => { }} inWhichNum={this.state.inWhichDimension} onOk={this.handlerConfirmDistribution} />
+                <RequesterEmployeeModal open={this.state.isOpenRequesterEmployee} onOk={this.handlerConfirmRequestEmployee} onClose={() => { }} />
+                <RequesterModal open={this.state.isOpenRequester} onOk={this.handlerConfirmRequester} onClose={() => { }} />
 
                 <ToastContainer
                     toastClassName={({ type }: any) => contextClass[type || "default"] +
@@ -143,9 +173,11 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                     }
                     bodyClassName={() => "text-sm font-white font-med block p-3"}
                 />
-                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => { }} onOk={() => this.handlerCloseDialogMessage()} widthClass='w-[30rem]' >
+                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => { }} onOk={() => { }} widthClass='w-[30rem]' >
                     <span className='text-sm'>{this.state.message}</span>
                 </Modal>
+
+                <FormMessageModal ref={this.dialog} />
 
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -208,7 +240,10 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     }
 
     protected handlerConfirmItem(data: any[]) {
-        this.setState({ ...this.state, isOpenItem: false, items: [...data] })
+        let oldItems = [...this.state.items ?? []];
+
+
+        this.setState({ ...this.state, isOpenItem: false, items: [...oldItems, ...data] })
     }
 
     private handlerCloseItem() {
@@ -289,7 +324,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let temps: any = { ...this.state };
         temps[key] = value;
 
-        if (key === 'agreementMethod') {
+        if (key === 'agreementMethod' || key === 'docType') {
             temps['items'] = [{}];
         }
 
@@ -297,6 +332,13 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             const document = this.state.series.find((e: any) => e.Series === value);
             console.log(document?.NextNumber)
             temps['docNum'] = document?.NextNumber;
+        }
+
+        if (key === 'reqType') {
+            temps['department'] = null;
+            temps['branch'] = null;
+            temps['cardCode'] = null
+            temps['cardName'] = null
         }
 
         this.setState(temps)
@@ -323,12 +365,50 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         })
     }
 
-    protected handlerCloseDialogMessage() {
-        // this.props.history.goBack();
+    protected handlerCloseDialogMessage(cb?: Function) {
         this.setState({
             ...this.state,
             showDialogMessage: false,
-        })
+        });
+
+        if (cb) {
+            cb();
+        }
     }
+
+    protected handlerOpenRequester() {
+        this.setState({ ... this.state, isOpenRequester: true })
+    }
+
+    protected handlerConfirmRequestEmployee(record: EmployeesInfo) {
+        this.setState({
+            ...this.state,
+            isOpenRequesterEmployee: false,
+            cardCode: record.id,
+            cardName: record.name,
+            branch: record.branch,
+            department: record.department,
+            email: record.email,
+        });
+    }
+
+
+    protected handlerOpenRequesterEmployee() {
+        this.setState({ ... this.state, isOpenRequesterEmployee: true })
+    }
+
+    protected handlerConfirmRequester(record: Users) {
+        this.setState({
+            ...this.state,
+            isOpenRequester: false,
+            cardCode: record.code,
+            cardName: record.name,
+            branch: record.branch,
+            department: record.department,
+            email: record.email,
+        });
+    }
+
+
 
 }

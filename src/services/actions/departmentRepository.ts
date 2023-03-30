@@ -27,6 +27,7 @@ export default class DepartmentRepository extends Repository<Department> {
 
     find<Department>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
+        if (!data) return {};
         const departments: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
         return departments.find((e: any) => e?.Code == code);
     }
