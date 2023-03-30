@@ -104,6 +104,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           return <MUITextField
             value={cell.getValue()}
             type="number"
+            startAdornment={'%'}
             name="DiscountPercent"
             disabled={data?.DocumentDtatus}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'discountPercent')}
@@ -151,7 +152,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         header: "Total",
         Cell: ({ cell }: any) => {
           return <MUITextField
-            startAdornment={'%'}
+      
             disabled={data?.isApproved}
             value={Formular.findToTal(cell.row.original.quantity, cell.row.original.unitPrice)}
           />;
