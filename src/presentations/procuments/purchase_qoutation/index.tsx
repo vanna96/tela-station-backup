@@ -32,8 +32,8 @@ export default function PurchaseQoutationLists() {
         enableClickToCopy: true,
       },
       {
-        accessorKey: "journalMemo",
-        header: "JurnalMemo",
+        accessorKey: "cardName",
+        header: "Card Name",
         // size: 200, //increase the width of this column
       },
       {

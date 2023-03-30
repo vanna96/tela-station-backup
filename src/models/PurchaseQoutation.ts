@@ -2,6 +2,7 @@ import {  } from '../utilies';
 import Model from './Model';
 import { MasterDocument, DocumentLine } from './interface/index';
 import moment from 'moment';
+import { ContactEmployee } from './BusinessParter';
 
 export interface PurchaseQoutationProps {
   id: any;
@@ -44,7 +45,9 @@ export interface PurchaseQoutationProps {
   discountPercent?: string;
   itemName?: string;
   uomCode?: string
-  transportationCode?:string
+  transportationCode?: string;
+  contactPersonList?: ContactEmployee[];
+  numAtCard?: string
 }
 
 export interface PurchaseQoutationDocumentLineProps {
@@ -72,12 +75,11 @@ export interface PurchaseQoutationDocumentLineProps {
   saleVatGroup?: string
 
 }
-export default class PurchaseQouatation extends Model implements MasterDocument {
+export default class PurchaseQoutation extends Model implements MasterDocument {
   id: any;
   docNum: any;
   cardCode?: string;
   cardName?: string;
-  constactPersonCode?: number;
   docDate?: string;
   docDueDate?: string;
   requriedDate?: string
@@ -98,6 +100,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   comments: string;
   docType: string;
   address: string;
+  contactPersonList?: ContactEmployee[];
   address2: string;
   extraMonth: string;
   extraDays: string;
@@ -114,9 +117,12 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   itemName?: string;
   uomCode?: string;
   transportationCode?: string;
+  contactPersonCode?: number;
+  numAtCard?:string
   constructor(json: any) {
     super();
     this.id = json['DocEntry'];
+    this.numAtCard = json['NumAtCard']
     this.documentStatus = json['DocumentStatus'];
     this.federalTaxID = json['FederalTaxID']
     this.extraMonth = json['ExtraMonth'];
@@ -124,12 +130,13 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     this.serie = json['Series'];
     this.docType = json['DocType'] === "dDocument_Service" ? "S" : "I";
     this.docNum = json['DocNum'];
+    this.contactPersonList = json['contactPersonList'];
     this.journalMemo = json['JournalMemo']
     this.cardName = json['CardName'];
     this.cardCode = json['CardCode'];
     this.documentsOwner = json['DocumentsOwner'];
     this.cardCode = json['CardCode'];
-    this.constactPersonCode = json['ContactPersonCode'];
+    this.contactPersonCode = json['ContactPersonCode'];
     this.docDate = (json['DocDate']);
     this.docDueDate = (json['DocDueDate']);
     this.terminateDate = (json['TernimatedDate']);
@@ -164,6 +171,8 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     console.log(json)
 
     return {
+      "DocNum": json['docNum'],
+      "NumAtCard": json['numAtCard'],
       "DocumentsOwner": json['documentsOwner'],
       "DocumentStatus": json['documentStatus'],
       "ImportFileNum": json['importFileNum'],
@@ -205,6 +214,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
 
   public static toUpdate(json: any) {
     return {
+      "NumAtCard": json['numAtCard'],
       "DocumentsOwner": json['documentsOwner'],
       "DocumentStatus": json['documentStatus'],
       "ImportFileNum": json['importFileNum'],

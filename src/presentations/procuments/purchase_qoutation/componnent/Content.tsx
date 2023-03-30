@@ -103,7 +103,6 @@ export default function ContentForm({ edit,data, handlerChangeItem, handlerChang
             value={cell.getValue()}
             type="number"
             name="DiscountPercent"
-            error={(cell.getValue() as number) <= 0}
             disabled={data?.DocumentDtatus}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'discountPercent')}
           />;
@@ -304,7 +303,7 @@ console.log(data);
           </label>
           <div className="">
                 <MUISelect
-                  items={[{ name: 'Item Method', value: 'I' }, { name: 'Monetary Method', value: 'S' }]}
+                  items={[{ name: 'Item', value: 'I' }, { name: 'Service', value: 'S' }]}
                   aliaslabel='name'
                   aliasvalue='value'
                   name="DocType"
