@@ -17,6 +17,8 @@ import Accounting from '../componnent/Acccounting';
 import GLAccount from '@/models/GLAccount';
 import PurchaseQoutationRepository from './../../../../services/actions/purchaseQoutationRepository';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
+import { UpdateDataSuccess } from '@/utilies/ClientError';
+import PurchaseQouatation from '@/models/PurchaseQoutation';
 
 class PurchaseQoutationForm extends CoreFormDocument {
 
@@ -94,17 +96,27 @@ class PurchaseQoutationForm extends CoreFormDocument {
     this.setState({ ...this.state, items: items })
   }
 
-
   async handlerSubmit(event: any) {
     event.preventDefault();
-    this.setState({ ...this.state, isSubmitting: true });
 
+    this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params
 
     await new PurchaseQoutationRepository().post(this.state, this.props?.edit, id).then((res: any) => {
-      this.showMessage('Success', 'Create Successfully');
-    }).catch((e: Error) => {
-      this.showMessage('Errors', e.message);
+      const purchaseQoutation = new PurchaseQouatation(res?.data)
+
+      this.props.history.replace(this.props.location.pathname?.replace('create', purchaseQoutation.id), purchaseQoutation);
+      this.dialog.current?.success("Create Successfully.");
+    }).catch((e: any) => {
+      if (e instanceof UpdateDataSuccess) {
+        this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.documentStatus === 'A' });
+        this.dialog.current?.success(e.message);
+        // const query = this.props.query.query as QueryClient;
+        return;
+      }
+      this.dialog.current?.error(e.message);
+    }).finally(() => {
+      this.setState({ ...this.state, isSubmitting: false })
     });
   }
 

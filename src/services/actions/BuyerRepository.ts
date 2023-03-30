@@ -28,9 +28,11 @@ export default class BuyerRepository extends Repository<Buyers> {
 
   find<Buyers>(code: number | undefined | null): any {
     const data = localStorage.getItem(this.key);
-    const buyer: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-    return buyer.find((e: any) => e?.IndicatorCode == code);
+    if (!data) return {};
+    const Buyer: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
+    return new Buyers(Buyer.find((e: any) => e?.SalesEmployeeCode === code) ?? {});
   }
+
 
   post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<Buyers> {
     throw new Error("Method not implemented.");

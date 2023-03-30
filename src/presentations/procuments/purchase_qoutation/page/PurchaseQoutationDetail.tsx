@@ -22,6 +22,7 @@ import OwnerRepository from '@/services/actions/ownerRepository';
 import PaymentTermTypeRepository from '@/services/actions/paymentTermTypeRepository';
 import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
 import { ContactEmployee } from '@/models/BusinessParter';
+import BuyerRepository from '@/services/actions/BuyerRepository';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -272,7 +273,9 @@ function Content(props: any) {
     <div className='flex flex-col gap-3'>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Buyer</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.Buyer ?? "N/A"}</span>
+        <span className="w-8/12 font-medium text-sm">
+          : {new BuyerRepository().find(data.salesPersonCode)?.name ?? "N/A"}
+        </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Owner</span>
@@ -322,7 +325,8 @@ function Account(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Indicator</span> <span className='col-span-2 font-medium'>: {data.indicator ?? "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Federal Tax ID</span> <span className='col-span-2 font-medium'>: {data.federalTaxID ?? "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Order Number</span> <span className='col-span-2 font-medium'>: {data.importFileNum ?? "N/A"}</span></div>
-    </div>
+    </div>import SalePerson from './../../../../components/selectbox/SalePerson';
+
   </div>
 }
 
