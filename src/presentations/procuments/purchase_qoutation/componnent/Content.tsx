@@ -17,6 +17,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "@/components/input/AccountTextField";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
+import SalePerson from "@/components/selectbox/SalePerson";
 
 interface ContentFormProps {
   handlerAddItem: () => void,
@@ -357,14 +358,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Buyer</label>
-            <MUISelect
-              items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-              onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
-              value={data?.contactPersonCode}
-              aliasvalue="id"
-              aliaslabel="name"
-              name="ContactPersonCode"
-            />
+            <SalePerson value={data?.salePersonCode} onChange={(e) => handlerChange('salePersonCode', e.target.value)} />
           </div>
           <div className="w-[48%]">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Owner</label>
