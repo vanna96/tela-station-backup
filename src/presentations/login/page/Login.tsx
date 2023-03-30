@@ -13,6 +13,9 @@ import PaymentMethodRepository from '../../../services/actions/paymentMethodRepo
 import PaymentTermTypeRepository from '../../../services/actions/paymentTermTypeRepository';
 import OwnerRepository from '@/services/actions/ownerRepository';
 import ShippingTypeRepository from '../../../services/actions/shippingTypeRepository';
+import SalePersonRepository from '@/services/actions/salePersonRepository';
+import GLAccountRepository from '@/services/actions/GLAccountRepository';
+import VatGroupRepository from '@/services/actions/VatGroupRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -48,6 +51,9 @@ export default function Login() {
       await new PaymentTermTypeRepository().get(),
       await new OwnerRepository().get(),
       await new ShippingTypeRepository().get(),
+      await new SalePersonRepository().get(),
+      await new GLAccountRepository().get(),
+      await new VatGroupRepository().get(),
     ]);
   }
 

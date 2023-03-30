@@ -17,13 +17,11 @@ interface SalePersonProps<T = unknown> {
 function SalePerson(props: SalePersonProps) {
     const { data, isLoading }: any = useQuery({ queryKey: ['sale_persons'], queryFn: () => new SalePersonRepository().get(), staleTime: Infinity })
 
-    console.log(data)
-
     return <MUISelect
         {...props}
         items={data ?? []}
         aliaslabel="name"
-        aliasvalue="name"
+        aliasvalue="code"
         loading={isLoading}
     />
 }

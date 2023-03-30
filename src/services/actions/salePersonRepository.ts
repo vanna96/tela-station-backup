@@ -17,7 +17,7 @@ export default class SalePersonRepository extends Repository<SalePerson> {
             return JSON.parse(salePersons).map((e :any) => new SalePerson(e));
         }
 
-        const salePersons = await request('GET', this.url).then((res: any) => res?.data?.value);
+        const salePersons = await request('GET', this.url).then((res: any) => res?.data?.value?.map((e : any) => new SalePerson(e)));
         const enc = Encryption.encrypt(this.key, JSON.stringify(salePersons));
         localStorage.setItem(this.key, enc);
 
@@ -31,7 +31,7 @@ export default class SalePersonRepository extends Repository<SalePerson> {
         if (!data) return {};
      
         const salePersons: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '{}')));
-        return salePersons.find((e: any) => e?.Code == code);
+        return salePersons.find((e: any) => e?.code == code);
     }
 
     post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<SalePerson> {

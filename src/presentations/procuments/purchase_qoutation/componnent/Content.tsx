@@ -18,6 +18,7 @@ import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "@/components/input/AccountTextField";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import SalePerson from "@/components/selectbox/SalePerson";
+import VatGroup from "@/components/selectbox/VatGroup";
 
 interface ContentFormProps {
   handlerAddItem: () => void,
@@ -136,12 +137,13 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
       //   },
       // },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "purchaseVatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => {
-          return <MUITextField
+          return <VatGroup
             value={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'vatGroup')}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
+            category="InputTax"
           />;
         },
       },
@@ -255,12 +257,13 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         },
       },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "purchaseVatGroup",
         header: "Tax Code", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField
+          return <VatGroup
             value={cell.getValue()}
-            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'vatGroup')}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
+            category="InputTax"
           />;
         },
       },
@@ -318,7 +321,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           key={tableKey}
           // columns={itemColumns}
           columns={data?.docType === "S" ? serviceColumns : itemColumns}
-          data={data.items ?? []}
+          data={data?.items ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
           enableColumnFilters={false}
