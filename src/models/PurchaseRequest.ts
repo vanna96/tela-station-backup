@@ -2,6 +2,7 @@ import { dateFormat } from "../utilies";
 import Model from "./Model";
 import { MasterDocument, DocumentLine } from "./interface/index";
 import Department from "./Department";
+import ItemGroup from './ItemGroup';
 
 export interface PurchaseRequestProps {
   id: any;
@@ -273,6 +274,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
 export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
   itemCode?: string | undefined;
   itemDescription?: string | undefined;
+  itemGroup?: string | undefined;
   quantity?: number | undefined;
   unitPrice?: number | undefined;
   currency?: string | undefined;
@@ -288,6 +290,7 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
   requiredDate?: string | undefined;
   shipDate?: string | undefined;
   accountCode?: number | undefined;
+  accountNo?: number | undefined;
   accountName?: string | undefined;
   blanketAgreementNumber?: string | undefined;
   discountPercent?: number;
@@ -301,18 +304,19 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
     this.saleVatGroup = json["VatGroup"];
     this.itemCode = json["ItemCode"];
     this.itemDescription = json["ItemDescription"];
+    this.itemGroup = json["ItemGroup"];
     this.quantity = json["Quantity"];
     this.unitPrice = json["UnitPrice"];
     this.currency = json["PriceCurrency"];
     this.lineDiscount = json["LineDiscount"];
     this.uomEntry = json["UoMEntry"];
     this.uomCode = json["UoMCode"];
-    this.project = json["Project"];
     this.vatGroup = json["VatGroup"];
     this.requiredDate = json["RequiredDate"];
     this.discountPercent = json["DiscountPercent"];
     this.shipDate = json["ShipDate"];
     this.accountCode = json["AccountCode"];
+    this.accountNo = json["AccountNo"];
     this.accountName = json["AccountName"];
     this.lineTotal = json["LineTotal"];
     this.lineVendor = json["LineVendor"];
@@ -322,12 +326,12 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
     throw new Error("Method not implemented.");
   }
 
-  public static toCreate(json: any, type: any) {
+  public static toCreate(json: any, docType: any) {
     let line = {
       Quantity: json["quantity"],
       ItemCode: json["itemCode"],
       ItemDescription: json["itemName"],
-      // ItemName: json["itemName"],
+      // ItemGroup: json["itemGroup"],
       UnitPrice: json["unitPrice"],
       // LineDiscount: 0.0,
       DocEntry: json["uomGroupEntry"],
@@ -336,16 +340,16 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
       // Project: null,
       // TaxCode: null,
       // TAXRate: null,
+      UoMEntry: json["uomEntry"],
       VatGroup: json["vatGroup"],
       LineTotal: json["lineTotal"],
       RequiredDate: json["requiredDate"],
-      ShipDate: json["shipDate"],
-      AccountCode: json["accountCode"],
-      AccountName: json["accountName"],
+      AccountCode: json["AccountNo"],
+      // AccountName: json["AccountName"],
       DiscountPercent: json["discountPercent"],
     };
 
-    if (type === "S") {
+    if (docType === "S") {
       delete line.ItemCode;
       delete line.UnitPrice;
     }
