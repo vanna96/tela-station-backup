@@ -30,6 +30,7 @@ export interface PurchaseRequestProps {
   paymentMethod?: string;
   shippingType?: string | undefined;
   items: PurchaseRequestDocumentLineProps[];
+  documentLine: PurchaseRequestDocumentLineProps[];
 }
 
 export interface PurchaseRequestDocumentLineProps {
@@ -50,6 +51,8 @@ export interface PurchaseRequestDocumentLineProps {
 export default class PurchaseRequest extends Model implements MasterDocument {
   id: any;
   docNum: any;
+  cardCode?: string;
+  cardName?: string;
   requester?: string;
   requesterName?: string;
   requesterEmail?: string;
@@ -124,16 +127,20 @@ export default class PurchaseRequest extends Model implements MasterDocument {
   constructor(json: any) {
     super();
     this.id = json["DocNum"];
-    this.requester = json["Requester"];
+    this.cardCode = json["Requester"];
     this.reqType = json["ReqType"];
+    this.cardName = json["RequesterName"];
+    this.department = json["RequesterDepartment"];
+    this.branch = json["RequesterBranch"];
+    this.requester = json["Requester"];
     this.requesterName = json["RequesterName"];
     this.requesterEmail = json["RequesterEmail"];
     this.requesterDepartment = json["RequesterDepartment"];
     this.requesterBranch = json["RequesterBranch"];
-    this.serie = json["Series"];
+    this.serie = json["Seriesss"];
     this.docTotalSys = json["DocTotalSys"];
     this.owner = json["DocumentsOwner"];
-    this.documentStatus = json["DocumentStatus"];
+    this.status = json["DocumentStatus"];
     this.vatSumSys = json["VatSumSys"];
     this.price = json["Price"];
     this.docNum = json["DocNum"];
@@ -148,9 +155,9 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     this.items = json["DocumentLines"]?.map(
       (e: any) => new PurchaseRequestDocumentLine(e)
     );
-    this.documentLine = json["DocumentLines"]?.map(
-      (e: any) => new PurchaseRequestDocumentLine(e)
-    );
+    // this.documentLine = json["DocumentLines"]?.map(
+    //   (e: any) => new PurchaseRequestDocumentLine(e)
+    // );
     this.userCode = json["Requester"];
     this.userName = json["RequesterName"];
     this.department = json["RequesterDepartment"];
@@ -171,62 +178,34 @@ export default class PurchaseRequest extends Model implements MasterDocument {
 
     return {
       Requester: json["cardCode"],
-      RequesterName: json["requesterName"],
-      RequesterEmail: json["requesterEmail"],
-      RequesterBranch: json["requesterBranch"],
-      RequesterDepartment: json["requesterDepartment"],
+      RequesterName: json["cardName"],
+      RequesterEmail: json["email"],
+      RequesterBranch: json["branch"],
+      RequesterDepartment: json["department"],
+      DocType: json["docType"],
+      CreationDate: json["creationDate"],
+      DocDate: json["docDate"],
+      RequriedDate: json["requriedDate"],
       DocDueDate: json["docDueDate"],
+      DocumentOwner: json["owner"],
       AttachmentEntry: ["attachmentEntry"],
       DocCurrency: json["docCurrency"],
       DocRate: json["docRate"],
-      Reference1: json["reference1"],
-      Reference2: json["reference2"],
       Comments: json["comments"],
-      journalMemo: json["journalMemo"],
-      documentStatus: json["documentStatus"],
       PriceList: json["priceList"],
-      Serie: json["serie"],
-      JournalMemo: json["JournalMemo"],
-      PaymentGroupCode: json["PaymentGroupCode"],
-      SalesPersonCode: json["SalesPersonCode"],
-      TransportationCode: json["TransportationCode"],
-      Confirmed: json["Confirmed"],
-      ContactPersonCode: json["ContactPersonCode"],
-      Series: json["Series"],
+      // Serie: json["serie"],
+      // Series: json["Series"],
       DocTotalSys: json["DocTotalSys"],
-      TaxDate: json["TaxDate"],
-      PartialSupply: json["PartialSupply"],
-      DocObjectCode: json["DocObjectCode"],
-      Indicator: json["Indicator"],
-      FederalTaxID: json["FederalTaxID"],
       DiscountPercent: json["DiscountPercent"],
-      CreationDate: json["CreationDate"],
-      UpdateDate: json["UpdateDate"],
-      UserSign: json["UserSign"],
-      VatSum: json["VatSum"],
-      RequriedDate: json["requriedDate"],
-      CancelDate: json["CancelDate"],
       Rounding: json["Rounding"],
       Address2: json["Address2"],
       DocumentStatus: json["DocumentStatus"],
-      PeriodIndicator: json["PeriodIndicator"],
-      PayToCode: json["PayToCode"],
-      ManualNumber: json["ManualNumber"],
-      UseShpdGoodsAct: json["UseShpdGoodsAct"],
-      TotalDiscount: json["TotalDiscount"],
-      VatPercent: json["VatPercent"],
-      ExtraMonth: json["ExtraMonth"],
-      ExtraDays: json["ExtraDays"],
-      StartFrom: json["StartFrom"],
-      DownPaymentStatus: json["DownPaymentStatus"],
-      BPLName: json["BPLName"],
-      VatRegNum: json["VATRegNum"],
-      PaymentTerm: json["PaymentTerm"],
-      PaymentMethod: json["PaymentMethod"],
-      ShippingType: json["ShippingType"],
-      items: json["DocumentLines"].map((e: any) =>
+      DocumentLine: json["items"]?.map((e: any) =>
         PurchaseRequestDocumentLine.toCreate(e, json["DocType"])
       ),
+      
+      // documentLine: json["items"]?.map((e: any) =>
+      // PurchaseRequestDocumentLine.toCreate(e, json["DocType"])),
     };
   }
 
@@ -314,6 +293,8 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
   requriedDate?: string;
   itemName?: string;
   saleVatGroup?: string;
+  lineVendor?: string;
+  
   constructor(json: any) {
     super();
     this.saleVatGroup = json["VatGroup"];
@@ -327,14 +308,14 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
     this.uomCode = json["UoMCode"];
     this.project = json["Project"];
     this.vatGroup = json["VatGroup"];
-    this.requriedDate = json["RequriedDate"];
+    this.requiredDate = json["RequiredDate"];
     this.discountPercent = json["DiscountPercent"];
     this.shipDate = json["ShipDate"];
     this.accountCode = json["AccountCode"];
     this.accountName = json["AccountName"];
     this.lineTotal = json["LineTotal"];
+    this.lineVendor = json["LineVendor"];
     this.itemName = json["ItemDescription"];
-    this.blanketAgreementNumber = json["BlanketAgreementNumber"];
   }
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
@@ -344,23 +325,22 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
     let line = {
       Quantity: json["quantity"],
       ItemCode: json["itemCode"],
-      ItemDescription: json["itemDescription"],
-      ItemName: json["itemName"],
+      ItemDescription: json["itemName"],
+      // ItemName: json["itemName"],
       UnitPrice: json["unitPrice"],
-      LineDiscount: 0.0,
+      // LineDiscount: 0.0,
       DocEntry: json["uomGroupEntry"],
       UoMCode: json["uomCode"],
-      TransportationCode: 1,
-      Project: null,
-      TaxCode: null,
-      TAXRate: null,
+      // TransportationCode: 1,
+      // Project: null,
+      // TaxCode: null,
+      // TAXRate: null,
       VatGroup: json["vatGroup"],
       LineTotal: json["lineTotal"],
       RequiredDate: json["requiredDate"],
       ShipDate: json["shipDate"],
       AccountCode: json["accountCode"],
       AccountName: json["accountName"],
-      BlanketAgreementNumber: json["blanketAgreementNumber"],
       DiscountPercent: json["discountPercent"],
     };
 

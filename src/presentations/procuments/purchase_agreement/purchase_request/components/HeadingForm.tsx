@@ -49,25 +49,8 @@ export default function HeadingForm({
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
-              {/* <MUITextField
-                label="Requester Name"
-                value={data?.userName}
-                name="BPCode"
-                onClick={handlerOpenRequester}
-                key={Math.random()}
-                endAdornment={true}
-              />
               <MUITextField
-                label="Requester Name"
-                value={data?.userName}
-                name="BPCode"
-                onClick={handlerOpenRequesterEmployee}
-                key={Math.random()}
-
-                endAdornment={true}
-              /> */}
-              <MUITextField
-                label="Requester Name"
+                label="Requester"
                 value={data?.cardCode}
                 name="BPCode"
                 onClick={handlerOpenRequester}
@@ -81,10 +64,7 @@ export default function HeadingForm({
                   Requester name
                 </label>
                 <div className="">
-                  <MUITextField
-                    name="CardName"
-                    value={data.cardName}
-                  />
+                  <MUITextField name="CardName" value={data.cardName} />
                 </div>
               </div>
             </div>
@@ -106,6 +86,19 @@ export default function HeadingForm({
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
+              <div className="flex items-center gap-1 text-sm">
+                <Checkbox />
+                <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                  Send E-Mail if PO or GPRO is Added
+                </label>
+              </div>
+            </div>
+            <MUITextField
+              label="Email"
+              value={data?.email}
+              name="RequesterEmail"
+            />
+            <div className="flex flex-col gap-1 text-sm">
               <div className="flex flex-col gap-1 text-sm">
                 <label htmlFor="Code" className="text-gray-500 text-[14px]">
                   Branch
@@ -116,31 +109,6 @@ export default function HeadingForm({
                   value={data.branch}
                   onChange={(e) => handlerChange("branch", e.target.value)}
                 />
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1 text-sm">
-            {/* <div> <MUICheckBox
-              label="Send E-Mail if PO or GPRO is Added"
-              defaultChecked
-              name="RequesterEmail"
-            /></div>
-            */}
-            <div className="grid grid-cols-1 gap-3">
-              <div className="flex flex-col gap-1 text-sm">
-                <div className="flex items-center gap-1 text-sm">
-                  <Checkbox />
-                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                    Send E-Mail if PO or GPRO is Added
-                  </label>
-                </div>
-                <div>
-                  <MUITextField
-                    label="Email"
-                    value={data?.email}
-                    name="RequesterEmail"
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -246,7 +214,6 @@ export default function HeadingForm({
             </div>
           </div>
         </div>
-        {/* <div className='col-span-2'></div> */}
       </FormCard>
     </>
   );
