@@ -109,7 +109,7 @@ export default function HeadingForm({
             </div>
           </div>
           <div className="grid grid-cols-1 gap-3">
-            <MUITextField label="Status" value={"open"} name="DocumentStatus" />
+            <MUITextField label="Status" value={(data?.documentStatus)?.replace("bost_", "")} name="DocumentStatus" />
           </div>
           <div className="grid grid-cols-1 gap-3">
             <div className="flex flex-col gap-1 text-sm">

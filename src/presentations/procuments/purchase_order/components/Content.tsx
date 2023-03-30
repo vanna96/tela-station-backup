@@ -129,7 +129,6 @@ export default function ContentForm({
               value={cell.getValue()}
               startAdornment={"%"}
               type="number"
-              error={(cell.getValue() as number) <= 0}
               disabled={data?.DocumentDtatus}
               onChange={(event) =>
                 handlerChangeInput(
@@ -148,8 +147,9 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              value={cell.getValue()}
-              disabled={data?.DocumentDtatus}
+              value={currencyFormat(cell.getValue())}
+              startAdornment={"$"}
+              disabled={data?.unitPrice}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "unitPrice")
               }
@@ -183,10 +183,12 @@ export default function ContentForm({
           return (
             <MUITextField
               disabled={data?.isApproved}
-              value={Formular.findToTal(
+              startAdornment={"$"}
+              value={Formular.findLineTotal(
                 cell.row.original.quantity,
-                cell.row.original.unitPrice
-              )}
+                cell.row.original.unitPrice,
+                cell.row.original.discountPercent,
+              )?.toFixed(2)}
             />
           );
         },
@@ -443,8 +445,9 @@ export default function ContentForm({
       <div className="flex flex-col gap-3">
         <div className="w-[100%] gap-3">
           <MUITextField
+            startAdornment={"$"}
             label="Total Before Discount"
-            value={data.LineTotal}
+            value={Formular.findTotalBeforeDiscount(data?.items ??[])?.toFixed(2)}
             name="LineTotal"
           />
         </div>
@@ -483,7 +486,10 @@ export default function ContentForm({
             <MUITextField label="Tax:" value={data.Tax} />
           </div>
           <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due" value={data.Tax} />
+            <MUITextField label="Total Payment Due" 
+            value={data.Tax}               
+            startAdornment={"$"}
+            />
           </div>
         </div>
       </div>
