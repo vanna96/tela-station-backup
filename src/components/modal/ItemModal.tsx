@@ -124,7 +124,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
             <div className="data-table" >
                 <MaterialReactTable
                     columns={columns}
-                    data={items}
+                    data={items ?? []}
                     enableStickyHeader={true}
                     enableStickyFooter={true}
                     enablePagination={true}

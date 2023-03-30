@@ -72,7 +72,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
 
   handlerAddItem({ value, record, field }: any) {
     let items = [...this.state.items ?? []];
-    let item = this.state.items?.find((e: any) => e?.ItemCode === record?.ItemCode);
+    let item = this.state.items?.find((e: any) => e?.itemCode === record?.itemCode);
     item[field] = value;
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
