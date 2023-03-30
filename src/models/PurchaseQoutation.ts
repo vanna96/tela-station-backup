@@ -75,7 +75,8 @@ export interface PurchaseQoutationDocumentLineProps {
   saleVatGroup?: string
 
 }
-export default class PurchaseQoutation extends Model implements MasterDocument {
+export default class PurchaseQouatation extends Model implements MasterDocument {
+
   id: any;
   docNum: any;
   cardCode?: string;
