@@ -47,7 +47,10 @@ export interface PurchaseQoutationProps {
   uomCode?: string
   transportationCode?: string;
   contactPersonList?: ContactEmployee[];
-  numAtCard?: string
+  numAtCard?: string;
+  vatSum?: number;
+  docTotalSys?: number;
+  salesPersonCode?: number
 }
 
 export interface PurchaseQoutationDocumentLineProps {
@@ -79,6 +82,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
 
   id: any;
   docNum: any;
+  salesPersonCode?: number
   cardCode?: string;
   cardName?: string;
   docDate?: string;
@@ -119,10 +123,15 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   uomCode?: string;
   transportationCode?: string;
   contactPersonCode?: number;
-  numAtCard?:string
+  numAtCard?: string;
+  vatSum?: number;
+  docTotalSys?: number
   constructor(json: any) {
     super();
+    this.salesPersonCode = json['SalesPersonCode']
     this.id = json['DocEntry'];
+    this.docTotalSys = json['DocTotalSys']
+    this.vatSum = json['VatSum'];
     this.numAtCard = json['NumAtCard']
     this.documentStatus = json['DocumentStatus'];
     this.federalTaxID = json['FederalTaxID']
@@ -172,6 +181,8 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     console.log(json)
 
     return {
+      "SalesPersonCode": json['salesPersonCode'],
+      "VatSum": json['vatSum'],
       "DocNum": json['docNum'],
       "NumAtCard": json['numAtCard'],
       "DocumentsOwner": json['documentsOwner'],
@@ -215,6 +226,8 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
 
   public static toUpdate(json: any) {
     return {
+      "SalesPersonCode": json['salesPersonCode'],
+      "VatSum": json['vatSum'],
       "NumAtCard": json['numAtCard'],
       "DocumentsOwner": json['documentsOwner'],
       "DocumentStatus": json['documentStatus'],

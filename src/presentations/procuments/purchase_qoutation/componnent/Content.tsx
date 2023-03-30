@@ -19,6 +19,7 @@ import AccountTextField from "@/components/input/AccountTextField";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import SalePerson from "@/components/selectbox/SalePerson";
 import VatGroup from "@/components/selectbox/VatGroup";
+import BuyerSelect from "@/components/selectbox/buyer";
 
 interface ContentFormProps {
   handlerAddItem: () => void,
@@ -361,7 +362,11 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Buyer</label>
-            <SalePerson value={data?.salePersonCode} onChange={(e) => handlerChange('salePersonCode', e.target.value)} />
+            <BuyerSelect
+              onChange={(e) => handlerChange('salesPersonCode', e.target.value)}
+              value={data?.salesPersonCode}
+              name="SalesPersonCode"
+            />
           </div>
           <div className="w-[48%]">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Owner</label>

@@ -282,19 +282,19 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: </span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.as ?? "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
-        <span className='w-8/12 font-medium text-sm'>: </span>
+        <span className='w-8/12 font-medium text-sm'>: { data?.as ?? "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Tax</span>
-        <span className='w-8/12 font-medium text-sm'>:</span>
+        <span className='w-8/12 font-medium text-sm'>:{ data?.vatSum}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
-        <span className='w-8/12 font-medium text-sm'>: </span>
+        <span className='w-8/12 font-medium text-sm'>:{data?.docTotalSys} </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Remark</span>
