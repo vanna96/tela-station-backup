@@ -1,6 +1,7 @@
 import axios, { AxiosError, ResponseType, AxiosResponse } from "axios";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { UpdateDataSuccess } from "./ClientError";
 
 const axiosInstance = axios.create({
     withCredentials: true,
@@ -21,6 +22,7 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
 
 const request = async (method: string, url: string, data?: any, responseType?: ResponseType, headers?: any) => {
     let source = axios.CancelToken.source();
@@ -48,11 +50,13 @@ const request = async (method: string, url: string, data?: any, responseType?: R
                     .catch((e) => {
                         if (!(e instanceof AxiosError)) {
 
+                            console.log(e)
+
                             if (window.location.pathname !== "/login" && e?.status !== 204) {
                                 window.location.href = '/login';
                             }
                             else if (e?.status === 204) {
-                                 reject(new Error('Update Successfully'));
+                                 reject(new UpdateDataSuccess('Update Successfully'));
                             }
                             else {
                                 reject(new Error('Internal Server Error'));

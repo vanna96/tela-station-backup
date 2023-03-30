@@ -17,6 +17,8 @@ import Checkbox from '@mui/material/Checkbox';
 import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "@/components/input/AccountTextField";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
+import SalePerson from "@/components/selectbox/SalePerson";
+import VatGroup from "@/components/selectbox/VatGroup";
 
 interface ContentFormProps {
   handlerAddItem: () => void,
@@ -24,11 +26,11 @@ interface ContentFormProps {
   handlerRemoveItem: (record: string) => void,
   handlerChange: (key: string, value: any) => void;
   data: any,
-  edit? : boolean
+  edit?: boolean
 }
 
 
-export default function ContentForm({ edit,data, handlerChangeItem, handlerChange, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
+export default function ContentForm({ edit, data, handlerChangeItem, handlerChange, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
   const [tableKey, setTableKey] = React.useState(Date.now())
 
   const handlerChangeInput = (event: any, row: any, field: any) => {
@@ -134,12 +136,13 @@ export default function ContentForm({ edit,data, handlerChangeItem, handlerChang
       //   },
       // },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "purchaseVatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => {
-          return <MUITextField
+          return <VatGroup
             value={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'vatGroup')}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
+            category="InputTax"
           />;
         },
       },
@@ -206,10 +209,7 @@ export default function ContentForm({ edit,data, handlerChangeItem, handlerChang
             <MUIDatePicker
               value={cell.getValue()}
               name="RequiredDate"
-              onChange={(event) => {
-                console.log(event);
-               
-              }}
+              onChange={(event) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'requiredDate')}
             />
           );
         },
@@ -221,7 +221,7 @@ export default function ContentForm({ edit,data, handlerChangeItem, handlerChang
           return <MUIDatePicker
             // disabled={true}
             value={cell.row?.original?.PlannedAmount}
-            onChange={(e: any) => handlerChange('shipDate', e)}
+            onChange={(e: any) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'shipDate')}
           />;
         },
       },
@@ -256,12 +256,13 @@ export default function ContentForm({ edit,data, handlerChangeItem, handlerChang
         },
       },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "purchaseVatGroup",
         header: "Tax Code", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField
+          return <VatGroup
             value={cell.getValue()}
-            onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'vatGroup')}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
+            category="InputTax"
           />;
         },
       },
@@ -290,7 +291,7 @@ export default function ContentForm({ edit,data, handlerChangeItem, handlerChang
   );
 
   const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
-console.log(data);
+  console.log(data);
 
   return (
     <FormCard title="Content" >
@@ -299,9 +300,9 @@ console.log(data);
           <div className="grid grid-cols-2">
             <div>
               <label htmlFor=" Item/ServiceType" className="text-gray-500 text-[14px]">
-            Item/Service Type
-          </label>
-          <div className="">
+                Item/Service Type
+              </label>
+              <div className="">
                 <MUISelect
                   items={[{ name: 'Item', value: 'I' }, { name: 'Service', value: 'S' }]}
                   aliaslabel='name'
@@ -318,8 +319,8 @@ console.log(data);
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.docType === "S" ? serviceColumns :  itemColumns}
-          data={data.items ?? []}
+          columns={data?.docType === "S" ? serviceColumns : itemColumns}
+          data={data?.items ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
           enableColumnFilters={false}
@@ -359,14 +360,7 @@ console.log(data);
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Buyer</label>
-            <MUISelect
-              items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-              onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
-              value={data?.contactPersonCode}
-              aliasvalue="id"
-              aliaslabel="name"
-              name="ContactPersonCode"
-            />
+            <SalePerson value={data?.salePersonCode} onChange={(e) => handlerChange('salePersonCode', e.target.value)} />
           </div>
           <div className="w-[48%]">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Owner</label>
@@ -401,9 +395,9 @@ console.log(data);
                 className="w-full "
                 defaultValue={data?.comments}
               />
-              
+
             }
-      
+
           </div>
         </div>
       </div>
@@ -427,7 +421,7 @@ console.log(data);
 
           <div className="w-[48%] gap-3 mt-5">
             <div className='flex items-center gap-1 text-sm'>
-              
+
               <Checkbox name='Renewal' checked={data.renewal} onChange={(e) => handlerChange('renewal', !data.renewal)} />
               <label htmlFor='Renewal' className='text-gray-500 text-[14px]'>Rounding</label>
             </div>

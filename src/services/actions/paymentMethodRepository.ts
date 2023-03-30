@@ -27,6 +27,7 @@ export default class PaymentMethodRepository extends Repository<PaymentMethod> {
 
     find<PaymentMethod>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
+        if (!data) return {};
         const paymentMethods: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
         return paymentMethods.find((e: any) => e?.PaymentMethodCode == code);
     }

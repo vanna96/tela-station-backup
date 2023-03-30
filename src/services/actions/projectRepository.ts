@@ -26,6 +26,7 @@ export default class ProjectRepository extends Repository<Project> {
 
     find<Project>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
+        if (!data) return {};
         const projects: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
         return projects.find((e: any) => e?.Code == code);
     }

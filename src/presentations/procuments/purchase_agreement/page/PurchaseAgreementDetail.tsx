@@ -1,19 +1,13 @@
 import { withRouter } from '@/routes/withRouter';
 import React, { Component, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
 import PurchaseAgreement from '../../../../models/PurchaseAgreement';
-import { PurchaseAgreementProps, PurchaseAgreementDocumentLineProps } from '../../../../models/PurchaseAgreement';
-import EditIcon from "@mui/icons-material/Edit";
-import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
 import Taps from '@/components/button/Taps';
-import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
+import MaterialReactTable from 'material-react-table';
 import { useMemo } from 'react';
 import { currencyFormat, dateFormat, fileToBase64 } from '@/utilies';
-import { AttachmentLine } from '../../../../models/Attachment';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { CircularProgress } from '@mui/material';
-import BackButton from '@/components/button/BackButton';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
 import DocumentStatus from '@/constants/documentStatus';

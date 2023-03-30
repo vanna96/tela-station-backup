@@ -16,6 +16,7 @@ import Logistic from '../componnent/Logistis';
 import Accounting from '../componnent/Acccounting';
 import GLAccount from '@/models/GLAccount';
 import PurchaseQoutationRepository from './../../../../services/actions/purchaseQoutationRepository';
+import VatGroupRepository from '@/services/actions/VatGroupRepository';
 
 class PurchaseQoutationForm extends CoreFormDocument {
 
@@ -25,7 +26,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
       ...this.state,
       docType: 'I',
       loading: true,
-   
+
     } as any;
 
 
@@ -75,7 +76,10 @@ class PurchaseQoutationForm extends CoreFormDocument {
     item[field] = value;
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
-    this.setState({ ...this.state, items: items })
+
+    if (field === 'purchaseVatGroup')
+      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+
     if (field === 'accountCode') {
       const account = value as GLAccount;
       item['accountCode'] = account.code;
@@ -83,6 +87,8 @@ class PurchaseQoutationForm extends CoreFormDocument {
     } else {
       item[field] = value;
     }
+
+    this.setState({ ...this.state, items: items })
   }
 
 
@@ -114,7 +120,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
           handlerChange={(key, value) => this.handlerChange(key, value)}
           handlerOpenProject={() => this.handlerOpenProject()}
         />
-     
+
         <ContentForm
           edit={this.props?.edit}
           data={this.state}

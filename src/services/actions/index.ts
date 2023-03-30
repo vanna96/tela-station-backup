@@ -114,4 +114,12 @@ export default class InitializeData {
 
         return response.data.value as [];
     }
+
+    public static async users(): Promise<any[]> {
+        const response: any = await request('GET', '/Users?$select=UserCode,UserName,eMail,Branch,Department');
+
+        if (!response?.data) return [];
+
+        return response.data.value;
+    }
 }

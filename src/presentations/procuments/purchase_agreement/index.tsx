@@ -7,7 +7,7 @@ import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { useQueryHook } from '../../../utilies/useQueryHook';
-import { UseQueryResult, useQuery } from "react-query";
+import { UseQueryResult, useQuery, useQueryClient } from "react-query";
 import PurchaseAgreementRepository from '../../../services/actions/purchaseAgreementRepository';
 
 
@@ -15,7 +15,7 @@ import PurchaseAgreementRepository from '../../../services/actions/purchaseAgree
 export default function PurchaseAgreementLists() {
     const route = useNavigate();
 
-    const { data, isLoading }: any = useQuery({ queryKey: ['pa'], queryFn: () => new PurchaseAgreementRepository().get() })
+    const { data, isLoading }: any = useQuery({ queryKey: ['pa'], queryFn: () => new PurchaseAgreementRepository().get() });
 
     const columns = React.useMemo(
         () => [
@@ -72,7 +72,7 @@ export default function PurchaseAgreementLists() {
                         }}>
                             <VisibilityIcon fontSize="small" className="text-gray-600 " />
                         </button>
-                        <button>
+                        <button title="back">
                             <EditIcon fontSize="small" className="text-blue-400" />
                         </button>
                     </div>
@@ -112,6 +112,7 @@ export default function PurchaseAgreementLists() {
                         enableStickyHeader={true}
                         enableStickyFooter={true}
                         enablePagination={true}
+                        enableColumnFilters={false}
                         muiTablePaginationProps={{
                             rowsPerPageOptions: [5, 10, 15],
                         }}
