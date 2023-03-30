@@ -1,3 +1,4 @@
+import GLAccountRepository from '@/services/actions/GLAccountRepository';
 import { dateFormat } from '../utilies';
 import { ContactEmployee } from './BusinessParter';
 import Model from './Model';
@@ -280,6 +281,8 @@ export class PurchaseOrderDocumentLineProps extends Model implements DocumentLin
   blanketAgreementNumber?: string | undefined;
   discountPercent?: string;
   requriedDate?: string;
+  accountNameD: string;
+
   constructor(json: any) {
     super();
     this.itemCode = json['ItemCode'];
@@ -299,6 +302,8 @@ export class PurchaseOrderDocumentLineProps extends Model implements DocumentLin
     this.accountName = json['AccountName'];
     this.lineTotal = json['LineTotal'];
     this.blanketAgreementNumber = json['BlanketAgreementNumber']
+    this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
+
   }
   toJson(update: boolean) {
     throw new Error('Method not implemented.');

@@ -88,7 +88,7 @@ class PurchaseOrder extends CoreFormDocument {
   handlerAddItem({ value, record, field }: any) {
     let items = [...(this.state.items ?? [])];
     let item = this.state.items?.find(
-      (e: any) => e?.ItemCode === record?.ItemCode
+      (e: any) => e?.itemCode === record?.itemCode
     );
 
     if (field === "accountCode") {
