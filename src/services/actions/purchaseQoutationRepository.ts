@@ -11,8 +11,7 @@ export default class PurchaseQoutationRepository extends Repository<PurchaseQoua
   url: string = '/PurchaseQuotations';
 
   public static documentSerie = {
-    Document: "1250000025",
-    DocumentSubType: "S"
+    Document: "540000006"
   }
 
   async get<T>(query?: string): Promise<T[]> {

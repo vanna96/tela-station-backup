@@ -73,6 +73,7 @@ export interface PurchaseQoutationDocumentLineProps {
 
 }
 export default class PurchaseQouatation extends Model implements MasterDocument {
+
   id: any;
   docNum: any;
   cardCode?: string;
