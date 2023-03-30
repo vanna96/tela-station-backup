@@ -125,7 +125,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             name="UnitPrice"
             disabled={data?.isApproved}
             error={(cell.getValue() as number) <= 0}
-            value={cell.getValue()}
+            value={currencyFormat(cell.getValue())}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
           />;
         },
@@ -156,9 +156,9 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         header: "Total",
         Cell: ({ cell }: any) => {
           return <MUITextField
-      
+            startAdornment={'USD'}
             disabled={data?.isApproved}
-            value={Formular.findToTalDiscountPercent(cell.row.original.quantity, cell.row.original.unitPrice, cell.row.original.discountPercent)}
+            value={Formular.findToTalDiscountPercent(cell.row.original.quantity, cell.row.original.unitPrice, cell.row.original.discountPercent).toFixed(2)}
           />;
         },
       },
@@ -413,7 +413,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
       <div className="flex flex-col gap-3">
 
         <div className="w-[100%] gap-3">
-          <MUITextField label="Total Before Discount:" value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)}
+          <MUITextField label="Total Before Discount:" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)}
 />
         </div>
         <div className="flex justify-between">
@@ -440,11 +440,11 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
-            <MUITextField label="Tax:" value={Formular.taxItems(data.items ?? []).toFixed(2)} />
+            <MUITextField label="Tax:" startAdornment={'USD'} value={Formular.taxItems(data.items ?? []).toFixed(2)} />
           </div>
 
           <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due::" value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
+            <MUITextField label="Total Payment Due::" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
           </div>
         </div>
       </div>
