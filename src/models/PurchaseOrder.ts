@@ -1,4 +1,5 @@
 import { dateFormat } from '../utilies';
+import { ContactEmployee } from './BusinessParter';
 import Model from './Model';
 import { MasterDocument, DocumentLine } from './interface/index';
 import moment from 'moment';
@@ -16,7 +17,7 @@ export interface PurchaseOrderProps {
   terminateDate?: string;
   description?: string;
   status?: string;
-  owner?: string;
+  documentsOwner?: string;
   docTotalSys?: number;
   remark?: string;
   attachmentEntry?: number;
@@ -43,6 +44,7 @@ export interface PurchaseOrderProps {
   documentStatus: string;
   numAtCard?: string;
   uomCode?: string;
+  contactPersonList?: ContactEmployee[];
   documentLine: PurchaseOrderDocumentLineProps[];
   requiredDate: string
 }
@@ -75,16 +77,17 @@ export default class PurchaseOrder extends Model implements MasterDocument {
   docNum: any;
   cardCode?: string;
   cardName?: string;
-  constactPersonCode?: number;
+  contactPersonCode?: number;
   docDate?: string;
   docDueDate?: string;
   requriedDate?: string
   terminateDate?: string;
   docTotalSys?: number;
   description?: string;
+  contactPersonList?: ContactEmployee[];
   vatSum?: number;
   status?: string;
-  owner?: string;
+  documentsOwner?: string;
   remark?: string;
   attachmentEntry?: number;
   paymentGroupCode?: string;
@@ -126,11 +129,12 @@ export default class PurchaseOrder extends Model implements MasterDocument {
     this.vatSum = json['VatSum'];
     this.journalMemo = json['JournalMemo']
     this.cardName = json['CardName'];
+    this.contactPersonList = json['contactPersonList'];
     this.cardCode = json['CardCode'];
     this.docTotalSys = json['DocTotalSys'];
-    this.owner = json['DocumentsOwner'];
+    this.documentsOwner = json['DocumentsOwner'];
     this.numAtCard = json['NumAtCard'];
-    this.constactPersonCode = json['ContactPersonCode'];
+    this.contactPersonCode= json['ContactPersonCode'];
     this.description = json['Description'];
     this.docDate = json['DocDate'];
     this.docDueDate = json['DocDueDate'];
@@ -183,7 +187,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "TerminateDate": json['terminateDate'],
       "Description": json['description'],
       "Status": json['status'],
-      "Owner": json['owner'],
+      "DocumentsOwner": json['documentsOwner'],
       "Remarks": json['remarks'],
       "UoMcode": json['uomcode'],
       "AttachmentEntry": json['attachmentEntry'],
@@ -228,7 +232,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "TerminateDate": json['terminateDate'],
       "Description": json['description'],
       "Status": json['status'],
-      "Owner": json['owner'],
+      "DocumentsOwner": json['documentsOwner'],
       "Remarks": json['remarks'],
       "AttachmentEntry": json['attachmentEntry'],
       "PaymentGroupCode":  json['paymentGroupCode'],

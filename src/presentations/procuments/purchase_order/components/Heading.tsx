@@ -30,11 +30,7 @@ export default function HeadingForm({
               onClick={handlerOpenVendor}
               endAdornment={true}
             />
-            <MUITextField
-              label="Name"
-              value={data?.cardName}
-              name="BPName"
-            />
+            <MUITextField label="Name" value={data?.cardName} name="BPName" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
@@ -58,7 +54,11 @@ export default function HeadingForm({
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
-              <MUITextField label="Vender Ref.No" name="" value={data?.numAtCard} />
+              <MUITextField
+                label="Vender Ref.No"
+                name=""
+                value={data?.numAtCard}
+              />
             </div>
           </div>
 
@@ -117,7 +117,11 @@ export default function HeadingForm({
                 Posting Date
               </label>
               <div className="">
-                <MUIDatePicker error={data?.message?.includes('DocDate')} value={data.docDate} onChange={(e: any) => handlerChange('docDate', e)} />
+                <MUIDatePicker
+                  error={data?.message?.includes("DocDate")}
+                  value={data.docDate}
+                  onChange={(e: any) => handlerChange("docDate", e)}
+                />
               </div>
             </div>
 

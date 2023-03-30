@@ -35,7 +35,7 @@ export default function AccounttingForm({
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Payment Terms
             </label>
-            <PaymentTerm name="PaymentTerms" value={data.paymentGroupCode} onChange={(e) => handlerChange('paymentGroupCode', e.target.value)} />
+            <PaymentTerm name="PaymentGroupCode" value={data.paymentGroupCode} onChange={(e) => handlerChange('paymentGroupCode', e.target.value)} />
 
           </div>
           <div className="w-[50%]">

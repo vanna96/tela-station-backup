@@ -357,8 +357,8 @@ export default function ContentForm({
             </label>
             <Owner
               name="DocumentsOwner"
-              value={data?.owner}
-              onChange={(e: any) => handlerChange("owner", e.target.value)}
+              value={data?.documentsOwner}
+              onChange={(e: any) => handlerChange("documentsOwner", e.target.value)}
             />
           </div>
         </div>

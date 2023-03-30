@@ -30,6 +30,8 @@ export default class PurchaseOrderRepository extends Repository<PurchaseOrder> {
         throw new Error(e.message)
       })
     const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseOrder.cardCode!);
+    purchaseOrder.contactPersonList = businessPartner.contactEmployee ?? [];
+
     return purchaseOrder;
   }
 

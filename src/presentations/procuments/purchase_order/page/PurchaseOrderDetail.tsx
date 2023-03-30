@@ -32,6 +32,8 @@ import OwnerRepository from "@/services/actions/ownerRepository";
 import PaymentTermTypeRepository from "@/services/actions/paymentTermTypeRepository";
 import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
 import DocumentHeaderComponent from "@/components/DocumenHeaderComponent";
+import { ContactEmployee } from "@/models/BusinessParter";
+import { dateFormat } from "../../../../utilies/index";
 
 class PurchaseOrderDetail extends Component<any, any> {
   constructor(props: any) {
@@ -109,8 +111,18 @@ class PurchaseOrderDetail extends Component<any, any> {
                   </span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="w-4/12 text-gray-500">Contact Person</span>
-                  <span className="w-8/12 font-medium">: N/A</span>
+                  <span className="w-4/12 text-gray-500">
+                    Contact Person Code
+                  </span>
+                  <span className="w-8/12 font-medium">
+                    :
+                    {
+                      this.state?.contactPersonList?.find(
+                        (e: ContactEmployee) =>
+                          e.id === this.state.contactPersonCode
+                      )?.name
+                    }
+                  </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Vendor Ref .No</span>
@@ -136,19 +148,19 @@ class PurchaseOrderDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Posting Date</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.docDate}
+                    : {dateFormat(this.state.docDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Delivery Date</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.docDueDate}
+                    : {dateFormat(this.state.docDueDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Document Date</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.taxDate}
+                    : {dateFormat(this.state.taxDate)}
                   </span>
                 </div>
               </div>
@@ -261,9 +273,7 @@ function Content(props: any) {
   return (
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
-        columns={
-          data?.docType === "I" ? itemColumn : serviceColumns
-        }
+        columns={data?.docType === "I" ? itemColumn : serviceColumns}
         data={data?.items ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
@@ -288,12 +298,12 @@ function Content(props: any) {
       <div className="flex flex-col gap-3">
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Buyer</span>
-          <span className="w-8/12 font-medium text-sm">: {data?.Buyer}</span>
+          <span className="w-8/12 font-medium text-sm">: {data?.Buyer ?? "N/A"}</span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Owner</span>
           <span className="w-8/12 font-medium text-sm">
-            : {new OwnerRepository().find(data.owner)?.name}
+            : {new OwnerRepository().find(data.documentsOwner)?.name}
           </span>
         </div>
         <div className="flex gap-2">
@@ -306,7 +316,9 @@ function Content(props: any) {
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Freight</span>
-          <span className="w-8/12 font-medium text-sm">: </span>
+          <span className="w-8/12 font-medium text-sm">
+            : {data?.freight ?? "N/A"}
+          </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Tax</span>
@@ -317,12 +329,12 @@ function Content(props: any) {
             Total Payment Due
           </span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.docTotalSys}
+            : {data?.docTotalSys }
           </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Remark</span>
-          <span className="w-8/12 font-medium text-sm">: {data?.comments}</span>
+          <span className="w-8/12 font-medium text-sm">: {data?.comments ?? "N/A"}</span>
         </div>
       </div>
     </div>
@@ -337,10 +349,19 @@ function Account(props: any) {
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Jounral Remark</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.journalMemo?.replace("at", "")}
+            : {data.journalMemo?.replace("at", "") ?? "N/A"}
           </span>
         </div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data.paymentTermType)?.PaymentTermsGroupName}</span></div>
+        <div className="grid grid-cols-3 gap-2">
+          <span className="text-gray-500">Payment Terms</span>{" "}
+          <span className="col-span-2 font-medium">
+            :{" "}
+            {
+              new PaymentTermTypeRepository().find(data.paymentGroupCode ?? "N/A")
+                ?.PaymentTermsGroupName
+            }
+          </span>
+        </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Payment Methods</span>
           <span className="col-span-2 font-medium">
@@ -349,41 +370,45 @@ function Account(props: any) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Manually Recalulate Due Date</span>{" "}
-          <span className="col-span-2 font-medium">: {data.ManualNumber}</span>
+          <span className="col-span-2 font-medium">
+            : {data.ManualNumber ?? "N/A"}
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Cash Discount Date Offset</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.cashDiscountDateOffset}
+            : {data.cashDiscountDateOffset ?? "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Bussiness partner Projec</span>{" "}
-          <span className="col-span-2 font-medium">: {data.project}</span>
+          <span className="col-span-2 font-medium">: {data.project ?? "N/A"}</span>
         </div>
       </div>
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Create QR Code From</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.status?.replace("as", "")}
+            : {data.createQRCodeFrom || "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Cancellation Date</span>{" "}
-          <span className="col-span-2 font-medium">: {data.cancelDate}</span>
+          <span className="col-span-2 font-medium">
+            : {dateFormat(data.cancelDate)}
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Indicator</span>{" "}
-          <span className="col-span-2 font-medium">: {data.Indicator}</span>
+          <span className="col-span-2 font-medium">: {data.indicator ?? "N/A"}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Federal Tax ID</span>{" "}
-          <span className="col-span-2 font-medium">: {data.federalTaxID}</span>
+          <span className="col-span-2 font-medium">: {data.federalTaxID ?? "N/A"}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Order Number</span>{" "}
-          <span className="col-span-2 font-medium">: {data.importFileNum}</span>
+          <span className="col-span-2 font-medium">: {data.importFileNum ?? "N/A"}</span>
         </div>
       </div>
     </div>
