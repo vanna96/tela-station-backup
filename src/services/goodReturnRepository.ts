@@ -7,8 +7,7 @@ export default class GoodReturnRepository extends Repository<GoodReturn> {
     url: string = '/PurchaseReturns';
     
     public static documentSerie = {
-        Document: "1250000025",
-        DocumentSubType: "S"
+        Document: "234000032"
     }
     
     async get<T>(query?: string): Promise<T[]> {

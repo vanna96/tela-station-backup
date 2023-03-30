@@ -9,8 +9,7 @@ export default class PurchaseOrderRepository extends Repository<PurchaseOrder> {
   url: string = '/PurchaseOrders';
 
   public static documentSerie = {
-    Document: "1250000025",
-    DocumentSubType: "S"
+    Document: "22"
   }
 
   async get<T>(query?: string): Promise<T[]> {
