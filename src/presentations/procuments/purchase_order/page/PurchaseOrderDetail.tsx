@@ -34,6 +34,7 @@ import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
 import DocumentHeaderComponent from "@/components/DocumenHeaderComponent";
 import { ContactEmployee } from "@/models/BusinessParter";
 import { dateFormat } from "../../../../utilies/index";
+import BuyerRepository from "../../../../services/actions/buyerRepository";
 
 class PurchaseOrderDetail extends Component<any, any> {
   constructor(props: any) {
@@ -298,7 +299,9 @@ function Content(props: any) {
       <div className="flex flex-col gap-3">
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Buyer</span>
-          <span className="w-8/12 font-medium text-sm">: {data?.Buyer ?? "N/A"}</span>
+          <span className="w-8/12 font-medium text-sm">
+          : {new BuyerRepository().find(data.salesPersonCode)?.name ?? "N/A"}
+        </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Owner</span>
@@ -329,12 +332,14 @@ function Content(props: any) {
             Total Payment Due
           </span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.docTotalSys }
+            : {data?.docTotalSys}
           </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Remark</span>
-          <span className="w-8/12 font-medium text-sm">: {data?.comments ?? "N/A"}</span>
+          <span className="w-8/12 font-medium text-sm">
+            : {data?.comments ?? "N/A"}
+          </span>
         </div>
       </div>
     </div>
@@ -357,8 +362,9 @@ function Account(props: any) {
           <span className="col-span-2 font-medium">
             :{" "}
             {
-              new PaymentTermTypeRepository().find(data.paymentGroupCode ?? "N/A")
-                ?.PaymentTermsGroupName
+              new PaymentTermTypeRepository().find(
+                data.paymentGroupCode ?? "N/A"
+              )?.PaymentTermsGroupName
             }
           </span>
         </div>
@@ -382,7 +388,9 @@ function Account(props: any) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Bussiness partner Projec</span>{" "}
-          <span className="col-span-2 font-medium">: {data.project ?? "N/A"}</span>
+          <span className="col-span-2 font-medium">
+            : {data.project ?? "N/A"}
+          </span>
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -400,15 +408,21 @@ function Account(props: any) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Indicator</span>{" "}
-          <span className="col-span-2 font-medium">: {data.indicator ?? "N/A"}</span>
+          <span className="col-span-2 font-medium">
+            : {data.indicator ?? "N/A"}
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Federal Tax ID</span>{" "}
-          <span className="col-span-2 font-medium">: {data.federalTaxID ?? "N/A"}</span>
+          <span className="col-span-2 font-medium">
+            : {data.federalTaxID ?? "N/A"}
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Order Number</span>{" "}
-          <span className="col-span-2 font-medium">: {data.importFileNum ?? "N/A"}</span>
+          <span className="col-span-2 font-medium">
+            : {data.importFileNum ?? "N/A"}
+          </span>
         </div>
       </div>
     </div>
@@ -432,7 +446,7 @@ function Logistic(props: any) {
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Shiping Type</span>{" "}
           <span className="col-span-2 font-medium">
-            : {new ShippingTypeRepository().find(data.shippingType)?.Name}
+            : {new ShippingTypeRepository().find(data.transportationCode)?.Name}
           </span>
         </div>
       </div>

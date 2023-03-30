@@ -19,6 +19,9 @@ class PurchaseOrder extends CoreFormDocument {
     this.state = {
       ...this.state,
       docType: "I",
+      docDueDate: null,
+      taxDate: null,
+      cancelDate: null,
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
@@ -126,7 +129,7 @@ class PurchaseOrder extends CoreFormDocument {
             handlerChange={(key, value) => this.handlerChange(key, value)}
           />
           <ContentForm
-            edit
+            edit={this.props?.edit}
             data={this.state}
             handlerAddItem={() => this.handlerOpenItem()}
             handlerRemoveItem={this.handlerRemoveItem}

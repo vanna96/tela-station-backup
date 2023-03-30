@@ -164,6 +164,7 @@ export default function AccounttingForm({
                 label="Federal Tax ID"
                 value={data?.federalTaxID}
                 name="FederalTaxID"
+                onChange={(e: any) => handlerChange("federalTaxID", e.target.value)}
               />
             </div>
           </div>
@@ -173,6 +174,7 @@ export default function AccounttingForm({
                 label="Order Number"
                 value={data?.importFileNum}
                 name="ImportFileNum"
+                onChange={(e: any) => handlerChange("importFileNum", e.target.value)}
               />
             </div>
           </div>

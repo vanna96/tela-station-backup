@@ -25,7 +25,6 @@ export interface PurchaseOrderProps {
   priceList?: number;
   serie: string;
   paymentMethod?: string;
-  shippingType?: string | undefined;
   journalMemo?: string;
   taxDate: string;
   comments: string;
@@ -36,6 +35,7 @@ export interface PurchaseOrderProps {
   extraDays: string;
   cashDiscountDateOffset: number;
   createQRCodeFrom: string;
+  transportationCode?: string;
   cancelDate: string;
   indicator: string;
   federalTaxID: string;
@@ -44,6 +44,7 @@ export interface PurchaseOrderProps {
   documentStatus: string;
   numAtCard?: string;
   uomCode?: string;
+  salesPersonCode?: number;
   contactPersonList?: ContactEmployee[];
   documentLine: PurchaseOrderDocumentLineProps[];
   requiredDate: string
@@ -89,6 +90,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
   status?: string;
   documentsOwner?: string;
   remark?: string;
+  transportationCode?: string;
   attachmentEntry?: number;
   paymentGroupCode?: string;
   priceList?: number;
@@ -99,6 +101,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
   items: PurchaseOrderDocumentLineProps[];
   taxDate: string;
   comments: string;
+  salesPersonCode?: number;
   docType: string;
   address: string;
   address2: string;
@@ -134,11 +137,12 @@ export default class PurchaseOrder extends Model implements MasterDocument {
     this.docTotalSys = json['DocTotalSys'];
     this.documentsOwner = json['DocumentsOwner'];
     this.numAtCard = json['NumAtCard'];
+    this.salesPersonCode = json['SalesPersonCode'];
     this.contactPersonCode= json['ContactPersonCode'];
     this.description = json['Description'];
     this.docDate = json['DocDate'];
     this.docDueDate = json['DocDueDate'];
-    this.shippingType = json['TransportationCode'];
+    this.transportationCode = json['TransportationCode'];
     this.paymentGroupCode= json['PaymentGroupCode'];
     this.taxDate = json['TaxDate'];
     this.comments = json['Comments'];
@@ -167,6 +171,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "FederalTaxID": json['federalTaxID'],
       "Indicator": json['indicator'],
       "CancelDate": json['cancelDate'],
+      "SalesPersonCode": json['salesPersonCode'],
       "DocTotalSys": json['docTotalSys'],
       "CashDiscountDateOffset": json['cashDiscountDateOffset'],
       "ExtraMonth": json['extraMonth'],
@@ -194,7 +199,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "PaymentGroupCode":  json['paymentGroupCode'],
       "Series": json['series'],
       "PaymentMethod": json['paymentMethod'],
-      "TransportationCode": json['TransportationCode'],
+      "TransportationCode": json['transportationCode'],
       "Project": json['project'],
       "DocNum": json['docNum'],
       "DocCurrency": json['docCurrency'],
@@ -219,6 +224,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "NumAtCard": json['numAtCard'],
       "VatSum": json['vatSum'],
       "UoMcode": json['uomcode'],
+      "SalesPersonCode": json['salesPersonCode'],
       "DocType": json['docType'],
       "DocTotalSys": json['docTotalSys'],
       "Comments": json['comments'],
@@ -239,7 +245,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "Series": json['series'],
       "DocNum": json['docNum'],
       "PaymentMethod": json['paymentMethod'],
-      "ShippingType": json['shippingType'],
+      "TransportationCode": json['transportationCode'],
       "Project": json['project'],
       "DocCurrency": json['docCurrency'],
       "CreateQRCodeFrom": json['createQRCodeFrom'],

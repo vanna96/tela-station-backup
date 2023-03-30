@@ -56,8 +56,8 @@ export default function GeneralForm({
           </label>
           <ShippingType
             name="TransportationCode"
-            value={data?.shippingType}
-            onChange={(e) => handlerChange('shippingType', e.target.value)}
+            value={data?.transportationCode}
+            onChange={(e) => handlerChange('transportationCode', e.target.value)}
           />
         </div>
       </div>
