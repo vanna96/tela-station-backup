@@ -9,6 +9,7 @@ import ShippingType from '@/components/selectbox/ShippingType';
 import MUITextField from '@/components/input/MUITextField';
 import PaymentTerm from '@/components/selectbox/PaymentTerm';
 import MUIDatePicker from '@/components/input/MUIDatePicker';
+import IndicatorSelect from '@/components/selectbox/Indicator';
 
 export interface IAccountingFormProps {
   data: any,
@@ -23,7 +24,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
     <FormCard title='ACCOUNTING'>
       <div className='flex flex-col gap-3 mt-2'>
         <div>
-          <MUITextField label="Journal Remark" value={`Purchase Order - ${data?.journalMemo ?? "N/A"}`}
+          <MUITextField label="Journal Remark" value={("Purchase Qoutation" ?? data?.journalMemo) || "N/A"}
             name="JournalMemo"
             onChange={(e) => handlerChange('journalMemo', e.target.value)}
           />
@@ -111,11 +112,11 @@ export default function Accounting({ data, handlerChange, handlerOpenProject }: 
             </div>
           </div>
           <div>
-            <MUITextField
-              label="Indicator"
-              value={data.indicator}
-              name="Indicator"
+            <label htmlFor="Code" className="text-gray-500 text-[14px]">Indicator</label>
+            <IndicatorSelect
               onChange={(e) => handlerChange('indicator', e.target.value)}
+              value={data?.indicator}
+              name="Indicator"
             />
           </div>
           <div>

@@ -26,7 +26,10 @@ class PurchaseQoutationForm extends CoreFormDocument {
       ...this.state,
       docType: 'I',
       loading: true,
-
+      docDate: null,
+      docDueDate: null,
+      taxDate: null,
+      requriedDate: null
     } as any;
 
 
