@@ -7,9 +7,10 @@ import GLAccount from '@/models/GLAccount';
 interface AccountTextField {
     value: any,
     onChange: (account: any) => void
+    name: any
 }
 
-const AccountTextField: FC<AccountTextField> = ({ value, onChange }: AccountTextField) => {
+const AccountTextField: FC<AccountTextField> = ({ value, onChange,name }: AccountTextField) => {
     const [open, setOpen] = React.useState<boolean>(false)
 
     const handlerConfirm = (account: GLAccount) => {
@@ -20,7 +21,7 @@ const AccountTextField: FC<AccountTextField> = ({ value, onChange }: AccountText
 
     return <>
         <GLAccountModal open={open} onClose={onClose} onOk={handlerConfirm} />
-        <MUITextField endAdornment value={value} onClick={() => setOpen(true)} />
+        <MUITextField endAdornment value={value} name={name} onClick={() => setOpen(true)} />
     </>
 }
 
