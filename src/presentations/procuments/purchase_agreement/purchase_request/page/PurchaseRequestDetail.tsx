@@ -273,7 +273,7 @@ function Content(props: any) {
         Cell: ({ cell }: any) => dateFormat(cell.getValue()),
       },
       {
-        accessorKey: "Vendor",
+        accessorKey: "lineVendor",
         header: "Vendor",
         Cell: ({ cell }: any) => (cell.getValue()),
       },
@@ -282,7 +282,7 @@ function Content(props: any) {
         header: "G/L Account",
       },
       {
-        accessorKey: "G/L Account Name",
+        accessorKey: "accountNameD",
         header: "G/L Account Name",
       },
       {

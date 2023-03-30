@@ -17,6 +17,7 @@ import AccountTextField from "@/components/input/AccountTextField";
 import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRepository";
 import ItemGroupRepository from "../../../../../services/actions/itemGroupRepository";
 import VatGroup from "../../../../../components/selectbox/VatGroup";
+import MUIDatePicker from "@/components/input/MUIDatePicker";
 
 export interface ContentFormProps {
   handlerAddItem: () => void;
@@ -173,9 +174,10 @@ export default function ContentForm({
             <MUITextField
               startAdornment={"USD"}
               disabled={data?.isApproved}
-              value={Formular.findToTal(
+              value={Formular.findLineTotal(
                 cell.row.original.quantity,
-                cell.row.original.unitPrice
+                cell.row.original.unitPrice,
+                cell.row.original.discountPercent
               )}
             />
           );
@@ -184,9 +186,24 @@ export default function ContentForm({
 
       {
         accessorKey: "purchaseVatGroup",
-        header: "Vat Group",
-        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
+        header: "Tax Code",
+        Cell: ({ cell }: any) => {
+          return (
+            <VatGroup
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(
+                  event,
+                  cell?.row?.original,
+                  "purchaseVatGroup"
+                )
+              }
+              category="InputTax"
+            />
+          );
+        },
       },
+
       // {
       //   accessorKey: "UoMCode",
       //   header: "UoM Code",
@@ -225,8 +242,8 @@ export default function ContentForm({
           // return ;
           return (
             <MUITextField
-              defaultValue={currencyFormat(cell.getValue())}
-              onBlur={(event) =>
+              value={cell.getValue()}
+              onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "itemName")
               }
             />
@@ -237,16 +254,28 @@ export default function ContentForm({
         accessorKey: "requiredDate",
         header: "Required Date", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField value={cell.getValue()} onChange={(event) =>
-            handlerChangeInput(event, cell?.row?.original, "requiredDate")
-          }/>;
+          return (
+            <MUITextField
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "requiredDate")
+              }
+            />
+          );
         },
       },
       {
         accessorKey: "lineVendor",
         header: "Vendor", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField value={cell.getValue()} />;
+          return (
+            <MUITextField
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "lineVendor")
+              }
+            />
+          );
         },
       },
       {
@@ -296,7 +325,16 @@ export default function ContentForm({
         accessorKey: "lineTotal",
         header: "Total (LC)", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField value={cell.getValue()} />;
+          return (
+            <MUITextField
+              startAdornment={"USD"}
+              // disabled={data?.isApproved}
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "lineTotal")
+              }
+            />
+          );
         },
       },
     ],
@@ -412,7 +450,7 @@ export default function ContentForm({
         <div className="w-[100%] gap-3">
           <MUITextField
             label="Total Before Discount"
-            value={Formular.findItemTotal(data?.items ?? [])}
+            value={Formular.findTotalBeforeDiscount(data?.items ?? [])}
             name="LineTotal"
           />
         </div>
@@ -448,7 +486,10 @@ export default function ContentForm({
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
-            <MUITextField label="Tax:" value={data.Tax} />
+            <MUITextField
+              label="Tax:"
+              value={Formular.calculateTotalTax(data?.items ?? [])}
+            />
           </div>
           <div className="w-[48%] gap-3">
             <MUITextField label="Total Payment Due" value={data.Tax} />

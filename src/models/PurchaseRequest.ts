@@ -3,6 +3,7 @@ import Model from "./Model";
 import { MasterDocument, DocumentLine } from "./interface/index";
 import Department from "./Department";
 import ItemGroup from './ItemGroup';
+import GLAccountRepository from '@/services/actions/GLAccountRepository';
 
 export interface PurchaseRequestProps {
   id: any;
@@ -203,7 +204,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       Address2: json["Address2"],
       DocumentStatus: json["DocumentStatus"],
       DocumentLines: json["items"]?.map((e: any) =>
-        PurchaseRequestDocumentLine.toCreate(e, json["DocType"])
+        PurchaseRequestDocumentLine.toCreate(e, json["docType"])
       ),
       
       // documentLine: json["items"]?.map((e: any) =>
@@ -298,7 +299,10 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
   itemName?: string;
   saleVatGroup?: string;
   lineVendor?: string;
-  
+  purchaseVatGroup?: string;
+  accountNameD?: string ;
+
+
   constructor(json: any) {
     super();
     this.saleVatGroup = json["VatGroup"];
@@ -312,6 +316,7 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
     this.uomEntry = json["UoMEntry"];
     this.uomCode = json["UoMCode"];
     this.vatGroup = json["VatGroup"];
+    this.purchaseVatGroup = json["VatGroup"];
     this.requiredDate = json["RequiredDate"];
     this.discountPercent = json["DiscountPercent"];
     this.shipDate = json["ShipDate"];
@@ -321,12 +326,15 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
     this.lineTotal = json["LineTotal"];
     this.lineVendor = json["LineVendor"];
     this.itemName = json["ItemDescription"];
+    this.taxRate = json["Rate"]
+    this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
+// {(new OwnerRepository().find(data.owner)?.name) || "N/A"}
   }
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
   }
 
-  public static toCreate(json: any, docType: any) {
+  public static toCreate(json: any, type: any) {
     let line = {
       Quantity: json["quantity"],
       ItemCode: json["itemCode"],
@@ -341,7 +349,9 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
       // TaxCode: null,
       // TAXRate: null,
       UoMEntry: json["uomEntry"],
-      VatGroup: json["vatGroup"],
+      // VatGroup: json["vatGroup"],
+      VatGroup: json["purchaseVatGroup"],
+      LineVendor: json["lineVendor"],
       LineTotal: json["lineTotal"],
       RequiredDate: json["requiredDate"],
       AccountCode: json["AccountNo"],
@@ -349,7 +359,7 @@ export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
       DiscountPercent: json["discountPercent"],
     };
 
-    if (docType === "S") {
+    if (type === "S") {
       delete line.ItemCode;
       delete line.UnitPrice;
     }
