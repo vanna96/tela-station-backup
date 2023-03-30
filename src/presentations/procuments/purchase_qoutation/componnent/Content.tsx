@@ -20,6 +20,7 @@ import MUIDatePicker from "@/components/input/MUIDatePicker";
 import SalePerson from "@/components/selectbox/SalePerson";
 import VatGroup from "@/components/selectbox/VatGroup";
 import BuyerSelect from "@/components/selectbox/buyer";
+import Item from './../../../../models/Item';
 
 interface ContentFormProps {
   handlerAddItem: () => void,
@@ -41,7 +42,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
   const handlerRemoveRow = (row: any) => {
     handlerRemoveItem(row.ItemCode);
   }
-
   const itemColumns = React.useMemo(
     () => [
       {
@@ -108,7 +108,10 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             startAdornment={'%'}
             name="DiscountPercent"
             disabled={data?.DocumentDtatus}
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'discountPercent')}
+            onChange={(event) =>
+              
+              handlerChangeInput(event, cell?.row?.original, 'discountPercent')
+            }
           />;
         },
       },
@@ -155,7 +158,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           return <MUITextField
       
             disabled={data?.isApproved}
-            value={Formular.findToTal(cell.row.original.quantity, cell.row.original.unitPrice)}
+            value={Formular.findToTalDiscountPercent(cell.row.original.quantity, cell.row.original.unitPrice, cell.row.original.discountPercent)}
           />;
         },
       },
@@ -222,8 +225,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <MUIDatePicker
             // disabled={true}
-            value={cell.row?.original?.PlannedAmount}
-            onChange={(e: any) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'shipDate')}
+            value={cell.getValue()}
+            onChange={(event) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'shipDate')}
           />;
         },
       },
@@ -410,7 +413,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
       <div className="flex flex-col gap-3">
 
         <div className="w-[100%] gap-3">
-          <MUITextField label="Total Before Discount:" value={""} />
+          <MUITextField label="Total Before Discount:" value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)}
+/>
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
@@ -436,11 +440,11 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
-            <MUITextField label="Tax:" value={""} />
+            <MUITextField label="Tax:" value={Formular.taxItems(data.items ?? []).toFixed(2)} />
           </div>
 
           <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due::" value={""} />
+            <MUITextField label="Total Payment Due::" value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
           </div>
         </div>
       </div>
