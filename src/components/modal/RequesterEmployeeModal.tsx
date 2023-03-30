@@ -102,7 +102,7 @@ const RequesterEmployeeModal: FC<RequesterEmployeeModalProps> = ({
             rowSelection,
           }}
           renderTopToolbarCustomActions={({ table }) => {
-            return <h2 className=" text-lg font-bold">Vendor</h2>;
+            return <h2 className=" text-lg font-bold">Requester Employee</h2>;
           }}
         />
       </div>
