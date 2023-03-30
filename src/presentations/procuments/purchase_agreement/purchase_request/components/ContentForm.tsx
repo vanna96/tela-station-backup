@@ -214,6 +214,7 @@ export default function ContentForm({
           return (
             <AccountTextField
               value={cell.getValue()}
+              name="AccountNo"
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "AccountNo")
               }
@@ -349,24 +350,7 @@ export default function ContentForm({
         />
       </div>
       <div className="flex flex-col gap-3">
-        {/* <div className="w-[48%] gap-3">
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Buyer
-            </label>
-            <MUISelect
-              items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                id: e.id,
-                name: e.name,
-              }))}
-              onChange={(e) =>
-                handlerChange("contactPersonCode", e.target.value)
-              }
-              value={data?.contactPersonCode}
-              aliasvalue="id"
-              aliaslabel="name"
-              name="ContactPersonCode"
-            />
-          </div> */}
+
         <div className="">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Owner
@@ -389,6 +373,7 @@ export default function ContentForm({
               fullWidth
               name="Comments"
               value={data?.comments}
+              onChange={(e: any) => handlerChange("comments", e.target.value)}
             />
           </div>
         </div>

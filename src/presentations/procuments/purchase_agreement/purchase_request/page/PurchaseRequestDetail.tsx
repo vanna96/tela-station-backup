@@ -144,7 +144,7 @@ class PurchaseRequestDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Posting Date</span>
                   <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.creationDate)}
+                    : {dateFormat(this.state.docDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -156,7 +156,7 @@ class PurchaseRequestDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Document Date</span>
                   <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.docDate)}
+                    : {dateFormat(this.state.taxDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">

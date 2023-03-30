@@ -145,7 +145,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
     this.price = json["Price"];
     this.docNum = json["DocNum"];
     this.requriedDate = json["RequriedDate"];
-    this.creationDate = json["CreationDate"];
+    this.taxDate = json["TaxDate"];
     this.docDueDate = json["DocDueDate"];
     this.docDate = json["DocDate"];
     this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
@@ -182,8 +182,9 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       RequesterEmail: json["email"],
       RequesterBranch: json["branch"],
       RequesterDepartment: json["department"],
+      ReqType: json["reqType"],
       DocType: json["docType"],
-      CreationDate: json["creationDate"],
+      TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       RequriedDate: json["requriedDate"],
       DocDueDate: json["docDueDate"],
@@ -200,7 +201,7 @@ export default class PurchaseRequest extends Model implements MasterDocument {
       Rounding: json["Rounding"],
       Address2: json["Address2"],
       DocumentStatus: json["DocumentStatus"],
-      DocumentLine: json["items"]?.map((e: any) =>
+      DocumentLines: json["items"]?.map((e: any) =>
         PurchaseRequestDocumentLine.toCreate(e, json["DocType"])
       ),
       

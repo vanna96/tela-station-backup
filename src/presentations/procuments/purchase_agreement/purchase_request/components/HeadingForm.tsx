@@ -170,8 +170,8 @@ export default function HeadingForm({
               </label>
               <div className="">
                 <MUIDatePicker
-                  value={data.creationDate}
-                  onChange={(e: any) => handlerChange("creationDate", e)}
+                  value={data.docDate}
+                  onChange={(e: any) => handlerChange("docDate", e)}
                 />
               </div>
             </div>
@@ -195,8 +195,8 @@ export default function HeadingForm({
               </label>
               <div className="">
                 <MUIDatePicker
-                  value={data.docDate}
-                  onChange={(e: any) => handlerChange("docDate", e)}
+                  value={data.taxDate}
+                  onChange={(e: any) => handlerChange("taxDate", e)}
                 />
               </div>
             </div>
