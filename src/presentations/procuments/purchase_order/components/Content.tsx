@@ -15,6 +15,7 @@ import { ContactEmployee } from "@/models/BusinessParter";
 import Owner from "@/components/selectbox/Owner";
 import AccounttingForm from "./Accountting";
 import AccountTextField from "../../../../components/input/AccountTextField";
+import VatGroup from '../../../../components/selectbox/VatGroup';
 
 export interface ContentFormProps {
   handlerAddItem: () => void;
@@ -121,12 +122,13 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "purchaseVatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => {
-          return <MUITextField
+          return <VatGroup
             value={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
+            category="InputTax"
           />;
         },
       },
@@ -192,14 +194,14 @@ export default function ContentForm({
         accessorKey: "accountCode",
         header: "G/L Account", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          console.log(cell.getValue());
+          console.log(cell.getValue())
           return (
             <AccountTextField
+              name="AccountNo"
               value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "accountCode")
-              }
-            />
+              } />
           );
         },
       },
@@ -211,17 +213,14 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "vatGroup",
-        header: "Tax Code", //uses the default width from defaultColumn prop
+        accessorKey: "purchaseVatGroup",
+        header: "Tax Code",
         Cell: ({ cell }: any) => {
-          return (
-            <MUITextField
-              value={cell.getValue()}
-              onChange={(event: any) =>
-                handlerChangeInput(event, cell?.row?.original, "VatGroup")
-              }
-            />
-          );
+          return <VatGroup
+            value={cell.getValue()}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
+            category="InputTax"
+          />;
         },
       },
       {
