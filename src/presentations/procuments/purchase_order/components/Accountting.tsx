@@ -1,6 +1,7 @@
 import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
+import IndicatorSelect from "@/components/selectbox/Indicator";
 import MUISelect from "@/components/selectbox/MUISelect";
 import Owner from "@/components/selectbox/Owner";
 import PaymentMethod from "@/components/selectbox/PaymentMethod";
@@ -163,14 +164,14 @@ export default function AccounttingForm({
             </div>
           </div>
         </div>
-        <div className="mt-2">
+        <div>
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Indicator
           </label>
-          <Owner
-            name="Indicator"
+          <IndicatorSelect
+            onChange={(e) => handlerChange("indicator", e.target.value)}
             value={data?.indicator}
-            onChange={(e: any) => handlerChange("owner", e.target.value)}
+            name="Indicator"
           />
         </div>
         <div className="flex gap-5 mt-2">
