@@ -12,7 +12,7 @@ export const currencyFormat = (value:any) =>
     if (!value) return 0.00.toFixed(2);
 
     if (typeof value === "number")
-        return value.toFixed(2)
+        return "$ " + value.toFixed(2)
 
     return parseFloat(value).toFixed(2);
 }
