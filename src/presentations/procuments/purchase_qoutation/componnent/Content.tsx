@@ -246,9 +246,9 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           return <MUITextField value={cell.getValue()} />;
         },
       },
-      {
+    {
         accessorKey: "purchaseVatGroup",
-        header: "Tax Code", //uses the default width from defaultColumn prop
+        header: "Tax Code",
         Cell: ({ cell }: any) => {
           return <VatGroup
             value={cell.getValue()}

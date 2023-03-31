@@ -225,12 +225,12 @@ function Content(props: any) {
       {
         accessorKey: "shipDate",
         header: "Qouted date",
-        Cell: ({ cell }: any) => cell.getValue(),
+        Cell: ({ cell }: any) => dateFormat(cell.getValue()),
       },
       {
         accessorKey: "requiredDate",
         header: "Required Date",
-        Cell: ({ cell }: any) => cell.getValue(),
+        Cell: ({ cell }: any) => dateFormat(cell.getValue()),
       },
       {
         accessorKey: "accountCode",
