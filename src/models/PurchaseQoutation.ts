@@ -2,6 +2,8 @@ import {  } from '../utilies';
 import Model from './Model';
 import { MasterDocument, DocumentLine } from './interface/index';
 import moment from 'moment';
+import { ContactEmployee } from './BusinessParter';
+import GLAccountRepository from '@/services/actions/GLAccountRepository';
 
 export interface PurchaseQoutationProps {
   id: any;
@@ -44,7 +46,13 @@ export interface PurchaseQoutationProps {
   discountPercent?: string;
   itemName?: string;
   uomCode?: string
-  transportationCode?:string
+  transportationCode?: string;
+  contactPersonList?: ContactEmployee[];
+  numAtCard?: string;
+  vatSum?: number;
+  docTotalSys?: number;
+  salesPersonCode?: number;
+  accountNameD?: string;
 }
 
 export interface PurchaseQoutationDocumentLineProps {
@@ -76,9 +84,9 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
 
   id: any;
   docNum: any;
+  salesPersonCode?: number
   cardCode?: string;
   cardName?: string;
-  constactPersonCode?: number;
   docDate?: string;
   docDueDate?: string;
   requriedDate?: string
@@ -99,6 +107,7 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   comments: string;
   docType: string;
   address: string;
+  contactPersonList?: ContactEmployee[];
   address2: string;
   extraMonth: string;
   extraDays: string;
@@ -115,9 +124,18 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
   itemName?: string;
   uomCode?: string;
   transportationCode?: string;
+  contactPersonCode?: number;
+  numAtCard?: string;
+  vatSum?: number;
+  docTotalSys?: number;
+  accountNameD?: string;
   constructor(json: any) {
     super();
+    this.salesPersonCode = json['SalesPersonCode']
     this.id = json['DocEntry'];
+    this.docTotalSys = json['DocTotalSys']
+    this.vatSum = json['VatSum'];
+    this.numAtCard = json['NumAtCard']
     this.documentStatus = json['DocumentStatus'];
     this.federalTaxID = json['FederalTaxID']
     this.extraMonth = json['ExtraMonth'];
@@ -125,12 +143,13 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     this.serie = json['Series'];
     this.docType = json['DocType'] === "dDocument_Service" ? "S" : "I";
     this.docNum = json['DocNum'];
+    this.contactPersonList = json['contactPersonList'];
     this.journalMemo = json['JournalMemo']
     this.cardName = json['CardName'];
     this.cardCode = json['CardCode'];
     this.documentsOwner = json['DocumentsOwner'];
     this.cardCode = json['CardCode'];
-    this.constactPersonCode = json['ContactPersonCode'];
+    this.contactPersonCode = json['ContactPersonCode'];
     this.docDate = (json['DocDate']);
     this.docDueDate = (json['DocDueDate']);
     this.terminateDate = (json['TernimatedDate']);
@@ -154,7 +173,8 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     this.discountPercent = json['DiscountPercent'];
     this.itemName = json['ItemDescription'];
     this.uomCode = json['UoMCode'];
-    this.transportationCode = json['TransportationCode']
+    this.transportationCode = json['TransportationCode'];
+    this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
 
   }
   toJson(update: boolean) {
@@ -165,6 +185,10 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
     console.log(json)
 
     return {
+      "SalesPersonCode": json['salesPersonCode'],
+      "VatSum": json['vatSum'],
+      "DocNum": json['docNum'],
+      "NumAtCard": json['numAtCard'],
       "DocumentsOwner": json['documentsOwner'],
       "DocumentStatus": json['documentStatus'],
       "ImportFileNum": json['importFileNum'],
@@ -206,6 +230,9 @@ export default class PurchaseQouatation extends Model implements MasterDocument 
 
   public static toUpdate(json: any) {
     return {
+      "SalesPersonCode": json['salesPersonCode'],
+      "VatSum": json['vatSum'],
+      "NumAtCard": json['numAtCard'],
       "DocumentsOwner": json['documentsOwner'],
       "DocumentStatus": json['documentStatus'],
       "ImportFileNum": json['importFileNum'],
@@ -272,10 +299,11 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
   discountPercent?: number;
   requriedDate?: string;
   itemName?: string;
-  saleVatGroup?: string
+  saleVatGroup?: string;
+ 
   constructor(json: any) {
     super();
-    this.saleVatGroup = json['VatGroup']
+    this.saleVatGroup = json['VatGroup'];
     this.itemCode = json['ItemCode'];
     this.itemDescription = json['ItemDescription'];
     this.quantity = json['Quantity'];
@@ -293,7 +321,8 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
     this.accountName = json['AccountName'];
     this.lineTotal = json['LineTotal'];
     this.itemName = json['ItemDescription'];
-    this.blanketAgreementNumber = json['BlanketAgreementNumber']
+    this.blanketAgreementNumber = json['BlanketAgreementNumber'];
+ 
   }
   toJson(update: boolean) {
     throw new Error('Method not implemented.');

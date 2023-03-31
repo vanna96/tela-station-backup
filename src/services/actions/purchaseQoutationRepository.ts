@@ -4,7 +4,7 @@ import PurchaseAgreement from '../../models/PurchaseAgreement';
 import request from '../../utilies/request';
 import BusinessPartnerRepository from './bussinessPartnerRepository';
 import { IContactPersonList } from '../../astractions/index';
-import PurchaseQouatation from '@/models/PurchaseQouatation';
+import PurchaseQouatation from '@/models/PurchaseQoutation';
 
 export default class PurchaseQoutationRepository extends Repository<PurchaseQouatation> {
 
@@ -35,7 +35,7 @@ export default class PurchaseQoutationRepository extends Repository<PurchaseQoua
 
     // purchaseQoutation.email = businessPartner.email;
     // purchaseQoutation.phone = businessPartner.phone;
-    // purchaseQoutation.contactPersonList = businessPartner.contactEmployee ?? [];
+    purchaseQoutation.contactPersonList = businessPartner.contactEmployee ?? [];
 
     return purchaseQoutation;
   }

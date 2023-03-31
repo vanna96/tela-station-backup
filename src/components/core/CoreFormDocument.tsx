@@ -373,7 +373,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let totalVatRate = temps.items?.reduce((prev: any, current: any) => prev + (current?.vatRate ?? 0), 0);
         const total = temps['docTotalBeforeDiscount'] - temps['docDiscountPrice'];
         totalVatRate = ((temps['docDiscountPrice'] === 0 ? temps.docTotalBeforeDiscount : temps['docDiscountPrice']) * totalVatRate) / 100;
-        temps['docTaxTotal'] = temps['docDiscountPrice'] === 0 || total === 0 ? 0 : totalVatRate;
+        temps['docTaxTotal'] = totalVatRate;
         temps['docTotal'] = total + temps['docTaxTotal'];
         return temps;
     }
@@ -469,8 +469,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             docTotalBeforeDiscount = items.reduce((prev, current) => prev + current.lineTotal, 0);
             let total = docTotalBeforeDiscount - this.state.docDiscountPrice;
             docTaxTotal = items.reduce((prev, cur) => prev + (cur?.vatRate ?? 0), 0);
-            docTaxTotal = total <= 0 ? 0 : (total * docTaxTotal / 100);
-            docTotal = total <= 0 || total === docTotalBeforeDiscount ? 0 : total + docTaxTotal;
+            docTaxTotal = (total * docTaxTotal / 100);
+            docTotal = total + docTaxTotal;
         }
 
         if (field === 'accountCode') {
