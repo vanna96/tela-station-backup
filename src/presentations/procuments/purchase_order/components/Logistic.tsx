@@ -19,8 +19,7 @@ export default function GeneralForm({
 }: ILogisticFormProps) {
   return (
     <FormCard title="Logistic">
-      <div className="">
-        <div className="">
+      <div className="mt-2">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Ship To
           </label>
@@ -34,7 +33,6 @@ export default function GeneralForm({
               defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
             />
           </div>
-        </div>
         <div className="mt-2">
         <label htmlFor="Code" className="text-gray-500 text-[14px]">
           Shipping Type
@@ -47,7 +45,7 @@ export default function GeneralForm({
         </div>
       </div>
       <div>
-        <div className="">
+        <div className="mt-2">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Pay To
           </label>
