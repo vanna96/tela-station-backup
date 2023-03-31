@@ -8,7 +8,7 @@ import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft,
 import Taps from '@/components/button/Taps';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
-import { currencyFormat, dateFormat, discountFormat, fileToBase64 } from '@/utilies';
+import { currencyDetailFormat, currencyFormat, dateFormat, discountFormat, fileToBase64 } from '@/utilies';
 import { AttachmentLine } from '../../../../models/Attachment';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
@@ -189,7 +189,7 @@ function Content(props: any) {
     {
       accessorKey: "unitPrice",
       header: "Info Price",
-      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+      Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
     {
       accessorKey: "discountPercent",
@@ -204,7 +204,7 @@ function Content(props: any) {
     {
       accessorKey: "lineTotal",
       header: "Total (LC)",
-      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+      Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
       enableClickToCopy: true,
     },
     {
@@ -250,7 +250,7 @@ function Content(props: any) {
       {
         accessorKey: "lineTotal",
         header: "Total (LC)",
-        Cell: ({ cell }: any) => cell.getValue(),
+        Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
       },
       {
         accessorKey: "blanketAgreementNumber",

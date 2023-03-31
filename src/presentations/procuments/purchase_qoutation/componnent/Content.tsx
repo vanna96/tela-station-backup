@@ -65,7 +65,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             value={cell.getValue()}
             name="ItemCode"
             error={(cell.getValue() as number) <= 0}
-            disabled={data?.DocumentDtatus}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'itemCode')}
           />;
         },
@@ -79,7 +78,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           return <MUITextField
             value={cell.getValue()}
             name="ItemDescription"
-            disabled={data?.DocumentDtatus}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'itemDescription')}
           />;
         },
@@ -94,7 +92,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             type="number"
             name="Quantity"
             error={(cell.getValue() as number) <= 0}
-            disabled={data?.isApproved}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'quantity')}
           />;
         },
@@ -108,7 +105,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             type="number"
             startAdornment={'%'}
             name="DiscountPercent"
-            disabled={data?.DocumentDtatus}
             onChange={(event) =>
               
               handlerChangeInput(event, cell?.row?.original, 'discountPercent')
@@ -124,9 +120,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             startAdornment={'USD'}
             type="number"
             name="UnitPrice"
-            disabled={data?.isApproved}
             error={(cell.getValue() as number) <= 0}
-            value={currencyFormat(cell.getValue())}
+            value={cell.getValue()}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
           />;
         },
@@ -158,8 +153,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <MUITextField
             startAdornment={'USD'}
-            disabled={data?.isApproved}
-            value={Formular.findToTalDiscountPercent(cell.row.original.quantity, cell.row.original.unitPrice, cell.row.original.discountPercent).toFixed(2)}
+            value={Formular.findToTalDiscountPercent(cell.row.original.quantity, cell.row.original.unitPrice, cell.row.original.discountPercent)}
           />;
         },
       },
@@ -415,7 +409,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         <div className="flex flex-col gap-3">
 
           <div className="w-[100%] gap-3">
-            <MUITextField label="Total Before Discount:" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
+            <MUITextField label="Total Before Discount:" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? [])} />
           </div>
           <div className="flex justify-between">
             <div className="w-[48%] gap-3">
@@ -478,11 +472,11 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           </div>
           <div className="flex justify-between">
             <div className="w-[48%] gap-3">
-              <MUITextField label="Tax:" disabled={edit} startAdornment={'USD'} value={Formular.taxItems(data.items ?? []).toFixed(2)} />
+              <MUITextField label="Tax:" disabled={edit} startAdornment={'USD'} value={Formular.taxItems(data.items ?? [])} />
             </div>
 
             <div className="w-[48%] gap-3">
-              <MUITextField label="Total Payment Due:" disabled={edit} startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
+              <MUITextField label="Total Payment Due:" disabled={edit} startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? [])} />
             </div>
           </div>
         </div>
