@@ -16,6 +16,14 @@ export const currencyFormat = (value:any) =>
 
     return parseFloat(value).toFixed(2);
 }
+export const discountFormat = (value: any) => {
+  if (!value) return 0;
+
+  if (typeof value === "number")
+    return value + " %" 
+
+  return parseFloat(value);
+}
 
 
 export const arrayBufferToBlob = async (arrayBuffer : any, type : any, fileName : string) : Promise<Blob> =>

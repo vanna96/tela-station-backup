@@ -8,7 +8,7 @@ import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft,
 import Taps from '@/components/button/Taps';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
-import { currencyFormat, dateFormat, fileToBase64 } from '@/utilies';
+import { currencyFormat, dateFormat, discountFormat, fileToBase64 } from '@/utilies';
 import { AttachmentLine } from '../../../../models/Attachment';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
@@ -193,8 +193,8 @@ function Content(props: any) {
     },
     {
       accessorKey: "discountPercent",
-      header: "	Discount %",
-      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+      header: "	Discount",
+      Cell: ({ cell }: any) => discountFormat(cell.getValue()),
     },
     {
       accessorKey: "vatGroup",
