@@ -109,16 +109,14 @@ class PurchaseQoutationDetail extends Component<any, any> {
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Vendor Ref .No</span>
-                  <span className='w-8/12 font-medium'>:{this.state?.numAtCard ||"N/A"}</span>
+                  <span className='w-8/12 font-medium'>:{this.state?.numAtCard || "N/A"}</span>
                 </div>
-
-
-              </div>
-              <div className='flex flex-col gap-1'>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500 '>Local Currency</span>
                   <span className='w-8/12 font-medium'>: {this.state.docCurrency || "N/A"}</span>
                 </div>
+              </div>
+              <div className='flex flex-col gap-1'>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Status</span>
                   <span className='w-8/12 font-medium'>: {this.state.documentStatus?.replace('bost_', '') || "N/A"}</span>
@@ -303,11 +301,11 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
-        <span className='w-8/12 font-medium text-sm'>: { data?.as || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.as || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Tax</span>
-        <span className='w-8/12 font-medium text-sm'>:{ data?.vatSum}</span>
+        <span className='w-8/12 font-medium text-sm'>:{data?.vatSum}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>

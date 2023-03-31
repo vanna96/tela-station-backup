@@ -7,7 +7,7 @@ import { useQuery } from "react-query";
 import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
 import OwnerRepository from "@/services/actions/ownerRepository";
-import FactoringIndicatorRepository from "@/services/actions/factoringIndicatorRepository";
+import FactoringIndicatorRepository from "@/services/actions/FactoringIndicatorRepository";
 
 
 interface IndicatorProps<T = unknown> {

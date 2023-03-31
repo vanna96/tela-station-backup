@@ -303,7 +303,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
     <FormCard title="Content" >
       <div className="col-span-2 data-table gap-3">
         <div className="flex flex-col my-5">
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-4">
             <div>
               <label htmlFor=" Item/ServiceType" className="text-gray-500 text-[14px]">
                 Item/Service Type

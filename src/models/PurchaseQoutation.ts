@@ -303,7 +303,7 @@ export class PurchaseQoutationDocumentLine extends Model implements DocumentLine
  
   constructor(json: any) {
     super();
-    this.saleVatGroup = json['VatGroup']
+    this.saleVatGroup = json['VatGroup'];
     this.itemCode = json['ItemCode'];
     this.itemDescription = json['ItemDescription'];
     this.quantity = json['Quantity'];
