@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import InitializeData from '@/services/actions';
 import { useMemo } from 'react';
 import DistributionRule from '@/models/DistributionRule';
+import DistributionRuleRepository from '../../services/actions/distributionRulesRepository';
 
 
 interface DistributionRuleModalProps {
@@ -18,7 +19,7 @@ interface DistributionRuleModalProps {
 const DistributionRuleModal: FC<DistributionRuleModalProps> = ({ open, onClose, inWhichNum, onOk }) => {
   const { data, isLoading }: any = useQuery({
     queryKey: ["distribution-rules"],
-    queryFn: () => InitializeData.listDistribution(),
+    queryFn: () => new DistributionRuleRepository().get(),
     staleTime: Infinity,
   });
 

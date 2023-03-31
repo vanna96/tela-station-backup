@@ -10,6 +10,8 @@ import ItemGroup from '@/models/ItemGroup';
 import UnitOfMeasurement from '@/models/UnitOfMeasurement';
 import VatGroupRepository from '../../services/actions/VatGroupRepository';
 import VatGroup from '@/models/VatGroup';
+import ItemGroupRepository from '@/services/actions/itemGroupRepository';
+import UnitOfMeasurementRepository from '@/services/actions/unitOfMeasurementRepository';
 
 
 type ItemType = 'purchase' | 'sale' | 'inventory';
@@ -31,25 +33,10 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
         staleTime: Infinity,
     });
 
-
-    const itemGroup = useQuery({
-        queryKey: ["item-groups"],
-        queryFn: () => InitializeData.listItemGroup(),
-        staleTime: Infinity,
-    });
-
-    const uomGroup = useQuery({
-        queryKey: ["uom-groups"],
-        queryFn: () => InitializeData.unitOfMeasurement(),
-        staleTime: Infinity,
-    });
-
-
     const [pagination, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 8,
     });
-
 
 
     const [rowSelection, setRowSelection] = React.useState({});
