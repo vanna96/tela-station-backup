@@ -1,5 +1,5 @@
 export default class Formular {
-  constructor() {}
+  constructor() { }
 
   public static findItemTotal(items: any[]): number {
     const total = items?.reduce((accumulator: number, currentItem: any) => {
@@ -25,10 +25,10 @@ export default class Formular {
   ) {
     let total = (parseFloat(price ?? "0") *
       parseFloat(qty ?? "0") -
-    parseFloat(price ?? "0") *
-      parseFloat(qty?? "0") *
-        discount / 100)
-   
+      parseFloat(price ?? "0") *
+      parseFloat(qty ?? "0") *
+      discount / 100)
+
 
     if (isNaN(total)) return 0;
 

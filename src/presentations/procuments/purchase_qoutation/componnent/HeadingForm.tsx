@@ -22,7 +22,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
       <FormCard title='Information'>
         <div className="flex flex-col gap-2">
           <div className="grid grid-cols-2 gap-3">
-            <MUITextField label="Vendor Code" disabled={edit} value={data?.cardCode} name="BPCode" onClick={handlerOpenVendor} endAdornment={true} />
+            <MUITextField label="Vendor Code" disabled={edit} value={data?.cardCode} name="BPCode" onClick={handlerOpenVendor} endAdornment={!edit} />
             <MUITextField label="Vendor Name" disabled={edit} value={data?.cardName} name="BPName" />
           </div>
 
@@ -42,7 +42,10 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
             </div>
 
             <div className="flex flex-col gap-1 text-sm">
-              <MUITextField label="Vender Ref.No" name="" />
+              <MUITextField label="Vender Ref.No" name="NumAtCard"
+                onChange={(e) => handlerChange('numAtCard', e.target.value)}
+                value={data?.numAtCard}
+              />
             </div>
           </div>
 
