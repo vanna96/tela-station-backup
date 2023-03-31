@@ -12,8 +12,6 @@ interface SalePersonProps<T = unknown> {
     disabled?: boolean,
 }
 
-
-
 function SalePerson(props: SalePersonProps) {
     const { data, isLoading }: any = useQuery({ queryKey: ['sale_persons'], queryFn: () => new SalePersonRepository().get(), staleTime: Infinity })
 
