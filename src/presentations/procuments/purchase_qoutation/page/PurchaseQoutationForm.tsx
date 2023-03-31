@@ -36,7 +36,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
 
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    this.handlerAddItem = this.handlerAddItem.bind(this);
+    // this.handlerAddItem = this.handlerAddItem.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
@@ -75,26 +75,26 @@ class PurchaseQoutationForm extends CoreFormDocument {
     this.setState({ ...this.state, items: items })
   }
 
-  handlerAddItem({ value, record, field }: any) {
-    let items = [...this.state.items ?? []];
-    let item = this.state.items?.find((e: any) => e?.ItemCode === record?.ItemCode);
-    item[field] = value;
-    const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-    if (index > 0) items[index] = item;
+  // handlerAddItem({ value, record, field }: any) {
+  //   let items = [...this.state.items ?? []];
+  //   let item = this.state.items?.find((e: any) => e?.itemCode === record?.itemCode);
+  //   item[field] = value;
+  //   const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
+  //   if (index > 0) items[index] = item;
 
-    if (field === 'purchaseVatGroup')
-      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+  //   if (field === 'purchaseVatGroup')
+  //     item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
 
-    if (field === 'accountCode') {
-      const account = value as GLAccount;
-      item['accountCode'] = account.code;
-      item['accountName'] = account.name;
-    } else {
-      item[field] = value;
-    }
+  //   if (field === 'accountCode') {
+  //     const account = value as GLAccount;
+  //     item['accountCode'] = account.code;
+  //     item['accountName'] = account.name;
+  //   } else {
+  //     item[field] = value;
+  //   }
 
-    this.setState({ ...this.state, items: items })
-  }
+  //   this.setState({ ...this.state, items: items })
+  // }
 
   async handlerSubmit(event: any) {
     event.preventDefault();
@@ -141,7 +141,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
           data={this.state}
           handlerAddItem={() => this.handlerOpenItem()}
           handlerRemoveItem={this.handlerRemoveItem}
-          handlerChangeItem={this.handlerAddItem}
+          handlerChangeItem={this.handlerChangeItems}
           handlerChange={(key, value) => this.handlerChange(key, value)}
         />
         <Logistic

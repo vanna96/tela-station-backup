@@ -203,8 +203,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         accessorKey: "requiredDate",
         header: "Required Date",
         Cell: ({ cell }: any) => {
-          console.log(cell);
-          console.log(cell.row);
           return (
             <MUIDatePicker
               value={cell.getValue()}
@@ -229,7 +227,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         accessorKey: "accountCode",
         header: "G/L Account", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          console.log(cell.getValue())
           return (
             <AccountTextField
               name="AccountNo"
@@ -291,7 +288,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
   );
 
   const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
-  console.log(data);
 
   return (
     <FormCard title="Content" >
@@ -408,76 +404,30 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
       {data?.documentStatus === "bost_Open" ? 
         <div className="flex flex-col gap-3">
 
-          <div className="w-[100%] gap-3">
-            <MUITextField label="Total Before Discount:" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? [])} />
+        <div className="w-[100%] gap-3">
+          <MUITextField label="Total Before Discount:" value={currencyFormat(data?.docTotalBeforeDiscount)} />
+        </div>
+        <div className="flex justify-between">
+          <div className="w-[48%] gap-3">
+            <MUITextField label="Discount:" startAdornment={'%'} value={data?.docDiscountPercent} onChange={(e) => handlerChange('docDiscountPercent', e.target.value)} />
           </div>
-          <div className="flex justify-between">
-            <div className="w-[48%] gap-3">
-              <MUITextField label="Discount:" value={""} />
-            </div>
-            <div className="w-[48%] gap-3 mt-5">
-              <MUITextField label="" value={""} />
-            </div>
+          <div className="w-[48%] gap-3 mt-5">
+            <MUITextField label="" startAdornment={data?.currency ?? 'AUD'} value={data?.docDiscountPrice} onChange={(e) => handlerChange('docDiscountPrice', e.target.value)} />
           </div>
           <div className="flex justify-between">
             <div className="w-[48%] gap-3">
               <MUITextField label="Fright:" value={""} />
             </div>
 
-            <div className="w-[48%] gap-3 mt-5">
-              <div className='flex items-center gap-1 text-sm'>
-
-                <Checkbox name='Renewal' checked={data.renewal} onChange={(e) => handlerChange('renewal', !data.renewal)} />
-                <label htmlFor='Renewal' className='text-gray-500 text-[14px]'>Rounding</label>
-              </div>
-
-            </div>
           </div>
-          <div className="flex justify-between">
-            <div className="w-[48%] gap-3">
-              <MUITextField label="Tax:" startAdornment={'USD'} value={Formular.taxItems(data.items ?? []).toFixed(2)} />
-            </div>
-
-            <div className="w-[48%] gap-3">
-              <MUITextField label="Total Payment Due:" startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
-            </div>
+        </div>
+        <div className="flex justify-between">
+          <div className="w-[48%] gap-3">
+            <MUITextField label="Tax:" value={currencyFormat(data?.docTaxTotal)} />
           </div>
-        </div> :
-        <div className="flex flex-col gap-3">
 
-          <div className="w-[100%] gap-3">
-            <MUITextField label="Total Before Discount:" disabled={edit} startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? []).toFixed(2)} />
-          </div>
-          <div className="flex justify-between">
-            <div className="w-[48%] gap-3">
-              <MUITextField label="Discount:" disabled={edit} value={""} />
-            </div>
-            <div className="w-[48%] gap-3 mt-5">
-              <MUITextField label="" disabled={edit} value={""} />
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="w-[48%] gap-3">
-              <MUITextField label="Fright:" disabled={edit} value={""} />
-            </div>
-
-            <div className="w-[48%] gap-3 mt-5">
-              <div className='flex items-center gap-1 text-sm'>
-
-                <Checkbox name='Renewal' disabled={edit} checked={data.renewal} onChange={(e) => handlerChange('renewal', !data.renewal)} />
-                <label htmlFor='Renewal' className='text-gray-500 text-[14px]'>Rounding</label>
-              </div>
-
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="w-[48%] gap-3">
-              <MUITextField label="Tax:" disabled={edit} startAdornment={'USD'} value={Formular.taxItems(data.items ?? [])} />
-            </div>
-
-            <div className="w-[48%] gap-3">
-              <MUITextField label="Total Payment Due:" disabled={edit} startAdornment={'USD'} value={Formular.findTotalBeforeDiscount(data.items ?? [])} />
-            </div>
+          <div className="w-[48%] gap-3">
+            <MUITextField label="Total Payment Due::" value={currencyFormat(data?.docTotal)} />
           </div>
         </div>
     }

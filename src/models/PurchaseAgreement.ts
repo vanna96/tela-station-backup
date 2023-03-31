@@ -297,14 +297,14 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
             "CumulativeVATAmountFC": null,
         };
 
-        // if (type === 'M') {
-        //     delete body.ItemNo;
-        //     delete body.ItemDescription;
-        //     delete body.ItemGroup;
-        //     delete body.UnitPrice;
-        //     delete body.UoMEntry;
-        //     delete body.InventoryUoM;
-        // }
+        if (type === 'M') {
+            delete body.ItemNo;
+            delete body.ItemDescription;
+            delete body.ItemGroup;
+            delete body.UnitPrice;
+            delete body.UoMEntry;
+            delete body.InventoryUoM;
+        }
         
         return body;
     }

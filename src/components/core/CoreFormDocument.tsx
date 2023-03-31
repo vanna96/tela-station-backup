@@ -21,6 +21,9 @@ import RequesterEmployeeModal from '../modal/RequesterEmployeeModal';
 import EmployeesInfo from '@/models/EmployeesInfo';
 import Users from '../../models/User';
 import RequesterModal from '../modal/RequesterModal';
+import VatGroupRepository from '@/services/actions/VatGroupRepository';
+import GLAccount from '@/models/GLAccount';
+import Formular from '@/utilies/formular';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -81,11 +84,12 @@ export interface CoreFormDocumentState {
     department: any,
     branch: any,
     reqType: number,
+    docTotalBeforeDiscount: number,
     docTotal: number,
     docDiscountPercent: number | any,
     docDiscountPrice: number | any,
     docTaxTotal: number | any,
-    rounded: boolean
+    rounded: boolean,
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -142,6 +146,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             reqType: 12,
             docTaxTotal: 0,
             docTotal: 0,
+            docTotalBeforeDiscount: 0,
             docDiscountPercent: 0,
             docDiscountPrice: 0,
             rounded: false
@@ -151,7 +156,9 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
         this.handlerConfirmDistribution = this.handlerConfirmDistribution.bind(this)
         this.handlerConfirmRequestEmployee = this.handlerConfirmRequestEmployee.bind(this)
-        this.handlerConfirmRequester = this.handlerConfirmRequester.bind(this)
+        this.handlerConfirmRequester = this.handlerConfirmRequester.bind(this);
+        this.handlerChangeItems = this.handlerChangeItems.bind(this);
+        this.handlerDeleteItem = this.handlerDeleteItem.bind(this);
     }
 
     abstract FormRender(): JSX.Element;
@@ -319,7 +326,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         });
     }
 
-
     protected handlerChange(key: string, value: any) {
         let temps: any = { ...this.state };
         temps[key] = value;
@@ -341,7 +347,35 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             temps['cardName'] = null
         }
 
+        // discount
+        let docDiscountPercent = this.state.docDiscountPercent;
+        let docTotalBeforeDiscount = this.state.docTotalBeforeDiscount;
+        if (key === 'docDiscountPercent') {
+            let discount = parseFloat(value);
+            temps['docDiscountPrice'] = discount >= 100 ? 0 : (docTotalBeforeDiscount * value) / 100;
+            temps['docDiscountPercent'] = discount > 100 ? 100 : value;
+            //
+            temps = this.findTotalVatRate(temps);
+        }
+
+        if (key === 'docDiscountPrice') {
+            const total = parseFloat(value) > docTotalBeforeDiscount;
+            docDiscountPercent = total ? 100 : ((value / docTotalBeforeDiscount) * 100);
+            temps['docDiscountPercent'] = (docDiscountPercent >= 10 ? docDiscountPercent : docDiscountPercent / 10);
+            temps['docDiscountPrice'] = total ? 0 : value;
+            temps = this.findTotalVatRate(temps);
+        }
+
         this.setState(temps)
+    }
+
+    findTotalVatRate(temps: any) {
+        let totalVatRate = temps.items?.reduce((prev: any, current: any) => prev + (current?.vatRate ?? 0), 0);
+        const total = temps['docTotalBeforeDiscount'] - temps['docDiscountPrice'];
+        totalVatRate = ((temps['docDiscountPrice'] === 0 ? temps.docTotalBeforeDiscount : temps['docDiscountPrice']) * totalVatRate) / 100;
+        temps['docTaxTotal'] = temps['docDiscountPrice'] === 0 || total === 0 ? 0 : totalVatRate;
+        temps['docTotal'] = total + temps['docTaxTotal'];
+        return temps;
     }
 
 
@@ -410,5 +444,51 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     }
 
 
+    protected handlerChangeItems({ value, record, field }: any) {
+        let items = [...this.state.items ?? []];
+        let item = this.state.items?.find((e: any) => e?.itemCode === record?.itemCode);
+        item[field] = value;
+        const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
+        if (index > 0) items[index] = item;
 
+        if (field === 'purchaseVatGroup')
+            item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+
+
+        if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
+            item['lineTotal'] = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
+
+        }
+
+        // total
+        let docTotalBeforeDiscount = this.state.docTotalBeforeDiscount;
+        let docTaxTotal = this.state.docTaxTotal;
+        let docTotal = this.state.docTotal;
+
+        if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent' || field?.includes('Vat')) {
+            docTotalBeforeDiscount = items.reduce((prev, current) => prev + current.lineTotal, 0);
+            let total = docTotalBeforeDiscount - this.state.docDiscountPrice;
+            docTaxTotal = items.reduce((prev, cur) => prev + (cur?.vatRate ?? 0), 0);
+            docTaxTotal = total <= 0 ? 0 : (total * docTaxTotal / 100);
+            docTotal = total <= 0 || total === docTotalBeforeDiscount ? 0 : total + docTaxTotal;
+        }
+
+        if (field === 'accountCode') {
+            const account = value as GLAccount;
+            item['accountCode'] = account.code;
+            item['accountName'] = account.name;
+        } else {
+            item[field] = value;
+        }
+
+
+        this.setState({ ...this.state, items, docTotalBeforeDiscount, docTaxTotal, docTotal })
+    }
+
+    protected handlerDeleteItem(code: string) {
+        let items = [...this.state.items ?? []];
+        const index = items.findIndex((e: any) => e?.ItemCode === code);
+        items.splice(index, 1)
+        this.setState({ ...this.state, items: items })
+    }
 }
