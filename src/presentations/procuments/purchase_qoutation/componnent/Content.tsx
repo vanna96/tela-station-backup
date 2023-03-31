@@ -368,7 +368,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Buyer</label>
             <BuyerSelect
               onChange={(e) => handlerChange('salesPersonCode', e.target.value)}
-              value={data?.salesPersonCode}
+              value={data?.salesPersonCode }
               name="SalesPersonCode"
             />
           </div>
@@ -376,7 +376,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Owner</label>
             <Owner
               onChange={(e) => handlerChange('documentsOwner', e.target.value)}
-              value={data?.documentsOwner}
+              value={data?.documentsOwner }
               name="DocumentsOwner"
             />
           </div>
@@ -394,7 +394,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
                 fullWidth
                 name="Comments"
                 className="w-full "
-                defaultValue={data?.comments}
+                defaultValue={data?.comments }
               /> : <TextField
                 size="small"
                 multiline
