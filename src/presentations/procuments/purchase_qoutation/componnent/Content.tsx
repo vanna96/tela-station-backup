@@ -227,29 +227,23 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         accessorKey: "accountCode",
         header: "G/L Account", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
+          console.log(cell.getValue());
           return (
             <AccountTextField
-              name="AccountNo"
               value={cell.getValue()}
+              name="AccountNo"
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "accountCode")
-              } />
+              }
+            />
           );
         },
       },
       {
-        accessorKey: "accountNameD",
-        header: "  G/L Account Name", //uses the default width from defaultColumn prop
+        accessorKey: "accountName",
+        header: "	G/L Account Name", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return (
-            <MUITextField
-              name="AccountName"
-              value={cell.getValue()}
-              onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "accountNameD")
-              } />
-
-          );
+          return <MUITextField value={cell.getValue()} />;
         },
       },
       {

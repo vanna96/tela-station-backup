@@ -19,6 +19,7 @@ import PurchaseQoutationRepository from './../../../../services/actions/purchase
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import { UpdateDataSuccess } from '@/utilies/ClientError';
 import PurchaseQouatation from '@/models/PurchaseQoutation';
+import Formular from '@/utilies/formular';
 
 class PurchaseQoutationForm extends CoreFormDocument {
 
@@ -28,9 +29,9 @@ class PurchaseQoutationForm extends CoreFormDocument {
       ...this.state,
       docType: 'I',
       loading: true,
-      docDate: null,
-      docDueDate: null,
-      taxDate: null,
+      docDate: new Date().toISOString(),
+      docDueDate: new Date().toISOString(),
+      taxDate: new Date().toISOString(),
       requriedDate: null
     } as any;
 
@@ -75,27 +76,33 @@ class PurchaseQoutationForm extends CoreFormDocument {
     this.setState({ ...this.state, items: items })
   }
 
-  // handlerAddItem({ value, record, field }: any) {
-  //   let items = [...this.state.items ?? []];
-  //   let item = this.state.items?.find((e: any) => e?.itemCode === record?.itemCode);
-  //   item[field] = value;
-  //   const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-  //   if (index > 0) items[index] = item;
+  handlerAddItem({ value, record, field }: any) {
+    let items = [...(this.state.items ?? [])];
+    let item = this.state.items?.find(
+      (e: any) => e?.itemCode === record?.itemCode
+    );
 
-  //   if (field === 'purchaseVatGroup')
-  //     item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+    if (field === "accountCode") {
+      const account = value as GLAccount;
+      item[field] = account.code;
+      item["accountName"] = account.name;
+    } else {
+      item[field] = value;
+    }
 
-  //   if (field === 'accountCode') {
-  //     const account = value as GLAccount;
-  //     item['accountCode'] = account.code;
-  //     item['accountName'] = account.name;
-  //   } else {
-  //     item[field] = value;
-  //   }
+    if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
+      const total = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
+      item['lineTotal'] = total;
+    }
 
-  //   this.setState({ ...this.state, items: items })
-  // }
+    if (field === 'purchaseVatGroup')
+      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
 
+    const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
+    if (index > 0) items[index] = item;
+
+    this.setState({ ...this.state, items: items, docTotal: Formular.findTotalBeforeDiscount(items) });
+  }
   async handlerSubmit(event: any) {
     event.preventDefault();
 
