@@ -70,29 +70,18 @@ export default function HeadingForm({
             </div>
 
             <div className="flex flex-col gap-1 text-sm">
-              <div className="flex flex-col gap-1 text-sm">
-                <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                  Department
-                </label>
-                <div className="">
-                  <DepartmentSelect
-                    name="RequesterDepartment"
-                    value={data.department}
-                    onChange={(e) =>
-                      handlerChange("department", e.target.value)
-                    }
-                  />
-                </div>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Department
+              </label>
+              <div className="mt-1">
+                <DepartmentSelect
+                  name="RequesterDepartment"
+                  value={data.department}
+                  onChange={(e) => handlerChange("department", e.target.value)}
+                />
               </div>
             </div>
-            {/* <div className="flex flex-col gap-1 text-sm">
-              <div className="flex items-center gap-1 text-sm">
-                <Checkbox />
-                <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                  Send E-Mail if PO or GPRO is Added
-                </label>
-              </div>
-            </div> */}
+
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Branch
@@ -109,19 +98,7 @@ export default function HeadingForm({
               value={data?.email}
               name="RequesterEmail"
             />
-            {/* <div className="flex flex-col gap-1 text-sm">
-              <div className="flex flex-col gap-1 text-sm">
-                <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                  Branch
-                </label>
 
-                <BranchSelect
-                  name="Branch"
-                  value={data.branch}
-                  onChange={(e) => handlerChange("branch", e.target.value)}
-                />
-              </div>
-            </div> */}
             <div className="flex flex-col gap-1 text-sm">
               <div className="flex items-center gap-1 text-sm">
                 <Checkbox />
@@ -226,8 +203,8 @@ export default function HeadingForm({
               </label>
               <div className="">
                 <MUIDatePicker
-                  value={data.requiredDate}
-                  onChange={(e: any) => handlerChange("requiredDate", e)}
+                  value={data.requriedDate}
+                  onChange={(e: any) => handlerChange("requriedDate", e)}
                 />
               </div>
             </div>

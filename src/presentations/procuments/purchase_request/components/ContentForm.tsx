@@ -101,15 +101,15 @@ export default function ContentForm({
           />
         ),
       },
-      {
-        accessorKey: "itemGroup",
-        header: "Item Group",
-        Cell: ({ cell }: any) => (
-          <MUITextField
-            value={new ItemGroupRepository().find(cell.getValue())?.name}
-          />
-        ),
-      },
+      // {
+      //   accessorKey: "itemGroup",
+      //   header: "Item Group",
+      //   Cell: ({ cell }: any) => (
+      //     <MUITextField
+      //       value={new ItemGroupRepository().find(cell.getValue())?.name}
+      //     />
+      //   ),
+      // },
       {
         accessorKey: "quantity",
         header: "Quantity",
@@ -450,8 +450,7 @@ export default function ContentForm({
         <div className="w-[100%] gap-3">
           <MUITextField
             label="Total Before Discount"
-            value={currencyFormat(Formular.findTotalBeforeDiscount(data?.items ?? []))}
-            name="LineTotal"
+            value={currencyFormat(data?.docTotalBeforeDiscount)}
           />
         </div>
         {/* <div className="flex justify-between">
@@ -488,11 +487,11 @@ export default function ContentForm({
           <div className="w-[48%] gap-3">
             <MUITextField
               label="Tax:"
-              value={currencyFormat(Formular.calculateTotalTax(data?.items ?? []))}
+              value={currencyFormat(data?.docTaxTotal)}
             />
           </div>
           <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due" value={currencyFormat(data.Tax)} />
+            <MUITextField label="Total Payment Due"  value={currencyFormat(data?.docTotal)}  />
           </div>
         </div>
       </div>
