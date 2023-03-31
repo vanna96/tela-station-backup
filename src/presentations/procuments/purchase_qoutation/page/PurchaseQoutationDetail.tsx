@@ -298,7 +298,7 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.as || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.docTotalBeforeDiscount || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
