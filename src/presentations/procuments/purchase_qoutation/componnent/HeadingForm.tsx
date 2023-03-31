@@ -55,13 +55,11 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 Currency
               </label>
               <div className="grid grid-cols-2 gap-3">
-                <TextField
-                  size="small"
-                  fullWidth
-                  className="w-full text-field bg-gray-100"
-                  name="BPCurrency"
-                  value={data.currency}
-                // disabled
+                <MUITextField
+                  name="DocCurrency"
+                  value={data.docCurrency}
+                  onChange={(e) => handlerChange('docCurrency', e.target.value)}
+                disabled={edit}
                 />
                 <div></div>
               </div>
