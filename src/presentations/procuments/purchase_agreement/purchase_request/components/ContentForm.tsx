@@ -450,11 +450,11 @@ export default function ContentForm({
         <div className="w-[100%] gap-3">
           <MUITextField
             label="Total Before Discount"
-            value={Formular.findTotalBeforeDiscount(data?.items ?? [])}
+            value={currencyFormat(Formular.findTotalBeforeDiscount(data?.items ?? []))}
             name="LineTotal"
           />
         </div>
-        <div className="flex justify-between">
+        {/* <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <MUITextField
               label="Discount"
@@ -466,7 +466,7 @@ export default function ContentForm({
           <div className="w-[48%] gap-3 mt-5">
             <MUITextField label="" />
           </div>
-        </div>
+        </div> */}
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <MUITextField label="Fright" name="" />
@@ -488,11 +488,11 @@ export default function ContentForm({
           <div className="w-[48%] gap-3">
             <MUITextField
               label="Tax:"
-              value={Formular.calculateTotalTax(data?.items ?? [])}
+              value={currencyFormat(Formular.calculateTotalTax(data?.items ?? []))}
             />
           </div>
           <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due" value={data.Tax} />
+            <MUITextField label="Total Payment Due" value={currencyFormat(data.Tax)} />
           </div>
         </div>
       </div>

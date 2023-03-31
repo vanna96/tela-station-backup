@@ -24,7 +24,7 @@ class PurchaseRequestForm extends CoreFormDocument {
       documentStatus: "O",
       requiredDate: null,
       docDate: new Date().toISOString(),
-      creationDate: new Date().toISOString(),
+      taxDate: new Date().toISOString(),
       docDueDate: new Date().toISOString(),
     } as any;
 
