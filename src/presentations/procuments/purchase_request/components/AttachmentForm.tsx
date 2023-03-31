@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import FormCard from '@/components/card/FormCard';
 import { Button } from '@mui/material';
-import { fileToBase64 } from '../../../../../utilies/index';
+import { fileToBase64 } from '../../../../utilies/index';
 
 
 const style = {
