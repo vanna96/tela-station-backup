@@ -238,7 +238,7 @@ function Content(props: any) {
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "accountNameD",
+        accessorKey: "accountName",
         header: "G/L Account Name",
         Cell: ({ cell }: any) => cell.getValue(),
       },
