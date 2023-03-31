@@ -28,12 +28,12 @@ export default function PurchaseQoutationLists() {
       },
       {
         accessorKey: "cardCode",
-        header: "Card Code",
+        header: "Vendor Code",
         enableClickToCopy: true,
       },
       {
-        accessorKey: "journalMemo",
-        header: "JurnalMemo",
+        accessorKey: "cardName",
+        header: "Vendor Name",
         // size: 200, //increase the width of this column
       },
       {

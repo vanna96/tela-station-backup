@@ -10,15 +10,13 @@ import ShippingType from '@/components/selectbox/ShippingType';
 export interface ILogisticFormProps {
   data: any,
   handlerChange: (key: string, value: any) => void
+  edit: boolean
 }
-
-
-
-export default function Logistic({ data, handlerChange }: ILogisticFormProps) {
+export default function Logistic({ data, handlerChange, edit }: ILogisticFormProps) {
   return (
     <FormCard title='Logistic'>
       <div className='flex flex-col gap-3 mt-2'>
-        <div className='grid grid-col-1 '>
+        <div className=''>
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Ship To
           </label>
@@ -34,7 +32,9 @@ export default function Logistic({ data, handlerChange }: ILogisticFormProps) {
             />
           </div>
         </div>
-        <div className='grid grid-col-1'>
+      </div>
+      <div className='flex flex-col gap-3 mt-2'>
+        <div className=''>
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Pay To
           </label>
@@ -50,15 +50,19 @@ export default function Logistic({ data, handlerChange }: ILogisticFormProps) {
             />
           </div>
         </div>
-        <div className='grid grid-col-1'>
-          <label htmlFor="Code" className="text-gray-500 text-[14px]">
-            Shipping Type
-          </label>
-          <ShippingType
-            onChange={(e) => handlerChange('transportationCode', e.target.value)}
-            value={data?.transportationCode}
-            name="TransportationCode"
-          />
+      </div>
+      <div className='flex flex-col -mt-4'>
+        <div className='grid grid-cols-2'>
+          <div>
+            <label htmlFor="Code" className="text-gray-500 text-[14px]">
+              Shipping Type
+            </label>
+            <ShippingType
+              onChange={(e) => handlerChange('transportationCode', e.target.value)}
+              value={data?.transportationCode}
+              name="TransportationCode"
+            />
+          </div>
         </div>
       </div>
     </FormCard>

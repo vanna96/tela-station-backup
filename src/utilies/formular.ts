@@ -1,6 +1,6 @@
 import { currencyFormat } from './index';
 export default class Formular {
-  constructor() {}
+  constructor() { }
 
   public static findItemTotal(items: any[]): number {
     const total = items?.reduce((accumulator: number, currentItem: any) => {
@@ -44,12 +44,14 @@ export default class Formular {
   public static findToTalDiscountPercent(
     qty: string,
     price: string,
-    discount: string
+    discount: number
   ) {
-    let total = parseFloat(price) * parseFloat(qty);
-    const totalDiscount = (total * parseFloat(discount)) / 100;
+    let total = (parseFloat(price ?? "0") *
+      parseFloat(qty ?? "0") -
+      parseFloat(price ?? "0") *
+      parseFloat(qty ?? "0") *
+      discount / 100)
 
-    total = total - totalDiscount;
 
     if (isNaN(total)) return 0;
 
