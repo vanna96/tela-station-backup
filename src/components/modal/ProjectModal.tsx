@@ -4,6 +4,7 @@ import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
 import InitializeData from '@/services/actions';
 import Project from '@/models/Project';
+import ProjectRepository from '@/services/actions/projectRepository';
 
 
 interface ProjectModalProps {
@@ -16,7 +17,7 @@ interface ProjectModalProps {
 const ProjectModal: FC<ProjectModalProps> = ({ open, onClose, onOk }) => {
   const { data, isLoading }: any = useQuery({
     queryKey: ["projects"],
-    queryFn: () => InitializeData.listOfProjects(),
+    queryFn: () => new ProjectRepository().get(),
     staleTime: Infinity,
   });
 

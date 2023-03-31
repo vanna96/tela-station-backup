@@ -204,8 +204,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         accessorKey: "requiredDate",
         header: "Required Date",
         Cell: ({ cell }: any) => {
-          console.log(cell);
-          console.log(cell.row);
           return (
             <MUIDatePicker
               value={cell.getValue()}
@@ -230,7 +228,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         accessorKey: "accountCode",
         header: "G/L Account", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          console.log(cell.getValue())
           return (
             <AccountTextField
               name="AccountNo"
@@ -292,7 +289,6 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
   );
 
   const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
-  console.log(data);
 
   return (
     <FormCard title="Content" >
@@ -405,14 +401,14 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
       <div className="flex flex-col gap-3">
 
         <div className="w-[100%] gap-3">
-          <MUITextField label="Total Before Discount:" value={""} />
+          <MUITextField label="Total Before Discount:" value={currencyFormat(data?.docTotalBeforeDiscount)} />
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
-            <MUITextField label="Discount:" value={""} />
+            <MUITextField label="Discount:" startAdornment={'%'} value={data?.docDiscountPercent} onChange={(e) => handlerChange('docDiscountPercent', e.target.value)} />
           </div>
           <div className="w-[48%] gap-3 mt-5">
-            <MUITextField label="" value={""} />
+            <MUITextField label="" startAdornment={data?.currency ?? 'AUD'} value={data?.docDiscountPrice} onChange={(e) => handlerChange('docDiscountPrice', e.target.value)} />
           </div>
         </div>
         <div className="flex justify-between">
@@ -431,11 +427,11 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
-            <MUITextField label="Tax:" value={""} />
+            <MUITextField label="Tax:" value={currencyFormat(data?.docTaxTotal)} />
           </div>
 
           <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due::" value={""} />
+            <MUITextField label="Total Payment Due::" value={currencyFormat(data?.docTotal)} />
           </div>
         </div>
       </div>

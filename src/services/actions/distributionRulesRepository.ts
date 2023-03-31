@@ -5,7 +5,7 @@ import request from "@/utilies/request";
 
 export default class DistributionRuleRepository extends Repository<DistributionRule> {
    
-    url = '/DistributionRules?$select=GroupName,Number,DistributionRulesWarehouseInfos';
+    url = `/DistributionRules?$select=FactorCode,FactorDescription&$filter=Active eq 'tYES'`;
     
     // specific key
     key = 'distributionRules';

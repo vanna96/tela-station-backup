@@ -14,7 +14,9 @@ export default class SalePersonRepository extends Repository<SalePerson> {
         const data = localStorage.getItem(this.key);
         if (data) {
             const salePersons = JSON.parse(Encryption.decrypt(this.key, data));
-            return JSON.parse(salePersons).map((e :any) => new SalePerson(e));
+            console.log(salePersons);
+            
+            return JSON.parse(salePersons);
         }
 
         const salePersons = await request('GET', this.url).then((res: any) => res?.data?.value?.map((e : any) => new SalePerson(e)));

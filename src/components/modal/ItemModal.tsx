@@ -8,6 +8,10 @@ import { useMemo } from 'react';
 import Item from '@/models/Item';
 import ItemGroup from '@/models/ItemGroup';
 import UnitOfMeasurement from '@/models/UnitOfMeasurement';
+import VatGroupRepository from '../../services/actions/VatGroupRepository';
+import VatGroup from '@/models/VatGroup';
+import ItemGroupRepository from '@/services/actions/itemGroupRepository';
+import UnitOfMeasurementRepository from '@/services/actions/unitOfMeasurementRepository';
 
 
 type ItemType = 'purchase' | 'sale' | 'inventory';
@@ -29,25 +33,10 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
         staleTime: Infinity,
     });
 
-
-    const itemGroup = useQuery({
-        queryKey: ["item-groups"],
-        queryFn: () => InitializeData.listItemGroup(),
-        staleTime: Infinity,
-    });
-
-    const uomGroup = useQuery({
-        queryKey: ["uom-groups"],
-        queryFn: () => InitializeData.unitOfMeasurement(),
-        staleTime: Infinity,
-    });
-
-
     const [pagination, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 8,
     });
-
 
 
     const [rowSelection, setRowSelection] = React.useState({});
@@ -90,6 +79,21 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
         let selectItems = keys.map((e: any) => items.find((ele: any) => ele?.ItemCode === e));
 
         selectItems = selectItems.map((e: any) => {
+            let vatRate: any = 0;
+            switch (type) {
+                case 'purchase':
+                    vatRate = (new VatGroupRepository().find(e?.PurchaseVATGroup) as VatGroup).vatRate;
+                    break;
+                case 'sale':
+                    vatRate = (new VatGroupRepository().find(e?.SalesVATGroup) as VatGroup).vatRate;
+                    break;
+                // case 'inventory':
+                //     vatRate = (new VatGroupRepository().find(e?.SalesVATGroup) as VatGroup).vatRate;
+                //     break;
+                default:
+                    vatRate = 0;
+                    break;
+            }
 
             return ({
                 itemCode: e?.ItemCode,
@@ -100,6 +104,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 saleVatGroup: e?.SalesVATGroup,
                 purchaseVatGroup: e?.PurchaseVATGroup,
                 vatGroup: e?.PurchaseVATGroup,
+                vatRate: vatRate,
                 quantity: 0,
                 unitPrice: 0,
                 discountPercent: 0,
@@ -124,7 +129,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
             <div className="data-table" >
                 <MaterialReactTable
                     columns={columns}
-                    data={items}
+                    data={items ?? []}
                     enableStickyHeader={true}
                     enableStickyFooter={true}
                     enablePagination={true}

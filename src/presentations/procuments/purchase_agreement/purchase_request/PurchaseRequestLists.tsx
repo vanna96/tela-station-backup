@@ -42,14 +42,14 @@ export default function PurchaseRequestLists() {
         // size: 200, //increase the width of this column
       },
       {
-        accessorKey: "DocDate",
+        accessorKey: "taxDate",
         header: "Document Date",
         Cell: ({ cell }: any) => (
           <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>
         ),
       },
       {
-        accessorKey: "DocDueDate",
+        accessorKey: "docDueDate",
         header: "Valid Date",
         Cell: ({ cell }) => <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>,
       },

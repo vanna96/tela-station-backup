@@ -9,79 +9,10 @@ import AttachmentForm from "../components/AttachmentForm";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
 import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
 import { ToastOptions } from "react-toastify";
-import GLAccount from '../../../../../models/GLAccount';
-
-// class PurchaseRequestForm extends CoreFormDocument {
-//   constructor(props: any) {
-//     super(props);
-//     this.state = {
-//       ...this.state,
-//       docType: "I",
-//       documentStatus: "O",
-//       requiredDate: null,
-//       docDate: null,
-//       creationDate: null,
-//       docDueDate: null,
-//     } as any;
-
-//     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-//     this.handlerAddItem = this.handlerAddItem.bind(this);
-//     this.handlerSubmit = this.handlerSubmit.bind(this);
-//   }
-
-//   componentDidMount(): void {
-//     DocumentSerieRepository.getDocumentSeries(
-//       PurchaseRequestRepository.documentSerie
-//     ).then((res: any) => {
-//       this.setState({ ...this.state, series: res });
-//     });
-
-//     DocumentSerieRepository.getDefaultDocumentSerie(
-//       PurchaseRequestRepository.documentSerie
-//     ).then((res: any) => {
-//       this.setState({
-//         ...this.state,
-//         serie: res?.Series,
-//         docNum: res?.NextNumber,
-//         isLoadingSerie: false,
-//       });
-//     });
-//   }
-
-//   handlerRemoveItem(code: string) {
-//     let items = [...(this.state.items ?? [])];
-//     const index = items.findIndex((e: any) => e?.ItemCode === code);
-//     items.splice(index, 1);
-//     this.setState({ ...this.state, items: items });
-//   }
-
-//   handlerAddItem({ value, record, field }: any) {
-//     let items = [...(this.state.items ?? [])];
-//     let item = this.state.items?.find(
-//       (e: any) => e?.ItemCode === record?.ItemCode
-//     );
-//     item[field] = value;
-//     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-//     if (index > 0) items[index] = item;
-//     this.setState({ ...this.state, items: items });
-//   }
-
-//   async handlerSubmit(event: any) {
-//     event.preventDefault();
-//     this.setState({ ...this.state, isSubmitting: true });
-
-//     await new PurchaseRequestRepository()
-//       .post(this.state)
-//       .then((res: any) => {
-//         console.log(res);
-//         this.showMessage("Success", "Create Successfully");
-//       })
-//       .catch((e: Error) => {
-//         this.showMessage("Errors", e.message);
-//       });
-
-//     setTimeout(() => {}, 2000);
-//   }
+import GLAccount from "../../../../../models/GLAccount";
+import { UpdateDataSuccess } from "@/utilies/ClientError";
+import Formular from "@/utilies/formular";
+import VatGroupRepository from "@/services/actions/VatGroupRepository";
 
 class PurchaseRequestForm extends CoreFormDocument {
   constructor(props: any) {
@@ -92,10 +23,9 @@ class PurchaseRequestForm extends CoreFormDocument {
       docType: "I",
       documentStatus: "O",
       requiredDate: null,
-      docDate: null,
-      creationDate: null,
-      docDueDate: null,
-
+      docDate: new Date().toISOString(),
+      creationDate: new Date().toISOString(),
+      docDueDate: new Date().toISOString(),
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
@@ -105,10 +35,14 @@ class PurchaseRequestForm extends CoreFormDocument {
 
   componentDidMount(): void {
     if (!this.props?.edit) {
-      setTimeout(() => this.setState({
-        ...this.state,
-        //  loading: false
-      }), 500);
+      setTimeout(
+        () =>
+          this.setState({
+            ...this.state,
+            //  loading: false
+          }),
+        500
+      );
     }
 
     if (this.props.edit) {
@@ -157,7 +91,7 @@ class PurchaseRequestForm extends CoreFormDocument {
 
   handlerRemoveItem(code: string) {
     let items = [...(this.state.items ?? [])];
-    const index = items.findIndex((e: any) => e?.ItemCode === code);
+    const index = items.findIndex((e: any) => e?.itemCode === code);
     items.splice(index, 1);
     this.setState({ ...this.state, items: items });
   }
@@ -176,24 +110,71 @@ class PurchaseRequestForm extends CoreFormDocument {
       item[field] = value;
     }
 
+    if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
+      const total = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
+      item['lineTotal'] = total;
+    }
+
+    if (field === 'purchaseVatGroup')
+      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
-    this.setState({ ...this.state, items: items });
+
+    this.setState({ ...this.state, items: items, docTotal: Formular.findTotalBeforeDiscount(items) });
   }
+
+  // async handlerSubmit(event: any) {
+  //   event.preventDefault();
+  //   this.setState({ ...this.state, isSubmitting: true });
+
+  //   const { id } = this.props?.match?.params;
+
+  //   await new PurchaseRequestRepository()
+  //     .post(this.state, this.props?.edit, id)
+  //     .then((res: any) => {
+  //       this.showMessage("Success", "Create Successfully");
+  //     })
+  //     .catch((e: Error) => {
+  //       this.showMessage("Errors", e.message);
+  //     });
+  // }
 
   async handlerSubmit(event: any) {
     event.preventDefault();
-    this.setState({ ...this.state, isSubmitting: true });
 
+    this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params;
 
     await new PurchaseRequestRepository()
       .post(this.state, this.props?.edit, id)
       .then((res: any) => {
-        this.showMessage("Success", "Create Successfully");
+        const purchaseRequest = new PurchaseRequest(res?.data);
+
+        this.props.history.replace(
+          this.props.location.pathname?.replace("create", purchaseRequest.id),
+          purchaseRequest
+        );
+        this.dialog.current?.success("Create Successfully.");
       })
-      .catch((e: Error) => {
-        this.showMessage("Errors", e.message);
+      .catch((e: any) => {
+        if (e instanceof UpdateDataSuccess) {
+          this.props.history.replace(
+            this.props.location.pathname?.replace("/edit", ""),
+            {
+              ...this.state,
+              isSubmitting: false,
+              isApproved: this.state.documentStatus === "A",
+            }
+          );
+          this.dialog.current?.success(e.message);
+          // const query = this.props.query.query as QueryClient;
+          return;
+        }
+        this.dialog.current?.error(e.message);
+      })
+      .finally(() => {
+        this.setState({ ...this.state, isSubmitting: false });
       });
   }
 
@@ -213,12 +194,11 @@ class PurchaseRequestForm extends CoreFormDocument {
             }}
             handlerChange={(key, value) => {
               this.handlerChange(key, value);
-            
             }}
           />
 
           <ContentForm
-            data={this.state}
+            data={this?.state}
             handlerAddItem={() => this.handlerOpenItem()}
             handlerRemoveItem={this.handlerRemoveItem}
             handlerChangeItem={this.handlerAddItem}
