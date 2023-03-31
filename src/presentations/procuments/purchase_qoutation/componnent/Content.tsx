@@ -106,7 +106,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             startAdornment={'%'}
             name="DiscountPercent"
             onChange={(event) =>
-              
+
               handlerChangeInput(event, cell?.row?.original, 'discountPercent')
             }
           />;
@@ -358,7 +358,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Buyer</label>
             <BuyerSelect
               onChange={(e) => handlerChange('salesPersonCode', e.target.value)}
-              value={data?.salesPersonCode }
+              value={data?.salesPersonCode}
               name="SalesPersonCode"
             />
           </div>
@@ -366,7 +366,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Owner</label>
             <Owner
               onChange={(e) => handlerChange('documentsOwner', e.target.value)}
-              value={data?.documentsOwner }
+              value={data?.documentsOwner}
               name="DocumentsOwner"
             />
           </div>
@@ -384,7 +384,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
                 fullWidth
                 name="Comments"
                 className="w-full "
-                defaultValue={data?.comments }
+                defaultValue={data?.comments}
               /> : <TextField
                 size="small"
                 multiline
@@ -395,42 +395,65 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
                 className="w-full "
                 defaultValue={data?.comments}
               />
-
             }
-
           </div>
         </div>
       </div>
-      {data?.documentStatus === "bost_Open" ? 
+      {data?.documentStatus === "bost_Open" ?
         <div className="flex flex-col gap-3">
-
-        <div className="w-[100%] gap-3">
-          <MUITextField label="Total Before Discount:" value={currencyFormat(data?.docTotalBeforeDiscount)} />
-        </div>
-        <div className="flex justify-between">
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Discount:" startAdornment={'%'} value={data?.docDiscountPercent} onChange={(e) => handlerChange('docDiscountPercent', e.target.value)} />
-          </div>
-          <div className="w-[48%] gap-3 mt-5">
-            <MUITextField label="" startAdornment={data?.currency ?? 'AUD'} value={data?.docDiscountPrice} onChange={(e) => handlerChange('docDiscountPrice', e.target.value)} />
+          <div className="w-[100%] gap-3">
+            <MUITextField label="Total Before Discount:" value={currencyFormat(data?.docTotalBeforeDiscount)} />
           </div>
           <div className="flex justify-between">
             <div className="w-[48%] gap-3">
-              <MUITextField label="Fright:" value={""} />
+              <MUITextField label="Discount:" startAdornment={'%'} value={data?.docDiscountPercent} onChange={(e) => handlerChange('docDiscountPercent', e.target.value)} />
+            </div>
+            <div className="w-[48%] gap-3 mt-5">
+              <MUITextField label="" startAdornment={data?.currency ?? 'AUD'} value={data?.docDiscountPrice} onChange={(e) => handlerChange('docDiscountPrice', e.target.value)} />
+            </div>
+            <div className="flex justify-between">
+              <div className="w-[48%] gap-3">
+                <MUITextField label="Fright:" value={""} />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Tax:" value={currencyFormat(data?.docTaxTotal)} />
             </div>
 
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Total Payment Due::" value={currencyFormat(data?.docTotal)} />
+            </div>
+          </div>
+        </div> :
+        <div className="flex flex-col gap-3">
+          <div className="w-[100%] gap-3">
+            <MUITextField label="Total Before Discount:" value={currencyFormat(data?.docTotalBeforeDiscount)} />
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField label="Discount:" disabled={edit} startAdornment={'%'} value={data?.docDiscountPercent} onChange={(e) => handlerChange('docDiscountPercent', e.target.value)} />
+            </div>
+            <div className="w-[48%] gap-3 mt-5">
+              <MUITextField label="" disabled={edit} startAdornment={data?.currency ?? 'AUD'} value={data?.docDiscountPrice} onChange={(e) => handlerChange('docDiscountPrice', e.target.value)} />
+            </div>
+            <div className="flex justify-between">
+              <div className="w-[48%] gap-3">
+                <MUITextField disabled={edit} label="Fright:" value={""} />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField disabled={edit} label="Tax:" value={currencyFormat(data?.docTaxTotal)} />
+            </div>
+            <div className="w-[48%] gap-3">
+              <MUITextField disabled={edit} label="Total Payment Due::" value={currencyFormat(data?.docTotal)} />
+            </div>
           </div>
         </div>
-        <div className="flex justify-between">
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Tax:" value={currencyFormat(data?.docTaxTotal)} />
-          </div>
-
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due::" value={currencyFormat(data?.docTotal)} />
-          </div>
-        </div>
-    }
+      }
     </FormCard>
   );
 }
