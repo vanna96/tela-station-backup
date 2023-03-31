@@ -15,8 +15,8 @@ import { ContactEmployee } from "@/models/BusinessParter";
 import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "@/components/input/AccountTextField";
 import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRepository";
-import ItemGroupRepository from "../../../../../services/actions/itemGroupRepository";
-import VatGroup from "../../../../../components/selectbox/VatGroup";
+import ItemGroupRepository from "../../../../services/actions/itemGroupRepository";
+import VatGroup from "../../../../components/selectbox/VatGroup";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 
 export interface ContentFormProps {

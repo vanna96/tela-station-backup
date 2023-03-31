@@ -7,10 +7,10 @@ import TextField from "@mui/material/TextField";
 import Department from "@/models/Department";
 import Branch from "@/models/Branch";
 import ShippingType from "@/models/ShippingType";
-import DepartmentSelect from "../../../../../components/selectbox/Department";
-import BranchSelect from "../../../../../components/selectbox/Branch";
-import Owner from "../../../../../models/FactoringIndicator";
-import OwnerModal from "../../../../../components/modal/OwnerModal";
+import DepartmentSelect from "../../../../components/selectbox/Department";
+import BranchSelect from "../../../../components/selectbox/Branch";
+import Owner from "../../../../models/FactoringIndicator";
+import OwnerModal from "../../../../components/modal/OwnerModal";
 import Checkbox from "@mui/material/Checkbox";
 
 export interface IHeadingFormProps {

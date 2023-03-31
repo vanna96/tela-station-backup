@@ -9,7 +9,7 @@ import AttachmentForm from "../components/AttachmentForm";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
 import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
 import { ToastOptions } from "react-toastify";
-import GLAccount from "../../../../../models/GLAccount";
+import GLAccount from "../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import Formular from "@/utilies/formular";
 import VatGroupRepository from "@/services/actions/VatGroupRepository";
