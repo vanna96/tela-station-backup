@@ -1,20 +1,5 @@
 import { withRouter } from "@/routes/withRouter";
 import React, { Component, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import {
-  PurchaseAgreementProps,
-  PurchaseAgreementDocumentLineProps,
-} from "../../../../models/PurchaseAgreement";
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  HiOutlineEye,
-  HiChevronDoubleLeft,
-  HiChevronDoubleRight,
-  HiChevronLeft,
-  HiChevronRight,
-  HiOutlineDocumentAdd,
-  HiOutlineChevronDown,
-} from "react-icons/hi";
 import Taps from "@/components/button/Taps";
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useMemo } from "react";
@@ -24,17 +9,16 @@ import Modal from "@/components/modal/Modal";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import { CircularProgress } from "@mui/material";
 import BackButton from "@/components/button/BackButton";
-// import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
-// import PurchaseQouatation from '@/models/PurchaseQouatation';
 import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
 import PurchaseOrder from "@/models/PurchaseOrder";
 import OwnerRepository from "@/services/actions/ownerRepository";
 import PaymentTermTypeRepository from "@/services/actions/paymentTermTypeRepository";
 import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
 import DocumentHeaderComponent from "@/components/DocumenHeaderComponent";
-import { ContactEmployee } from "@/models/BusinessParter";
+import BusinessPartner, { ContactEmployee } from "@/models/BusinessParter";
 import { dateFormat } from "../../../../utilies/index";
 import BuyerRepository from "../../../../services/actions/buyerRepository";
+import BusinessPartnerRepository from "@/services/actions/bussinessPartnerRepository";
 
 class PurchaseOrderDetail extends Component<any, any> {
   constructor(props: any) {
@@ -58,17 +42,25 @@ class PurchaseOrderDetail extends Component<any, any> {
     console.log(data);
 
     if (data) {
-      setTimeout(() => this.setState({ ...data, loading: false }), 500);
-    } else {
-      new PurchaseOrderRepository()
-        .find(id)
-        .then((res: any) => {
+      setTimeout(() => {
+          let PurchaseOrder = data;
+          PurchaseOrder as PurchaseOrder;
+          if (PurchaseOrder.contactPersonCode) {
+              new BusinessPartnerRepository().findContactEmployee(PurchaseOrder.cardCode!).then((res: BusinessPartner) => {
+                  PurchaseOrder.contactPersonList = res.contactEmployee ?? [];
+                  this.setState({ ...PurchaseOrder, loading: false })
+              })
+          } else {
+              this.setState({ ...PurchaseOrder, loading: false })
+          }
+      }, 500)
+  } else {
+      new PurchaseOrderRepository().find(id).then((res: any) => {
           this.setState({ ...res, loading: false });
-        })
-        .catch((e: Error) => {
+      }).catch((e: Error) => {
           this.setState({ isError: true, message: e.message });
-        });
-    }
+      })
+  }
   }
 
   render() {
@@ -113,7 +105,7 @@ class PurchaseOrderDetail extends Component<any, any> {
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">
-                    Contact Person Code
+                    Contact Person
                   </span>
                   <span className="w-8/12 font-medium">
                     :
@@ -227,7 +219,7 @@ function Content(props: any) {
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "uomCode ",
+        accessorKey: "uomCode",
         header: "UoM Code",
         Cell: ({ cell }: any) => cell.getValue(),
       },
@@ -320,7 +312,7 @@ function Content(props: any) {
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Freight</span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.freight ?? "N/A"}
+            : {data?.freight || "N/A"}
           </span>
         </div>
         <div className="flex gap-2">

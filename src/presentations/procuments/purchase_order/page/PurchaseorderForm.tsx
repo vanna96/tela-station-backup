@@ -13,6 +13,8 @@ import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository"
 import LogisticForm from "../components/Logistic";
 import AccounttingForm from "../components/Accountting";
 import GLAccount from "@/models/GLAccount";
+import { UpdateDataSuccess } from "@/utilies/ClientError";
+import PurchaseOrders from "../../../../models/PurchaseOrder";
 class PurchaseOrder extends CoreFormDocument {
   constructor(props: any) {
     super(props);
@@ -106,16 +108,27 @@ class PurchaseOrder extends CoreFormDocument {
 
   async handlerSubmit(event: any) {
     event.preventDefault();
-    this.setState({ ...this.state, isSubmitting: true });
 
+    this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params
 
     await new PurchaseOrderRepository().post(this.state, this.props?.edit, id).then((res: any) => {
-        this.showMessage('Success', 'Create Successfully');
-    }).catch((e: Error) => {
-        this.showMessage('Errors', e.message);
+      const purchaseOrder = new PurchaseOrders(res?.data)
+
+      this.props.history.replace(this.props.location.pathname?.replace('create', purchaseOrder.id), purchaseOrder);
+      this.dialog.current?.success("Create Successfully.");
+    }).catch((e: any) => {
+      if (e instanceof UpdateDataSuccess) {
+        this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.documentStatus === 'A' });
+        this.dialog.current?.success(e.message);
+        // const query = this.props.query.query as QueryClient;
+        return;
+      }
+      this.dialog.current?.error(e.message);
+    }).finally(() => {
+      this.setState({ ...this.state, isSubmitting: false })
     });
-}
+  }
 
   FormRender = () => {
     return (
@@ -123,6 +136,7 @@ class PurchaseOrder extends CoreFormDocument {
         <form onSubmit={this.handlerSubmit} className="flex flex-col gap-4">
           <HeadingForm
             data={this.state}
+            edit={this.props?.edit}
             handlerOpenVendor={() => {
               this.handlerOpenVendor("supplier");
             }}
@@ -142,6 +156,7 @@ class PurchaseOrder extends CoreFormDocument {
             handlerChange={(key, value) => this.handlerChange(key, value)}
           />
           <AccounttingForm
+            edit={this.props?.edit}
             data={this.state}
             handlerChange={(key, value) => this.handlerChange(key, value)}
             handlerOpenProject={() => this.handlerOpenProject()}

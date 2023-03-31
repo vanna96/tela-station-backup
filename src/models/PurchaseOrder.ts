@@ -60,7 +60,7 @@ export interface PurchaseOrderDocumentLineProps {
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  TransportationCode?: string | undefined;
+  transportationCode?: string | undefined;
   project?: string | undefined;
   address2?: string | undefined;
   taxCode?: string | undefined;
@@ -74,7 +74,7 @@ export interface PurchaseOrderDocumentLineProps {
   blanketAgreementNumber?: string | undefined
   discountPercent?:string
 }
-export default class PurchaseOrder extends Model implements MasterDocument {
+export default class PurchaseOrders extends Model implements MasterDocument {
   id: any;
   docNum: any;
   cardCode?: string;
@@ -268,7 +268,7 @@ export class PurchaseOrderDocumentLineProps extends Model implements DocumentLin
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  TransportationCode?: string | undefined;
+  transportationCode?: string | undefined;
   project?: string | undefined;
   taxCode?: string | undefined;
   taxRate?: number | undefined;
