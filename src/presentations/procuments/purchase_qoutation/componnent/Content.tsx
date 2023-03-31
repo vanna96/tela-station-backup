@@ -431,7 +431,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           <div className="w-[100%] gap-3">
             <MUITextField label="Total Before Discount:" value={currencyFormat(data?.docTotalBeforeDiscount)} />
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-5">
             <div className="w-[48%] gap-3">
               <MUITextField label="Discount:" disabled={edit} startAdornment={'%'} value={data?.docDiscountPercent} onChange={(e) => handlerChange('docDiscountPercent', e.target.value)} />
             </div>
@@ -439,7 +439,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
               <MUITextField label="" disabled={edit} startAdornment={data?.currency ?? 'AUD'} value={data?.docDiscountPrice} onChange={(e) => handlerChange('docDiscountPrice', e.target.value)} />
             </div>
             <div className="flex justify-between">
-              <div className="w-[48%] gap-3">
+              <div className="w-[100%] gap-3">
                 <MUITextField disabled={edit} label="Fright:" value={""} />
               </div>
             </div>
