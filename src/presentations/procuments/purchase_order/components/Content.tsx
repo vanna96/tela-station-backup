@@ -147,7 +147,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              value={currencyFormat(cell.getValue())}
+              value={(cell.getValue())}
               startAdornment={"$"}
               disabled={data?.unitPrice}
               onChange={(event) =>
