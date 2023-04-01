@@ -39,7 +39,7 @@ class PurchaseRequestForm extends CoreFormDocument {
         () =>
           this.setState({
             ...this.state,
-            //  loading: false
+            loading: false,
           }),
         500
       );
@@ -110,18 +110,30 @@ class PurchaseRequestForm extends CoreFormDocument {
       item[field] = value;
     }
 
-    if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
-      const total = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
-      item['lineTotal'] = total;
+    if (
+      field === "quantity" ||
+      field === "unitPrice" ||
+      field === "discountPercent"
+    ) {
+      const total = Formular.findLineTotal(
+        item["quantity"],
+        item["unitPrice"],
+        item["discountPercent"]
+      );
+      item["lineTotal"] = total;
     }
 
-    if (field === 'purchaseVatGroup')
-      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+    if (field === "purchaseVatGroup")
+      item["vatRate"] = new VatGroupRepository().find(value)?.vatRate;
 
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
 
-    this.setState({ ...this.state, items: items, docTotal: Formular.findTotalBeforeDiscount(items) });
+    this.setState({
+      ...this.state,
+      items: items,
+      docTotal: Formular.findTotalBeforeDiscount(items),
+    });
   }
 
   // async handlerSubmit(event: any) {
@@ -183,6 +195,7 @@ class PurchaseRequestForm extends CoreFormDocument {
       <>
         <form onSubmit={this.handlerSubmit} className="flex flex-col gap-4">
           <HeadingForm
+            edit={this.props?.edit}
             data={this.state}
             handlerOpenRequester={() => {
               const { reqType }: any = this.state;
@@ -203,7 +216,7 @@ class PurchaseRequestForm extends CoreFormDocument {
             handlerRemoveItem={this.handlerRemoveItem}
             handlerChangeItem={this.handlerAddItem}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
+            // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
 
           <AttachmentForm />
