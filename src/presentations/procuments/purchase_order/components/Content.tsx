@@ -408,9 +408,9 @@ export default function ContentForm({
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Buyer
             </label>
-            <SalePerson
-              value={data?.salePersonCode}
-              onChange={(e) => handlerChange("salePersonCode", e.target.value)}
+            <BuyerSelect
+              value={data?.salesPersonCode}
+              onChange={(e) => handlerChange("salesPersonCode", e.target.value)}
             />
           </div>
           <div className="w-[48%]">

@@ -6,7 +6,7 @@ import { IContactPersonList } from '../../astractions/index';
 import PurchaseOrder from '@/models/PurchaseOrder';
 export default class PurchaseOrderRepository extends Repository<PurchaseOrder> {
 
-  url: string = '/PurchaseOrders';
+  url: string = '/PurchaseOrders?$top=10';
 
   public static documentSerie = {
     Document: "22"
