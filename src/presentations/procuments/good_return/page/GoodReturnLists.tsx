@@ -37,7 +37,7 @@ export default function GoodReturnLists() {
         // size: 200, //increase the width of this column
       },
       {
-        accessorKey: "creationDate",
+        accessorKey: "docDate",
         header: "Posting Date",
         Cell: ({ cell }: any) => (
           <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>

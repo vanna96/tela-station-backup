@@ -17,6 +17,8 @@ import BusinessPartnerRepository from '@/services/actions/bussinessPartnerReposi
 import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
 import GoodReturn from '@/models/GoodReturn';
 import GoodReturnRepository from '@/services/goodReturnRepository';
+import SalePersonRepository from '../../../../services/actions/salePersonRepository';
+import Formular from '@/utilies/formular';
 
 
 class GoodReturnDetail extends Component<any, any> {
@@ -101,7 +103,7 @@ class GoodReturnDetail extends Component<any, any> {
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Vendor Ref .No</span>
-                  <span className='w-8/12 font-medium'>:{this.state?.numAtCard || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>:{this.state?.numAtCard || " N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500 '>Local Currency</span>
@@ -118,17 +120,14 @@ class GoodReturnDetail extends Component<any, any> {
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Valid Until</span>
+                  <span className='w-4/12 text-gray-500'>Return Date </span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDueDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Document Date</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.taxDate) || "N/A"}</span>
                 </div>
-                <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Required Date</span>
-                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.requriedDate) || "N/A"}</span>
-                </div>
+                
 
               </div>
             </div>
@@ -279,18 +278,23 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Buyer</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new BuyerRepository().find(data.salesPersonCode)?.name || "N/A"}
+          : {new SalePersonRepository().find(data?.salesPersonCode)?.name || "N/A"}
         </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Owner</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new OwnerRepository().find(data.documentsOwner)?.name || "N/A"}
+          : {new OwnerRepository().find(data?.documentsOwner)?.name || "N/A"}
+
         </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.docTotalBeforeDiscount || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findItemTotal(data?.items)) ?? ""}</span>
+      </div>
+      <div className='flex gap-2'>
+        <span className='w-4/12 text-gray-500 text-sm'>Discount</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.docDiscountPercent || "N/A"}{data?.docDiscountPrice}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
