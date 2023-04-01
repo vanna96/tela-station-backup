@@ -7,7 +7,7 @@ import BusinessPartnerRepository from './actions/bussinessPartnerRepository';
 
 export default class GoodReturnRepository extends Repository<GoodReturn> {
 
-  url: string = '/PurchaseQuotations';
+  url: string = '/PurchaseReturns';
 
   public static documentSerie = {
     Document: "540000006"

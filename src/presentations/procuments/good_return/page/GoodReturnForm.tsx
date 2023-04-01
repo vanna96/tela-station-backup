@@ -32,7 +32,6 @@ class GoodReturnForm extends CoreFormDocument {
       docDate: new Date().toISOString(),
       docDueDate: new Date().toISOString(),
       taxDate: new Date().toISOString(),
-      requriedDate: null
     } as any;
 
 

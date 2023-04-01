@@ -133,7 +133,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
 
                 <div className="flex flex-col gap-1 text-sm">
                   <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                    Valid Until
+                  Return Date
                   </label>
                   <div className="">
                     <MUIDatePicker disabled={edit} error={data?.message?.includes('DocDueDate')} value={data.docDueDate} onChange={(e: any) => handlerChange('docDueDate', e)} />
@@ -155,15 +155,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               </div>
             </div>
 
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Requried Date
-              </label>
-              <div className="">
-                <MUIDatePicker error={data?.message?.includes('RequriedDate')} value={data.requriedDate} onChange={(e: any) => handlerChange('requriedDate', e)} />
-
-              </div>
-            </div>
+           
           </div>
         </div>
         {/* <div className='col-span-2'></div> */}
