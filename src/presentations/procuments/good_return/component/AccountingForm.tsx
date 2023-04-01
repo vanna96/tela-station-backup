@@ -67,33 +67,23 @@ export default function Accounting({
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                 Central Bank Ind.
-                </label>
-                <PaymentTerm
-                  onChange={(e) =>
-                    handlerChange("paymentGroupCode", e.target.value)
-                  }
-                  value={data?.paymentGroupCode}
-                  name="PaymentGroupCode"
-                />
-              </div>
-              <div>
-                <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                 Installments
-                </label>
-                <div className="">
-                  <PaymentMethod
-                    type="outgoing"
-                    name="PaymentMethod"
-                    value={data.paymentMethod}
-                    onChange={(e) =>
-                      handlerChange("paymentMethod", e.target.value)
-                    }
-                  />
-                </div>
-              </div>
+              <MUITextField
+              label="Central Bank Indicator"
+                onChange={(e) =>
+                  handlerChange("centralBankIndicator", e.target.value)
+                }
+                value={data?.centralBankIndicator}
+                name="centralBankIndicator"
+              />
+
+              <MUITextField
+                label="Installments"
+                name="numberOfInstallments"
+                value={data?.numberOfInstallments}
+                onChange={(e) =>
+                  handlerChange("numberOfInstallments", e.target.value)
+                }
+              />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -114,9 +104,7 @@ export default function Accounting({
                   aliasvalue="pdt_None"
                   name="StartFrom"
                   value={data.startFrom}
-                  onChange={(e) =>
-                    handlerChange("startFrom", e.target.value)
-                  }
+                  onChange={(e) => handlerChange("startFrom", e.target.value)}
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -193,11 +181,10 @@ export default function Accounting({
               </div>
               <div>
                 <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                 Installments
+                  Installments
                 </label>
                 <div className="">
                   <MUITextField
-                   
                     value={data.numberOfInstallments}
                     onChange={(e) =>
                       handlerChange("numberOfInstallments", e.target.value)

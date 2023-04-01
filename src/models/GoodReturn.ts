@@ -190,7 +190,7 @@ export default class GoodReturn extends Model implements MasterDocument {
     console.log(json);
 
     return {
-      numberOfInstallments: json["NumberOfInstallments"],
+      NumberOfInstallments: json["numberOfInstallments"],
       CentralBankIndicator:json["centralBankIndicator"],
       SalesPersonCode: json["salesPersonCode"],
       VatSum: json["vatSum"],
