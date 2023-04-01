@@ -17,6 +17,7 @@ import AccounttingForm from "./Accountting";
 import AccountTextField from "../../../../components/input/AccountTextField";
 import VatGroup from "../../../../components/selectbox/VatGroup";
 import BuyerSelect from "@/components/selectbox/Buyer";
+import SalePerson from "@/components/selectbox/SalePerson";
 
 export interface ContentFormProps {
   handlerAddItem: () => void;
@@ -147,7 +148,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              value={(cell.getValue())}
+              value={cell.getValue()}
               startAdornment={"$"}
               disabled={data?.unitPrice}
               onChange={(event) =>
@@ -407,10 +408,9 @@ export default function ContentForm({
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Buyer
             </label>
-            <BuyerSelect
-              onChange={(e) => handlerChange("salesPersonCode", e.target.value)}
-              value={data?.salesPersonCode}
-              name="SalesPersonCode"
+            <SalePerson
+              value={data?.salePersonCode}
+              onChange={(e) => handlerChange("salePersonCode", e.target.value)}
             />
           </div>
           <div className="w-[48%]">
@@ -418,11 +418,9 @@ export default function ContentForm({
               Owner
             </label>
             <Owner
-              name="DocumentsOwner"
+              onChange={(e) => handlerChange("documentsOwner", e.target.value)}
               value={data?.documentsOwner}
-              onChange={(e: any) =>
-                handlerChange("documentsOwner", e.target.value)
-              }
+              name="DocumentsOwner"
             />
           </div>
         </div>
@@ -431,46 +429,65 @@ export default function ContentForm({
             Remarks
           </label>
           <div className="">
-            <TextField
-              size="small"
-              multiline
-              rows={4}
-              fullWidth
-              name="Comments"
-              value={data?.comments}
-            />
+            {data.documentStatus === "bost_Open" ? (
+              <TextField
+                size="small"
+                multiline
+                rows={4}
+                fullWidth
+                name="Comments"
+                className="w-full "
+                defaultValue={data?.comments}
+              />
+            ) : (
+              <TextField
+                size="small"
+                multiline
+                rows={4}
+                disabled={edit}
+                fullWidth
+                name="Comments"
+                className="w-full "
+                defaultValue={data?.comments}
+              />
+            )}
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-3">
         <div className="w-[100%] gap-3">
           <MUITextField
-            startAdornment={"$"}
-            label="Total Before Discount"
-            disabled={edit}
-            value={Formular.findTotalBeforeDiscount(data?.items ?? [])?.toFixed(
-              2
-            )}
-            name="LineTotal"
+            label="Total Before Discount:"
+            value={currencyFormat(data?.docTotalBeforeDiscount)}
           />
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <MUITextField
-              label="Discount"
-              value={data.DiscountPercent}
-              name="DiscountPercent"
+              label="Discount:"
               startAdornment={"%"}
+              value={data?.docDiscountPercent}
+              onChange={(e) =>
+                handlerChange("docDiscountPercent", e.target.value)
+              }
             />
           </div>
           <div className="w-[48%] gap-3 mt-5">
-            <MUITextField label="" />
+            <MUITextField
+              label=""
+              startAdornment={data?.currency ?? "AUD"}
+              value={data?.docDiscountPrice}
+              onChange={(e) =>
+                handlerChange("docDiscountPrice", e.target.value)
+              }
+            />
           </div>
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
-            <MUITextField label="Fright" name="" disabled={edit} />
+            <MUITextField label="Fright:" value={""} />
           </div>
+
           <div className="w-[48%] gap-3 mt-5">
             <div className="flex items-center gap-1 text-sm">
               <Checkbox
@@ -486,13 +503,16 @@ export default function ContentForm({
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
-            <MUITextField label="Tax:" value={data.Tax} disabled={edit} />
+            <MUITextField
+              label="Tax:"
+              value={currencyFormat(data?.docTaxTotal)}
+            />
           </div>
+
           <div className="w-[48%] gap-3">
             <MUITextField
-              label="Total Payment Due"
-              value={data.Tax}
-              startAdornment={"$"}
+              label="Total Payment Due::"
+              value={currencyFormat(data?.docTotal)}
             />
           </div>
         </div>

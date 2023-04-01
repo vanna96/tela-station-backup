@@ -26,8 +26,8 @@ class PurchaseOrder extends CoreFormDocument {
       cancelDate: null,
     } as any;
 
-    this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    this.handlerAddItem = this.handlerAddItem.bind(this);
+    // this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
+    // this.handlerAddItem = this.handlerAddItem.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
@@ -60,51 +60,51 @@ class PurchaseOrder extends CoreFormDocument {
       }
     }
 
-    DocumentSerieRepository.getDocumentSeries(
-      PurchaseOrderRepository.documentSerie
-    ).then((res: any) => {
-      this.setState({ ...this.state, series: res, isLoadingSerie: false });
-    });
+    // DocumentSerieRepository.getDocumentSeries(
+    //   PurchaseOrderRepository.documentSerie
+    // ).then((res: any) => {
+    //   this.setState({ ...this.state, series: res, isLoadingSerie: false });
+    // });
 
-    if (!this.props.edit) {
-      DocumentSerieRepository.getDefaultDocumentSerie(
-        PurchaseOrderRepository.documentSerie
-      ).then((res: any) => {
-        this.setState({
-          ...this.state,
-          serie: res?.Series,
-          docNum: res?.NextNumber,
-          isLoadingSerie: false,
-        });
-      });
-    }
+    // if (!this.props.edit) {
+    //   DocumentSerieRepository.getDefaultDocumentSerie(
+    //     PurchaseOrderRepository.documentSerie
+    //   ).then((res: any) => {
+    //     this.setState({
+    //       ...this.state,
+    //       serie: res?.Series,
+    //       docNum: res?.NextNumber,
+    //       isLoadingSerie: false,
+    //     });
+    //   });
+    // }
   }
 
-  handlerRemoveItem(code: string) {
-    let items = [...(this.state.items ?? [])];
-    const index = items.findIndex((e: any) => e?.ItemCode === code);
-    items.splice(index, 1);
-    this.setState({ ...this.state, items: items });
-  }
+  // handlerRemoveItem(code: string) {
+  //   let items = [...(this.state.items ?? [])];
+  //   const index = items.findIndex((e: any) => e?.ItemCode === code);
+  //   items.splice(index, 1);
+  //   this.setState({ ...this.state, items: items });
+  // }
 
-  handlerAddItem({ value, record, field }: any) {
-    let items = [...(this.state.items ?? [])];
-    let item = this.state.items?.find(
-      (e: any) => e?.itemCode === record?.itemCode
-    );
+  // handlerAddItem({ value, record, field }: any) {
+  //   let items = [...(this.state.items ?? [])];
+  //   let item = this.state.items?.find(
+  //     (e: any) => e?.itemCode === record?.itemCode
+  //   );
 
-    if (field === "accountCode") {
-      const account = value as GLAccount;
-      item["accountCode"] = account.code;
-      item["AccountName"] = account.name;
-    } else {
-      item[field] = value;
-    }
+  //   if (field === "accountCode") {
+  //     const account = value as GLAccount;
+  //     item["accountCode"] = account.code;
+  //     item["AccountName"] = account.name;
+  //   } else {
+  //     item[field] = value;
+  //   }
 
-    const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-    if (index > 0) items[index] = item;
-    this.setState({ ...this.state, items: items });
-  }
+  //   const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
+  //   if (index > 0) items[index] = item;
+  //   this.setState({ ...this.state, items: items });
+  // }
 
   async handlerSubmit(event: any) {
     event.preventDefault();
@@ -146,8 +146,8 @@ class PurchaseOrder extends CoreFormDocument {
             edit={this.props?.edit}
             data={this.state}
             handlerAddItem={() => this.handlerOpenItem()}
-            handlerRemoveItem={this.handlerRemoveItem}
-            handlerChangeItem={this.handlerAddItem}
+            handlerRemoveItem={this.handlerDeleteItem}
+            handlerChangeItem={this.handlerChangeItems}
             handlerChange={(key, value) => this.handlerChange(key, value)}
             // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
