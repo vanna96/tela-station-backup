@@ -18,8 +18,6 @@ import { UpdateDataSuccess } from '@/utilies/ClientError';
 import PurchaseQouatation from '@/models/PurchaseQoutation';
 import Formular from '@/utilies/formular';
 import GoodReturn from '@/models/GoodReturn';
-import Logistic from '../../purchase_qoutation/componnent/Logistis';
-import Accounting from '../../purchase_qoutation/componnent/Acccounting';
 
 class GoodReturnForm extends CoreFormDocument {
 
@@ -32,6 +30,7 @@ class GoodReturnForm extends CoreFormDocument {
       docDate: new Date().toISOString(),
       docDueDate: new Date().toISOString(),
       taxDate: new Date().toISOString(),
+      cancelDate: null
     } as any;
 
 
@@ -150,12 +149,12 @@ class GoodReturnForm extends CoreFormDocument {
           handlerChangeItem={this.handlerChangeItems}
           handlerChange={(key, value) => this.handlerChange(key, value)}
         />
-        <Logistic
+        <LogisticsForm
           data={this.state}
           handlerChange={(key, value) => this.handlerChange(key, value)}
           edit={this.props.edit}
         />
-        <Accounting
+        <AccounttingForm
           edit={this.props.edit}
           data={this.state}
           handlerChange={(key, value) => this.handlerChange(key, value)}
