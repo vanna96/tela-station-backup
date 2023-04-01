@@ -127,12 +127,14 @@ export default class GoodReturn extends Model implements MasterDocument {
   docTotalSys?: number;
   accountNameD?: string;
   centralBankIndicator?: string;
+  numberOfInstallments?: number;
 
   constructor(json: any) {
     super();
+    this.numberOfInstallments= json["NumberOfInstallments"]
     this.centralBankIndicator = json["CentralBankIndicator"]
     this.salesPersonCode = json["SalesPersonCode"];
-    this.id = json["DocEntry"];
+    this.id = json["DocNum"];
     this.docTotalSys = json["DocTotalSys"];
     this.vatSum = json["VatSum"];
     this.numAtCard = json["NumAtCard"];
@@ -188,6 +190,7 @@ export default class GoodReturn extends Model implements MasterDocument {
     console.log(json);
 
     return {
+      numberOfInstallments: json["NumberOfInstallments"],
       CentralBankIndicator:json["centralBankIndicator"],
       SalesPersonCode: json["salesPersonCode"],
       VatSum: json["vatSum"],
@@ -265,7 +268,7 @@ export default class GoodReturn extends Model implements MasterDocument {
       Remarks: json["remarks"],
       AttachmentEntry: json["attachmentEntry"],
       PaymentGroupCode: json["paymentGroupCode"],
-      Series: json["series"],
+      // Series: json["series"],
       PaymentMethod: json["paymentMethod"],
       TransportationCode: json["transportationCode"],
       Project: json["project"],

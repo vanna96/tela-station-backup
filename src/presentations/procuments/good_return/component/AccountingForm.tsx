@@ -198,9 +198,9 @@ export default function Accounting({
                 <div className="">
                   <MUITextField
                    
-                    value={data.installments}
+                    value={data.numberOfInstallments}
                     onChange={(e) =>
-                      handlerChange("installments", e.target.value)
+                      handlerChange("numberOfInstallments", e.target.value)
                     }
                   />
                 </div>
