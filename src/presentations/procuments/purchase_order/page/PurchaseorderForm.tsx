@@ -60,24 +60,24 @@ class PurchaseOrder extends CoreFormDocument {
       }
     }
 
-    // DocumentSerieRepository.getDocumentSeries(
-    //   PurchaseOrderRepository.documentSerie
-    // ).then((res: any) => {
-    //   this.setState({ ...this.state, series: res, isLoadingSerie: false });
-    // });
+    DocumentSerieRepository.getDocumentSeries(
+      PurchaseOrderRepository.documentSerie
+    ).then((res: any) => {
+      this.setState({ ...this.state, series: res, isLoadingSerie: false });
+    });
 
-    // if (!this.props.edit) {
-    //   DocumentSerieRepository.getDefaultDocumentSerie(
-    //     PurchaseOrderRepository.documentSerie
-    //   ).then((res: any) => {
-    //     this.setState({
-    //       ...this.state,
-    //       serie: res?.Series,
-    //       docNum: res?.NextNumber,
-    //       isLoadingSerie: false,
-    //     });
-    //   });
-    // }
+    if (!this.props.edit) {
+      DocumentSerieRepository.getDefaultDocumentSerie(
+        PurchaseOrderRepository.documentSerie
+      ).then((res: any) => {
+        this.setState({
+          ...this.state,
+          serie: res?.Series,
+          docNum: res?.NextNumber,
+          isLoadingSerie: false,
+        });
+      });
+    }
   }
 
   // handlerRemoveItem(code: string) {
