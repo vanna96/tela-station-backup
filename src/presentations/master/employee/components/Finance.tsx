@@ -61,7 +61,7 @@ export default function Finance({
         <div className="flex flex-col gap-2 mt-2">
           <div className="flex flex-col gap-1 text-sm">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Month
+              Bank
             </label>
             <BuyerSelect
               value={data?.bankCode}
