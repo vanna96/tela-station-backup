@@ -14,7 +14,7 @@ const MasterDataPage = () => {
     return <>
         <MainContainer title='Master Data'>
             <ItemCard title='Item Master Data' icon={<AiOutlineFileProtect />} />
-            <ItemCard title='Employees' icon={<AiOutlineFileAdd />} />
+            <ItemCard title='Employees' onClick={() => goTo('employee')} icon={<AiOutlineFileProtect />} />
             <ItemCard title='Suppliers' icon={<AiOutlineShopping />} />
             <ItemCard title='Customers' icon={<AiOutlineFileUnknown />} />
             <ItemCard title='Warehouses' icon={<AiOutlineSnippets />} />

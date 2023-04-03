@@ -33,7 +33,7 @@ export default function GeneralForm({
               defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
             />
           </div>
-        <div className="mt-2">
+        <div className="mt-2 w-[50%]">
         <label htmlFor="Code" className="text-gray-500 text-[14px]">
           Shipping Type
         </label>
