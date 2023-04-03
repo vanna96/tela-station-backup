@@ -20,7 +20,7 @@ export interface IHeadingFormProps {
 
 export default function HeadingForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject, edit }: IHeadingFormProps) {
 
-console.log(data)
+  console.log(data)
   return (
     <>
       <FormCard title='Information'>
@@ -49,14 +49,15 @@ console.log(data)
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
               <div className="">
                 <MUISelect
-                  items={data?.shipToDefault?.map((e: BPAddress) => ({
-                    addressName: e.addressName,
-                    street: e.street,
-                    city: e.city,
-                    country: e.city,
-                    federalTaxId: e.federalTaxId,
-                    addressType: e.addressType
-                  }))}
+                  items={data?.shipTodefault}
+                  // items={data?.shipToDefault?.map((e: BPAddress) => ({
+                  //   addressName: e.addressName,
+                  //   street: e.street,
+                  //   city: e.city,
+                  //   country: e.city,
+                  //   federalTaxId: e.federalTaxId,
+                  //   addressType: e.addressType
+                  // }))}
                   onChange={(e) => handlerChange('shipToDefault', e.target.value)}
                   value={data?.shipTo}
                   aliasvalue="id"
@@ -235,7 +236,7 @@ console.log(data)
                   // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
                   onChange={(e) => handlerChange('fromWarehouse', e.target.value)}
                   value={data?.fromWarehouse}
-                
+
                 />
 
               </div>
@@ -247,7 +248,7 @@ console.log(data)
                   // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
                   onChange={(e) => handlerChange('toWarehouse', e.target.value)}
                   value={data?.toWarehouse}
-                 
+
                 />
 
               </div>

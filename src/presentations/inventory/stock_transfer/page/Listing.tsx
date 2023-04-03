@@ -72,7 +72,7 @@ export default function StockTransferLists() {
           <div className="flex gap-4">
             <button
               onClick={() => {
-                route("/procument/purchase-request/" + cell.row.original.id, {
+                route("/inventory/stock-transfer/" + cell.row.original.id, {
                   state: cell.row.original,
                 });
               }}

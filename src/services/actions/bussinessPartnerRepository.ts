@@ -50,6 +50,13 @@ export default class BusinessPartnerRepository extends Repository<BusinessPartne
                 throw new Error(e.message);
         })
     }
+
+    async findShipToAddress<T>(id: string): Promise<any> {
+        return await request('GET', `${this.url}('${id}')?$select=${['BPAddresses', 'ShipToDefault'].join(',')}`).then((res: any) => new BusinessPartner(res.data))
+            .catch((e: Error) => {
+                throw new Error(e.message);
+        })
+    }
     
 
     post(payload: any): Promise<BusinessPartner> {

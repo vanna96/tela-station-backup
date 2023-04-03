@@ -359,9 +359,9 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
               <TextField
                 size="small"
               
-                name="Comments"
+                name="pickandpackRemarks"
                 className="w-full "
-                defaultValue={data?.comments}
+                defaultValue={data?.pickandpackRemarks}
               />
             </div>
           </div>
@@ -374,9 +374,9 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
                 size="small"
                 fullWidth
                 multiline
-                name="Comments"
+                name="journalRemarks"
                 className="w-full "
-                defaultValue={data?.comments}
+                defaultValue={data?.journalRemarks}
               />
             </div>
             <div className="w-[48%]">

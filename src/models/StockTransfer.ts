@@ -1,4 +1,5 @@
 import { dateFormat } from "../utilies";
+import { BPAddress, ContactEmployee } from "./BusinessParter";
 import Model from "./Model";
 import { MasterDocument, DocumentLine } from "./interface/index";
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
@@ -30,7 +31,10 @@ export interface StockTransferProps {
   paymentMethod?: string;
   shippingType?: string | undefined;
   items: StockTransferDocumentLineProps[];
-  documentLine: StockTransferDocumentLineProps[];
+  stockTransferLines: StockTransferDocumentLineProps[];
+  contactPersonList?: ContactEmployee[];
+  shippingList?: BPAddress[];
+
 }
 
 export interface StockTransferDocumentLineProps {
@@ -58,41 +62,48 @@ export default class StockTransfer extends Model implements MasterDocument {
   attachmentEntry?: number;
   docCurrency?: string;
   reference1?: string;
-  reference2?: string;
   comments?: string;
   journalMemo?: string;
   salesPersonCode?: string;
   contactPersonCode?: string;
   series?: string;
   taxDate?: string;
-  address2?: string;
+  address?: string;
   documentStatus?: string;
   serie: string;
   shippingType?: string | undefined;
   items: StockTransferDocumentLine[];
   documentowner?: string;
-  documentLine?: StockTransferDocumentLine[];
-  fromWarehouse?: number;
-  toWarehouse?: number;
+  stockTransferLines?: StockTransferDocumentLine[];
+  fromWarehouse?: string;
+  toWarehouse?: string;
   shipToDefault?: string;
   owner?: number;
   status?: string;
+  contactPerson?: string;
+  dueDate?: string;
+  shippingList?: BPAddress[];
+  contactPersonList?: ContactEmployee[];
+
 
   constructor(json: any) {
     super();
     this.id = json["DocNum"];
-    this.cardCode = json["Requester"];
+    this.cardCode = json["CardCode"];
     this.cardName = json["CardName"];
     this.serie = json["Seriesss"];
     this.owner = json["DocumentsOwner"];
     this.status = json["DocumentStatus"];
     this.docNum = json["DocNum"];
     this.taxDate = json["TaxDate"];
-    this.docDueDate = json["DocDueDate"];
+    this.dueDate = json["DocDueDate"];
     this.docDate = json["DocDate"];
     // this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
     this.comments = json["Comments"];
-    this.items = json["DocumentLines"]?.map(
+    this.items = json["StockTransferLines"]?.map(
+      (e: any) => new StockTransferDocumentLine(e)
+    );
+    this.stockTransferLines = json["StockTransferLines"]?.map(
       (e: any) => new StockTransferDocumentLine(e)
     );
     this.documentStatus = json["DocumentStatus"]
@@ -100,7 +111,16 @@ export default class StockTransfer extends Model implements MasterDocument {
       ?.charAt(0);
     this.fromWarehouse = json['FromWarehouse'];
     this.toWarehouse = json['ToWarehouse'];
-    this.shipToDefault = json['ShipToDefault'];
+    this.shipToDefault = json['ShipToCode'];
+    this.salesPersonCode = json['SalesPersonCode']
+    this.contactPerson = json['ContactPerson']
+    this.address = json['Address']
+    this.reference1 = json['Reference1']
+    this.journalMemo = json['JournalMemo']
+    this.documentStatus = json['DocumentStatus']
+    this.contactPersonList = json['contactPersonList'];
+    this.shippingList = json['shippingList'];
+
   }
 
   toJson(update: boolean) {
@@ -203,26 +223,12 @@ export class StockTransferDocumentLine extends Model implements DocumentLine {
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  TransportationCode?: string | undefined;
-  project?: string | undefined;
-  vatGroup?: string | undefined;
-  requiredDate?: string | undefined;
-  shipDate?: string | undefined;
-  accountCode?: number | undefined;
-  accountNo?: number | undefined;
-  accountName?: string | undefined;
-  discountPercent?: number;
-  requriedDate?: string;
-  itemName?: string;
-  saleVatGroup?: string;
-  lineVendor?: string;
-  purchaseVatGroup?: string;
-  accountNameD?: string;
+  warehouseCode?: string;
+  fromWarehouseCode?: string;
 
 
   constructor(json: any) {
     super();
-    this.saleVatGroup = json["VatGroup"];
     this.itemCode = json["ItemCode"];
     this.itemDescription = json["ItemDescription"];
     this.itemGroup = json["ItemGroup"];
@@ -232,16 +238,9 @@ export class StockTransferDocumentLine extends Model implements DocumentLine {
     this.lineDiscount = json["LineDiscount"];
     this.uomEntry = json["UoMEntry"];
     this.uomCode = json["UoMCode"];
-    this.requiredDate = json["RequiredDate"];
-    this.discountPercent = json["DiscountPercent"];
-    this.shipDate = json["ShipDate"];
-    this.accountCode = json["AccountCode"];
-    this.accountNo = json["AccountNo"];
-    this.accountName = json["AccountName"];
-    this.lineVendor = json["LineVendor"];
-    this.itemName = json["ItemDescription"];
-    this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
-    // {(new OwnerRepository().find(data.owner)?.name) || "N/A"}
+    this.fromWarehouseCode = json["FromWarehouseCode"];
+    this.warehouseCode = json["warehouseCode"]
+
   }
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
@@ -256,16 +255,11 @@ export class StockTransferDocumentLine extends Model implements DocumentLine {
       DocEntry: json["uomGroupEntry"],
       UoMCode: json["uomCode"],
       UoMEntry: json["uomEntry"],
-      LineVendor: json["lineVendor"],
-      RequiredDate: json["requiredDate"],
-      AccountCode: json["AccountNo"],
-      DiscountPercent: json["discountPercent"],
+      FromWarehouseCode: json["fromWarehouseCode"],
+      WarehouseCode: json["warehouseCode"],
     };
 
-    if (type === "S") {
-      delete line.ItemCode;
-      delete line.UnitPrice;
-    }
+
 
     return line;
   }

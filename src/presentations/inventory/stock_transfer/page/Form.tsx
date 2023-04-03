@@ -19,12 +19,11 @@ class StockTransferForm extends CoreFormDocument {
     this.state = {
       ...this.state,
       loading: true,
-      docType: "I",
       documentStatus: "O",
       requriedDate: null,
       docDate: new Date().toISOString(),
       taxDate: new Date().toISOString(),
-      docDueDate: new Date().toISOString(),
+      dueDate: new Date().toISOString(),
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);

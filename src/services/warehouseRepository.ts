@@ -20,7 +20,6 @@ export default class WarehouseRepository extends Repository<Warehouse> {
         const warehouse = await request('GET', this.url).then((res: any) => res?.data?.value);
         const enc = Encryption.encrypt(this.key, JSON.stringify(warehouse));
         localStorage.setItem(this.key, enc);
-
         return warehouse;
     }
 

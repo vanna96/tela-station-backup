@@ -19,6 +19,7 @@ import BusinessPartner, { ContactEmployee } from '@/models/BusinessParter';
 import BuyerRepository from '@/services/actions/BuyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import StockTransferRepository from '@/services/actions/stockTransferRepository';
+import WarehouseRepository from '@/services/warehouseRepository';
 
 
 class StockTransferDetail extends Component<any, any> {
@@ -46,15 +47,21 @@ class StockTransferDetail extends Component<any, any> {
 
     if (data) {
       setTimeout(() => {
-        let purchaseQoutation = data;
-        purchaseQoutation as StockTransfer;
-        if (purchaseQoutation.contactPersonCode) {
-          new BusinessPartnerRepository().findContactEmployee(purchaseQoutation.cardCode!).then((res: BusinessPartner) => {
-            purchaseQoutation.contactPersonList = res.contactEmployee || [];
-            this.setState({ ...purchaseQoutation, loading: false })
+        let stockTransfer = data;
+        stockTransfer as StockTransfer;
+        if (stockTransfer.contactPerson) {
+          new BusinessPartnerRepository().findContactEmployee(stockTransfer.cardCode!).then((res: BusinessPartner) => {
+            stockTransfer.contactPersonList = res.contactEmployee || [];
+            this.setState({ ...stockTransfer, loading: false })
           })
-        } else {
-          this.setState({ ...purchaseQoutation, loading: false })
+        }
+        // if (stockTransfer.shipToDefault) {
+        //   new BusinessPartnerRepository().findShipToAddress(stockTransfer.shipToDefault!).then((res: BusinessPartner) => {
+        //     stockTransfer.shippingList = res.bpAddress || [];
+        //     this.setState({ ...stockTransfer, loading: false })
+        //   })
+        else {
+          this.setState({ ...stockTransfer, loading: false })
         }
       }, 500)
     } else {
@@ -67,7 +74,6 @@ class StockTransferDetail extends Component<any, any> {
   }
 
   render() {
-
 
     return (
       <div className='w-full h-full flex flex-col p-4 gap-4'>
@@ -90,25 +96,23 @@ class StockTransferDetail extends Component<any, any> {
                   <span className='w-8/12 font-medium'>: {this.state.docNum || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Vendor</span>
+                  <span className='w-4/12 text-gray-500'>Card Code</span>
                   <span className='w-8/12 font-medium'>: {this.state.cardCode || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Name</span>
+                  <span className='w-4/12 text-gray-500'>Card Name</span>
                   <span className='w-8/12 font-medium'>: {this.state.cardName || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Contact Person</span>
-                  <span className='w-8/12 font-medium'>: {this.state?.contactPersonList?.find((e: ContactEmployee) => e.id === this.state.contactPersonCode)?.name || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {this.state?.contactPersonList?.find((e: ContactEmployee) => e.id === this.state.contactPerson)?.name || "N/A"}</span>
+
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Vendor Ref .No</span>
-                  <span className='w-8/12 font-medium'>:{this.state?.numAtCard || "N/A"}</span>
+                  <span className='w-4/12 text-gray-500'>Ship To </span>
+                  <span className='w-8/12 font-medium'>: {this.state?.address || "N/A"}</span>
                 </div>
-                <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500 '>Local Currency</span>
-                  <span className='w-8/12 font-medium'>: {this.state.docCurrency || "N/A"}</span>
-                </div>
+
               </div>
               <div className='flex flex-col gap-1'>
                 <div className='flex gap-2'>
@@ -120,28 +124,27 @@ class StockTransferDetail extends Component<any, any> {
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Valid Until</span>
-                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDueDate) || "N/A"}</span>
-                </div>
-                <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Document Date</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.taxDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Required Date</span>
-                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.requriedDate) || "N/A"}</span>
+                  <span className='w-4/12 text-gray-500'>From Warehouse</span>
+                  <span className='w-8/12 font-medium'>: {this.state.fromWarehouse} {new WarehouseRepository().find(parseFloat(this.state.fromWarehouse))?.WarehouseName}</span>
                 </div>
+                <div className='flex gap-2'>
+                  <span className='w-4/12 text-gray-500'>To Warehouse</span>
+                  <span className='w-8/12 font-medium'>: {this.state.toWarehouse}   {new WarehouseRepository().find(this.state.toWarehouse)?.WarehouseName}</span>
+
+                </div>
+
 
               </div>
             </div>
             <div className='grow flex flex-col gap-3 p-6 shadow-sm rounded-lg bg-white'>
               <Taps
-                items={['Content', 'Logistic', 'Account', 'Attachment']}
+                items={['Content', 'Attachment']}
               >
                 <Content data={this.state} />
-                <Logistic data={this.state} />
-                <Account data={this.state} />
-
                 <PreviewAttachment attachmentEntry={this.state.attachmentEntry || "N/A"} />
               </Taps>
             </div>
@@ -176,88 +179,40 @@ function Content(props: any) {
 
     },
     {
-      accessorKey: "quantity",
-      header: "	Required Qty.",
+      accessorKey: "fromWarehouseCode",
+      header: "	From Warehouse ",
       enableClickToCopy: true,
+    },
+    {
+      accessorKey: "warehouseCode",
+      header: "	To Warehouse",
+      enableClickToCopy: true,
+    },
+    {
+      accessorKey: "quantity",
+      header: "Quantity",
     },
     {
       accessorKey: "unitPrice",
-      header: "Info Price",
+      header: "Price",
       Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
     {
-      accessorKey: "discountPercent",
-      header: "	Discount",
+      accessorKey: "department",
+      header: "	Department",
       Cell: ({ cell }: any) => discountFormat(cell.getValue()),
     },
     {
-      accessorKey: "vatGroup",
-      header: "Tax Code",
+      accessorKey: "lineofbusiness",
+      header: "Line of Business",
       Cell: ({ cell }: any) => cell.getValue(),
     },
-    {
-      accessorKey: "lineTotal",
-      header: "Total (LC)",
-      Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
-      enableClickToCopy: true,
-    },
-    {
-      accessorKey: "uomCode",
-      header: "UoM Code",
-      Cell: ({ cell }: any) => cell.getValue(),
-    },
-  ], [data]);
 
-  const serviceColumns = React.useMemo(
-    () => [
-      {
-        accessorKey: "itemDescription",
-        header: "	Descrition",
-        Cell: ({ cell }: any) => cell.getValue(),
-    
-      },
-      {
-        accessorKey: "shipDate",
-        header: "Qouted date",
-        Cell: ({ cell }: any) => dateFormat(cell.getValue()),
-      },
-      {
-        accessorKey: "requiredDate",
-        header: "Required Date",
-        Cell: ({ cell }: any) => dateFormat(cell.getValue()),
-      },
-      {
-        accessorKey: "accountCode",
-        header: "G/L Account",
-        Cell: ({ cell }: any) => cell.getValue(),
-      },
-      {
-        accessorKey: "accountName",
-        header: "G/L Account Name",
-        Cell: ({ cell }: any) => cell.getValue(),
-      },
-      {
-        accessorKey: "vatGroup",
-        header: "Tax Code",
-        Cell: ({ cell }: any) => cell.getValue(),
-      },
-      {
-        accessorKey: "lineTotal",
-        header: "Total (LC)",
-        Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
-      },
-      {
-        accessorKey: "blanketAgreementNumber",
-        header: "BlanketAgreementNumber",
-        Cell: ({ cell }: any) => cell.getValue(),
-      },
-    ],
-    [data]
-  );
+  ], [data]);
 
   return <div className="data-table  border-none p-0 mt-3">
     <MaterialReactTable
-      columns={data?.docType === 'I' ? itemColumn : serviceColumns}
+      columns={itemColumn}
       data={data?.items || []}
       enableHiding={true}
       initialState={{ density: "compact" }}
@@ -279,73 +234,27 @@ function Content(props: any) {
     />
     <div className='flex flex-col gap-3'>
       <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Buyer</span>
+        <span className='w-4/12 text-gray-500 text-sm'>Sale Employee</span>
         <span className="w-8/12 font-medium text-sm">
           : {new BuyerRepository().find(data.salesPersonCode)?.name || "N/A"}
         </span>
       </div>
       <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Owner</span>
+        <span className='w-4/12 text-gray-500 text-sm'>Pick and Pack Remark</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new OwnerRepository().find(data.documentsOwner)?.name || "N/A"}
+          : {data?.PickAndPackRemarks}
         </span>
       </div>
       <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.docTotalBeforeDiscount || "N/A"}</span>
+        <span className='w-4/12 text-gray-500 text-sm'>Journal Remarks</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.journalRemarks || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.as || "N/A"}</span>
-      </div>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Tax</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.vatSum}</span>
-      </div>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.docTotalSys} </span>
-      </div>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Remark</span>
+        <span className='w-4/12 text-gray-500 text-sm'>Remarks</span>
         <span className='w-8/12 font-medium text-sm'>: {data?.comments || "N/A"}</span>
       </div>
-    </div>
-  </div>
-
-}
-function Account(props: any) {
-  const { data }: any = props;
-
-  return <div className='grow w-full grid grid-cols-2 gap-2 text-sm py-2'>
-    <div className='flex flex-col gap-2'>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Jounral Remark</span> <span className='col-span-2 font-medium'>: {data.journalMemo?.replace('at', '') || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data.paymentGroupCode)?.PaymentTermsGroupName || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Methods</span> <span className='col-span-2 font-medium'>: {data.paymentMethod || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalulate Due Date</span> <span className='col-span-2 font-medium'>: {data.paymentMethod || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cash Discount Date Offset</span> <span className='col-span-2 font-medium'>: {data.cashDiscountDateOffset || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Bussiness partner Projec</span> <span className='col-span-2 font-medium'>: {data.project || "N/A"}</span></div>
-    </div>
-    <div className='flex flex-col gap-2'>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Create QR Code From</span> <span className='col-span-2 font-medium'>: {data.stat || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cancellation Date</span> <span className='col-span-2 font-medium'>: {dateFormat(data.cancelDate || "N/A")}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Indicator</span> <span className='col-span-2 font-medium'>: {data.indicator || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Federal Tax ID</span> <span className='col-span-2 font-medium'>: {data.federalTaxID || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Order Number</span> <span className='col-span-2 font-medium'>: {data.importFileNum || "N/A"}</span></div>
-    </div>
-
-  </div>
-}
-
-function Logistic(props: any) {
-  const { data }: any = props;
-
-  return <div className='grow w-full grid grid-cols-2 gap-2 text-sm py-2'>
-    <div className='flex flex-col gap-2'>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500 '>Ship To</span> <span className='col-span-2 font-medium'>: {data.address2}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Pay To</span> <span className='col-span-2 font-medium'>: {data.address}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shiping Type</span> <span className='col-span-2 font-medium'>:  {new ShippingTypeRepository().find(data.shippingType)?.Name}</span></div>
 
     </div>
   </div>
+
 }
