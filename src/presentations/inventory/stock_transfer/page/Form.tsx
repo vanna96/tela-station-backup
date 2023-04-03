@@ -1,20 +1,19 @@
 import CoreFormDocument from "@/components/core/CoreFormDocument";
-import PurchaseRequest from "@/models/PurchaseRequest";
-import HeadingForm from "../components/HeadingForm";
+import HeadingForm from "../component/HeadingForm";
 import { withRouter } from "@/routes/withRouter";
-import ContentForm from "../components/ContentForm";
+import ContentForm from "../component/ContentForm";
 import { LoadingButton } from "@mui/lab";
-import { FormEventHandler } from "react";
-import AttachmentForm from "../components/AttachmentForm";
+import AttachmentForm from "@/components/attachment";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
-import PurchaseRequestRepository from "@/services/actions/purchaseRequestRepository";
-import { ToastOptions } from "react-toastify";
+import StockTransferRepository from "@/services/actions/stockTransferRepository";
 import GLAccount from "../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import Formular from "@/utilies/formular";
 import VatGroupRepository from "@/services/actions/VatGroupRepository";
+import StockTransfer from "@/models/StockTransfer";
 
-class PurchaseRequestForm extends CoreFormDocument {
+
+class StockTransferForm extends CoreFormDocument {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -58,7 +57,7 @@ class PurchaseRequestForm extends CoreFormDocument {
           500
         );
       } else {
-        new PurchaseRequestRepository()
+        new StockTransferRepository()
           .find(this.props.match.params.id)
           .then((res: any) => {
             this.setState({ ...res, loading: false });
@@ -70,14 +69,14 @@ class PurchaseRequestForm extends CoreFormDocument {
     }
 
     DocumentSerieRepository.getDocumentSeries(
-      PurchaseRequestRepository.documentSerie
+      StockTransferRepository.documentSerie
     ).then((res: any) => {
       this.setState({ ...this.state, series: res, isLoadingSerie: false });
     });
 
     if (!this.props.edit) {
       DocumentSerieRepository.getDefaultDocumentSerie(
-        PurchaseRequestRepository.documentSerie
+        StockTransferRepository.documentSerie
       ).then((res: any) => {
         this.setState({
           ...this.state,
@@ -136,36 +135,20 @@ class PurchaseRequestForm extends CoreFormDocument {
     });
   }
 
-  // async handlerSubmit(event: any) {
-  //   event.preventDefault();
-  //   this.setState({ ...this.state, isSubmitting: true });
-
-  //   const { id } = this.props?.match?.params;
-
-  //   await new PurchaseRequestRepository()
-  //     .post(this.state, this.props?.edit, id)
-  //     .then((res: any) => {
-  //       this.showMessage("Success", "Create Successfully");
-  //     })
-  //     .catch((e: Error) => {
-  //       this.showMessage("Errors", e.message);
-  //     });
-  // }
-
   async handlerSubmit(event: any) {
     event.preventDefault();
 
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params;
 
-    await new PurchaseRequestRepository()
+    await new StockTransferRepository()
       .post(this.state, this.props?.edit, id)
       .then((res: any) => {
-        const purchaseRequest = new PurchaseRequest(res?.data);
+        const stockTransfer = new StockTransfer(res?.data);
 
         this.props.history.replace(
-          this.props.location.pathname?.replace("create", purchaseRequest.id),
-          purchaseRequest
+          this.props.location.pathname?.replace("create", stockTransfer.id),
+          stockTransfer
         );
         this.dialog.current?.success("Create Successfully.");
       })
@@ -194,30 +177,24 @@ class PurchaseRequestForm extends CoreFormDocument {
     return (
       <>
         <form onSubmit={this.handlerSubmit} className="flex flex-col gap-4">
-          <HeadingForm
-            edit={this.props?.edit}
-            data={this.state}
-            handlerOpenRequester={() => {
-              const { reqType }: any = this.state;
-              if (reqType == 12) {
-                this.handlerOpenRequester();
-              } else {
-                this.handlerOpenRequesterEmployee();
-              }
-            }}
-            handlerChange={(key, value) => {
-              this.handlerChange(key, value);
-            }}
-          />
+        <HeadingForm
+          data={this.state}
+          edit={this.props?.edit}
+          handlerOpenVendor={() => {
+            this.handlerOpenVendor('customer');
+          }}
+          handlerChange={(key, value) => this.handlerChange(key, value)}
+          handlerOpenProject={() => this.handlerOpenProject()}
+        />
 
-          <ContentForm
-            data={this?.state}
-            handlerAddItem={() => this.handlerOpenItem()}
-            handlerRemoveItem={this.handlerRemoveItem}
-            handlerChangeItem={this.handlerAddItem}
-            handlerChange={(key, value) => this.handlerChange(key, value)}
-            // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
-          />
+        <ContentForm
+          edit={this.props?.edit}
+          data={this.state}
+          handlerAddItem={() => this.handlerOpenItem()}
+          handlerRemoveItem={this.handlerRemoveItem}
+          handlerChangeItem={this.handlerChangeItems}
+          handlerChange={(key, value) => this.handlerChange(key, value)}
+        />
 
           <AttachmentForm />
 
@@ -254,4 +231,4 @@ class PurchaseRequestForm extends CoreFormDocument {
   };
 }
 
-export default withRouter(PurchaseRequestForm);
+export default withRouter(StockTransferForm);

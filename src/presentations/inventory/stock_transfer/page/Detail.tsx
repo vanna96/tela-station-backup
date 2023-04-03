@@ -1,9 +1,13 @@
 import { withRouter } from '@/routes/withRouter';
 import React, { Component, useEffect } from 'react'
+import StockTransfer from '../../../../models/StockTransfer';
+import { StockTransferProps, StockTransferDocumentLineProps } from '../../../../models/StockTransfer';
+import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
 import Taps from '@/components/button/Taps';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { currencyDetailFormat, currencyFormat, dateFormat, discountFormat, fileToBase64 } from '@/utilies';
+import { AttachmentLine } from '../../../../models/Attachment';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { CircularProgress } from '@mui/material';
@@ -14,14 +18,10 @@ import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
 import BusinessPartner, { ContactEmployee } from '@/models/BusinessParter';
 import BuyerRepository from '@/services/actions/BuyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
-import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
-import GoodReturn from '@/models/GoodReturn';
-import GoodReturnRepository from '@/services/actions/goodReturnRepository';
-import SalePersonRepository from '../../../../services/actions/salePersonRepository';
-import Formular from '@/utilies/formular';
+import StockTransferRepository from '@/services/actions/stockTransferRepository';
 
 
-class GoodReturnDetail extends Component<any, any> {
+class StockTransferDetail extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
@@ -41,24 +41,24 @@ class GoodReturnDetail extends Component<any, any> {
 
   initData() {
     const { id } = this.props.match.params;
-    const data = this.props.location.state as GoodReturn;
+    const data = this.props.location.state as StockTransfer;
     console.log(data);
 
     if (data) {
       setTimeout(() => {
-        let goodReturn = data;
-        goodReturn as GoodReturn;
-        if (goodReturn.contactPersonCode) {
-          new BusinessPartnerRepository().findContactEmployee(goodReturn.cardCode!).then((res: BusinessPartner) => {
-            goodReturn.contactPersonList = res.contactEmployee || [];
-            this.setState({ ...goodReturn, loading: false })
+        let purchaseQoutation = data;
+        purchaseQoutation as StockTransfer;
+        if (purchaseQoutation.contactPersonCode) {
+          new BusinessPartnerRepository().findContactEmployee(purchaseQoutation.cardCode!).then((res: BusinessPartner) => {
+            purchaseQoutation.contactPersonList = res.contactEmployee || [];
+            this.setState({ ...purchaseQoutation, loading: false })
           })
         } else {
-          this.setState({ ...goodReturn, loading: false })
+          this.setState({ ...purchaseQoutation, loading: false })
         }
       }, 500)
     } else {
-      new GoodReturnRepository().find(id).then((res: any) => {
+      new StockTransferRepository().find(id).then((res: any) => {
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {
         this.setState({ isError: true, message: e.message });
@@ -103,7 +103,7 @@ class GoodReturnDetail extends Component<any, any> {
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Vendor Ref .No</span>
-                  <span className='w-8/12 font-medium'>:{this.state?.numAtCard || " N/A"}</span>
+                  <span className='w-8/12 font-medium'>:{this.state?.numAtCard || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500 '>Local Currency</span>
@@ -120,14 +120,17 @@ class GoodReturnDetail extends Component<any, any> {
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Return Date </span>
+                  <span className='w-4/12 text-gray-500'>Valid Until</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDueDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Document Date</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.taxDate) || "N/A"}</span>
                 </div>
-                
+                <div className='flex gap-2'>
+                  <span className='w-4/12 text-gray-500'>Required Date</span>
+                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.requriedDate) || "N/A"}</span>
+                </div>
 
               </div>
             </div>
@@ -151,7 +154,7 @@ class GoodReturnDetail extends Component<any, any> {
   }
 }
 
-export default withRouter(GoodReturnDetail);
+export default withRouter(StockTransferDetail);
 
 
 
@@ -278,23 +281,18 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Buyer</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new SalePersonRepository().find(data?.salesPersonCode)?.name || "N/A"}
+          : {new BuyerRepository().find(data.salesPersonCode)?.name || "N/A"}
         </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Owner</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new OwnerRepository().find(data?.documentsOwner)?.name || "N/A"}
-
+          : {new OwnerRepository().find(data.documentsOwner)?.name || "N/A"}
         </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findItemTotal(data?.items)) ?? ""}</span>
-      </div>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.docDiscountPercent || "N/A"}{data?.docDiscountPrice}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.docTotalBeforeDiscount || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
@@ -307,14 +305,6 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
         <span className='w-8/12 font-medium text-sm'>:{data?.docTotalSys} </span>
-      </div>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Applied Amount</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.appliedAmount} </span>
-      </div>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Balance Due</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.BalanceDue} </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Remark</span>
@@ -332,14 +322,12 @@ function Account(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Jounral Remark</span> <span className='col-span-2 font-medium'>: {data.journalMemo?.replace('at', '') || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data.paymentGroupCode)?.PaymentTermsGroupName || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Methods</span> <span className='col-span-2 font-medium'>: {data.paymentMethod || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Central Bank Ind.</span> <span className='col-span-2 font-medium'>: {data.centralBankIndicator || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Installments</span> <span className='col-span-2 font-medium'>: {data.numberOfInstallments || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalculate Due Date</span> <span className='col-span-2 font-medium'>: {data.StartFrom || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalulate Due Date</span> <span className='col-span-2 font-medium'>: {data.paymentMethod || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cash Discount Date Offset</span> <span className='col-span-2 font-medium'>: {data.cashDiscountDateOffset || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Bussiness partner Projec</span> <span className='col-span-2 font-medium'>: {data.project || "N/A"}</span></div>
     </div>
     <div className='flex flex-col gap-2'>
-    <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Business partner Project</span> <span className='col-span-2 font-medium'>: {data.project || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Create QR Code From</span> <span className='col-span-2 font-medium'>: {data.createQRCodeFrom || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Create QR Code From</span> <span className='col-span-2 font-medium'>: {data.stat || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cancellation Date</span> <span className='col-span-2 font-medium'>: {dateFormat(data.cancelDate || "N/A")}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Indicator</span> <span className='col-span-2 font-medium'>: {data.indicator || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Federal Tax ID</span> <span className='col-span-2 font-medium'>: {data.federalTaxID || "N/A"}</span></div>

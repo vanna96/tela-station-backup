@@ -7,7 +7,7 @@ import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
-import GoodReturnRepository from "@/services/goodReturnRepository";
+import GoodReturnRepository from "@/services/actions/goodReturnRepository";
 
 export default function GoodReturnLists() {
   const route = useNavigate();

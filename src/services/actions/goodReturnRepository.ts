@@ -3,7 +3,7 @@ import Repository from '@/astractions/repository';
 import PurchaseQouatation from '@/models/PurchaseQoutation';
 import GoodReturn from '@/models/GoodReturn';
 import request from '@/utilies/request';
-import BusinessPartnerRepository from './actions/bussinessPartnerRepository';
+import BusinessPartnerRepository from './bussinessPartnerRepository';
 
 export default class GoodReturnRepository extends Repository<GoodReturn> {
 

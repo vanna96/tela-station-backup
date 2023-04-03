@@ -1,7 +1,7 @@
 import Repository from '@/astractions/repository';
 import request from '@/utilies/request';
-import PurchaseRequest from '../models/PurchaseRequest';
-import PurchaseAgreement from '../models/PurchaseAgreement';
+import PurchaseRequest from '../../models/PurchaseRequest';
+import PurchaseAgreement from '../../models/PurchaseAgreement';
 
 export default class PurchaseRequestRepository extends Repository<PurchaseRequest> {
     

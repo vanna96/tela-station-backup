@@ -12,7 +12,7 @@ import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRep
 import LogisticsForm from '../component/LogisticsForm';
 import AccounttingForm from '../component/AccountingForm';
 import GLAccount from '@/models/GLAccount';
-import GoodReturnRepository from '@/services/goodReturnRepository';
+import GoodReturnRepository from '@/services/actions/goodReturnRepository';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import { UpdateDataSuccess } from '@/utilies/ClientError';
 import PurchaseQouatation from '@/models/PurchaseQoutation';

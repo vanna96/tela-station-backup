@@ -8,13 +8,14 @@ import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
 import PurchaseRequestRepository from "@/services/actions/purchaseRequestRepository";
+import StockTransferRepository from "@/services/actions/stockTransferRepository";
 
-export default function PurchaseRequestLists() {
+export default function StockTransferLists() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["pr"],
-    queryFn: () => new PurchaseRequestRepository().get(),
+    queryKey: ["st"],
+    queryFn: () => new StockTransferRepository().get(),
   });
   console.log(data);
   const columns = React.useMemo(
@@ -27,23 +28,19 @@ export default function PurchaseRequestLists() {
         size: 88,
       },
       {
-        accessorKey: "requester",
-        header: "Requester",
+        accessorKey: "cardCode",
+        header: "BP Code",
         enableClickToCopy: true,
       },
       {
-        accessorKey: "requesterName",
-        header: "Requester Name",
+        accessorKey: "cardName",
+        header: "BP Name",
         // size: 200, //increase the width of this column
       },
-      {
-        accessorKey: "requesterEmail",
-        header: "Requester Email",
-        // size: 200, //increase the width of this column
-      },
+
       {
         accessorKey: "taxDate",
-        header: "Document Date",
+        header: "Posting Date",
         Cell: ({ cell }: any) => (
           <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>
         ),
@@ -52,6 +49,11 @@ export default function PurchaseRequestLists() {
         accessorKey: "docDueDate",
         header: "Valid Date",
         Cell: ({ cell }) => <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>,
+      },
+      {
+        accessorKey: "documentStatus",
+        header: "Status",
+        Cell: ({ cell }) => <>{(cell.getValue())?.split("bost_")}</>,
       },
       {
         accessorKey: "docTotalSys",
@@ -97,13 +99,13 @@ export default function PurchaseRequestLists() {
       <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
         <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full bg-white py-3">
           <h3 className="text-lg 2xl:text-base xl:text-sm">
-            Procument / Purchase Request
+            Inventory / Stock Transfer
           </h3>
           <Button
             variant="outlined"
             disableElevation
             size="small"
-            onClick={() => route("/procument/purchase-request/create")}
+            onClick={() => route("/inventory/stock-transfer/create")}
           >
             <span className="text-xs">Create</span>
           </Button>
@@ -133,7 +135,7 @@ export default function PurchaseRequestLists() {
               return (
                 <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
                   <h3 className="font-bold text-base xl:text-sm">
-                    Purchase Agreement
+                    Stock Transfer
                   </h3>
                   {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
                 </div>
