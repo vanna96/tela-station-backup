@@ -1,27 +1,22 @@
 import CoreFormDocument from '@/components/core/CoreFormDocument';
-import PurchaseAgreement from '../../../../models/PurchaseAgreement';
-import GeneralForm from '../../purchase_agreement/components/GeneralForm';
-import HeadingForm from '../componnent/HeadingForm';
 import { withRouter } from '@/routes/withRouter';
-import ContentForm from '../componnent/Content';
 import { LoadingButton } from '@mui/lab';
-import { FormEventHandler } from 'react';
 import AttachmentForm from '@/components/attachment';
-import { CoreFormDocumentState } from '../../../../components/core/CoreFormDocument';
 import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
-import { ToastOptions } from 'react-toastify';
 import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
-import Logistic from '../componnent/Logistis';
-import Accounting from '../componnent/Acccounting';
 import GLAccount from '@/models/GLAccount';
-import PurchaseQoutationRepository from './../../../../services/actions/purchaseQoutationRepository';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import { UpdateDataSuccess } from '@/utilies/ClientError';
-import PurchaseQouatation from '@/models/PurchaseQoutation';
 import Formular from '@/utilies/formular';
+import HeadingForm from '../component/HeadingForm';
+import Logistic from '../component/Logistic';
+import Accounting from '../component/Accounting';
+import Content from '../component/Content';
+import PurchaseDownPaymentRepository from '@/services/actions/DownPaymentRequestRepository';
+import PurchaseDownPayment from '@/models/DownPaymentRequest';
 
-class PurchaseQoutationForm extends CoreFormDocument {
+class PurchaseDownPaymentForm extends CoreFormDocument {
 
   constructor(props: any) {
     super(props)
@@ -32,7 +27,6 @@ class PurchaseQoutationForm extends CoreFormDocument {
       docDate: new Date().toISOString(),
       docDueDate: new Date().toISOString(),
       taxDate: new Date().toISOString(),
-      requriedDate: null
     } as any;
 
 
@@ -49,22 +43,21 @@ class PurchaseQoutationForm extends CoreFormDocument {
 
     if (this.props.edit) {
       if (this.props.location.state) {
-        const routeState = this.props.location.state;
-        setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
+        setTimeout(() => this.setState({ ...this.props.location.state, loading: true, }), 500)
       } else {
-        new purchaseQoutationRepository().find(this.props.match.params.id).then((res: any) => {
-          this.setState({ ...res, loading: false });
+        new PurchaseDownPaymentRepository().find(this.props.match.params.id).then((res: any) => {
+          this.setState({ ...res, loading: false, isApproved: res?.status === 'A' || res?.status === 'T', });
         }).catch((e: Error) => {
           this.setState({ message: e.message });
         })
       }
     }
 
-    DocumentSerieRepository.getDocumentSeries(purchaseQoutationRepository?.documentSerie).then((res: any) => {
+    DocumentSerieRepository.getDocumentSeries(PurchaseDownPaymentRepository?.documentSerie).then((res: any) => {
       this.setState({ ...this.state, series: res, })
     });
 
-    DocumentSerieRepository.getDefaultDocumentSerie(purchaseQoutationRepository.documentSerie).then((res: any) => {
+    DocumentSerieRepository.getDefaultDocumentSerie(PurchaseDownPaymentRepository.documentSerie).then((res: any) => {
       this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber, isLoadingSerie: false })
     });
   }
@@ -109,10 +102,10 @@ class PurchaseQoutationForm extends CoreFormDocument {
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params
 
-    await new PurchaseQoutationRepository().post(this.state, this.props?.edit, id).then((res: any) => {
-      const purchaseQoutation = new PurchaseQouatation(res?.data)
+    await new PurchaseDownPaymentRepository().post(this.state, this.props?.edit, id).then((res: any) => {
+      const purchaseDownPayment = new PurchaseDownPayment(res?.data)
 
-      this.props.history.replace(this.props.location.pathname?.replace('create', purchaseQoutation.id), purchaseQoutation);
+      this.props.history.replace(this.props.location.pathname?.replace('create', purchaseDownPayment.id), purchaseDownPayment);
       this.dialog.current?.success("Create Successfully.");
     }).catch((e: any) => {
       if (e instanceof UpdateDataSuccess) {
@@ -142,8 +135,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
           handlerChange={(key, value) => this.handlerChange(key, value)}
           handlerOpenProject={() => this.handlerOpenProject()}
         />
-
-        <ContentForm
+        <Content
           edit={this.props?.edit}
           data={this.state}
           handlerAddItem={() => this.handlerOpenItem()}
@@ -182,4 +174,4 @@ class PurchaseQoutationForm extends CoreFormDocument {
   }
 }
 
-export default withRouter(PurchaseQoutationForm)
+export default withRouter(PurchaseDownPaymentForm)
