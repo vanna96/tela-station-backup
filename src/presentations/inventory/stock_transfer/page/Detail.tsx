@@ -19,7 +19,7 @@ import BusinessPartner, { ContactEmployee } from '@/models/BusinessParter';
 import BuyerRepository from '@/services/actions/BuyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import StockTransferRepository from '@/services/actions/stockTransferRepository';
-import WarehouseRepository from '@/services/actions/warehouseRepository';
+import WarehouseRepository from '@/services/warehouseRepository';
 
 
 class StockTransferDetail extends Component<any, any> {
