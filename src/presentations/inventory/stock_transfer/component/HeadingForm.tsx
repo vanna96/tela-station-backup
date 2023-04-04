@@ -124,7 +124,15 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                     Valid Until
                   </label>
                   <div className="">
-                    <MUIDatePicker error={data?.message?.includes('DocDueDate')} value={data.docDueDate} onChange={(e: any) => handlerChange('docDueDate', e)} />
+                    <MUIDatePicker error={data?.message?.includes('dueDate')} value={data.dueDate} onChange={(e: any) => handlerChange('dueDate', e)} />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 text-sm">
+                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                    Document Date
+                  </label>
+                  <div className="">
+                    <MUIDatePicker error={data?.message?.includes('taxDate')} value={data.taxDate} onChange={(e: any) => handlerChange('taxDate', e)} />
                   </div>
                 </div>
               </> :
@@ -158,31 +166,19 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
-
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Valid Until
               </label>
               <div className="">
-                <MUIDatePicker disabled={edit} error={data?.message?.includes('DocDueDate')} value={data.docDueDate} onChange={(e: any) => handlerChange('docDueDate', e)} />
+                <MUIDatePicker error={data?.message?.includes('dueDate')} value={data.dueDate} onChange={(e: any) => handlerChange('dueDate', e)} />
               </div>
             </div>
           </div>
           <div className="flex gap-1 text-sm">
-            {/* <label htmlFor="Code" className="text-gray-500 text-[14px]">Reference </label>
-              <div className="">
-              
-                <IconButton
-                  aria-label="more"
-                  id="long-button"
-                  aria-haspopup="true"
-                >
-                  <MoreHorizIcon />
-                </IconButton>
-              </div> */}
+       
             <div className='grid grid-cols-2 gap-3'>
               <div className='flex items-center gap-1 text-sm'>
                 <label htmlFor='Renewal' className='text-gray-500 text-[14px]'>Reference</label>
-                {/* <Checkbox name='Renewal' checked={data.renewal} onChange={(e) => handlerChange('renewal', !data.renewal)} /> */}
                 <IconButton
                   aria-label="more"
                   id="long-button"

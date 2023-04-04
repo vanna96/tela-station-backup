@@ -124,6 +124,10 @@ class StockTransferDetail extends Component<any, any> {
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
+                  <span className='w-4/12 text-gray-500'>Valid Until</span>
+                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.dueDate) || "N/A"}</span>
+                </div>
+                <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Document Date</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.taxDate) || "N/A"}</span>
                 </div>

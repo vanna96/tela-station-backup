@@ -96,8 +96,32 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           />;
         },
       },
+
+      {
+        accessorKey: "fromWarehouseCode",
+        header: "From Warehouse",
+        Cell: ({ cell }: any) => {
+
+          return <MUITextField
+            value={cell.getValue()}
+            name="fromWarehouseCode"
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'fromWarehouseCode')}
+          />;
+        },
+      },
     
-     
+      {
+        accessorKey: "warehouseCode",
+        header: "To Warehouse",
+        Cell: ({ cell }: any) => {
+
+          return <MUITextField
+            value={cell.getValue()}
+            name="warehouseCode"
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'warehouseCode')}
+          />;
+        },
+      },
     
       {
         accessorKey: "department",
