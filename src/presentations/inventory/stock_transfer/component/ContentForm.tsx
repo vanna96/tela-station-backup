@@ -96,216 +96,45 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           />;
         },
       },
+    
+     
+    
       {
-        accessorKey: "discountPercent",
-        header: "Discount",
-        Cell: ({ cell }: any) => {
-          return <MUITextField
-            value={cell.getValue()}
-            type="number"
-            startAdornment={'%'}
-            name="DiscountPercent"
-            onChange={(event) =>
-
-              handlerChangeInput(event, cell?.row?.original, 'discountPercent')
-            }
-          />;
-        },
+        accessorKey: "department",
+        header: "Department",
       },
-      {
-        accessorKey: "unitPrice",
-        header: "Unit Price",
-        Cell: ({ cell }: any) => {
-          return <MUITextField
-            startAdornment={'USD'}
-            type="number"
-            name="UnitPrice"
-            error={(cell.getValue() as number) <= 0}
-            value={cell.getValue()}
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
-          />;
-        },
+       {
+        accessorKey: "lineofBusiness",
+        header: "Line of Business",
       },
+    
       // {
-      //   accessorKey: "saleVatGroup",
-      //   header: "Tax Code",
+      //   accessorKey: "unitPrice",
+      //   header: "Unit Price",
       //   Cell: ({ cell }: any) => {
       //     return <MUITextField
+      //       startAdornment={'USD'}
+      //       type="number"
+      //       name="UnitPrice"
+      //       error={(cell.getValue() as number) <= 0}
       //       value={cell.getValue()}
-      //       onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'saleVatGroup')}
+      //       onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
       //     />;
       //   },
       // },
-      {
-        accessorKey: "purchaseVatGroup",
-        header: "Tax Code",
-        Cell: ({ cell }: any) => {
-          return <VatGroup
-            value={cell.getValue()}
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
-            category="InputTax"
-          />;
-        },
-      },
-      {
-        accessorKey: "lineTotal",
-        header: "Total",
-        Cell: ({ cell }: any) => {
-          return <MUITextField
-            startAdornment={'USD'}
-            value={Formular.findToTalDiscountPercent(cell.row.original.quantity, cell.row.original.unitPrice, cell.row.original.discountPercent)}
-          />;
-        },
-      },
-      {
-        accessorKey: "uomCode",
-        header: "UoM Code",
-        Cell: ({ cell }: any) => {
-
-          return <MUITextField
-            value={cell.getValue()}
-            name="UoMCode"
-            error={(cell.getValue() as number) <= 0}
-            disabled={data?.DocumentDtatus}
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'uomCode')}
-          />;
-        },
-      },
+    
+     
     ],
     []
   );
 
-  // const serviceColumns = React.useMemo(
-  //   () => [
-  //     {
-  //       accessorKey: "Action",
-  //       header: "",
-  //       size: 40,
-  //       enableResizing: false,
-  //       Cell: ({ cell }: any) => {
-  //         // return ;
-  //         return <Button size="small" color="error" onClick={() => handlerRemoveRow(cell.row.original)}><AiOutlineDelete /></Button>;
-  //       },
-  //     },
-  //     {
-  //       accessorKey: "itemDescription",
-  //       header: "Descriptions", //uses the default width from defaultColumn prop
-  //       Cell: ({ cell }: any) => {
-  //         // return ;
-  //         return <MUITextField
-  //           value={cell.getValue()}
-  //           name="ItemDescription"
-  //           onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'itemDescription')}
-  //         />;
-  //       },
-  //     },
-  //     {
-  //       accessorKey: "requiredDate",
-  //       header: "Required Date",
-  //       Cell: ({ cell }: any) => {
-  //         return (
-  //           <MUIDatePicker
-  //             value={cell.getValue()}
-  //             name="RequiredDate"
-  //             onChange={(event) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'requiredDate')}
-  //           />
-  //         );
-  //       },
-  //     },
-  //     {
-  //       accessorKey: "shipDate",
-  //       header: "Quoted Date", //uses the default width from defaultColumn prop
-  //       Cell: ({ cell }: any) => {
-  //         return <MUIDatePicker
-  //           // disabled={true}
-  //           value={cell.getValue()}
-  //           onChange={(event) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'shipDate')}
-  //         />;
-  //       },
-  //     },
-  //     {
-  //       accessorKey: "accountCode",
-  //       header: "G/L Account", //uses the default width from defaultColumn prop
-  //       Cell: ({ cell }: any) => {
-  //         console.log(cell.getValue());
-  //         return (
-  //           <AccountTextField
-  //             value={cell.getValue()}
-  //             name="AccountNo"
-  //             onChange={(event) =>
-  //               handlerChangeInput(event, cell?.row?.original, "accountCode")
-  //             }
-  //           />
-  //         );
-  //       },
-  //     },
-  //     {
-  //       accessorKey: "accountName",
-  //       header: "	G/L Account Name", //uses the default width from defaultColumn prop
-  //       Cell: ({ cell }: any) => {
-  //         return <MUITextField value={cell.getValue()} />;
-  //       },
-  //     },
-  //   {
-  //       accessorKey: "purchaseVatGroup",
-  //       header: "Tax Code",
-  //       Cell: ({ cell }: any) => {
-  //         return <VatGroup
-  //           value={cell.getValue()}
-  //           onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
-  //           category="InputTax"
-  //         />;
-  //       },
-  //     },
-  //     {
-  //       accessorKey: "lineTotal",
-  //       header: "Total LC", //uses the default width from defaultColumn prop
-  //       Cell: ({ cell }: any) => {
-  //         return <MUITextField
-  //           value={cell.getValue()}
-  //           onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'lineTotal')}
-  //         />;
-  //       },
-  //     },
-  //     {
-  //       accessorKey: "blanketAgreementNumber",
-  //       header: "BlanketAgreementNumber", //uses the default width from defaultColumn prop
-  //       Cell: ({ cell }: any) => {
-  //         return <MUITextField
-  //           value={cell.getValue()}
-  //           onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'blanketAgreementNumber')}
-  //         />;
-  //       },
-  //     },
-  //   ],
-  //   []
-  // );
 
   const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
 
   return (
     <FormCard title="Content" >
       <div className="col-span-2 data-table gap-3">
-        {/* <div className="flex flex-col my-5">
-          <div className="grid grid-cols-4">
-            <div>
-              <label htmlFor=" Item/ServiceType" className="text-gray-500 text-[14px]">
-                Item/Service Type
-              </label>
-              <div className="">
-                <MUISelect
-                  items={[{ name: 'Item', value: 'I' }, { name: 'Service', value: 'S' }]}
-                  aliaslabel='name'
-                  aliasvalue='value'
-                  name="DocType"
-                  disabled={edit}
-                  value={data.docType}
-                  onChange={(e) => handlerChange('docType', e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-        </div> */}
+        
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
@@ -374,9 +203,9 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
                 size="small"
                 fullWidth
                 multiline
-                name="journalRemarks"
+                name="journalMemo"
                 className="w-full "
-                defaultValue={data?.journalRemarks}
+                defaultValue={data?.journalMemo}
               />
             </div>
             <div className="w-[48%]">

@@ -36,11 +36,11 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <div className="">
                 <MUISelect
                   items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
-                  value={data?.contactPersonCode}
+                  onChange={(e) => handlerChange('contactPerson', e.target.value)}
+                  value={data?.contactPerson}
                   aliasvalue="id"
                   aliaslabel="name"
-                  name="ContactPersonCode"
+                  name="ContactPerson"
                 />
 
               </div>
@@ -49,7 +49,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
               <div className="">
                 <MUISelect
-                  items={data?.shipTodefault}
+                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
                   // items={data?.shipToDefault?.map((e: BPAddress) => ({
                   //   addressName: e.addressName,
                   //   street: e.street,
@@ -64,53 +64,19 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                   aliaslabel="name"
                   name="shipToDefault"
                 />
-
               </div>
             </div>
-            {/* <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">Reference </label>
-              <div className="">
-              
-                <IconButton
-                  aria-label="more"
-                  id="long-button"
-                  aria-haspopup="true"
-                >
-                  <MoreHorizIcon />
-                </IconButton>
-              </div>
-              
-            </div> */}
-
-
           </div>
-
-          {/* <div className="grid grid-cols-2 gap-3"> */}
-          {/* <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
-              <div className="">
-                <MUISelect
-                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
-                  value={data?.contactPersonCode}
-                  aliasvalue="id"
-                  aliaslabel="name"
-                  name="ContactPersonCode"
-                />
-
-              </div>
-            </div> */}
           <div className="">
             <TextField
               size="small"
               multiline
-              rows={2}
+              rows={3}
               fullWidth
-              name="Comments"
+              name="address"
               className="w-full "
-              defaultValue={data?.comments}
+              defaultValue={data?.address}
             />
-            {/* </div> */}
           </div>
 
 

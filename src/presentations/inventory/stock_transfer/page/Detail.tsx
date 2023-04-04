@@ -247,7 +247,7 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Journal Remarks</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.journalRemarks || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.journalMemo || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Remarks</span>

@@ -120,7 +120,6 @@ export default class StockTransfer extends Model implements MasterDocument {
     this.documentStatus = json['DocumentStatus']
     this.contactPersonList = json['contactPersonList'];
     this.shippingList = json['shippingList'];
-
   }
 
   toJson(update: boolean) {
@@ -147,69 +146,35 @@ export default class StockTransfer extends Model implements MasterDocument {
       ),
       FromWarehouse: json['fromWarehouse'],
       ToWarehouse: json['toWarehouse'],
-      ShipToDefault: json['shipToDefault']
-
-
+      ShipToDefault: json['shipToDefault'],
+      ContactPerson: json['contactPerson'],
+      SalesPersonCode : json['SalesPersonCode']
     };
   }
 
   public static toUpdate(json: any) {
     return {
-      Requester: json["userCode"],
-      RequesterName: json["userName"],
-      RequesterEmail: json["requesterEmail"],
-      RequesterBranch: json["requesterBranch"],
-      RequesterDepartment: json["requesterDepartment"],
-      docDueDate: json["DocDueDate"],
-      attachmentEntry: ["AttachmentEntry"],
-      docCurrency: json["DocCurrency"],
-      docRate: json["DocRate"],
-      reference1: json["Reference1"],
-      reference2: json["Reference2"],
-      comments: json["Comments"],
-      journalMemo: json["JournalMemo"],
-      paymentGroupCode: json["PaymentGroupCode"],
-      salesPersonCode: json["SalesPersonCode"],
-      transportationCode: json["TransportationCode"],
-      confirmed: json["Confirmed"],
-      contactPersonCode: json["ContactPersonCode"],
-      series: json["Series"],
-      taxDate: json["TaxDate"],
-      partialSupply: json["PartialSupply"],
-      docObjectCode: json["DocObjectCode"],
-      indicator: json["Indicator"],
-      federalTaxID: json["FederalTaxID"],
-      discountPercent: json["DiscountPercent"],
-      creationDate: json["CreationDate"],
-      updateDate: json["UpdateDate"],
-      userSign: json["UserSign"],
-      vatSum: json["VatSum"],
-      docTotalSys: json["DocTotalSys"],
-      requiredDate: json["RequriedDate"],
-      cancelDate: json["CancelDate"],
-      rounding: json["Rounding"],
-      address2: json["Address2"],
-      documentStatus: json["DocumentStatus"],
-      periodIndicator: json["PeriodIndicator"],
-      payToCode: json["PayToCode"],
-      manualNumber: json["ManualNumber"],
-      useShpdGoodsAct: json["UseShpdGoodsAct"],
-      totalDiscount: json["TotalDiscount"],
-      vatPercent: json["VatPercent"],
-      extraMonth: json["ExtraMonth"],
-      extraDays: json["ExtraDays"],
-      startFrom: json["StartFrom"],
-      downPaymentStatus: json["DownPaymentStatus"],
-      bPLName: json["BPLName"],
-      vatRegNum: json["VATRegNum"],
-      paymentTerm: json["PaymentTerm"],
-      priceList: json["PriceList"],
-      serie: json["Serie"],
-      paymentMethod: json["PaymentMethod"],
-      shippingType: json["ShippingType"],
-      DocTotalSys: json["DocTotalSys"],
-      docType: json["DocType"],
-      items: [],
+      TaxDate: json["taxDate"],
+      DocDate: json["docDate"],
+      AttachmentEntry: json["attachmentEntry"],
+      DocCurrency: json["docCurrency"],
+      DocRate: json["docRate"],
+      Comments: json["comments"],
+      // Serie: json["serie"],
+      // Series: json["Series"],
+
+      Address2: json["Address2"],
+      DocumentStatus: json["DocumentStatus"],
+      StockTransferLines: json["items"]?.map((e: any) =>
+        StockTransferDocumentLine.toCreate(e, json["docType"])
+      ),
+      FromWarehouse: json['fromWarehouse'],
+      ToWarehouse: json['toWarehouse'],
+      ShipToCode: json['shipToDefault'],
+      ContactPerson: json['contactPerson'],
+      SalesPersonCode : json['salesPersonCode'],
+      JournalMemo: json['journalMemo']
+
     };
   }
 }
