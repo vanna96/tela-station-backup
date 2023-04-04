@@ -1,8 +1,12 @@
 import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
+import BranchSelect from "@/components/selectbox/Branch";
 import BuyerSelect from "@/components/selectbox/Buyer";
+import DepartmentSelect from "@/components/selectbox/Department";
 import MUISelect from "@/components/selectbox/MUISelect";
+import ManagerSelect from "@/components/selectbox/Manager";
+import UsersSelect from "@/components/selectbox/UserCode";
 import { ContactEmployee } from "@/models/BusinessParter";
 import { Checkbox } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -28,11 +32,13 @@ export default function Heading({
               label="First Name"
               value={data?.firstName}
               name="FirstName"
+              onChange={(e: any) => handlerChange("firstName", e.target.value)}
             />
             <MUITextField
               label="Middle Name"
               value={data?.middleName}
               name="MiddleName"
+              onChange={(e: any) => handlerChange("middleName", e.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -40,11 +46,13 @@ export default function Heading({
               label="Last Name"
               value={data?.lastName}
               name="LastName"
+              onChange={(e: any) => handlerChange("lastName", e.target.value)}
             />
             <MUITextField
               label="Job Title"
               value={data?.jobTitle}
               name="JobTitle"
+              onChange={(e: any) => handlerChange("jobTitle", e.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -52,41 +60,19 @@ export default function Heading({
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Department
               </label>
-              <div className="">
-                <MUISelect
-                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                    id: e.id,
-                    name: e.name,
-                  }))}
-                  onChange={(e) =>
-                    handlerChange("contactPersonCode", e.target.value)
-                  }
-                  value={data?.contactPersonCode}
-                  aliasvalue="id"
-                  aliaslabel="name"
-                  name="ContactPersonCode"
-                />
-              </div>
+              <DepartmentSelect
+                value={data?.department}
+                onChange={(e) => handlerChange("department", e.target.value)}
+              />
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Branch
               </label>
-              <div className="">
-                <MUISelect
-                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                    id: e.id,
-                    name: e.name,
-                  }))}
-                  onChange={(e) =>
-                    handlerChange("contactPersonCode", e.target.value)
-                  }
-                  value={data?.contactPersonCode}
-                  aliasvalue="id"
-                  aliaslabel="name"
-                  name="ContactPersonCode"
-                />
-              </div>
+              <BranchSelect
+                value={data?.branch}
+                onChange={(e) => handlerChange("branch", e.target.value)}
+              />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -95,19 +81,12 @@ export default function Heading({
                 Manager
               </label>
               <div className="">
-                <MUISelect
-                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                    id: e.id,
-                    name: e.name,
-                  }))}
-                  onChange={(e) =>
-                    handlerChange("contactPersonCode", e.target.value)
-                  }
-                  value={data?.contactPersonCode}
-                  aliasvalue="id"
-                  aliaslabel="name"
-                  name="ContactPersonCode"
-                />
+              <ManagerSelect
+                value={data?.manager}
+                onChange={(e) =>
+                  handlerChange("manager", e.target.value)
+                }
+              />
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
@@ -115,31 +94,24 @@ export default function Heading({
                 User Code
               </label>
               <div className="">
-                <MUISelect
-                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                    id: e.id,
-                    name: e.name,
-                  }))}
-                  onChange={(e) =>
-                    handlerChange("contactPersonCode", e.target.value)
-                  }
-                  value={data?.contactPersonCode}
-                  aliasvalue="id"
-                  aliaslabel="name"
-                  name="ContactPersonCode"
+                <UsersSelect
+                  value={data?.applicationUserID}
+                  onChange={(e) => handlerChange("applicationUserID", e.target.value)}
                 />
               </div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Sales Employee
-            </label>
-            <BuyerSelect
-              value={data?.salesPersonCode}
-              onChange={(e) => handlerChange("salesPersonCode", e.target.value)}
-            />
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Sales Employee
+              </label>
+              <BuyerSelect
+                value={data?.salesPersonCode}
+                onChange={(e) =>
+                  handlerChange("salesPersonCode", e.target.value)
+                }
+              />
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
@@ -167,13 +139,13 @@ export default function Heading({
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Employee Code"
-              value={data?.firstName}
-              name="FirstName"
+              value={data?.employeeCode}
+              name="EmployeeCode"
             />
             <MUITextField
               label="Ext.Employee No."
-              value={data?.middleName}
-              name="MiddleName"
+              value={data?.externalEmployeeNumber}
+              name="ExternalEmployeeNumber"
             />
             <div className="flex items-center text-sm mt-2 -ml-2">
               <Checkbox
@@ -191,13 +163,13 @@ export default function Heading({
           </div>
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
-              label="Employee Code"
-              value={data?.firstName}
-              name="FirstName"
+              label="Office Phone"
+              value={data?.officePhone}
+              name="OfficePhone"
             />
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Cost Center
+                Position
               </label>
               <div className="">
                 <MUISelect
@@ -219,37 +191,29 @@ export default function Heading({
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Ext."
-              value={data?.firstName}
-              name="FirstName"
+              value={data?.officeExtension}
+              name="OfficeExtension"
             />
             <MUITextField
               label="Mobile Phone"
-              value={data?.middleName}
-              name="MiddleName"
+              value={data?.mobilePhone}
+              name="MobilePhone"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Home Phone"
-              value={data?.firstName}
-              name="FirstName"
+              value={data?.homePhone}
+              name="HomePhone"
             />
-            <MUITextField
-              label="Fax"
-              value={data?.middleName}
-              name="MiddleName"
-            />
+            <MUITextField label="Fax" value={data?.fax} name="Fax" />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <MUITextField
-              label="Email"
-              value={data?.firstName}
-              name="FirstName"
-            />
+            <MUITextField label="Email" value={data?.eMail} name="eMail" />
             <MUITextField
               label="Link Vendor"
-              value={data?.middleName}
-              name="MiddleName"
+              value={data?.linkedVendor}
+              name="LinkedVendor"
             />
           </div>
         </div>

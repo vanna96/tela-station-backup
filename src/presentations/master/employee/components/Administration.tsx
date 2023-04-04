@@ -3,6 +3,8 @@ import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import BuyerSelect from "@/components/selectbox/Buyer";
 import MUISelect from "@/components/selectbox/MUISelect";
+import StatusSelect from "@/components/selectbox/Status";
+import TerminationReasonSelect from "@/components/selectbox/TerminationReason";
 import { ContactEmployee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
 
@@ -20,7 +22,7 @@ export default function Administration({
   return (
     <>
       <FormCard title="Administration">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-2">
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
@@ -36,38 +38,38 @@ export default function Administration({
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Termination Date
+                Status
               </label>
-              <div className="">
-                <MUIDatePicker
-                  error={data?.message?.includes("TerminationReason")}
-                  value={data.terminationReason}
-                  onChange={(e: any) => handlerChange("terminationReason", e)}
-                />
-              </div>
+              <StatusSelect
+                value={data?.statusCode}
+                onChange={(e) => handlerChange("statusCode", e.target.value)}
+              />
             </div>
           </div>
         </div>
-        <div className="flex">
-          <div className="w-[49%]">
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Status
-            </label>
-            <BuyerSelect
-              value={data?.salesPersonCode}
-              onChange={(e) => handlerChange("salesPersonCode", e.target.value)}
-            />
+        <div className="grid grid-cols-2 gap-3 mt-2">
+            <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                TerminationDate
+              </label>
+              <div className="">
+                <MUIDatePicker
+                  error={data?.message?.includes("terminationDate")}
+                  value={data.startDate}
+                  onChange={(e: any) => handlerChange("terminationDate", e)}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Termination Reason
+              </label>
+              <TerminationReasonSelect
+                value={data?.treminationReason}
+                onChange={(e) => handlerChange("treminationReason", e.target.value)}
+              />
+            </div>
           </div>
-          <div className="w-[49%] ml-3">
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Termination Reaon
-            </label>
-            <BuyerSelect
-              value={data?.salesPersonCode}
-              onChange={(e) => handlerChange("salesPersonCode", e.target.value)}
-            />
-          </div>
-        </div>
       </FormCard>
     </>
   );

@@ -43,24 +43,29 @@ class PurchaseOrderDetail extends Component<any, any> {
 
     if (data) {
       setTimeout(() => {
-          let PurchaseOrder = data;
-          PurchaseOrder as PurchaseOrder;
-          if (PurchaseOrder.contactPersonCode) {
-              new BusinessPartnerRepository().findContactEmployee(PurchaseOrder.cardCode!).then((res: BusinessPartner) => {
-                  PurchaseOrder.contactPersonList = res.contactEmployee ?? [];
-                  this.setState({ ...PurchaseOrder, loading: false })
-              })
-          } else {
-              this.setState({ ...PurchaseOrder, loading: false })
-          }
-      }, 500)
-  } else {
-      new PurchaseOrderRepository().find(id).then((res: any) => {
+        let PurchaseOrder = data;
+        PurchaseOrder as PurchaseOrder;
+        if (PurchaseOrder.contactPersonCode) {
+          new BusinessPartnerRepository()
+            .findContactEmployee(PurchaseOrder.cardCode!)
+            .then((res: BusinessPartner) => {
+              PurchaseOrder.contactPersonList = res.contactEmployee ?? [];
+              this.setState({ ...PurchaseOrder, loading: false });
+            });
+        } else {
+          this.setState({ ...PurchaseOrder, loading: false });
+        }
+      }, 500);
+    } else {
+      new PurchaseOrderRepository()
+        .find(id)
+        .then((res: any) => {
           this.setState({ ...res, loading: false });
-      }).catch((e: Error) => {
+        })
+        .catch((e: Error) => {
           this.setState({ isError: true, message: e.message });
-      })
-  }
+        });
+    }
   }
 
   render() {
@@ -104,9 +109,7 @@ class PurchaseOrderDetail extends Component<any, any> {
                   </span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="w-4/12 text-gray-500">
-                    Contact Person
-                  </span>
+                  <span className="w-4/12 text-gray-500">Contact Person</span>
                   <span className="w-8/12 font-medium">
                     :
                     {
@@ -132,7 +135,6 @@ class PurchaseOrderDetail extends Component<any, any> {
                 </div>
               </div>
               <div className="flex flex-col gap-1">
-                
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Status</span>
                   <span className="w-8/12 font-medium">
@@ -293,8 +295,8 @@ function Content(props: any) {
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Buyer</span>
           <span className="w-8/12 font-medium text-sm">
-          : {new BuyerRepository().find(data.salesPersonCode)?.name ?? "N/A"}
-        </span>
+            : {new BuyerRepository().find(data.salesPersonCode)?.name ?? "N/A"}
+          </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Owner</span>

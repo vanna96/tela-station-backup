@@ -25,28 +25,16 @@ export default function Remark({
             Remarks
           </label>
           <div className="">
-            {data.documentStatus === "bost_Open" ? (
               <TextField
                 size="small"
                 multiline
                 rows={4}
                 fullWidth
-                name="Comments"
+                name="Remarks"
                 className="w-full "
-                defaultValue={data?.comments}
+                value={data?.remarks}
+                onChange={(e: any) => handlerChange("remarks", e.target.value)}
               />
-            ) : (
-              <TextField
-                size="small"
-                multiline
-                rows={4}
-                disabled={edit}
-                fullWidth
-                name="Comments"
-                className="w-full "
-                defaultValue={data?.comments}
-              />
-            )}
           </div>
         </div>
       </FormCard>

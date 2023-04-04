@@ -1,6 +1,7 @@
 import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
+import CountrySelect from "@/components/selectbox/Country";
 import MUISelect from "@/components/selectbox/MUISelect";
 import { ContactEmployee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
@@ -49,34 +50,23 @@ export default function Address({
             <MUITextField label="City" value={data?.workCity} name="WorkCity" />
             <MUITextField
               label="Country"
-              value={data?.workCountryCode}
-              name="WorkCountryCode"
+              value={data?.workCountry}
+              name="WorkCountry"
             />
             <MUITextField
               label="State"
-              value={data?.workStateCode}
-              name="WorkStateCode"
+              value={data?.workState}
+              name="WorkState"
             />
           </div>
           <div className="flex flex-col gap-1 text-sm">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Country/Region
             </label>
-            <div className="">
-              <MUISelect
-                items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                  id: e.id,
-                  name: e.name,
-                }))}
-                onChange={(e) =>
-                  handlerChange("contactPersonCode", e.target.value)
-                }
-                value={data?.contactPersonCode}
-                aliasvalue="id"
-                aliaslabel="name"
-                name="ContactPersonCode"
-              />
-            </div>
+            <CountrySelect
+              value={data?.workCountryCode}
+              onChange={(e) => handlerChange("workCountryCode", e.target.value)}
+            />
           </div>
         </div>
         {/* Home */}
@@ -115,29 +105,18 @@ export default function Address({
             />
             <MUITextField
               label="State"
-              value={data?.workStateCode}
-              name="WorkStateCode"
+              value={data?.homeState}
+              name="HomeState"
             />
           </div>
           <div className="flex flex-col gap-1 text-sm">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Country/Region
             </label>
-            <div className="">
-              <MUISelect
-                items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                  id: e.id,
-                  name: e.name,
-                }))}
-                onChange={(e) =>
-                  handlerChange("contactPersonCode", e.target.value)
-                }
-                value={data?.contactPersonCode}
-                aliasvalue="id"
-                aliaslabel="name"
-                name="ContactPersonCode"
-              />
-            </div>
+            <CountrySelect
+              value={data?.homeCountry}
+              onChange={(e) => handlerChange("homeCountry", e.target.value)}
+            />
           </div>
         </div>
       </FormCard>

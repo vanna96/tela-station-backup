@@ -47,7 +47,7 @@ export default function EmployeeLists() {
                 Cell: (cell: any) => (
                     <div className="flex gap-4">
                         <button onClick={() => {
-                            route('/master/employee/' + cell.row.original.id, { state: cell.row.original })
+                            route('/master-data/employee/' + cell.row.original.id, { state: cell.row.original })
                         }}>
                             <VisibilityIcon fontSize="small" className="text-gray-600 " />
                         </button>
