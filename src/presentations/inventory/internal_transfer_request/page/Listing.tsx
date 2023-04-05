@@ -104,7 +104,7 @@ export default function InternalTransferLists() {
             variant="outlined"
             disableElevation
             size="small"
-            onClick={() => route("/inventory/internal-transfer/create")}
+            onClick={() => route("/inventory/internal-transfer-request/create")}
           >
             <span className="text-xs">Create</span>
           </Button>

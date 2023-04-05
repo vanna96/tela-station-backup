@@ -130,6 +130,8 @@ export default class InternalTransfer extends Model implements MasterDocument {
     console.log(json);
 
     return {
+      CardCode: json['cardCode'],
+      CardName : json['cardName'],
       TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       AttachmentEntry: json["attachmentEntry"],

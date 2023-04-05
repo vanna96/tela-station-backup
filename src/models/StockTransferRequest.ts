@@ -130,6 +130,8 @@ export default class StockTransferRequest extends Model implements MasterDocumen
     console.log(json);
 
     return {
+      CardCode: json['cardCode'],
+      CardName : json['cardName'],
       TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       AttachmentEntry: json["attachmentEntry"],
@@ -154,6 +156,8 @@ export default class StockTransferRequest extends Model implements MasterDocumen
 
   public static toUpdate(json: any) {
     return {
+       CardCode: json['cardCode'],
+      CardName : json['cardName'],
       TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       AttachmentEntry: json["attachmentEntry"],
