@@ -1,7 +1,5 @@
 import { withRouter } from '@/routes/withRouter';
 import React, { Component, useEffect } from 'react'
-import StockTransfer from '../../../../models/StockTransfer';
-import { StockTransferProps, StockTransferDocumentLineProps } from '../../../../models/StockTransfer';
 import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
 import Taps from '@/components/button/Taps';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
@@ -18,11 +16,12 @@ import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
 import BusinessPartner, { ContactEmployee } from '@/models/BusinessParter';
 import BuyerRepository from '@/services/actions/BuyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
-import StockTransferRepository from '@/services/actions/stockTransferRepository';
 import WarehouseRepository from '@/services/warehouseRepository';
+import StockTransferRequest from '@/models/StockTransferRequest';
+import StockTransferRequestRepository from '@/services/actions/stockTransferRequestRepository';
 
 
-class StockTransferDetail extends Component<any, any> {
+class StockTransferRequestDetail extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
@@ -42,13 +41,13 @@ class StockTransferDetail extends Component<any, any> {
 
   initData() {
     const { id } = this.props.match.params;
-    const data = this.props.location.state as StockTransfer;
+    const data = this.props.location.state as StockTransferRequest;
     console.log(data);
 
     if (data) {
       setTimeout(() => {
         let stockTransfer = data;
-        stockTransfer as StockTransfer;
+        stockTransfer as StockTransferRequest;
         if (stockTransfer.contactPerson) {
           new BusinessPartnerRepository().findContactEmployee(stockTransfer.cardCode!).then((res: BusinessPartner) => {
             stockTransfer.contactPersonList = res.contactEmployee || [];
@@ -65,7 +64,7 @@ class StockTransferDetail extends Component<any, any> {
         }
       }, 500)
     } else {
-      new StockTransferRepository().find(id).then((res: any) => {
+      new StockTransferRequestRepository().find(id).then((res: any) => {
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {
         this.setState({ isError: true, message: e.message });
@@ -161,7 +160,7 @@ class StockTransferDetail extends Component<any, any> {
   }
 }
 
-export default withRouter(StockTransferDetail);
+export default withRouter(StockTransferRequestDetail);
 
 
 

@@ -18,11 +18,12 @@ import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
 import BusinessPartner, { ContactEmployee } from '@/models/BusinessParter';
 import BuyerRepository from '@/services/actions/BuyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
-import StockTransferRepository from '@/services/actions/stockTransferRepository';
+import InternalTransferRepository from '@/services/actions/internalTransferRepository';
 import WarehouseRepository from '@/services/warehouseRepository';
+import InternalTransfer from '@/models/InternalTransfer';
 
 
-class StockTransferDetail extends Component<any, any> {
+class InternalTransferDetails extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
@@ -42,13 +43,13 @@ class StockTransferDetail extends Component<any, any> {
 
   initData() {
     const { id } = this.props.match.params;
-    const data = this.props.location.state as StockTransfer;
+    const data = this.props.location.state as InternalTransfer;
     console.log(data);
 
     if (data) {
       setTimeout(() => {
         let stockTransfer = data;
-        stockTransfer as StockTransfer;
+        stockTransfer as InternalTransfer;
         if (stockTransfer.contactPerson) {
           new BusinessPartnerRepository().findContactEmployee(stockTransfer.cardCode!).then((res: BusinessPartner) => {
             stockTransfer.contactPersonList = res.contactEmployee || [];
@@ -65,7 +66,7 @@ class StockTransferDetail extends Component<any, any> {
         }
       }, 500)
     } else {
-      new StockTransferRepository().find(id).then((res: any) => {
+      new InternalTransferRepository().find(id).then((res: any) => {
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {
         this.setState({ isError: true, message: e.message });
@@ -161,7 +162,7 @@ class StockTransferDetail extends Component<any, any> {
   }
 }
 
-export default withRouter(StockTransferDetail);
+export default withRouter(InternalTransferDetails);
 
 
 

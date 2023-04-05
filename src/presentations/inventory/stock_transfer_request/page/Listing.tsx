@@ -13,7 +13,7 @@ export default function StockTransferRequestLists() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["st"],
+    queryKey: ["str"],
     queryFn: () => new StockTransferRequestRepository().get(),
   });
   console.log(data);
