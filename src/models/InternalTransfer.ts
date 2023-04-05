@@ -31,7 +31,7 @@ export interface InternalTransferProps {
   paymentMethod?: string;
   shippingType?: string | undefined;
   items: InternalTransferDocumentLineProps[];
-  InternalTransferLines: InternalTransferDocumentLineProps[];
+  StockTransferLines: InternalTransferDocumentLineProps[];
   contactPersonList?: ContactEmployee[];
   shippingList?: BPAddress[];
 
@@ -74,7 +74,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
   shippingType?: string | undefined;
   items: InternalTransferDocumentLine[];
   documentowner?: string;
-  InternalTransferLines?: InternalTransferDocumentLine[];
+  StockTransferLines?: InternalTransferDocumentLine[];
   fromWarehouse?: string;
   toWarehouse?: string;
   shipToDefault?: string;
@@ -100,10 +100,10 @@ export default class InternalTransfer extends Model implements MasterDocument {
     this.docDate = json["DocDate"];
     // this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
     this.comments = json["Comments"];
-    this.items = json["InternalTransferLines"]?.map(
+    this.items = json["StockTransferLines"]?.map(
       (e: any) => new InternalTransferDocumentLine(e)
     );
-    this.InternalTransferLines = json["InternalTransferLines"]?.map(
+    this.StockTransferLines = json["StockTransferLines"]?.map(
       (e: any) => new InternalTransferDocumentLine(e)
     );
     this.documentStatus = json["DocumentStatus"]
@@ -141,7 +141,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
 
       Address2: json["Address2"],
       DocumentStatus: json["DocumentStatus"],
-      InternalTransferLines: json["items"]?.map((e: any) =>
+      StockTransferLines: json["items"]?.map((e: any) =>
         InternalTransferDocumentLine.toCreate(e, json["docType"])
       ),
       FromWarehouse: json['fromWarehouse'],
@@ -165,7 +165,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
 
       Address2: json["Address2"],
       DocumentStatus: json["DocumentStatus"],
-      InternalTransferLines: json["items"]?.map((e: any) =>
+      StockTransferLines: json["items"]?.map((e: any) =>
         InternalTransferDocumentLine.toCreate(e, json["docType"])
       ),
       FromWarehouse: json['fromWarehouse'],

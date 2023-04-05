@@ -31,7 +31,7 @@ export interface DamageTransferProps {
   paymentMethod?: string;
   shippingType?: string | undefined;
   items: DamageTransferDocumentLineProps[];
-  DamageTransferLines: DamageTransferDocumentLineProps[];
+  StockTransferLines: DamageTransferDocumentLineProps[];
   contactPersonList?: ContactEmployee[];
   shippingList?: BPAddress[];
 
@@ -74,7 +74,7 @@ export default class DamageTransfer extends Model implements MasterDocument {
   shippingType?: string | undefined;
   items: DamageTransferDocumentLine[];
   documentowner?: string;
-  DamageTransferLines?: DamageTransferDocumentLine[];
+  StockTransferLines?: DamageTransferDocumentLine[];
   fromWarehouse?: string;
   toWarehouse?: string;
   shipToDefault?: string;
@@ -100,10 +100,10 @@ export default class DamageTransfer extends Model implements MasterDocument {
     this.docDate = json["DocDate"];
     // this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
     this.comments = json["Comments"];
-    this.items = json["DamageTransferLines"]?.map(
+    this.items = json["StockTransferLines"]?.map(
       (e: any) => new DamageTransferDocumentLine(e)
     );
-    this.DamageTransferLines = json["DamageTransferLines"]?.map(
+    this.StockTransferLines = json["StockTransferLines"]?.map(
       (e: any) => new DamageTransferDocumentLine(e)
     );
     this.documentStatus = json["DocumentStatus"]
@@ -141,7 +141,7 @@ export default class DamageTransfer extends Model implements MasterDocument {
 
       Address2: json["Address2"],
       DocumentStatus: json["DocumentStatus"],
-      DamageTransferLines: json["items"]?.map((e: any) =>
+      StockTransferLines: json["items"]?.map((e: any) =>
         DamageTransferDocumentLine.toCreate(e, json["docType"])
       ),
       FromWarehouse: json['fromWarehouse'],
@@ -165,7 +165,7 @@ export default class DamageTransfer extends Model implements MasterDocument {
 
       Address2: json["Address2"],
       DocumentStatus: json["DocumentStatus"],
-      DamageTransferLines: json["items"]?.map((e: any) =>
+      StockTransferLines: json["items"]?.map((e: any) =>
         DamageTransferDocumentLine.toCreate(e, json["docType"])
       ),
       FromWarehouse: json['fromWarehouse'],
