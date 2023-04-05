@@ -240,7 +240,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
                 multiline
                 name="Comments"
                 className="w-full "
-                defaultValue={data?.comments}
+                value={data?.comments}
+                onChange={(e: any) => handlerChange("comments", e.target.value)}
               />
             </div>
           </div>

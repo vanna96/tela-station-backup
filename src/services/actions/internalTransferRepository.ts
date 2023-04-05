@@ -3,14 +3,15 @@ import request from "@/utilies/request";
 import StockTransfer from "../../models/StockTransfer";
 
 export default class InternalTransferRepository extends Repository<StockTransfer> {
-  url: string = "/InventoryTransferRequests?$filter=U_TRANSTYPE eq 'I'";
+  url: string = "/InventoryTransferRequests";
+   query: string = "?$filter=U_TRANSTYPE eq 'I'";
 
   public static documentSerie = {
     Document: "1470000113",
   };
 
   async get<T>(query?: string): Promise<T[]> {
-    const response: any = await request("GET", this.url)
+    const response: any = await request("GET", this.url + this.query)
       .then((res: any) => {
         const data = res?.data?.value?.map((e: any) => new StockTransfer(e));
         return data;

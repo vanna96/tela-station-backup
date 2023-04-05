@@ -156,6 +156,7 @@ export default class StockTransfer extends Model implements MasterDocument {
 
   public static toUpdate(json: any) {
     return {
+      
       TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       AttachmentEntry: json["attachmentEntry"],

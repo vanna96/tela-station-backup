@@ -226,7 +226,21 @@ export class InternalTransferDocumentLine extends Model implements DocumentLine 
       WarehouseCode: json["warehouseCode"],
     };
 
+    return line;
+  }
 
+  public static toUpdate(json: any, type: any) {
+    let line = {
+      Quantity: json["quantity"],
+      ItemCode: json["itemCode"],
+      ItemDescription: json["itemName"],
+      UnitPrice: json["unitPrice"],
+      DocEntry: json["uomGroupEntry"],
+      UoMCode: json["uomCode"],
+      // UoMEntry: json["uomEntry"],
+      FromWarehouseCode: json["fromWarehouseCode"],
+      WarehouseCode: json["warehouseCode"],
+    };
 
     return line;
   }
