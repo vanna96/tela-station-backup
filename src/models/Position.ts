@@ -1,6 +1,6 @@
 import Model from './Model';
 
-export default class Users extends Model {
+export default class Position extends Model {
 
   code: string;
   name: string;
@@ -9,8 +9,8 @@ export default class Users extends Model {
   constructor(json: any) {
     super()
 
-    this.code = json['InternalKey']
-    this.name = json['UserCode']
+    this.code = json['PositionID']
+    this.name = json['Name']
   }
 
   toJson(update: boolean) {

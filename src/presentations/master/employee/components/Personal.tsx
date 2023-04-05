@@ -2,6 +2,7 @@ import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import BuyerSelect from "@/components/selectbox/Buyer";
+import CountrySelect from "@/components/selectbox/Country";
 import MUISelect from "@/components/selectbox/MUISelect";
 import { ContactEmployee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
@@ -22,15 +23,25 @@ export default function Personal({
       <FormCard title="Personal">
         <div className="flex flex-col gap-2">
           <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Status
+            <div>
+              <label
+                htmlFor="AgreementMethod"
+                className="text-gray-500 text-[14px]"
+              >
+                Gender
               </label>
-              <BuyerSelect
-                value={data?.salesPersonCode}
-                onChange={(e) =>
-                  handlerChange("salesPersonCode", e.target.value)
-                }
+
+              <MUISelect
+                items={[
+                  { name: "Not Specified", value: "E" },
+                  { name: "Female", value: "F" },
+                  { name: "Male", value: "gt_Male" },
+                ]}
+                aliaslabel="name"
+                aliasvalue="value"
+                name="Gender"
+                value={data?.gender}
+                onChange={(e) => handlerChange("gender", e.target.value)}
               />
             </div>
             <div className="flex flex-col gap-1 text-sm">
@@ -47,24 +58,36 @@ export default function Personal({
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Country/Region Of Bir
+              Country/Region Of Bir:
               </label>
-              <BuyerSelect
-                value={data?.salesPersonCode}
+              <CountrySelect
+                value={data?.countryOfBirth}
                 onChange={(e) =>
-                  handlerChange("salesPersonCode", e.target.value)
+                  handlerChange("countryOfBirth", e.target.value)
                 }
               />
             </div>
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+            <div>
+              <label
+                htmlFor="Month"
+                className="text-gray-500 text-[14px]"
+              >
                 Marital Status
               </label>
-              <BuyerSelect
-                value={data?.salesPersonCode}
-                onChange={(e) =>
-                  handlerChange("salesPersonCode", e.target.value)
-                }
+
+              <MUISelect
+                items={[
+                  { name: "Divorced", value: "D" },
+                  { name: "Married", value: "mts_Married" },
+                  { name: "Not Specified", value: "N" },
+                  { name: "Single", value: "S" },
+                  { name: "Widowed", value: "w" },
+                ]}
+                aliaslabel="name"
+                aliasvalue="value"
+                name="MartialStatus"
+                value={data?.martialStatus}
+                onChange={(e) => handlerChange("martialStatus", e.target.value)}
               />
             </div>
           </div>
@@ -73,11 +96,13 @@ export default function Personal({
               label="No. of Children"
               value={data?.numOfChildren}
               name="NumOfChildren"
+              onChange={(e) => handlerChange("numOfChildren", e.target.value)}
             />
             <MUITextField
               label="ID No."
               value={data?.idNumber}
               name="IdNumber"
+              onChange={(e) => handlerChange("idNumber", e.target.value)}
             />
           </div>
         </div>
@@ -85,19 +110,20 @@ export default function Personal({
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Citizenship
+                Citizenship
               </label>
-              <BuyerSelect
-                value={data?.salesPersonCode}
+              <CountrySelect
+                value={data?.citizenshipCountryCode}
                 onChange={(e) =>
-                  handlerChange("salesPersonCode", e.target.value)
+                  handlerChange("citizenshipCountryCode", e.target.value)
                 }
               />
             </div>
             <MUITextField
-              label="ID No."
-              value={data?.idNumber}
-              name="IdNumber"
+              label="Passport No."
+              value={data?.passportNumber}
+              name="PassportNumber"
+              onChange={(e) => handlerChange("passportNumber", e.target.value)}
             />
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
@@ -107,7 +133,9 @@ export default function Personal({
                 <MUIDatePicker
                   error={data?.message?.includes("PassportExpirationDate")}
                   value={data.passportExpirationDate}
-                  onChange={(e: any) => handlerChange("passportExpirationDate", e)}
+                  onChange={(e: any) =>
+                    handlerChange("passportExpirationDate", e)
+                  }
                 />
               </div>
             </div>
@@ -128,6 +156,7 @@ export default function Personal({
             label="Passport Issuer"
             value={data?.passportIssuer}
             name="PassportIssuer"
+            onChange={(e) => handlerChange("passportIssuer", e.target.value)}
           />
         </div>
       </FormCard>

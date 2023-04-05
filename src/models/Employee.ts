@@ -67,6 +67,7 @@ export interface EmployeeProps {
     bankAccount?:number;
     bankBranch?: string;
     remarks?: string;
+    pager?: string;
 }
 
 
@@ -134,6 +135,7 @@ export default class Employees extends Model {
     bankAccount?:number;
     bankBranch?: string;
     remarks?: string;
+    pager?: string;
     constructor(json: any) {
         super();
         this.id = json['EmployeeID'];
@@ -199,6 +201,7 @@ export default class Employees extends Model {
         this.bankAccount = json['BankAccount'];
         this.bankBranch = json['BankBranch'];
         this.remarks = json['Remarks'];
+        this.pager = json['Pager'];
 
 
     }
@@ -271,7 +274,7 @@ export default class Employees extends Model {
             "BankAccount": json['bankAccount'],
             "BankBranch": json['bankBranch'],
             "Remarks": json['remarks'],
-
+            "Pager": json['pager'],
 
         };
     }
@@ -340,6 +343,7 @@ export default class Employees extends Model {
             "BankAccount": json['bankAccount'],
             "BankBranch": json['bankBranch'],
             "Remarks": json['remarks'],
+            "Pager": json['pager'],
         };
     }
 

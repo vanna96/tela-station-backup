@@ -22,7 +22,7 @@ function UsersSelect(props: UsersProps) {
 
     return <MUISelect
         {...props}
-        aliaslabel="UserName"
+        aliaslabel="InternalKey"
         aliasvalue="UserCode"
         loading={isLoading}
         items={data}

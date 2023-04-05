@@ -6,6 +6,7 @@ import BuyerSelect from "@/components/selectbox/Buyer";
 import DepartmentSelect from "@/components/selectbox/Department";
 import MUISelect from "@/components/selectbox/MUISelect";
 import ManagerSelect from "@/components/selectbox/Manager";
+import PositionSelect from "@/components/selectbox/Position";
 import UsersSelect from "@/components/selectbox/UserCode";
 import { ContactEmployee } from "@/models/BusinessParter";
 import { Checkbox } from "@mui/material";
@@ -58,6 +59,15 @@ export default function Heading({
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Position
+              </label>
+              <PositionSelect
+                value={data?.position}
+                onChange={(e) => handlerChange("position", e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Department
               </label>
               <DepartmentSelect
@@ -65,6 +75,8 @@ export default function Heading({
                 onChange={(e) => handlerChange("department", e.target.value)}
               />
             </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Branch
@@ -74,21 +86,19 @@ export default function Heading({
                 onChange={(e) => handlerChange("branch", e.target.value)}
               />
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Manager
               </label>
               <div className="">
-              <ManagerSelect
-                value={data?.manager}
-                onChange={(e) =>
-                  handlerChange("manager", e.target.value)
-                }
-              />
+                <ManagerSelect
+                  value={data?.manager}
+                  onChange={(e) => handlerChange("manager", e.target.value)}
+                />
               </div>
             </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 User Code
@@ -96,12 +106,12 @@ export default function Heading({
               <div className="">
                 <UsersSelect
                   value={data?.applicationUserID}
-                  onChange={(e) => handlerChange("applicationUserID", e.target.value)}
+                  onChange={(e) =>
+                    handlerChange("applicationUserID", e.target.value)
+                  }
                 />
               </div>
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Sales Employee
@@ -113,27 +123,13 @@ export default function Heading({
                 }
               />
             </div>
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Cost Center
-              </label>
-              <div className="">
-                <MUISelect
-                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                    id: e.id,
-                    name: e.name,
-                  }))}
-                  onChange={(e) =>
-                    handlerChange("contactPersonCode", e.target.value)
-                  }
-                  value={data?.contactPersonCode}
-                  aliasvalue="id"
-                  aliaslabel="name"
-                  name="ContactPersonCode"
-                />
-              </div>
-            </div>
           </div>
+          <MUITextField
+              label="Cost Center"
+              value={data?.costCenterCode}
+              name="CostCenterCode"
+              onChange={(e: any) => handlerChange("costCenterCode", e.target.value)}
+            />
         </div>
         <div className="flex flex-col gap-2 mt-2">
           <div className="grid grid-cols-2 gap-3">
@@ -141,11 +137,15 @@ export default function Heading({
               label="Employee Code"
               value={data?.employeeCode}
               name="EmployeeCode"
+              onChange={(e) => handlerChange("employeeCode", e.target.value)}
             />
             <MUITextField
               label="Ext.Employee No."
               value={data?.externalEmployeeNumber}
               name="ExternalEmployeeNumber"
+              onChange={(e) =>
+                handlerChange("externalEmployeeNumber", e.target.value)
+              }
             />
             <div className="flex items-center text-sm mt-2 -ml-2">
               <Checkbox
@@ -166,38 +166,27 @@ export default function Heading({
               label="Office Phone"
               value={data?.officePhone}
               name="OfficePhone"
+              onChange={(e) => handlerChange("officePhone", e.target.value)}
             />
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Position
-              </label>
-              <div className="">
-                <MUISelect
-                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                    id: e.id,
-                    name: e.name,
-                  }))}
-                  onChange={(e) =>
-                    handlerChange("contactPersonCode", e.target.value)
-                  }
-                  value={data?.contactPersonCode}
-                  aliasvalue="id"
-                  aliaslabel="name"
-                  name="ContactPersonCode"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Ext."
               value={data?.officeExtension}
               name="OfficeExtension"
+              onChange={(e) => handlerChange("officeExtension", e.target.value)}
             />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Mobile Phone"
               value={data?.mobilePhone}
               name="MobilePhone"
+              onChange={(e) => handlerChange("mobilePhone", e.target.value)}
+            />
+            <MUITextField
+              label="Pager"
+              value={data?.pager}
+              name="Pager"
+              onChange={(e) => handlerChange("pager", e.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -205,15 +194,27 @@ export default function Heading({
               label="Home Phone"
               value={data?.homePhone}
               name="HomePhone"
+              onChange={(e) => handlerChange("homePhone", e.target.value)}
             />
-            <MUITextField label="Fax" value={data?.fax} name="Fax" />
+            <MUITextField
+              label="Fax"
+              value={data?.fax}
+              name="Fax"
+              onChange={(e) => handlerChange("fax", e.target.value)}
+            />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <MUITextField label="Email" value={data?.eMail} name="eMail" />
+            <MUITextField
+              label="Email"
+              value={data?.eMail}
+              name="eMail"
+              onChange={(e) => handlerChange("eMail", e.target.value)}
+            />
             <MUITextField
               label="Link Vendor"
               value={data?.linkedVendor}
               name="LinkedVendor"
+              onChange={(e) => handlerChange("linkedVendor", e.target.value)}
             />
           </div>
         </div>

@@ -12,11 +12,7 @@ export interface IFinanceProps {
   edit?: boolean;
 }
 
-export default function Finance({
-  data,
-  edit,
-  handlerChange,
-}: IFinanceProps) {
+export default function Finance({ data, edit, handlerChange }: IFinanceProps) {
   return (
     <>
       <FormCard title="Finance">
@@ -24,36 +20,60 @@ export default function Finance({
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Salary"
-              value={data?.firstName}
-              name="FirstName"
+              value={data?.salary}
+              name="Salary"
+              onChange={(e) => handlerChange("salary", e.target.value)}
             />
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+            <div>
+              <label htmlFor="Month" className="text-gray-500 text-[14px]">
                 Month
               </label>
-              <BuyerSelect
-                value={data?.salesPersonCode}
-                onChange={(e) =>
-                  handlerChange("salesPersonCode", e.target.value)
-                }
+
+              <MUISelect
+                items={[
+                  { name: "Biweekly", value: "B" },
+                  { name: "Day", value: "D" },
+                  { name: "Hour", value: "H" },
+                  { name: "Month", value: "scu_Month" },
+                  { name: "Semimonthly", value: "S" },
+                  { name: "Week", value: "W" },
+                  { name: "Year", value: "Y" },
+                  // { name: "Male", value: "gt_Male" },
+                ]}
+                aliaslabel="name"
+                aliasvalue="value"
+                name="SalaryUnit"
+                value={data?.salaryUnit}
+                onChange={(e) => handlerChange("salaryUnit", e.target.value)}
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Employee Costs"
-              value={data?.firstName}
-              name="FirstName"
+              value={data?.employeeCosts}
+              name="EmployeeCosts"
+              onChange={(e) => handlerChange("employeeCosts", e.target.value)}
+
             />
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+            <div>
+              <label htmlFor="Month" className="text-gray-500 text-[14px]">
                 Month
               </label>
-              <BuyerSelect
-                value={data?.salesPersonCode}
-                onChange={(e) =>
-                  handlerChange("salesPersonCode", e.target.value)
-                }
+
+              <MUISelect
+                items={[
+                  { name: "Day", value: "D" },
+                  { name: "Hour", value: "H" },
+                  { name: "Month", value: "scu_Month" },
+                  { name: "Week", value: "W" },
+                  { name: "Year", value: "Y" },
+                ]}
+                aliaslabel="name"
+                aliasvalue="value"
+                name="SalaryUnit"
+                value={data?.salaryUnit}
+                onChange={(e) => handlerChange("salaryUnit", e.target.value)}
               />
             </div>
           </div>
