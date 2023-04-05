@@ -7,15 +7,14 @@ import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
-import PurchaseRequestRepository from "@/services/actions/purchaseRequestRepository";
-import StockTransferRepository from "@/services/actions/stockTransferRepository";
+import DamageTransferRepository from "@/services/actions/damageTransferRequestRepository";
 
-export default function StockTransferLists() {
+export default function StockDamageRequestList() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["st"],
-    queryFn: () => new StockTransferRepository().get(),
+    queryKey: ["dtr"],
+    queryFn: () => new DamageTransferRepository().get(),
   });
   console.log(data);
   const columns = React.useMemo(
@@ -72,7 +71,7 @@ export default function StockTransferLists() {
           <div className="flex gap-4">
             <button
               onClick={() => {
-                route("/inventory/stock-transfer/" + cell.row.original.id, {
+                route("/stock-damage-request/" + cell.row.original.id, {
                   state: cell.row.original,
                 });
               }}
@@ -99,13 +98,13 @@ export default function StockTransferLists() {
       <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
         <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full bg-white py-3">
           <h3 className="text-lg 2xl:text-base xl:text-sm">
-            Inventory / Stock Transfer
+            Inventory / Stock Damage Request
           </h3>
           <Button
             variant="outlined"
             disableElevation
             size="small"
-            onClick={() => route("/inventory/stock-transfer/create")}
+            onClick={() => route("/inventory/stock-damage-request/create")}
           >
             <span className="text-xs">Create</span>
           </Button>
@@ -135,7 +134,7 @@ export default function StockTransferLists() {
               return (
                 <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
                   <h3 className="font-bold text-base xl:text-sm">
-                    Stock Transfer
+                    Stock Damage Request
                   </h3>
                   {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
                 </div>

@@ -5,15 +5,15 @@ import ContentForm from "../component/ContentForm";
 import { LoadingButton } from "@mui/lab";
 import AttachmentForm from "@/components/attachment";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
-import StockTransferRepository from "@/services/actions/stockTransferRepository";
 import GLAccount from "../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import Formular from "@/utilies/formular";
 import VatGroupRepository from "@/services/actions/VatGroupRepository";
-import StockTransfer from "@/models/StockTransfer";
+import DamageTransferRepository from "@/services/actions/damageTransferRequestRepository";
+import DamageTransfer from "@/models/DamageTransfer";
 
 
-class StockTransferForm extends CoreFormDocument {
+class StockDamageRequestForm extends CoreFormDocument {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -56,7 +56,7 @@ class StockTransferForm extends CoreFormDocument {
           500
         );
       } else {
-        new StockTransferRepository()
+        new DamageTransferRepository()
           .find(this.props.match.params.id)
           .then((res: any) => {
             this.setState({ ...res, loading: false });
@@ -68,14 +68,14 @@ class StockTransferForm extends CoreFormDocument {
     }
 
     DocumentSerieRepository.getDocumentSeries(
-      StockTransferRepository.documentSerie
+      DamageTransferRepository.documentSerie
     ).then((res: any) => {
       this.setState({ ...this.state, series: res, isLoadingSerie: false });
     });
 
     if (!this.props.edit) {
       DocumentSerieRepository.getDefaultDocumentSerie(
-        StockTransferRepository.documentSerie
+        DamageTransferRepository.documentSerie
       ).then((res: any) => {
         this.setState({
           ...this.state,
@@ -140,10 +140,10 @@ class StockTransferForm extends CoreFormDocument {
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params;
 
-    await new StockTransferRepository()
+    await new DamageTransferRepository()
       .post(this.state, this.props?.edit, id)
       .then((res: any) => {
-        const stockTransfer = new StockTransfer(res?.data);
+        const stockTransfer = new DamageTransfer(res?.data);
 
         this.props.history.replace(
           this.props.location.pathname?.replace("create", stockTransfer.id),
@@ -230,4 +230,4 @@ class StockTransferForm extends CoreFormDocument {
   };
 }
 
-export default withRouter(StockTransferForm);
+export default withRouter(StockDamageRequestForm);
