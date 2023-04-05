@@ -8,6 +8,10 @@ import PurchaseAgreementForm from "@/presentations/procuments/purchase_agreement
 import Lists from '../presentations/inventory/stock_transfer/page/Listing';
 import Form from "@/presentations/inventory/stock_transfer/page/Form";
 import Detail from "@/presentations/inventory/stock_transfer/page/Detail";
+import StockTransferRequestLists from '../presentations/inventory/stock_transfer_request/page/Listing';
+import StockTransferRequestForm from "@/presentations/inventory/stock_transfer/page/Form";
+import StockTransferRequestDetail from "@/presentations/inventory/stock_transfer/page/Detail";
+
 
 export default function InventoryRoute() {
   return (
@@ -23,10 +27,10 @@ export default function InventoryRoute() {
         />
       </Route>
       <Route path="/stock-transfer-request">
-        {/* <Route index element={<PurchaseAgreementLists />} />
-        <Route path=':id' element={<PurchaseAgreementDetail />} />
-        <Route path='create' element={<PurchaseAgreementForm />} />
-        <Route path=':id/edit' element={<PurchaseAgreementForm edit={true} />} /> */}
+        <Route index element={< StockTransferRequestLists/>} />
+        <Route path=':id' element={<StockTransferRequestDetail />} />
+        <Route path='create' element={<StockTransferRequestForm />} />
+        <Route path=':id/edit' element={<StockTransferRequestForm edit={true} />} />
 
       </Route>
       <Route path="/internal-damage-request">
