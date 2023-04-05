@@ -14,9 +14,9 @@ import StockTransferRequestDetail from "@/presentations/inventory/stock_transfer
 import InternalTransferRequestLists from '../presentations/inventory/internal_transfer_request/page/Listing';
 import InternalTransferDetails from '../presentations/inventory/internal_transfer_request/page/Detail'
 import InternalTransferForm from '../presentations/inventory/internal_transfer_request/page/Form'
-import StockDamageRequestList from "@/presentations/inventory/damage_transfer_request/page/Listing";
-import StockDamageRequestDetail from "@/presentations/inventory/damage_transfer_request/page/Detail";
-import StockDamageRequestForm from "../presentations/inventory/damage_transfer_request/page/Form"
+import StockDamageRequestList from "@/presentations/inventory/stock_damage_request/page/Listing";
+import StockDamageRequestDetail from "@/presentations/inventory/stock_damage_request/page/Detail";
+import StockDamageRequestForm from "../presentations/inventory/stock_damage_request/page/Form"
 
 export default function InventoryRoute() {
   return (
