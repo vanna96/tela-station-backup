@@ -41,7 +41,7 @@ export interface EmployeeProps {
     homeCity?: string;
     homeCounty?: string;
     homeState?: number;
-    homeCountry?: number;
+    homeCountry?: string;
     homeBlock?: number;
     homeZipCode?: number;
     startDate?: number;
@@ -68,6 +68,7 @@ export interface EmployeeProps {
     bankBranch?: string;
     remarks?: string;
     pager?: string;
+    workCounty?: string;
 }
 
 
@@ -109,7 +110,7 @@ export default class Employees extends Model {
     homeCity?: string;
     homeCounty?: string;
     homeState?: number;
-    homeCountry?: number;
+    homeCountry?: string;
     homeBlock?: number;
     homeZipCode?: number;
     startDate?: number;
@@ -136,6 +137,8 @@ export default class Employees extends Model {
     bankBranch?: string;
     remarks?: string;
     pager?: string;
+    workCounty?: string;
+
     constructor(json: any) {
         super();
         this.id = json['EmployeeID'];
@@ -202,6 +205,7 @@ export default class Employees extends Model {
         this.bankBranch = json['BankBranch'];
         this.remarks = json['Remarks'];
         this.pager = json['Pager'];
+        this.workCounty = json['WorkCounty'];
 
 
     }
@@ -275,6 +279,8 @@ export default class Employees extends Model {
             "BankBranch": json['bankBranch'],
             "Remarks": json['remarks'],
             "Pager": json['pager'],
+            "WorkCounty": json['workCounty'],
+
 
         };
     }
@@ -344,6 +350,8 @@ export default class Employees extends Model {
             "BankBranch": json['bankBranch'],
             "Remarks": json['remarks'],
             "Pager": json['pager'],
+            "WorkCounty": json['workCounty'],
+
         };
     }
 
