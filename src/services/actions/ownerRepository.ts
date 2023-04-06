@@ -4,9 +4,9 @@ import Encryption from "@/utilies/encryption";
 import request from "@/utilies/request";
 
 export default class OwnerRepository extends Repository<Owner> {
-   
+
     url = '/EmployeesInfo?$filter=ApplicationUserID ne null&$select=EmployeeID,FirstName,LastName';
-    
+
     // specific key
     key = 'employeesInfo';
 
@@ -14,14 +14,14 @@ export default class OwnerRepository extends Repository<Owner> {
         const data = localStorage.getItem(this.key);
         if (data) {
             const owners = JSON.parse(Encryption.decrypt(this.key, data));
-            return JSON.parse(owners)?.map((e:any) => new Owner(e).toJson());
+            return JSON.parse(owners)?.map((e: any) => new Owner(e).toJson());
         }
 
         const owners = await request('GET', this.url).then((res: any) => res?.data?.value);
         const enc = Encryption.encrypt(this.key, JSON.stringify(owners));
         localStorage.setItem(this.key, enc);
 
-        return owners?.map((e:any) => new Owner(e).toJson());
+        return owners?.map((e: any) => new Owner(e).toJson());
     }
 
 

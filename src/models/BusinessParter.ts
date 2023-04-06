@@ -34,7 +34,7 @@ export default class BusinessPartner extends Model {
     billToDefault?: string | null | undefined;
     website?: string | null | undefined;
     bpAddress?: BPAddress[] | null | undefined;;
-    contactEmployee?: ContactEmployee[] | null | undefined;;
+    contactEmployee?: ContactEmployee[] | null | undefined;
     bpPaymentMethod?: [] | null | undefined;;
     internalCode?: number | null | undefined;
     id?: number;

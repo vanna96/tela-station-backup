@@ -122,4 +122,11 @@ export default class InitializeData {
 
         return response.data.value;
     }
+    public static async indicator(): Promise<any[]> {
+        const response: any = await request('GET', '/FactoringIndicators');
+
+        if (!response?.data) return [];
+
+        return response.data.value;
+    }
 }

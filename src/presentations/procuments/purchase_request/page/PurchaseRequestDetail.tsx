@@ -26,16 +26,16 @@ import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import {
   PurchaseRequestProps,
   PurchaseRequestDocumentLineProps,
-} from "../../../../../models/PurchaseRequest";
-import Department from "../../../../../models/Department";
-import { DocumentLine } from "../../../../../models/interface/index";
-import { PurchaseRequestDocumentLine } from "../../../../../models/PurchaseRequest";
-import Formular from "../../../../../utilies/formular";
-import DocumentHeaderComponent from '../../../../../components/DocumenHeaderComponent';
+} from "../../../../models/PurchaseRequest";
+import Department from "../../../../models/Department";
+import { DocumentLine } from "../../../../models/interface/index";
+import { PurchaseRequestDocumentLine } from "../../../../models/PurchaseRequest";
+import Formular from "../../../../utilies/formular";
+import DocumentHeaderComponent from '../../../../components/DocumenHeaderComponent';
 import OwnerRepository from '@/services/actions/ownerRepository';
 import DepartmentRepository from '@/services/actions/departmentRepository';
-import { dateFormat } from '../../../../../utilies/index';
-import BranchRepository from '../../../../../services/actions/branchRepository';
+import { dateFormat } from '../../../../utilies/index';
+import BranchRepository from '../../../../services/actions/branchRepository';
 
 class PurchaseRequestDetail extends Component<any, any> {
   constructor(props: any) {

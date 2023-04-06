@@ -9,7 +9,7 @@ import AttachmentForm from "../components/AttachmentForm";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
 import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
 import { ToastOptions } from "react-toastify";
-import GLAccount from "../../../../../models/GLAccount";
+import GLAccount from "../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import Formular from "@/utilies/formular";
 import VatGroupRepository from "@/services/actions/VatGroupRepository";
@@ -22,9 +22,9 @@ class PurchaseRequestForm extends CoreFormDocument {
       loading: true,
       docType: "I",
       documentStatus: "O",
-      requiredDate: null,
+      requriedDate: null,
       docDate: new Date().toISOString(),
-      creationDate: new Date().toISOString(),
+      taxDate: new Date().toISOString(),
       docDueDate: new Date().toISOString(),
     } as any;
 

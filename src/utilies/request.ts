@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
 
 
 const request = async (method: string, url: string, data?: any, responseType?: ResponseType, headers?: any) => {
-    let source = axios.CancelToken.source();
+   
 
     return new Promise((resolve, reject) => {
         setTimeout(() => {

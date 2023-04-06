@@ -15,8 +15,8 @@ import { ContactEmployee } from "@/models/BusinessParter";
 import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "@/components/input/AccountTextField";
 import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRepository";
-import ItemGroupRepository from "../../../../../services/actions/itemGroupRepository";
-import VatGroup from "../../../../../components/selectbox/VatGroup";
+import ItemGroupRepository from "../../../../services/actions/itemGroupRepository";
+import VatGroup from "../../../../components/selectbox/VatGroup";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 
 export interface ContentFormProps {
@@ -101,15 +101,15 @@ export default function ContentForm({
           />
         ),
       },
-      {
-        accessorKey: "itemGroup",
-        header: "Item Group",
-        Cell: ({ cell }: any) => (
-          <MUITextField
-            value={new ItemGroupRepository().find(cell.getValue())?.name}
-          />
-        ),
-      },
+      // {
+      //   accessorKey: "itemGroup",
+      //   header: "Item Group",
+      //   Cell: ({ cell }: any) => (
+      //     <MUITextField
+      //       value={new ItemGroupRepository().find(cell.getValue())?.name}
+      //     />
+      //   ),
+      // },
       {
         accessorKey: "quantity",
         header: "Quantity",
@@ -450,11 +450,10 @@ export default function ContentForm({
         <div className="w-[100%] gap-3">
           <MUITextField
             label="Total Before Discount"
-            value={Formular.findTotalBeforeDiscount(data?.items ?? [])}
-            name="LineTotal"
+            value={currencyFormat(data?.docTotalBeforeDiscount)}
           />
         </div>
-        <div className="flex justify-between">
+        {/* <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <MUITextField
               label="Discount"
@@ -466,7 +465,7 @@ export default function ContentForm({
           <div className="w-[48%] gap-3 mt-5">
             <MUITextField label="" />
           </div>
-        </div>
+        </div> */}
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <MUITextField label="Fright" name="" />
@@ -488,11 +487,11 @@ export default function ContentForm({
           <div className="w-[48%] gap-3">
             <MUITextField
               label="Tax:"
-              value={Formular.calculateTotalTax(data?.items ?? [])}
+              value={currencyFormat(data?.docTaxTotal)}
             />
           </div>
           <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due" value={data.Tax} />
+            <MUITextField label="Total Payment Due"  value={currencyFormat(data?.docTotal)}  />
           </div>
         </div>
       </div>
