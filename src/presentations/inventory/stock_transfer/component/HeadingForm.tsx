@@ -49,15 +49,15 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
               <div className="">
                 <MUISelect
-                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  // items={data?.shipToDefault?.map((e: BPAddress) => ({
-                  //   addressName: e.addressName,
-                  //   street: e.street,
-                  //   city: e.city,
-                  //   country: e.city,
-                  //   federalTaxId: e.federalTaxId,
-                  //   addressType: e.addressType
-                  // }))}
+                  // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
+                  items={data?.shipToDefault?.map((e: BPAddress) => ({
+                    addressName: e.addressName,
+                    street: e.street,
+                    city: e.city,
+                    country: e.city,
+                    federalTaxId: e.federalTaxId,
+                    addressType: e.addressType
+                  }))}
                   onChange={(e) => handlerChange('shipToDefault', e.target.value)}
                   value={data?.shipTo}
                   aliasvalue="id"
