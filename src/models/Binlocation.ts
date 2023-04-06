@@ -60,7 +60,7 @@ export default class Binlocation extends Model {
     this.absEntry = json['AbsEntry'];
     this.warehouse = json['Warehouse'];
     this.binCode = json['BinCode'];
-    this.inactive = json['Inactive'];
+    this.inactive = json['Inactive'] === "tNO" ? "Active" : "Inactive";
     this.sublevel1 = json['Sublevel1'];
     this.sublevel2 = json['Sublevel2'];
     this.sublevel3 = json['Sublevel3'];
