@@ -6,10 +6,11 @@ import DistributionRule from '@/models/DistributionRule';
 
 interface DistributionRuleTextField {
     value: any,
+    inWhichNum: number;
     onChange: (dimension: any) => void
 }
 
-const DistributionRuleTextField: FC<DistributionRuleTextField> = ({ value, onChange }: DistributionRuleTextField) => {
+const DistributionRuleTextField: FC<DistributionRuleTextField> = ({ value, onChange, inWhichNum }: DistributionRuleTextField) => {
     const [open, setOpen] = React.useState<boolean>(false)
 
     const handlerConfirm = (dimension: DistributionRule) => {
@@ -19,7 +20,7 @@ const DistributionRuleTextField: FC<DistributionRuleTextField> = ({ value, onCha
     const onClose = () => setOpen(false);
 
     return <>
-        <DistributionRuleModal open={open} onClose={onClose} onOk={handlerConfirm} />
+        <DistributionRuleModal open={open} onClose={onClose} onOk={handlerConfirm} inWhichNum={inWhichNum} />
         <MUITextField endAdornment value={value} onClick={() => setOpen(true)} />
     </>
 }
