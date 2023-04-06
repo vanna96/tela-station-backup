@@ -18,7 +18,7 @@ const MasterDataPage = () => {
             <ItemCard title='Suppliers' icon={<AiOutlineShopping />} />
             <ItemCard title='Customers' icon={<AiOutlineFileUnknown />} />
             <ItemCard title='Warehouses' onClick={() => goTo('warehouse')} icon={<AiOutlineSnippets />} />
-            <ItemCard title='Bin Location' icon={<AiOutlineSolution />} />
+            <ItemCard title='Bin Location' onClick={() => goTo('binlocation')} icon={<AiOutlineSolution />} />
         </MainContainer>
     </>
 }

@@ -26,12 +26,12 @@ export default class CountryRepository extends Repository<Country> {
   }
 
 
-  find<Country>(code: number | undefined | null): any {
+
+  find<FactoringIndicator>(code: number | undefined | null): any {
     const data = localStorage.getItem(this.key);
     const country: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
     return country.find((e: any) => e?.Code == code);
   }
-
   post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<Country> {
     throw new Error("Method not implemented.");
   }
