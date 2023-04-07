@@ -29,7 +29,10 @@ export interface BinlocationProps {
   ratchRestrictions?: string;
   restrictedTransType?: string;
   specificItemGroup?: string;
-  batchRestrictions?: string
+  batchRestrictions?: string;
+  specificItem?: string;
+  specificUoMGroup?: string;
+  restrictionReason?:string
 }
 
 export default class Binlocation extends Model {
@@ -52,15 +55,20 @@ export default class Binlocation extends Model {
   ratchRestrictions?: string;
   restrictedTransType?: string;
   specificItemGroup?: string;
-  batchRestrictions?: string
+  batchRestrictions?: string;
+  specificItem?: string;
+  specificUoMGroup?: string;
+  restrictionReason?: string
   constructor(json: any) {
     super();
     this.id = json['AbsEntry'];
+    this.specificItem = json['SpecificItem'];
     this.batchRestrictions = json['BatchRestrictions']
     this.absEntry = json['AbsEntry'];
     this.warehouse = json['Warehouse'];
     this.binCode = json['BinCode'];
-    this.inactive = json['Inactive'] === "tNO" ? "Active" : "Inactive";
+    this.restrictionReason = json['RestrictionReason']
+    this.inactive = json['Inactive'];
     this.sublevel1 = json['Sublevel1'];
     this.sublevel2 = json['Sublevel2'];
     this.sublevel3 = json['Sublevel3'];
@@ -75,6 +83,7 @@ export default class Binlocation extends Model {
     this.ratchRestrictions = json['RatchRestrictions'];
     this.restrictedTransType = json['RestrictedTransType'];
     this.specificItemGroup = json['SpecificItemGroup'];
+    this.specificUoMGroup = json['SpecificUoMGroup']
   }
 
   toJson(update: boolean) {
@@ -85,7 +94,10 @@ export default class Binlocation extends Model {
   public static toCreate(json: any) {
     return {
       "AbsEntry": json['absEntry'],
+      "SpecificItem": json['specificItem'],
       "Warehouse": json['Warehouse'],
+      "RestrictionReason": json['restrictionReason'],
+      "SpecificUoMGroup": json['specificUoMGroup'],
       "BatchRestrictions": json['batchRestrictions'],
       "BinCode": json['binCode'],
       "Inactive": json['inactive'],
@@ -110,7 +122,10 @@ export default class Binlocation extends Model {
   public static toUpdate(json: any) {
     return {
       "AbsEntry": json['absEntry'],
+      "SpecificUoMGroup": json['specificUoMGroup'],
+      "SpecificItem": json['specificItem'],
       "Warehouse": json['Warehouse'],
+      "RestrictionReason": json['restrictionReason'],
       "BatchRestrictions": json['batchRestrictions'],
       "BinCode": json['binCode'],
       "Inactive": json['inactive'],

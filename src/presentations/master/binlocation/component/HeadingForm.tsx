@@ -29,7 +29,7 @@ export default function HeadingForm({ data, handlerChange, edit }: IHeadingFormP
         <div className="flex flex-col gap-2">
           <div className="grid grid-cols-2 gap-3">
             <div>
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">Warehouse:</label>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">Warehouse:</label>
               <WareBinSelect onChange={(e) => handlerChange("warehouse", e?.target.value)} value={data?.warehouse} name="Warehouse" />
             </div>
             <div>
@@ -40,8 +40,12 @@ export default function HeadingForm({ data, handlerChange, edit }: IHeadingFormP
           <div className="grid grid-cols-1 gap-3">
             <div>
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Bin Code:</label>
-              <MUITextField onChange={(e) => handlerChange("binCode", e?.target.value)} value={data?.binCode} name="BinCode" />
-           
+              {
+                edit == true ? <MUITextField disabled={true} onChange={(e) => handlerChange("binCode", e?.target.value)} value={data?.binCode} name="BinCode" />
+                  :
+                  <MUITextField disabled={true} onChange={(e) => handlerChange("binCode", e?.target.value)} value={`${data?.warehouse  ?? ""}-${data?.sublevel2 ?? ""}-${data?.binCode ?? ""}${data?.sublevel1 ?? ""}-${data?.sublevel3 ?? ""}`} name="BinCode" />
+              }
+
             </div>
           </div>
         </div>
@@ -60,12 +64,12 @@ export default function HeadingForm({ data, handlerChange, edit }: IHeadingFormP
           <div className="grid grid-cols-1 gap-3">
             <div>
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Description:</label>
-              <MUITextField onChange={(e) => handlerChange("description", e?.target.value)} value={data?.description} name="Description" />
+              <MUITextField onChange={(e) => handlerChange("description", e?.target.value ?? "")} value={data?.description} name="Description" />
             </div>
           </div>
         </div>
         {/* <div className='col-span-2'></div> */}
-       
+
       </FormCard>
     </>
   )

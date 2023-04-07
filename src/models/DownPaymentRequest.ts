@@ -366,6 +366,9 @@ export class PurchaseDownPaymentDocumentLine extends Model implements DocumentLi
  
       delete line.ItemCode;
       delete line.UnitPrice;
+      delete line.AccountCode;
+      delete line.ItemDescription;
+      delete line.AccountName
     }
 
     return line;
