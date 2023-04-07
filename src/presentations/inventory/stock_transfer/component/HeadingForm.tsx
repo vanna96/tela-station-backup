@@ -5,10 +5,10 @@ import MUISelect from '@/components/selectbox/MUISelect';
 import { BPAddress, ContactEmployee } from '@/models/BusinessParter';
 import TextField from '@mui/material/TextField';
 import { documentStatusList } from '@/constants';
-import ShippingType from '../../../../components/selectbox/ShippingType';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import IconButton from '@mui/material/IconButton';
 import WarehouseSelect from '@/components/selectbox/Warehouse';
+import { getShippingAddress } from '@/models/BusinessParter';
 
 export interface IHeadingFormProps {
   handlerOpenVendor: () => void,
@@ -50,7 +50,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <div className="">
                 <MUISelect
                   // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  items={data?.shipToDefault?.map((e: BPAddress) => ({
+                  items={data?.shippingType?.map((e: BPAddress) => ({
                     addressName: e.addressName,
                     street: e.street,
                     city: e.city,
@@ -59,9 +59,9 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                     addressType: e.addressType
                   }))}
                   onChange={(e) => handlerChange('shipToDefault', e.target.value)}
-                  value={data?.shipTo}
-                  aliasvalue="id"
-                  aliaslabel="name"
+                  value={data?.shipToDefault}
+                  aliasvalue="addressName"
+                  aliaslabel="addressName"
                   name="shipToDefault"
                 />
               </div>
@@ -75,7 +75,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               fullWidth
               name="address"
               className="w-full "
-              defaultValue={data?.address}
+             value= {getShippingAddress(data.shipToDefault , data.shippingType)}
             />
           </div>
 
@@ -175,7 +175,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
             </div>
           </div>
           <div className="flex gap-1 text-sm">
-       
+
             <div className='grid grid-cols-2 gap-3'>
               <div className='flex items-center gap-1 text-sm'>
                 <label htmlFor='Renewal' className='text-gray-500 text-[14px]'>Reference</label>

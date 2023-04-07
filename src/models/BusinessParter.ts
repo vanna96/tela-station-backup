@@ -23,7 +23,7 @@ export default class BusinessPartner extends Model {
     defaultAccount?: string | null | undefined;
     defaultBranch?: string | null | undefined;
     defaultBankCode?: string | null | undefined;
-    currentBalance?: number| null | undefined;;
+    currentBalance?: number | null | undefined;;
     deliveryNoteBalance?: number | null | undefined;;
     openOrderBalance?: number | null | undefined;;
     vatGroup?: string | null | undefined;
@@ -36,9 +36,9 @@ export default class BusinessPartner extends Model {
     bpAddress?: BPAddress[] | null | undefined;;
     contactEmployee?: ContactEmployee[] | null | undefined;
     bpPaymentMethod?: [] | null | undefined;;
-    internalCode?: number | null | undefined;; 
+    internalCode?: number | null | undefined;;
 
-    constructor (json: any) {
+    constructor(json: any) {
         super();
         this.cardCode = json?.CardCode;
         this.cardName = json?.CardName;
@@ -82,22 +82,42 @@ export default class BusinessPartner extends Model {
     }
 
 
-    public getShippingToAddress() : string {
-        const shipAddress = this.bpAddress?.find((e: BPAddress) => e.addressName === this.shipToDefault);
-        
+    // public getShippingToAddress() : string {
+    //     const shipAddress = this.bpAddress?.find((e: BPAddress) => e.addressName === this.shipToDefault);
+
+    //     if (!shipAddress) return '';
+
+    //     return `${shipAddress.street}, ${shipAddress.city}, ${shipAddress.country}.`;
+    // }
+
+    public getShippingAddress(shipToDefault: string, bpAddress: BPAddress[]): string {
+        const shipAddress = bpAddress?.find((e: BPAddress) => e.addressName === shipToDefault);
+
         if (!shipAddress) return '';
 
         return `${shipAddress.street}, ${shipAddress.city}, ${shipAddress.country}.`;
     }
 
-    public getBillToAddress() : string {
+
+    public getBillToAddress(): string {
         const shipAddress = this.bpAddress?.find((e: BPAddress) => e.addressName === this.shipToDefault);
-        
+
         if (!shipAddress) return '';
 
         return `${shipAddress.street}, ${shipAddress.city}, ${shipAddress.country}.`;
     }
+
+
 }
+
+export const getShippingAddress = (shipToDefault: string, bpAddress: BPAddress[]): string => {
+    // function implementation
+    const shipAddress = bpAddress?.find((e: BPAddress) => e.addressName === shipToDefault);
+
+    if (!shipAddress) return '';
+
+    return `${shipAddress?.street ?? ""}, ${shipAddress?.city ?? ""}, ${shipAddress?.country ?? ""}.`;
+};
 
 
 export class BPAddress extends Model {
@@ -129,7 +149,7 @@ export class BPAddress extends Model {
 
 
 export class ContactEmployee extends Model {
-    
+
     id?: number;
     name?: string;
 
@@ -137,12 +157,13 @@ export class ContactEmployee extends Model {
         super();
 
         this.id = json['InternalCode'];
-        this.name =json['Name']
+        this.name = json['Name']
     }
 
-    
+
     toJson(update: boolean) {
         throw new Error("Method not implemented.");
     }
 
 }
+
