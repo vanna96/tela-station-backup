@@ -3,11 +3,12 @@ import { useCookies } from "react-cookie"
 import { useNavigate } from "react-router-dom"
 import { UpdateDataSuccess } from "./ClientError"
 
-const axiosInstance = axios.create({
-  withCredentials: true,
-  baseURL: "https://103.120.133.234:50000/b1s/v1",
-  // baseURL: "https://159.138.36.29:50000/b1s/v1",
-})
+export const url = "https://103.120.133.234:50000/b1s/v1";
+
+export const axiosInstance = axios.create({
+    withCredentials: true,
+    baseURL: url,
+});
 
 axiosInstance.interceptors.response.use(
   (response) => {
