@@ -9,6 +9,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import IconButton from '@mui/material/IconButton';
 import WarehouseSelect from '@/components/selectbox/Warehouse';
 import { getShippingAddress } from '@/models/BusinessParter';
+import PriceList from '@/models/PriceList';
+import PriceListSelect from '@/components/selectbox/PriceList';
 
 export interface IHeadingFormProps {
   handlerOpenVendor: () => void,
@@ -49,8 +51,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
               <div className="">
                 <MUISelect
-                  // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  items={data?.shippingType?.map((e: BPAddress) => ({
+                  items={data?.shippingType?.filter((e: { addressName: string; }) => e.addressName !== 'Bill To').map((e: BPAddress) => ({
                     addressName: e.addressName,
                     street: e.street,
                     city: e.city,
@@ -67,17 +68,33 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               </div>
             </div>
           </div>
-          <div className="">
-            <TextField
-              size="small"
-              multiline
-              rows={3}
-              fullWidth
-              name="address"
-              className="w-full "
-             value= {getShippingAddress(data.shipToDefault , data.shippingType)}
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">Price List</label>
+              <div className="">
+                <PriceListSelect
+                  name="priceList"
+                  value={data.priceList} 
+                  onChange={(e: any) => handlerChange('priceList', e)}
+                />
+
+              </div>
+            </div>
+            <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To Address</label>
+              <TextField
+                size="small"
+                multiline
+                rows={3}
+                fullWidth
+                name="address"
+                className="w-full "
+                value={getShippingAddress(data.shipToDefault, data.shippingType)}
+              />
+            </div>
           </div>
+
+
 
 
         </div>
@@ -121,28 +138,21 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
 
                 <div className="flex flex-col gap-1 text-sm">
                   <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                    Valid Until
+                    Document Date
                   </label>
                   <div className="">
                     <MUIDatePicker error={data?.message?.includes('dueDate')} value={data.dueDate} onChange={(e: any) => handlerChange('dueDate', e)} />
                   </div>
                 </div>
-                <div className="flex flex-col gap-1 text-sm">
-                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                    Document Date
-                  </label>
-                  <div className="">
-                    <MUIDatePicker error={data?.message?.includes('taxDate')} value={data.taxDate} onChange={(e: any) => handlerChange('taxDate', e)} />
-                  </div>
-                </div>
+
               </> :
               <>
 
-                <div className="flex flex-col gap-1 text-sm">
+                {/* <div className="flex flex-col gap-1 text-sm">
                   <MUITextField label="Status" disabled={edit} value={(data?.documentStatus)} name="DocumentStatus" />
 
 
-                </div>
+                </div> */}
 
                 <div className="flex flex-col gap-1 text-sm">
 
@@ -153,27 +163,18 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                     <MUIDatePicker disabled={edit} error={data?.message?.includes('DocDate')} value={data.docDate} onChange={(e: any) => handlerChange('docDate', e)} />
                   </div>
                 </div>
+                <div className="flex flex-col gap-1 text-sm">
+                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                    Document Date
+                  </label>
+                  <div className="">
+                    <MUIDatePicker error={data?.message?.includes('taxDate')} value={data.taxDate} onChange={(e: any) => handlerChange('taxDate', e)} />
+                  </div>
+                </div>
               </>
             }
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Document Date
-              </label>
-              <div className="">
-                <MUIDatePicker error={data?.message?.includes('TaxDate')} value={data.taxDate} onChange={(e: any) => handlerChange('taxDate', e)} />
-              </div>
-            </div>
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Valid Until
-              </label>
-              <div className="">
-                <MUIDatePicker error={data?.message?.includes('dueDate')} value={data.dueDate} onChange={(e: any) => handlerChange('dueDate', e)} />
-              </div>
-            </div>
-          </div>
+
           <div className="flex gap-1 text-sm">
 
             <div className='grid grid-cols-2 gap-3'>
@@ -215,6 +216,18 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
 
               </div>
             </div>
+            {/* <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">To Bin Location</label>
+              <div className="">
+                <MUITextField
+                  // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
+                  // onChange={(e) => handlerChange('toWarehouse', e.target.value)}
+                  // value={data?.toWarehouse}
+
+                />
+
+              </div>
+            </div> */}
           </div>
         </div>
       </FormCard>

@@ -28,7 +28,7 @@ export default class WarehouseRepository extends Repository<Warehouse> {
         const data = localStorage.getItem(this.key);
         if (!data) return {};
         const warehouse: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-        return warehouse.find((e: any) => e?.Code == code);
+        return warehouse.find((e: any) => e?.WarehouseCode == code);
     }
 
     post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<Warehouse> {

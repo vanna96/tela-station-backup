@@ -349,27 +349,7 @@ export default function ContentForm({
   return (
     <FormCard title="Content">
       <div className="col-span-2 data-table">
-        {/* <div className="my-4 w-[30%]">
-          <label
-            htmlFor="AgreementMethod"
-            className="text-gray-500 text-[14px]"
-          >
-            Item/Service Type
-          </label>
-          <div className="w-2/3">
-            <MUISelect
-              items={[
-                { name: "Items", value: "I" },
-                { name: "Service", value: "S" },
-              ]}
-              aliaslabel="name"
-              aliasvalue="value"
-              name="DocType"
-              value={data.docType}
-              onChange={(e) => handlerChange("docType", e.target.value)}
-            />
-          </div>
-        </div> */}
+     
         <div className="flex flex-col pb-4 sm:pb-2 ">
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">

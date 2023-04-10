@@ -20,6 +20,7 @@ import BuyerRepository from '@/services/actions/BuyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import StockTransferRepository from '@/services/actions/stockTransferRepository';
 import WarehouseRepository from '@/services/warehouseRepository';
+import PriceListRepository from '@/services/actions/pricelistRepository';
 
 
 class StockTransferDetail extends Component<any, any> {
@@ -109,9 +110,14 @@ class StockTransferDetail extends Component<any, any> {
 
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Ship To </span>
+                  <span className='w-4/12 text-gray-500'>Ship To Code </span>
+                  <span className='w-8/12 font-medium'>: {this.state?.shipToDefault || "N/A"}</span>
+                </div>
+                <div className='flex gap-2'>
+                  <span className='w-4/12 text-gray-500'>Ship To Address </span>
                   <span className='w-8/12 font-medium'>: {this.state?.address || "N/A"}</span>
                 </div>
+
 
               </div>
               <div className='flex flex-col gap-1'>
@@ -123,21 +129,23 @@ class StockTransferDetail extends Component<any, any> {
                   <span className='w-4/12 text-gray-500'>Posting Date</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDate) || "N/A"}</span>
                 </div>
-                <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Valid Until</span>
-                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.dueDate) || "N/A"}</span>
-                </div>
+
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Document Date</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.taxDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>From Warehouse</span>
-                  <span className='w-8/12 font-medium'>: {this.state.fromWarehouse} {new WarehouseRepository().find(parseFloat(this.state.fromWarehouse))?.WarehouseName}</span>
+                  <span className='w-8/12 font-medium'>: {this.state.fromWarehouse} - {new WarehouseRepository().find(parseFloat(this.state.fromWarehouse))?.WarehouseName}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>To Warehouse</span>
-                  <span className='w-8/12 font-medium'>: {this.state.toWarehouse}   {new WarehouseRepository().find(this.state.toWarehouse)?.WarehouseName}</span>
+                  <span className='w-8/12 font-medium'>: {this.state.toWarehouse} - {new WarehouseRepository().find(this.state.toWarehouse)?.WarehouseName}</span>
+
+                </div>
+                <div className='flex gap-2'>
+                  <span className='w-4/12 text-gray-500'>Price List</span>
+                  <span className='w-8/12 font-medium'>: {new PriceListRepository().find(this.state.priceList)?.PriceListName}</span>
 
                 </div>
 
@@ -186,11 +194,17 @@ function Content(props: any) {
       accessorKey: "fromWarehouseCode",
       header: "	From Warehouse ",
       enableClickToCopy: true,
+      Cell: ({ cell }: any) => new WarehouseRepository().find(cell.getValue())?.WarehouseName,
+
+      // <span className='w-8/12 font-medium'>: {this.state.toWarehouse} - {new WarehouseRepository().find(this.state.toWarehouse)?.WarehouseName}</span>
+
     },
     {
       accessorKey: "warehouseCode",
       header: "	To Warehouse",
       enableClickToCopy: true,
+      Cell: ({ cell }: any) => new WarehouseRepository().find(cell.getValue())?.WarehouseName,
+
     },
     {
       accessorKey: "quantity",
@@ -236,28 +250,25 @@ function Content(props: any) {
         // isLoading: true,
       }}
     />
-    <div className='flex flex-col gap-3'>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Sale Employee</span>
-        <span className="w-8/12 font-medium text-sm">
-          : {new BuyerRepository().find(data.salesPersonCode)?.name || "N/A"}
-        </span>
-      </div>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Pick and Pack Remark</span>
-        <span className="w-8/12 font-medium text-sm">
-          : {data?.PickAndPackRemarks}
-        </span>
-      </div>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Journal Remarks</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.journalMemo || "N/A"}</span>
-      </div>
-      <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Remarks</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.comments || "N/A"}</span>
-      </div>
+    <div className='min-h-[10rem] grid grid-cols-2 gap-3 w-full shadow-sm rounded-lg bg-white text-[12px] p-2'>
+      <div className='flex flex-col gap-1'>
 
+        <div className='flex gap-2'>
+          <span className='w-4/12 text-gray-500 text-sm'>Sale Employee</span>
+          <span className="w-8/12 font-medium text-sm">
+            : {new BuyerRepository().find(data.salesPersonCode)?.name || "N/A"}
+          </span>
+        </div>
+
+        <div className='flex gap-2'>
+          <span className='w-4/12 text-gray-500 text-sm'>Journal Remarks</span>
+          <span className='w-8/12 font-medium text-sm'>: {data?.journalMemo || "N/A"}</span>
+        </div>
+        <div className='flex gap-2'>
+          <span className='w-4/12 text-gray-500 text-sm'>Remarks</span>
+          <span className='w-8/12 font-medium text-sm'>: {data?.comments || "N/A"}</span>
+        </div>
+      </div>
     </div>
   </div>
 

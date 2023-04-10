@@ -29,10 +29,11 @@ export interface StockTransferProps {
   signeDate?: string;
   serie: string;
   paymentMethod?: string;
-  shippingType?: string | undefined;
+  // shippingType?: string | undefined;
   items: StockTransferDocumentLineProps[];
   stockTransferLines: StockTransferDocumentLineProps[];
   contactPersonList?: ContactEmployee[];
+  shippingType?: BPAddress[];
   shippingList?: BPAddress[];
 
 }
@@ -84,11 +85,12 @@ export default class StockTransfer extends Model implements MasterDocument {
   dueDate?: string;
   shippingList?: BPAddress[];
   contactPersonList?: ContactEmployee[];
-
+  shippingType?: BPAddress[]
+  priceList ?: string | undefined ;
 
   constructor(json: any) {
     super();
-    this.id = json["DocNum"];
+    this.id = json["DocEntry"];
     this.cardCode = json["CardCode"];
     this.cardName = json["CardName"];
     this.serie = json["Seriesss"];
@@ -103,6 +105,9 @@ export default class StockTransfer extends Model implements MasterDocument {
     this.items = json["StockTransferLines"]?.map(
       (e: any) => new StockTransferDocumentLine(e)
     );
+    // this.service = json[
+    //   'service'
+    // ]
     this.stockTransferLines = json["StockTransferLines"]?.map(
       (e: any) => new StockTransferDocumentLine(e)
     );
@@ -119,7 +124,8 @@ export default class StockTransfer extends Model implements MasterDocument {
     this.journalMemo = json['JournalMemo']
     this.documentStatus = json['DocumentStatus']
     this.contactPersonList = json['contactPersonList'];
-    this.shippingList = json['shippingList'];
+    this.shippingList = json['shippingType'];
+    this.priceList = json['PriceList']
   }
 
   toJson(update: boolean) {
@@ -131,32 +137,7 @@ export default class StockTransfer extends Model implements MasterDocument {
 
     return {
       CardCode: json['cardCode'],
-      CardName : json['cardName'],
-      TaxDate: json["taxDate"],
-      DocDate: json["docDate"],
-      AttachmentEntry: json["attachmentEntry"],
-      DocCurrency: json["docCurrency"],
-      DocRate: json["docRate"],
-      Comments: json["comments"],
-      // Serie: json["serie"],
-      // Series: json["Series"],
-
-      Address2: json["Address2"],
-      DocumentStatus: json["DocumentStatus"],
-      StockTransferLines: json["items"]?.map((e: any) =>
-        StockTransferDocumentLine.toCreate(e, json["docType"])
-      ),
-      FromWarehouse: json['fromWarehouse'],
-      ToWarehouse: json['toWarehouse'],
-      ShipToDefault: json['shipToDefault'],
-      ContactPerson: json['contactPerson'],
-      SalesPersonCode : json['SalesPersonCode']
-    };
-  }
-
-  public static toUpdate(json: any) {
-    return {
-      
+      CardName: json['cardName'],
       TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       AttachmentEntry: json["attachmentEntry"],
@@ -175,7 +156,32 @@ export default class StockTransfer extends Model implements MasterDocument {
       ToWarehouse: json['toWarehouse'],
       ShipToCode: json['shipToDefault'],
       ContactPerson: json['contactPerson'],
-      SalesPersonCode : json['salesPersonCode'],
+      SalesPersonCode: json['SalesPersonCode']
+    };
+  }
+
+  public static toUpdate(json: any) {
+    return {
+
+      TaxDate: json["taxDate"],
+      DocDate: json["docDate"],
+      AttachmentEntry: json["attachmentEntry"],
+      DocCurrency: json["docCurrency"],
+      DocRate: json["docRate"],
+      Comments: json["comments"],
+      // Serie: json["serie"],
+      // Series: json["Series"],
+
+      Address2: json["Address2"],
+      DocumentStatus: json["DocumentStatus"],
+      StockTransferLines: json["items"]?.map((e: any) =>
+        StockTransferDocumentLine.toCreate(e, json["docType"])
+      ),
+      FromWarehouse: json['fromWarehouse'],
+      ToWarehouse: json['toWarehouse'],
+      ShipToCode: json['shipToDefault'],
+      ContactPerson: json['contactPerson'],
+      SalesPersonCode: json['salesPersonCode'],
       JournalMemo: json['journalMemo']
 
     };
@@ -207,7 +213,7 @@ export class StockTransferDocumentLine extends Model implements DocumentLine {
     this.uomEntry = json["UoMEntry"];
     this.uomCode = json["UoMCode"];
     this.fromWarehouseCode = json["FromWarehouseCode"];
-    this.warehouseCode = json["warehouseCode"]
+    this.warehouseCode = json["WarehouseCode"]
 
   }
   toJson(update: boolean) {
@@ -219,10 +225,10 @@ export class StockTransferDocumentLine extends Model implements DocumentLine {
       Quantity: json["quantity"],
       ItemCode: json["itemCode"],
       ItemDescription: json["itemName"],
-      UnitPrice: json["unitPrice"],
+      // UnitPrice: json["unitPrice"],
       DocEntry: json["uomGroupEntry"],
-      UoMCode: json["uomCode"],
-      UoMEntry: json["uomEntry"],
+      // UoMCode: json["uomCode"],
+      // UoMEntry: json["uomEntry"],
       FromWarehouseCode: json["fromWarehouseCode"],
       WarehouseCode: json["warehouseCode"],
     };
