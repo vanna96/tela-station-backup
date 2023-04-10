@@ -29,7 +29,7 @@ export default class UnitOfMeasurementRepository extends Repository<UnitOfMeasur
         const data = localStorage.getItem(this.key);
         if (!data) return {};
         const unitOfMeasurements: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-        return new UnitOfMeasurement(unitOfMeasurements.find((e: any) => e?.AbsEntry == code) ?? {});
+        return new UnitOfMeasurement(unitOfMeasurements.find((e: any) => e?.BaseUoM == code) ?? {});
     }
 
     post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<UnitOfMeasurement> {

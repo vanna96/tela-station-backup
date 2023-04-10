@@ -56,6 +56,8 @@ export interface CoreFormDocumentState {
     paymentTermType?: string | undefined | null,
     paymentMethod?: string | undefined | null,
     currency?: string | undefined | null,
+    priceLists?: string | undefined | null,
+    salePersonCode?: string | undefined | null,
     vendorRef?: string | undefined | null,
     documentStatus?: string | undefined | null,
     remark?: string | undefined | null,
@@ -124,6 +126,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             paymentMethod: null,
             paymentTermType: null,
             currency: null,
+            priceLists: null,
+            salePersonCode: null,
             renewal: false,
             items: [],
             series: [],
@@ -265,7 +269,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             cardName: record.cardName,
             contactPersonCode: record.contactEmployee!.length > 0 ? record.contactEmployee![0].id : undefined,
             contactPersonList: record.contactEmployee ?? [],
-            shippingType: record.bpAddress ?? [],
+            series: record.bpAddress ?? [],
             email: record.email,
             phone: record.phone,
             items: record.bpAddress ?? [],
@@ -274,6 +278,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             isOpenProject: false,
             isOpenVendor: false,
             currency: record.currency,
+            priceLists: record.priceLists,
+            salePersonCode : record.salePersonCode
         });
     }
 

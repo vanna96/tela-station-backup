@@ -38,8 +38,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <div className="">
                 <MUISelect
                   items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  onChange={(e) => handlerChange('contactPerson', e.target.value)}
-                  value={data?.contactPerson}
+                  onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
+                  value={data?.contactPersonCode}
                   aliasvalue="id"
                   aliaslabel="name"
                   name="ContactPerson"
@@ -51,7 +51,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
               <div className="">
                 <MUISelect
-                  items={data?.shippingType?.filter((e: { addressName: string; }) => e.addressName !== 'Bill To').map((e: BPAddress) => ({
+                  items={data?.series?.filter((e: { addressName: string; }) => e.addressName !== 'Bill To').map((e: BPAddress) => ({
                     addressName: e.addressName,
                     street: e.street,
                     city: e.city,
@@ -73,9 +73,9 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Price List</label>
               <div className="">
                 <PriceListSelect
-                  name="priceList"
-                  value={data.priceList} 
-                  onChange={(e: any) => handlerChange('priceList', e)}
+                  name="priceLists"
+                  value={data.priceLists} 
+                  onChange={(e: any) => handlerChange('priceLists', e)}
                 />
 
               </div>
@@ -89,7 +89,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 fullWidth
                 name="address"
                 className="w-full "
-                value={getShippingAddress(data.shipToDefault, data.shippingType)}
+                value={getShippingAddress(data.shipToDefault, data.series)}
               />
             </div>
           </div>

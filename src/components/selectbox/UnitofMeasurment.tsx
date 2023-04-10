@@ -3,9 +3,9 @@ import MUISelect from "./MUISelect";
 import { useQuery } from "react-query";
 import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import WarehouseRepository from "@/services/warehouseRepository";
+import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRepository";
 
-interface WarehouseProps<T = unknown> {
+interface UOMProps<T = unknown> {
     name?: string,
     defaultValue?: any,
     value?: any,
@@ -13,18 +13,18 @@ interface WarehouseProps<T = unknown> {
 }
 
 
-function WarehouseSelect(props: WarehouseProps) {
+function UOMSelect(props: UOMProps) {
 
-    const { data, isLoading }: any = useQuery({ queryKey: ['warehouse'], queryFn: () => new WarehouseRepository().get(), staleTime: Infinity });
+    const { data, isLoading }: any = useQuery({ queryKey: ['uom'], queryFn: () => new UnitOfMeasurementRepository().get(), staleTime: Infinity });
 
 
     return <MUISelect
         {...props}
-        aliaslabel="WarehouseName"
-        aliasvalue="WarehouseCode"
+        aliaslabel="Name"
+        aliasvalue="BaseUoM"
         loading={isLoading}
         items={data}
     />
 }
 
-export default WarehouseSelect;
+export default UOMSelect;

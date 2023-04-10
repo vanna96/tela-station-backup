@@ -216,12 +216,12 @@ function Content(props: any) {
       Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
     {
-      accessorKey: "department",
+      accessorKey: "distributionRule",
       header: "	Department",
       Cell: ({ cell }: any) => discountFormat(cell.getValue()),
     },
     {
-      accessorKey: "lineofbusiness",
+      accessorKey: "distributionRule2",
       header: "Line of Business",
       Cell: ({ cell }: any) => cell.getValue(),
     },

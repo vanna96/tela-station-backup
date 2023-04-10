@@ -33,7 +33,7 @@ export interface StockTransferProps {
   items: StockTransferDocumentLineProps[];
   stockTransferLines: StockTransferDocumentLineProps[];
   contactPersonList?: ContactEmployee[];
-  shippingType?: BPAddress[];
+  // services?: BPAddress[];
   shippingList?: BPAddress[];
 
 }
@@ -66,6 +66,7 @@ export default class StockTransfer extends Model implements MasterDocument {
   comments?: string;
   journalMemo?: string;
   salesPersonCode?: string;
+  salePersonCode?: string;
   contactPersonCode?: string;
   series?: string;
   taxDate?: string;
@@ -85,8 +86,11 @@ export default class StockTransfer extends Model implements MasterDocument {
   dueDate?: string;
   shippingList?: BPAddress[];
   contactPersonList?: ContactEmployee[];
-  shippingType?: BPAddress[]
+  // services?: BPAddress[]
   priceList ?: string | undefined ;
+  distributionRule?: string | undefined;
+  distributionRule2?: string | undefined;
+  priceLists?: string | undefined;
 
   constructor(json: any) {
     super();
@@ -100,14 +104,10 @@ export default class StockTransfer extends Model implements MasterDocument {
     this.taxDate = json["TaxDate"];
     this.dueDate = json["DocDueDate"];
     this.docDate = json["DocDate"];
-    // this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
     this.comments = json["Comments"];
     this.items = json["StockTransferLines"]?.map(
       (e: any) => new StockTransferDocumentLine(e)
     );
-    // this.service = json[
-    //   'service'
-    // ]
     this.stockTransferLines = json["StockTransferLines"]?.map(
       (e: any) => new StockTransferDocumentLine(e)
     );
@@ -117,15 +117,21 @@ export default class StockTransfer extends Model implements MasterDocument {
     this.fromWarehouse = json['FromWarehouse'];
     this.toWarehouse = json['ToWarehouse'];
     this.shipToDefault = json['ShipToCode'];
-    this.salesPersonCode = json['SalesPersonCode']
-    this.contactPerson = json['ContactPerson']
+    this.shipToDefault = json['ShipToDefault'];
+    this.contactPerson = json['ContactPersonCode']
     this.address = json['Address']
     this.reference1 = json['Reference1']
     this.journalMemo = json['JournalMemo']
     this.documentStatus = json['DocumentStatus']
     this.contactPersonList = json['contactPersonList'];
-    this.shippingList = json['shippingType'];
+    this.shippingList = json['shippingList'];
     this.priceList = json['PriceList']
+    this.priceLists = json['PriceList']
+    this.salesPersonCode = json["SalesPersonCode"]
+    this.salePersonCode = json['SalesPersonCode']
+    this.distributionRule = json['DistributionRule']
+    this.distributionRule2 = json['DistributionRule2']
+    this.shippingType =  json['series']
   }
 
   toJson(update: boolean) {
@@ -144,6 +150,7 @@ export default class StockTransfer extends Model implements MasterDocument {
       DocCurrency: json["docCurrency"],
       DocRate: json["docRate"],
       Comments: json["comments"],
+      JournalMemo: json['journalMemo'],
       // Serie: json["serie"],
       // Series: json["Series"],
 
@@ -155,8 +162,9 @@ export default class StockTransfer extends Model implements MasterDocument {
       FromWarehouse: json['fromWarehouse'],
       ToWarehouse: json['toWarehouse'],
       ShipToCode: json['shipToDefault'],
-      ContactPerson: json['contactPerson'],
-      SalesPersonCode: json['SalesPersonCode']
+      ContactPerson: json['contactPersonCode'],
+      SalesPersonCode: json['salePersonCode'],
+      PriceList: json['priceList']
     };
   }
 

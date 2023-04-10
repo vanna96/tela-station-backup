@@ -2,7 +2,7 @@ import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import MUISelect from "@/components/selectbox/MUISelect";
-import { ContactEmployee } from "@/models/BusinessParter";
+import { yee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
 import Department from "@/models/Department";
 import Branch from "@/models/Branch";

@@ -23,7 +23,8 @@ export default class BusinessPartner extends Model {
     defaultAccount?: string | null | undefined;
     defaultBranch?: string | null | undefined;
     defaultBankCode?: string | null | undefined;
-    currentBalance?: number | null | undefined;;
+    currentBalance?: number | null | undefined;
+    priceLists: string | null | undefined;
     deliveryNoteBalance?: number | null | undefined;;
     openOrderBalance?: number | null | undefined;;
     vatGroup?: string | null | undefined;
@@ -74,6 +75,7 @@ export default class BusinessPartner extends Model {
         this.bpAddress = json?.BPAddresses?.map((e: any) => new BPAddress(e));
         this.contactEmployee = json?.ContactEmployees?.map((e: any) => new ContactEmployee(e));
         this.bpPaymentMethod = [];
+        this.priceLists = json?.PriceListNum;
     }
 
 

@@ -22,6 +22,12 @@ import VatGroup from "@/components/selectbox/VatGroup";
 import BuyerSelect from "@/components/selectbox/buyer";
 import Item from "./../../../../models/Item";
 import { documentStatusList } from "@/constants";
+import WarehouseSelect from "@/components/selectbox/Warehouse";
+import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRepository";
+import UOMSelect from "@/components/selectbox/UnitofMeasurment";
+import DistributionRule from "@/models/DistributionRule";
+import DistributionRuleModal from "@/components/modal/DistributionRuleModal";
+import DistributionRuleSelect from "@/components/selectbox/DistributionRule";
 
 interface ContentFormProps {
   handlerAddItem: () => void;
@@ -124,12 +130,58 @@ export default function ContentForm({
         },
       },
 
+      // {
+      //   accessorKey: "unitPrice",
+      //   header: "Item Cost",
+      //   Cell: ({ cell }: any) => {
+      //     return <MUITextField
+      //       startAdornment={'USD'}
+      //       type="number"
+      //       disabled
+      //       name="UnitPrice"
+      //       error={(cell.getValue() as number) <= 0}
+      //       value={cell.getValue()}
+      //       onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
+      //     />;
+      //   },
+      // },
+      {
+        accessorKey: "uomEntry",
+        header: "UoM Code",
+        Cell: ({ cell }: any) => (
+          <UOMSelect
+            value={cell.getValue()}
+            name="uomEntry"
+            onChange={(event) =>
+              handlerChangeInput(
+                event,
+                cell?.row?.original,
+                "uomEntry"
+              )
+            }
+          />
+        ),
+      },
+
+      // {
+      //   accessorKey: "uomCode",
+      //   header: "UoM Name",
+      //   Cell: ({ cell }: any) => (
+      //     <MUITextField
+      //       disabled
+      //       value={
+      //         new UnitOfMeasurementRepository().find(cell.getValue())?.Name
+      //       }
+      //     />
+      //   ),
+      // },
+
       {
         accessorKey: "fromWarehouseCode",
         header: "From Warehouse",
         Cell: ({ cell }: any) => {
           return (
-            <MUITextField
+            <WarehouseSelect
               value={cell.getValue()}
               name="fromWarehouseCode"
               onChange={(event) =>
@@ -145,29 +197,47 @@ export default function ContentForm({
       },
 
       {
-        accessorKey: "warehouseCode",
-        header: "To Warehouse",
+        accessorKey: "distributionRule",
+        header: "Department",
         Cell: ({ cell }: any) => {
           return (
-            <MUITextField
+            <DistributionRuleSelect
               value={cell.getValue()}
-              name="warehouseCode"
+              name="distributionRule"
               onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "warehouseCode")
-              }
-            />
-          );
-        },
+                handlerChangeInput(event, cell?.row?.original, "distributionRule")
+              } />
+          )
+        }
       },
 
       {
-        accessorKey: "department",
-        header: "Department",
-      },
-      {
-        accessorKey: "lineofBusiness",
+        accessorKey: "distributionRule2",
         header: "Line of Business",
+        Cell: ({ cell }: any) => {
+          return (
+            <DistributionRuleSelect
+              value={cell.getValue()}
+              name="distributionRule2"
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "distributionRule2")
+              } />
+          )
+        }
       },
+      // {
+      //   accessorKey: "department",
+      //   header: "Department",
+      // },
+      // {
+      //   accessorKey: "branch",
+      //   header: "Branch",
+      // },
+      // {
+      //   accessorKey: "productline",
+      //   header: "Product Line",
+      // },
+
     ],
     []
   );
@@ -234,8 +304,8 @@ export default function ContentForm({
               Sales Employee
             </label>
             <BuyerSelect
-              onChange={(e) => handlerChange("salesPersonCode", e.target.value)}
-              value={data?.salesPersonCode}
+              onChange={(e) => handlerChange("salePersonCode", e.target.value)}
+              value={data?.salePersonCode}
               name="SalesPersonCode"
             />
             <div className="flex flex-col gap-1 text-sm">
@@ -250,9 +320,9 @@ export default function ContentForm({
                   fullWidth
                   name="journalMemo"
                   className="w-full "
-                  value={data?.journalMemo}
-                  defaultValue={"Stock Transfers - " + data?.cardCode ?? ""}
-                  onChange={(e) => handlerChange("journalMemo", e.target.value)}
+                  // value={data?.journalMemo}
+                  value={"Stock Transfers - " + data?.cardCode ?? ""}
+                  onChange={(e) => handlerChange("cardCode", e.target.value)}
                 />
               </div>
             </div>
@@ -263,7 +333,7 @@ export default function ContentForm({
         <div className="flex justify-between">
           <div className="w-full gap-3">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              {" "}
+
               Remarks
             </label>
             <TextField
