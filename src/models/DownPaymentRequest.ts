@@ -132,7 +132,8 @@ export default class PurchaseDownPayment extends Model implements MasterDocument
   accountNameD?: string;
   numberOfInstallments?: string;
   downPaymentType?: string
-
+  accountCode?: string | undefined;
+  accountName?: string | undefined;
   
   constructor(json: any) {
     super();
@@ -181,6 +182,8 @@ export default class PurchaseDownPayment extends Model implements MasterDocument
     this.transportationCode = json['TransportationCode'];
     this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
     this.downPaymentType = json['DownPaymentType']
+    this.accountCode = json['AccountCode'];
+    this.accountName = json['AccountName'];
   }
   toJson(update: boolean) {
     throw new Error('Method not implemented.');
@@ -270,7 +273,8 @@ export default class PurchaseDownPayment extends Model implements MasterDocument
       "Remarks": json['remarks'],
       "AttachmentEntry": json['attachmentEntry'],
       "PaymentGroupCode": json['paymentGroupCode'],
-      // "Series": json['series'],
+    "AccountCode": json["accountCode"],
+    "AccountName": json["accountName"],
       "PaymentMethod": json['paymentMethod'],
       "TransportationCode": json['transportationCode'],
       "Project": json['project'],
@@ -303,7 +307,7 @@ export class PurchaseDownPaymentDocumentLine extends Model implements DocumentLi
   lineTotal?: string | undefined;
   requiredDate?: string | undefined
   shipDate?: string | undefined;
-  accountCode?: number | undefined;
+  accountCode?: string | undefined;
   accountName?: string | undefined;
   blanketAgreementNumber?: string | undefined;
   discountPercent?: number;
@@ -366,9 +370,6 @@ export class PurchaseDownPaymentDocumentLine extends Model implements DocumentLi
  
       delete line.ItemCode;
       delete line.UnitPrice;
-      delete line.AccountCode;
-      delete line.ItemDescription;
-      delete line.AccountName
     }
 
     return line;

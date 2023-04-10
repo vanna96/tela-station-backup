@@ -12,7 +12,7 @@ import { getValueDocumentStatus } from '@/constants';
 export interface BinlocationProps {
   id: any;
   absEntry?: any;
-  warehouse?: string;
+  warehouse?: number;
   binCode?: boolean;
   inactive?: string;
   sublevel1?: string;
@@ -38,7 +38,7 @@ export interface BinlocationProps {
 export default class Binlocation extends Model {
   id: any;
   absEntry?: any;
-  warehouse?: string;
+  warehouse?: number;
   binCode?: boolean;
   inactive?: string;
   sublevel1?: string;
@@ -95,7 +95,7 @@ export default class Binlocation extends Model {
     return {
       "AbsEntry": json['absEntry'],
       "SpecificItem": json['specificItem'],
-      "Warehouse": json['Warehouse'],
+      "Warehouse": json['warehouse'],
       "RestrictionReason": json['restrictionReason'],
       "SpecificUoMGroup": json['specificUoMGroup'],
       "BatchRestrictions": json['batchRestrictions'],
@@ -124,7 +124,7 @@ export default class Binlocation extends Model {
       "AbsEntry": json['absEntry'],
       "SpecificUoMGroup": json['specificUoMGroup'],
       "SpecificItem": json['specificItem'],
-      "Warehouse": json['Warehouse'],
+      "Warehouse": json['warehouse'],
       "RestrictionReason": json['restrictionReason'],
       "BatchRestrictions": json['batchRestrictions'],
       "BinCode": json['binCode'],

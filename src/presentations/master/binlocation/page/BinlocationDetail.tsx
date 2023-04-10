@@ -53,7 +53,7 @@ class BinlocationDetail extends Component<any, any> {
         let warehouse = data;
         warehouse as Binlocation;
         if ("") {
-          
+
         } else {
           this.setState({ ...warehouse, loading: false })
         }
@@ -71,13 +71,11 @@ class BinlocationDetail extends Component<any, any> {
     return (
       <div className='w-full h-full flex flex-col p-4 gap-4'>
         <DocumentHeaderComponent data={this.state} />
-
         <Modal open={this.state.isError} title='Oop' onClose={() => { }} onOk={() => console.log(this.props.history.goBack())}>
           <span>
             {this.state?.message}
           </span>
         </Modal>
-
         {this.state.loading ? <div className='grow flex justify-center items-center'>
           <CircularProgress />
         </div> :
@@ -119,9 +117,7 @@ class BinlocationDetail extends Component<any, any> {
               </Taps>
             </div>
           </>)
-
         }
-
       </div>
     )
   }
@@ -146,13 +142,14 @@ function General(props: any) {
     </div>
     <div className='flex flex-col gap-2'>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Minimun Quantity</span> <span className='col-span-2 font-medium'>: {data?.minimunQty || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Maximun Quantity</span> <span className='col-span-2 font-medium'>: {data?.maximunQty??"N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Maximun Quantity</span> <span className='col-span-2 font-medium'>: {data?.maximunQty ?? "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Maximun Weight</span> <span className='col-span-2 font-medium'>: {data.maximunWeight || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Restricted Item Type</span> <span className='col-span-2 font-medium'>: {data?.restrictedItemType || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Restricted UoM Type</span> <span className='col-span-2 font-medium'>: {data.restrictedUoMType || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Batch Restriction</span> <span className='col-span-2 font-medium'>: {data.batchRestrictions || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Transaction Restriction</span> <span className='col-span-2 font-medium'>: {data.restrictedTransType || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Item Group</span> <span className='col-span-2 font-medium'>: {data.specificItemGroup || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Reason</span> <span className='col-span-2 font-medium'>: {data.restrictionReason || "N/A"}</span></div>
 
     </div>
   </div>

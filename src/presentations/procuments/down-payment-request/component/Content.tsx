@@ -144,6 +144,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             value={cell.getValue()}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
             category="InputTax"
+            name="VatGroup"
           />;
         },
       },
@@ -218,6 +219,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <MUIDatePicker
             // disabled={true}
+            name="ShipDate"
             value={cell.getValue()}
             onChange={(event) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'shipDate')}
           />;
@@ -231,7 +233,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           return (
             <AccountTextField
               value={cell.getValue()}
-              name="AccountNo"
+              name="AccountCode"
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "accountCode")
               }
@@ -243,7 +245,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         accessorKey: "accountName",
         header: "	G/L Account Name", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField value={cell.getValue()} />;
+          return <MUITextField name="AccountName" value={cell.getValue()} />;
         },
       },
     {
@@ -254,6 +256,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             value={cell.getValue()}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'purchaseVatGroup')}
             category="InputTax"
+            name="VatGroup"
           />;
         },
       },
