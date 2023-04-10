@@ -12,8 +12,11 @@ import Heading from "../components/Heading";
 import BussinessPartnersRepository from "@/services/actions/bussinessPartnerRepositorys";
 import General from "../components/General";
 import ContactPerson from "../components/ContactPersons";
-import Address from '../components/Address';
+import Address from "../components/Address";
 import PaymentTerm from "../components/PaymentTerm";
+import PaymentRun from "../components/PaymentRun";
+import Accounting from "../components/Accounting";
+import Remark from "../components/Remarks";
 class Supplier extends CoreFormDocument {
   constructor(props: any) {
     super(props);
@@ -144,8 +147,23 @@ class Supplier extends CoreFormDocument {
             handlerChange={(key, value) => this.handlerChange(key, value)}
             data={this.state}
           />
-           <PaymentTerm
+          <PaymentTerm
             handlerChange={(key, value) => this.handlerChange(key, value)}
+            data={this.state}
+          />
+          <PaymentRun
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            data={this.state}
+          />
+          <Accounting
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            data={this.state}
+            handlerOpenAccount={() => this.handlerOpenAccount()}
+            handlerOpenVendor={() => {
+              this.handlerOpenVendor("customer");
+            }}
+          />
+           <Remark
             data={this.state}
           />
           <div className="sticky w-full bottom-4  mt-2">

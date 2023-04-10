@@ -1,16 +1,14 @@
 import FormCard from "@/components/card/FormCard";
-import MUIDatePicker from "@/components/input/MUIDatePicker";
+import DistributionRuleTextField from "@/components/input/DimensionTextField";
 import MUITextField from "@/components/input/MUITextField";
 import BranchSelect from "@/components/selectbox/Branch";
-import BuyerSelect from "@/components/selectbox/Buyer";
 import DepartmentSelect from "@/components/selectbox/Department";
-import MUISelect from "@/components/selectbox/MUISelect";
 import ManagerSelect from "@/components/selectbox/Manager";
 import PositionSelect from "@/components/selectbox/Position";
 import UsersSelect from "@/components/selectbox/UserCode";
+import BuyerSelect from "@/components/selectbox/buyer";
 import { ContactEmployee } from "@/models/BusinessParter";
 import { Checkbox } from "@mui/material";
-import TextField from "@mui/material/TextField";
 
 export interface IHeadingFormProps {
   //   handlerOpenVendor: () => void;
@@ -106,6 +104,7 @@ export default function Heading({
               <div className="">
                 <UsersSelect
                   value={data?.applicationUserID}
+                  name="ApplicationUserID"
                   onChange={(e) =>
                     handlerChange("applicationUserID", e.target.value)
                   }
@@ -124,12 +123,20 @@ export default function Heading({
               />
             </div>
           </div>
-          <MUITextField
-              label="Cost Center"
-              value={data?.costCenterCode}
-              name="CostCenterCode"
-              onChange={(e: any) => handlerChange("costCenterCode", e.target.value)}
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Cost Center
+              </label>
+              <DistributionRuleTextField
+                value={data?.costCenterCode}
+                onChange={(e) =>
+                  handlerChange("costCenterCode", e.target.value)
+                }
+                inWhichNum={1}
+              />
+            </div>
+          </div>
         </div>
         <div className="flex flex-col gap-2 mt-2">
           <div className="grid grid-cols-2 gap-3">

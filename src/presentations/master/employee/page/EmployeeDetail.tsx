@@ -3,23 +3,21 @@ import React, { Component, useEffect } from "react";
 import Taps from "@/components/button/Taps";
 import Modal from "@/components/modal/Modal";
 import { CircularProgress } from "@mui/material";
-import BackButton from "@/components/button/BackButton";
 import EmployeeRepository from "@/services/actions/employeeRepository";
 import Employees from "@/models/Employee";
 import DocumentHeaderComponent from "@/components/DocumenHeaderComponent";
-import BusinessPartner, { ContactEmployee } from "@/models/BusinessParter";
 import { dateFormat } from "../../../../utilies/index";
 import BuyerRepository from "../../../../services/actions/buyerRepository";
-import BusinessPartnerRepository from "@/services/actions/bussinessPartnerRepository";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import DepartmentRepository from "@/services/actions/departmentRepository";
 import BranchRepository from "@/services/actions/branchRepository";
-import ManagerRepository from "@/services/actions/ManagerRepository";
 import UsersRepository from "@/services/actions/usersRepository";
 import CountryRepository from "@/services/actions/countryReporitory";
 import TerminationReasonRepository from "@/services/actions/terminationReason";
 import StatusRepository from "@/services/actions/statusRepository";
 import PositionRepository from "@/services/actions/positionRepository";
+import OwnerRepository from "@/services/actions/ownerRepository";
+import DistributionRuleRepository from "@/services/actions/distributionRulesRepository";
 
 class EmployeeDetail extends Component<any, any> {
   constructor(props: any) {
@@ -130,13 +128,13 @@ class EmployeeDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500 ">Manager</span>
                   <span className="w-8/12 font-medium">
-                  : {new ManagerRepository().find(this.state.manager)?.firstName ?? "N/A"}
+                  : {new OwnerRepository().find(this.state.manager)?.name ?? "N/A"}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500 ">User Code</span>
                   <span className="w-8/12 font-medium">
-                  : {new UsersRepository().find(this.state.applicationUserID)?.UserCode ?? "N/A"}
+                  : {new UsersRepository().find(this.state.applicationUserID)?.name ?? "N/A"}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -148,7 +146,7 @@ class EmployeeDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500 ">Cost Center</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.costCenter ?? "N/A"}
+                  : {new DistributionRuleRepository().find(this.state.costCenterCode)?.FactorDescription ?? "N/A"}
                   </span>
                 </div>
               </div>

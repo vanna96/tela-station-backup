@@ -3,7 +3,8 @@ import MUISelect from "./MUISelect";
 import { useQuery } from "react-query";
 import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-
+import { log } from "console";
+import UsersRepository from '../../services/actions/usersRepository';
 interface UsersProps<T = unknown> {
     name?: string,
     defaultValue?: any,
@@ -14,16 +15,15 @@ interface UsersProps<T = unknown> {
 
 function UsersSelect(props: UsersProps) {
 
-    const { data, isLoading }: any = useQuery({
-        queryKey: ["users"],
-        queryFn: () => InitializeData.users(),
-        staleTime: Infinity,
-    });
+    const { data, isLoading }: any = useQuery({ queryKey: ['users'], queryFn: () => new UsersRepository().get(), staleTime: Infinity })
+
+    console.log(data );
+    
 
     return <MUISelect
         {...props}
-        aliaslabel="InternalKey"
-        aliasvalue="UserCode"
+        aliaslabel="UserCode"
+        aliasvalue="InternalKey"
         loading={isLoading}
         items={data}
     />

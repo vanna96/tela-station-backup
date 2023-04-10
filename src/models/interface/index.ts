@@ -32,3 +32,6 @@ export interface DocumentLine {
     accountName?: string;
     // accountCode?: number;
 }
+export interface ContactEmployees {
+    name?: string;
+}

@@ -2,7 +2,7 @@ import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import BranchSelect from "@/components/selectbox/Branch";
-import BuyerSelect from "@/components/selectbox/Buyer";
+import BuyerSelect from "@/components/selectbox/buyer";
 import DepartmentSelect from "@/components/selectbox/Department";
 import IndustrySelect from "@/components/selectbox/Industry";
 import MUISelect from "@/components/selectbox/MUISelect";

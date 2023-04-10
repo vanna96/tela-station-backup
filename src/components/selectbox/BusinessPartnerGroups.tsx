@@ -1,11 +1,9 @@
 import { useMemo } from "react";
 import MUISelect from "./MUISelect";
 import { useQuery } from "react-query";
-import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import BranchRepository from "@/services/actions/branchRepository";
-
-interface BranchProps<T = unknown> {
+import BusinessPartnerGroupsRepository from "@/services/actions/businessPartnerGroups";
+interface BusinessPartnerGroupsProps<T = unknown> {
     name?: string,
     defaultValue?: any,
     value?: any,
@@ -13,9 +11,9 @@ interface BranchProps<T = unknown> {
 }
 
 
-function BranchSelect(props: BranchProps) {
+function BusinessPartnerGroupsSelect(props: BusinessPartnerGroupsProps) {
 
-    const { data, isLoading }: any = useQuery({ queryKey: ['branch'], queryFn: () => new BranchRepository().get(), staleTime: Infinity })
+    const { data, isLoading }: any = useQuery({ queryKey: ['businessPartnerGroups'], queryFn: () => new BusinessPartnerGroupsRepository().get(), staleTime: Infinity })
 
 
     return <MUISelect
@@ -27,4 +25,4 @@ function BranchSelect(props: BranchProps) {
     />
 }
 
-export default BranchSelect;
+export default BusinessPartnerGroupsSelect;

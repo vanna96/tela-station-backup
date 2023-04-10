@@ -33,6 +33,7 @@ export default class BuyerRepository extends Repository<Buyers> {
     return new Buyers(Buyer.find((e: any) => e?.SalesEmployeeCode === code) ?? {});
   }
 
+
   post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<Buyers> {
     throw new Error("Method not implemented.");
   }

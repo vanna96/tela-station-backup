@@ -2,7 +2,7 @@ import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import BranchSelect from "@/components/selectbox/Branch";
-import BuyerSelect from "@/components/selectbox/Buyer";
+import BuyerSelect from "@/components/selectbox/buyer";
 import DepartmentSelect from "@/components/selectbox/Department";
 import MUISelect from "@/components/selectbox/MUISelect";
 import ManagerSelect from "@/components/selectbox/Manager";
@@ -11,6 +11,8 @@ import UsersSelect from "@/components/selectbox/UserCode";
 import { ContactEmployee } from "@/models/BusinessParter";
 import { Checkbox } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import BusinessPartnerGroupsSelect from "@/components/selectbox/BusinessPartnerGroups";
+import CurrencySelect from "@/components/selectbox/Currency";
 
 export interface IHeadingFormProps {
   //   handlerOpenVendor: () => void;
@@ -74,21 +76,21 @@ export default function Heading({
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Branch
+                Group
               </label>
-              <BranchSelect
-                value={data?.branch}
-                onChange={(e) => handlerChange("branch", e.target.value)}
+              <BusinessPartnerGroupsSelect
+                value={data?.groupCode}
+                onChange={(e) => handlerChange("groupCode", e.target.value)}
               />
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Manager
+                Currency
               </label>
               <div className="">
-                <ManagerSelect
-                  value={data?.manager}
-                  onChange={(e) => handlerChange("manager", e.target.value)}
+                <CurrencySelect
+                  value={data?.currency}
+                  onChange={(e) => handlerChange("currency", e.target.value)}
                 />
               </div>
             </div>

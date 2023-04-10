@@ -1,23 +1,10 @@
 import FormCard from "@/components/card/FormCard";
-import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
-import BranchSelect from "@/components/selectbox/Branch";
-import BuyerSelect from "@/components/selectbox/Buyer";
-import CountrySelect from "@/components/selectbox/Country";
-import DepartmentSelect from "@/components/selectbox/Department";
-import EmailGroupSelect from "@/components/selectbox/EmailGroup";
-import IndustrySelect from "@/components/selectbox/Industry";
+import HolidaySelect from "@/components/selectbox/Holidays";
 import MUISelect from "@/components/selectbox/MUISelect";
-import ManagerSelect from "@/components/selectbox/Manager";
-import PositionSelect from "@/components/selectbox/Position";
-import ShippingType from "@/components/selectbox/ShippingType";
-import TerritorySelect from "@/components/selectbox/Territory";
-import UsersSelect from "@/components/selectbox/UserCode";
-import { ContactEmployee } from "@/models/BusinessParter";
-import { Checkbox } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import PaymentTerm from "@/components/selectbox/PaymentTerm";
 import PriceListSelect from "@/components/selectbox/PriceList";
+import PrioritySelect from "@/components/selectbox/Priority";
 
 export interface IPaymentTermProps {
   //   handlerOpenVendor: () => void;
@@ -157,9 +144,7 @@ export default function PaymentTerms({
               label="Bank Name"
               value={data?.houseBank}
               name="HouseBank"
-              onChange={(e: any) =>
-                handlerChange("houseBank", e.target.value)
-              }
+              onChange={(e: any) => handlerChange("houseBank", e.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -167,17 +152,13 @@ export default function PaymentTerms({
               label="Bank Code"
               value={data?.bankCode}
               name="BankCode"
-              onChange={(e: any) =>
-                handlerChange("bankCode", e.target.value)
-              }
+              onChange={(e: any) => handlerChange("bankCode", e.target.value)}
             />
             <MUITextField
               label="Account"
               value={data?.accountNo}
               name="AccountNo"
-              onChange={(e: any) =>
-                handlerChange("accountNo", e.target.value)
-              }
+              onChange={(e: any) => handlerChange("accountNo", e.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -221,17 +202,13 @@ export default function PaymentTerms({
               label="IBAN"
               value={data?.iBAN}
               name="IBAN"
-              onChange={(e: any) =>
-                handlerChange("iBAN", e.target.value)
-              }
+              onChange={(e: any) => handlerChange("iBAN", e.target.value)}
             />
             <MUITextField
               label="Man Date ID"
               value={data?.mandateID}
               name="MandateID"
-              onChange={(e: any) =>
-                handlerChange("mandateID", e.target.value)
-              }
+              onChange={(e: any) => handlerChange("mandateID", e.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -243,9 +220,52 @@ export default function PaymentTerms({
                 handlerChange("signatureDate", e.target.value)
               }
             />
-          
           </div>
         </div>
+        <div className="flex flex-col gap-2 mt-2">
+          <div className="grid grid-cols-2 gap-3">
+            <MUITextField
+              label="Average Delay"
+              value={data?.avarageLate}
+              name="AvarageLate"
+              onChange={(e: any) =>
+                handlerChange("avarageLate", e.target.value)
+              }
+            />
+             <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Priority
+              </label>
+              <div className="">
+                <PrioritySelect
+                  value={data?.priority}
+                  onChange={(e) => handlerChange("priority", e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <MUITextField
+              label="Default IBAN"
+              value={data?.iBAN}
+              name="IBAN"
+              onChange={(e: any) =>
+                handlerChange("iBAN", e.target.value)
+              }
+            />
+             <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Holiday
+              </label>
+              <div className="">
+                <HolidaySelect
+                  value={data?.priority}
+                  onChange={(e) => handlerChange("priority", e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          </div>
       </FormCard>
     </>
   );

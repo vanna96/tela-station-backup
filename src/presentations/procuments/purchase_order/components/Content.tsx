@@ -16,7 +16,7 @@ import Owner from "@/components/selectbox/Owner";
 import AccounttingForm from "./Accountting";
 import AccountTextField from "../../../../components/input/AccountTextField";
 import VatGroup from "../../../../components/selectbox/VatGroup";
-import BuyerSelect from "@/components/selectbox/Buyer";
+import BuyerSelect from "@/components/selectbox/buyer";
 import SalePerson from "@/components/selectbox/SalePerson";
 
 export interface ContentFormProps {

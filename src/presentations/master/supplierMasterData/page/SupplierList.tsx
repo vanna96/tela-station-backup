@@ -53,7 +53,7 @@ export default function SuppilerLists() {
                 Cell: (cell: any) => (
                     <div className="flex gap-4">
                         <button onClick={() => {
-                            route('/master-data/suppiler/' + cell.row.original.id, { state: cell.row.original })
+                            route('/master-data/supplier/' + cell.row.original.id, { state: cell.row.original })
                         }}>
                             <VisibilityIcon fontSize="small" className="text-gray-600 " />
                         </button>

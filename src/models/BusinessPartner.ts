@@ -1,12 +1,13 @@
 import { dateFormat } from '../utilies';
 import { ContactEmployee } from './BusinessParter';
 import Model from './Model';
-import { MasterDocument, DocumentLine } from './interface/index';
+import { MasterDocument, DocumentLine, ContactEmployees } from './interface/index';
 import moment from 'moment';
 let index = 1;
 export interface BusinessPatnersProps {
     id: any;
     employeeID?: number;
+    currency?: number;
     cardCode?: number;
     cardName?: string;
     cardType?: string;
@@ -18,8 +19,8 @@ export interface BusinessPatnersProps {
     openOrdersBalance?: number;
     openDeliveryNotesBalance?: number;
     currentAccountBalance?: number;
-    Phone1?: number;
-    Phone2?: number;
+    phone1?: number;
+    phone2?: number;
     cellular?: number;
     fax?: number;
     website?: string;
@@ -101,8 +102,15 @@ export interface BusinessPatnersProps {
     downPaymentInterimAccount?: number;
     downPaymentClearAct?: number;
     planningGroup?: string;
-}
+    paymentBlockDescription?: string;
+    emailAddress?: string;
+    contactEmployees: BusinessPartnersContactEmployeesProps[];
+    items: BusinessPartnersContactEmployeesProps[];
 
+}
+export interface BusinessPartnersContactEmployeesProps {
+    name?: string | undefined;
+}
 
 
 export default class BusinessPatners extends Model {
@@ -117,12 +125,12 @@ export default class BusinessPatners extends Model {
     cardForeignName?: string;
     federalTaxID?: number;
     series?: string;
-
+    currency?: number;
     openOrdersBalance?: number;
     openDeliveryNotesBalance?: number;
     currentAccountBalance?: number;
-    Phone1?: number;
-    Phone2?: number;
+    phone1?: number;
+    phone2?: number;
     cellular?: number;
     fax?: number;
     website?: string;
@@ -204,6 +212,9 @@ export default class BusinessPatners extends Model {
     downPaymentInterimAccount?: number;
     downPaymentClearAct?: number;
     planningGroup?: string;
+    paymentBlockDescription?: string;
+    emailAddress?: string;
+    items: BusinessPartnersContactEmployeesProps[];
 
     constructor(json: any) {
         super();
@@ -217,12 +228,15 @@ export default class BusinessPatners extends Model {
         this.cardForeignName = json['CardForeignName'];
         this.federalTaxID = json['FederalTaxID'];
         this.series = json['Series'];
+        this.paymentBlockDescription = json['PaymentBlockDescription'];
+        this.currency = json['Currency'];
+        this.emailAddress = json['EmailAddress'];
 
         this.openOrdersBalance = json['OpenOrdersBalance'];
         this.openDeliveryNotesBalance = json['OpenDeliveryNotesBalance'];
         this.currentAccountBalance = json['CurrentAccountBalance'];
-        this.Phone1 = json['Phone1'];
-        this.Phone2 = json['Phone2'];
+        this.phone1 = json['Phone1'];
+        this.phone2 = json['Phone2'];
         this.cellular = json['Cellular'];
         this.fax = json['Fax'];
         this.website = json['Website'];
@@ -306,6 +320,7 @@ export default class BusinessPatners extends Model {
         this.downPaymentInterimAccount = json['DownPaymentInterimAccount'];
         this.downPaymentClearAct = json['DownPaymentClearAct'];
         this.planningGroup = json['PlanningGroup'];
+        this.items = json['ContactEmployees']?.map((e: any) => new BusinessPartnersContactEmployeesProps(e));
 
     }
     toJson(update: boolean) {
@@ -325,6 +340,9 @@ export default class BusinessPatners extends Model {
             "CardForeignName": json['cardForeignName'],
             "FederalTaxID": json['federalTaxID'],
             "Series": json['series'],
+            "PaymentBlockDescription": json['paymentBlockDescription'],
+            "Currency": json['currency'],
+            "EmailAddress": json['emailAddress'],
 
             "OpenOrdersBalance": json['openOrdersBalance'],
             "OpenDeliveryNotesBalance": json['openDeliveryNotesBalance'],
@@ -412,6 +430,7 @@ export default class BusinessPatners extends Model {
             "DownPaymentInterimAccount": json['downPaymentInterimAccount'],
             "DownPaymentClearAct": json['downPaymentClearAct'],
             "PlanningGroup": json['planningGroup'],
+            "ContactEmployees": json['items'].map((e: any) => BusinessPartnersContactEmployeesProps.toCreate(e, json['cardCode']))
 
         };
     }
@@ -428,6 +447,8 @@ export default class BusinessPatners extends Model {
             "CardForeignName": json['cardForeignName'],
             "FederalTaxID": json['federalTaxID'],
             "Series": json['series'],
+            "PaymentBlockDescription": json['paymentBlockDescription'],
+            "Currency": json['currency'],
             "OpenOrdersBalance": json['openOrdersBalance'],
             "OpenDeliveryNotesBalance": json['openDeliveryNotesBalance'],
             "CurrentAccountBalance": json['currentAccountBalance'],
@@ -457,7 +478,7 @@ export default class BusinessPatners extends Model {
             "firstName": json['firstName'],
             "LastName": json['lastName'],
             "MiddleName": json['middleName'],
-            "title": json['title'],
+            "Title": json['title'],
             "Position": json['position'],
             "Address": json['address'],
             "MobilePhone": json['mobilePhone'],
@@ -514,9 +535,30 @@ export default class BusinessPatners extends Model {
             "DownPaymentInterimAccount": json['downPaymentInterimAccount'],
             "DownPaymentClearAct": json['downPaymentClearAct'],
             "PlanningGroup": json['planningGroup'],
+            "EmailAddress": json['emailAddress'],
+            "ContactEmployees": json['items'].map((e: any) => BusinessPartnersContactEmployeesProps.toCreate(e, json['cardCode']))
         };
     }
 
 
+}
+export class BusinessPartnersContactEmployeesProps extends Model implements ContactEmployees {
+    name?: string | undefined;
+
+    constructor(json: any) {
+        super();
+        this.name = json['Name;']
+    }
+    toJson(update: boolean) {
+        throw new Error('Method not implemented.');
+      }
+      public static toCreate(json: any, type: any) {
+
+        let line = {
+            "Name": json["name"],
+
+        };
+        return line;
+    }
 }
 

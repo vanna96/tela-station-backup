@@ -1,11 +1,9 @@
 import { useMemo } from "react";
 import MUISelect from "./MUISelect";
 import { useQuery } from "react-query";
-import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import BranchRepository from "@/services/actions/branchRepository";
-
-interface BranchProps<T = unknown> {
+import CurrencyRepository from "@/services/actions/currencyRepository";
+interface CurrencyProps<T = unknown> {
     name?: string,
     defaultValue?: any,
     value?: any,
@@ -13,9 +11,8 @@ interface BranchProps<T = unknown> {
 }
 
 
-function BranchSelect(props: BranchProps) {
-
-    const { data, isLoading }: any = useQuery({ queryKey: ['branch'], queryFn: () => new BranchRepository().get(), staleTime: Infinity })
+function CurrencySelect(props: CurrencyProps) {
+    const { data, isLoading }: any = useQuery({ queryKey: ['currency'], queryFn: () => new CurrencyRepository().get(), staleTime: Infinity })
 
 
     return <MUISelect
@@ -27,4 +24,4 @@ function BranchSelect(props: BranchProps) {
     />
 }
 
-export default BranchSelect;
+export default CurrencySelect;
