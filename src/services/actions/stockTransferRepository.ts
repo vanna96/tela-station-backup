@@ -1,6 +1,8 @@
 import Repository from "@/astractions/repository";
 import request from "@/utilies/request";
 import StockTransfer from "../../models/StockTransfer";
+import BusinessPartner from "@/models/BusinessParter";
+import BusinessPartnerRepository from "./bussinessPartnerRepository";
 
 export default class StockTransferRepository extends Repository<StockTransfer> {
   url: string = "/StockTransfers";
@@ -22,15 +24,32 @@ export default class StockTransferRepository extends Repository<StockTransfer> {
     return response;
   }
 
-  async find<T>(id: any): Promise<any> {
-    const stockTransfer = await request("GET", `${this.url}(${id})`)
-      .then((res: any) => new StockTransfer(res.data))
-      .catch((e: Error) => {
-        throw new Error(e.message);
-      });
+  // async find<T>(id: any): Promise<any> {
+  //   const stockTransfer = await request("GET", `${this.url}(${id})`)
+  //     .then((res: any) => new StockTransfer(res.data))
+  //     .catch((e: Error) => {
+  //       throw new Error(e.message);
+  //     });
 
-    return StockTransfer;
+  //   return StockTransfer;
+  // }
+
+  async find<T>(id: any): Promise<any> {
+    const purchaseAgreement = await request('GET', `${this.url}(${id})`).then((res: any) => new StockTransfer(res.data))
+      .catch((e: Error) => {
+        throw new Error(e.message)
+      })
+
+    const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.cardCode!);
+    const businessPartner2: BusinessPartner = await new BusinessPartnerRepository().findShipToAddress(purchaseAgreement.cardCode!);
+
+    // purchaseAgreement.email = businessPartner.email;
+    // purchaseAgreement.phone = businessPartner.phone;
+    purchaseAgreement.contactPersonList = businessPartner.contactEmployee ?? [];
+    purchaseAgreement.shippingList = businessPartner2.bpAddress ?? []
+    return purchaseAgreement;
   }
+
 
   async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
     if (isUpdate)

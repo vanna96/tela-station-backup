@@ -91,6 +91,8 @@ export default class StockTransfer extends Model implements MasterDocument {
   distributionRule?: string | undefined;
   distributionRule2?: string | undefined;
   priceLists?: string | undefined;
+  ContactPerson?: string | undefined;
+  shipToCode?: string | undefined;
 
   constructor(json: any) {
     super();
@@ -118,7 +120,8 @@ export default class StockTransfer extends Model implements MasterDocument {
     this.toWarehouse = json['ToWarehouse'];
     this.shipToDefault = json['ShipToCode'];
     this.shipToDefault = json['ShipToDefault'];
-    this.contactPerson = json['ContactPersonCode']
+    this.ContactPerson = json['ContactPersonCode']
+    this.contactPerson = json['ContactPerson']
     this.address = json['Address']
     this.reference1 = json['Reference1']
     this.journalMemo = json['JournalMemo']
@@ -131,7 +134,8 @@ export default class StockTransfer extends Model implements MasterDocument {
     this.salePersonCode = json['SalesPersonCode']
     this.distributionRule = json['DistributionRule']
     this.distributionRule2 = json['DistributionRule2']
-    this.shippingType =  json['series']
+    this.shippingType =  json['shippingList']
+    this.shipToCode = json['ShipToCode']
   }
 
   toJson(update: boolean) {
@@ -230,7 +234,7 @@ export class StockTransferDocumentLine extends Model implements DocumentLine {
 
   public static toCreate(json: any, type: any) {
     let line = {
-      Quantity: json["quantity"],
+      Quantity: parseFloat(json["quantity"]),
       ItemCode: json["itemCode"],
       ItemDescription: json["itemName"],
       // UnitPrice: json["unitPrice"],

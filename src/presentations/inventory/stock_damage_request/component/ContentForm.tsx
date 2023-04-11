@@ -109,7 +109,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           />;
         },
       },
-    
+
       {
         accessorKey: "warehouseCode",
         header: "To Warehouse",
@@ -122,16 +122,16 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           />;
         },
       },
-    
+
       {
         accessorKey: "department",
         header: "Department",
       },
-       {
+      {
         accessorKey: "lineofBusiness",
         header: "Line of Business",
       },
-    
+
       // {
       //   accessorKey: "unitPrice",
       //   header: "Unit Price",
@@ -146,8 +146,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
       //     />;
       //   },
       // },
-    
-     
+
+
     ],
     []
   );
@@ -158,7 +158,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
   return (
     <FormCard title="Content" >
       <div className="col-span-2 data-table gap-3">
-        
+
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
@@ -211,7 +211,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Pick and Pack Remarks</label>
               <TextField
                 size="small"
-              
+
                 name="pickandpackRemarks"
                 className="w-full "
                 defaultValue={data?.pickandpackRemarks}

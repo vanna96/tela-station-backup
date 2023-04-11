@@ -45,7 +45,7 @@ export default class BusinessPartnerRepository extends Repository<BusinessPartne
     }
 
     async findContactEmployee<T>(id: string): Promise<any> {
-        return await request('GET', `${this.url}('${id}')?$select=${['EmailAddress', 'Phone1', 'ContactEmployees'].join(',')}`).then((res: any) => new BusinessPartner(res.data))
+        return await request('GET', `${this.url}('${id}')?$select=${['EmailAddress', 'Phone1', 'ContactEmployees', 'BPAddresses', 'ShipToDefault'].join(',')}`).then((res: any) => new BusinessPartner(res.data))
             .catch((e: Error) => {
                 throw new Error(e.message);
         })

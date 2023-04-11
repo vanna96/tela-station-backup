@@ -38,8 +38,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <div className="">
                 <MUISelect
                   items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
-                  value={data?.contactPersonCode}
+                  onChange={(e) => handlerChange('contactPerson', e.target.value)}
+                  value={data?.contactPerson}
                   aliasvalue="id"
                   aliaslabel="name"
                   name="ContactPerson"
@@ -49,8 +49,11 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
-              <div className="">
+              {edit ? (
+               <div><MUITextField  disabled={edit} label ='' value={data?.shipToCode} name="shipToCode" /></div> 
+              ) : (
                 <MUISelect
+                  disabled={edit}
                   items={data?.series?.filter((e: { addressName: string; }) => e.addressName !== 'Bill To').map((e: BPAddress) => ({
                     addressName: e.addressName,
                     street: e.street,
@@ -65,7 +68,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                   aliaslabel="addressName"
                   name="shipToDefault"
                 />
-              </div>
+              )}
+
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -73,8 +77,9 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Price List</label>
               <div className="">
                 <PriceListSelect
+                  disabled={edit}
                   name="priceLists"
-                  value={data.priceLists} 
+                  value={data.priceLists}
                   onChange={(e: any) => handlerChange('priceLists', e)}
                 />
 
@@ -82,15 +87,31 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To Address</label>
-              <TextField
-                size="small"
-                multiline
-                rows={3}
-                fullWidth
-                name="address"
-                className="w-full "
-                value={getShippingAddress(data.shipToDefault, data.series)}
-              />
+              {edit === data.address ? (
+                <TextField
+                  size="small"
+                  multiline
+                  rows={3}
+                  fullWidth
+                  name="address"
+                  className="w-full "
+                  value={data.address}
+                />
+              ) : (
+                <TextField
+                  disabled={edit}
+                  size="small"
+                  multiline
+                  rows={3}
+                  fullWidth
+                  name="address"
+                  className="w-full "
+                  // value={getShippingAddress(data.shipToDefault, data.series)}
+                  value={data.address}
+
+                />
+              )}
+
             </div>
           </div>
 
@@ -131,7 +152,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                     Posting Date
                   </label>
                   <div className="">
-                    <MUIDatePicker error={data?.message?.includes('DocDate')} value={data.docDate} onChange={(e: any) => handlerChange('docDate', e)} />
+                    <MUIDatePicker disabled={edit} error={data?.message?.includes('DocDate')} value={data.docDate} onChange={(e: any) => handlerChange('docDate', e)} />
                   </div>
                 </div>
 
@@ -196,6 +217,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">From Warehouse</label>
               <div className="">
                 <WarehouseSelect
+                  disabled={edit}
                   // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
                   onChange={(e) => handlerChange('fromWarehouse', e.target.value)}
                   value={data?.fromWarehouse}
@@ -208,6 +230,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">To Warehouse</label>
               <div className="">
                 <WarehouseSelect
+                  disabled={edit}
                   // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
                   onChange={(e) => handlerChange('toWarehouse', e.target.value)}
                   value={data?.toWarehouse}

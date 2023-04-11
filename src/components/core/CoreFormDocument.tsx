@@ -272,7 +272,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             series: record.bpAddress ?? [],
             email: record.email,
             phone: record.phone,
-            items: record.bpAddress ?? [],
             paymentTermType: record.paymentTermTypeCode,
             paymentMethod: record.paymentMethod,
             isOpenProject: false,

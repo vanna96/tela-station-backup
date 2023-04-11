@@ -176,25 +176,25 @@ export default function ContentForm({
       //   ),
       // },
 
-      {
-        accessorKey: "fromWarehouseCode",
-        header: "From Warehouse",
-        Cell: ({ cell }: any) => {
-          return (
-            <WarehouseSelect
-              value={cell.getValue()}
-              name="fromWarehouseCode"
-              onChange={(event) =>
-                handlerChangeInput(
-                  event,
-                  cell?.row?.original,
-                  "fromWarehouseCode"
-                )
-              }
-            />
-          );
-        },
-      },
+      // {
+      //   accessorKey: "fromWarehouseCode",
+      //   header: "From Warehouse",
+      //   Cell: ({ cell }: any) => {
+      //     return (
+      //       <WarehouseSelect
+      //         value={cell.getValue()}
+      //         name="fromWarehouseCode"
+      //         onChange={(event) =>
+      //           handlerChangeInput(
+      //             event,
+      //             cell?.row?.original,
+      //             "fromWarehouseCode"
+      //           )
+      //         }
+      //       />
+      //     );
+      //   },
+      // },
 
       {
         accessorKey: "distributionRule",
@@ -251,6 +251,7 @@ export default function ContentForm({
       <div className="col-span-2 data-table gap-3">
         <MaterialReactTable
           key={tableKey}
+          
           // columns={itemColumns}
           columns={itemColumns}
           data={data?.items ?? []}
@@ -304,6 +305,7 @@ export default function ContentForm({
               Sales Employee
             </label>
             <BuyerSelect
+              disabled={edit}
               onChange={(e) => handlerChange("salePersonCode", e.target.value)}
               value={data?.salePersonCode}
               name="SalesPersonCode"
