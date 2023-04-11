@@ -25,7 +25,9 @@ export default class BusinessPartner extends Model {
     defaultBankCode?: string | null | undefined;
     currentBalance?: number | null | undefined;
     priceLists: string | null | undefined;
-    deliveryNoteBalance?: number | null | undefined;;
+    deliveryNoteBalance?: number | null | undefined;
+    street: string | null | undefined;
+    ;
     openOrderBalance?: number | null | undefined;;
     vatGroup?: string | null | undefined;
     shippingType?: number | null | undefined;;

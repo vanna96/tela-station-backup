@@ -3,6 +3,7 @@ import { BPAddress, ContactEmployee } from "./BusinessParter";
 import Model from "./Model";
 import { MasterDocument, DocumentLine } from "./interface/index";
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
+import ShippingType from './ShippingType';
 
 export interface InternalTransferProps {
   id: any;
@@ -29,11 +30,14 @@ export interface InternalTransferProps {
   signeDate?: string;
   serie: string;
   paymentMethod?: string;
-  shippingType?: string | undefined;
+  shippingType?: BPAddress[];
   items: InternalTransferDocumentLineProps[];
   StockTransferLines: InternalTransferDocumentLineProps[];
   contactPersonList?: ContactEmployee[];
-  shippingList?: BPAddress[];
+  ShippingType? : BPAddress[]
+  shippingList ?: BPAddress[];
+  series?: BPAddress[];
+
 
 }
 
@@ -47,7 +51,7 @@ export interface InternalTransferDocumentLineProps {
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  shippingType?: string | undefined;
+  shippingType?: BPAddress[];
   project?: string | undefined;
   vatGroup?: string | undefined;
 }
@@ -66,12 +70,12 @@ export default class InternalTransfer extends Model implements MasterDocument {
   journalMemo?: string;
   salesPersonCode?: string;
   contactPersonCode?: string;
-  series?: string;
+  // services?: string;
   taxDate?: string;
   address?: string;
   documentStatus?: string;
   serie: string;
-  shippingType?: string | undefined;
+  shippingType?: BPAddress[] ;
   items: InternalTransferDocumentLine[];
   documentowner?: string;
   StockTransferLines?: InternalTransferDocumentLine[];
@@ -82,7 +86,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
   status?: string;
   contactPerson?: string;
   dueDate?: string;
-  shippingList?: BPAddress[];
+  series?: BPAddress[];
   contactPersonList?: ContactEmployee[];
 
 
@@ -111,7 +115,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
       ?.charAt(0);
     this.fromWarehouse = json['FromWarehouse'];
     this.toWarehouse = json['ToWarehouse'];
-    this.shipToDefault = json['ShipToCode'];
+    // this.shipToCode = json['ShipToCode'];
     this.salesPersonCode = json['SalesPersonCode']
     this.contactPerson = json['ContactPerson']
     this.address = json['Address']
@@ -119,7 +123,11 @@ export default class InternalTransfer extends Model implements MasterDocument {
     this.journalMemo = json['JournalMemo']
     this.documentStatus = json['DocumentStatus']
     this.contactPersonList = json['contactPersonList'];
-    this.shippingList = json['shippingList'];
+    this.series = json['series'];
+    this.shippingType = json['shippingType']
+    this.shipToDefault = json['shipToDefault']
+    this.shipToDefault = json['S'];
+
   }
 
   toJson(update: boolean) {
@@ -131,13 +139,14 @@ export default class InternalTransfer extends Model implements MasterDocument {
 
     return {
       CardCode: json['cardCode'],
-      CardName : json['cardName'],
+      CardName: json['cardName'],
       TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       AttachmentEntry: json["attachmentEntry"],
       DocCurrency: json["docCurrency"],
       DocRate: json["docRate"],
       Comments: json["comments"],
+
       // Serie: json["serie"],
       // Series: json["Series"],
 
@@ -150,7 +159,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
       ToWarehouse: json['toWarehouse'],
       ShipToDefault: json['shipToDefault'],
       ContactPerson: json['contactPerson'],
-      SalesPersonCode : json['SalesPersonCode']
+      SalesPersonCode: json['SalesPersonCode']
     };
   }
 
@@ -174,7 +183,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
       ToWarehouse: json['toWarehouse'],
       ShipToCode: json['shipToDefault'],
       ContactPerson: json['contactPerson'],
-      SalesPersonCode : json['salesPersonCode'],
+      SalesPersonCode: json['salesPersonCode'],
       JournalMemo: json['journalMemo']
 
     };
