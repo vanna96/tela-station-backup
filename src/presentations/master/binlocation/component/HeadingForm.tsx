@@ -30,11 +30,11 @@ export default function HeadingForm({ data, handlerChange, edit }: IHeadingFormP
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Warehouse:</label>
-              <WareBinSelect onChange={(e) => handlerChange("warehouse", e?.target.value)} value={data?.warehouse} name="Warehouse" />
+              <WareBinSelect disabled={edit} onChange={(e) => handlerChange("warehouse", e?.target.value)} value={data?.warehouse} name="Warehouse" />
             </div>
             <div>
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Shelf:</label>
-              <ShelfSelect onChange={(e) => handlerChange("sublevel2", e?.target.value)} value={data?.sublevel2} name="Sublevel2" />
+              <ShelfSelect disabled={edit} onChange={(e) => handlerChange("sublevel2", e?.target.value)} value={data?.sublevel2} name="Sublevel2" />
             </div>
           </div>
           <div className="grid grid-cols-1 gap-3">
@@ -53,18 +53,18 @@ export default function HeadingForm({ data, handlerChange, edit }: IHeadingFormP
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Aisle:</label>
-              <AisleSelect onChange={(e) => handlerChange("sublevel1", e?.target.value)} value={data?.sublevel1} name="sublevel1" />
+              <AisleSelect disabled={edit} onChange={(e) => handlerChange("sublevel1", e?.target.value)} value={data?.sublevel1} name="sublevel1" />
             </div>
             <div>
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Level:</label>
 
-              <LevelSelect onChange={(e) => handlerChange("sublevel3", e?.target.value)} value={data?.sublevel3} name="Sublevel3" />
+              <LevelSelect disabled={edit} onChange={(e) => handlerChange("sublevel3", e?.target.value)} value={data?.sublevel3} name="Sublevel3" />
             </div>
           </div>
           <div className="grid grid-cols-1 gap-3">
             <div>
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Description:</label>
-              <MUITextField onChange={(e) => handlerChange("description", e?.target.value ?? "")} value={data?.description} name="Description" />
+              <MUITextField  onChange={(e) => handlerChange("description", e?.target.value ?? "")} value={data?.description} name="Description" />
             </div>
           </div>
         </div>

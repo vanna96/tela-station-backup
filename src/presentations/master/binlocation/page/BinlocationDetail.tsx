@@ -2,24 +2,10 @@ import { withRouter } from '@/routes/withRouter';
 import React, { Component, useEffect } from 'react'
 import PurchaseAgreement from '../../../../models/PurchaseAgreement';
 import Taps from '@/components/button/Taps';
-import MaterialReactTable from 'material-react-table';
-import { useMemo } from 'react';
-import { currencyFormat, dateFormat, fileToBase64 } from '@/utilies';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { CircularProgress } from '@mui/material';
-import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
-import DocumentStatus from '@/constants/documentStatus';
-import { ContactEmployee } from '@/models/BusinessParter';
-import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
-import BusinessPartner from '../../../../models/BusinessParter';
-import OwnerRepository from '@/services/actions/ownerRepository';
-import PaymentTermTypeRepository from '../../../../services/actions/paymentTermTypeRepository';
-import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
-import Warehouses from '@/models/Warehouses';
-import WarehouseRepository from '@/services/actions/WarehouseRepository';
-import CountryRepository from '@/services/actions/CountryRepository';
 import Binlocation from '@/models/Binlocation';
 import BinlocationRepository from '@/services/actions/BinlocationRepository';
 

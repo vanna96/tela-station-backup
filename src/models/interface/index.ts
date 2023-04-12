@@ -30,5 +30,5 @@ export interface DocumentLine {
     discountPercent?: number;
     vatGroup?: string;
     accountName?: string;
-    accountCode?: string;
+    accountCode?: number;
 }

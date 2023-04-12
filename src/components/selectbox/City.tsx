@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import MUISelect from "./MUISelect";
 import { useQueryHook } from "@/utilies/useQueryHook";
 import request from "@/utilies/request";
@@ -8,28 +8,32 @@ import { SelectInputProps } from "@mui/material/Select/SelectInput";
 import OwnerRepository from "@/services/actions/ownerRepository";
 import FactoringIndicatorRepository from "@/services/actions/FactoringIndicatorRepository";
 import CountryRepository from "@/services/actions/CountryRepository";
+import cityRepository from "@/services/actions/CityRepository";
 
 
-interface CountryProps<T = unknown> {
+interface CityProps<T = unknown> {
   name?: string,
   defaultValue?: any,
   value?: any,
   onChange?: SelectInputProps<T>['onChange'],
   disabled?: boolean,
+  country?: string
 }
 
 
-
-function CountrySelect(props: CountryProps) {
-  const { data, isLoading }: any = useQuery({ queryKey: ['country'], queryFn: () => new CountryRepository().get(), staleTime: Infinity })
-
+function CitySelect(props: CityProps) {
+  const { data, isLoading }: any = useQuery({ queryKey: ['city'], queryFn: () => new cityRepository().get(), staleTime: Infinity })
+  const items = useMemo(() =>
+    data?.filter((e:any) => e?.Country === props?.country)?.map((e:any) => ({ label: e?.Name, value: e?.Code })),
+    [data, props?.country])
   return <MUISelect
     {...props}
-    items={data ?? []}
-    aliaslabel={"Name"}  
+    items={items ?? []}
+    aliaslabel={"Name"}
     aliasvalue="Code"
     loading={isLoading}
+
   />
 }
 
-export default CountrySelect;
+export default CitySelect;
