@@ -37,11 +37,12 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <div className="">
                 <MUISelect
                   items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  onChange={(e) => handlerChange('contactPerson', e.target.value)}
-                  value={data?.contactPerson}
+                  onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
+                  value={edit ? data?.contactPerson : data?.contactPersonCode}
+                  // value={data?.contactPerson}
                   aliasvalue="id"
                   aliaslabel="name"
-                  name="ContactPerson"
+                  name="ContactPersonCode"
                 />
 
               </div>
@@ -50,7 +51,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
 
               <MUISelect
-                items={data?.series?.filter((e: { addressName: string; }) => e.addressName !== 'Bill To').map((e: BPAddress) => ({
+                items={data?.shippingType?.filter((e: { addressName: string; }) => e.addressName !== 'Bill To').map((e: BPAddress) => ({
                   addressName: e.addressName,
                   street: e.street,
                   city: e.city,
@@ -59,7 +60,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                   addressType: e.addressType
                 }))}
                 onChange={(e) => handlerChange('shipToDefault', e.target.value)}
-                value={data?.shipToDefault}
+                // value={data?.shipToDefault}
+                value={edit ? data?.shipToCode : data?.shipToDefault}
                 aliasvalue="addressName"
                 aliaslabel="addressName"
                 name="shipToDefault"
@@ -90,7 +92,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 fullWidth
                 name="address"
                 className="w-full "
-                value={getShippingAddress(data.shipToCode, data.shippingType)}
+                // value={getShippingAddress(data.shipToCode, data.shippingType)}
+                value={edit ? data?.address : getShippingAddress(data.shipToDefault, data.shippingType)}
 
               />
 

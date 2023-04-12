@@ -159,7 +159,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
       ),
       FromWarehouse: json['fromWarehouse'],
       ToWarehouse: json['toWarehouse'],
-      ShipToDefault: json['shipToDefault'],
+      ShipToCode: json['shipToDefault'],
       ContactPerson: json['contactPerson'],
       SalesPersonCode: json['SalesPersonCode']
     };

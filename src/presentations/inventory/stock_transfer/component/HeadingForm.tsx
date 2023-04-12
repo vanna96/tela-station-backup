@@ -39,7 +39,9 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 <MUISelect
                   items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
                   onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
-                  value={data?.contactPersonCode}
+                  // value={data?.contactPersonCode}
+                  value={edit ? data?.contactPerson : data?.contactPersonCode}
+
                   aliasvalue="id"
                   aliaslabel="name"
                   name="ContactPersonCode"
@@ -50,7 +52,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
               {edit ? (
-               <div><MUITextField  disabled={edit} label ='' value={data?.shipToCode} name="shipToCode" /></div> 
+                <div><MUITextField disabled={edit} label='' value={data?.shipToCode} name="shipToCode" /></div>
               ) : (
                 <MUISelect
                   disabled={edit}
