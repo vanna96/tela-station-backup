@@ -55,7 +55,7 @@ export default function General({ data, handlerChange, edit }: ILogisticFormProp
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">State</label>
             <CitySelect
-              value={bShow?.state}
+              value={data?.state}
               onChange={(e) => handlerChange('state', e.target.value)}
               name="State"
               country={bShow?.country}
