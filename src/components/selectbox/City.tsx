@@ -29,8 +29,8 @@ function CitySelect(props: CityProps) {
   return <MUISelect
     {...props}
     items={items ?? []}
-    aliaslabel={"Name"}
-    aliasvalue="Code"
+    // aliaslabel={"Name"}
+    // aliasvalue="Code"
     loading={isLoading}
 
   />

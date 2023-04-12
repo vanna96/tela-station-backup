@@ -14,11 +14,11 @@ export default function General({ data, handlerChange, edit }: ILogisticFormProp
   const [bShow, setBShow] = React.useState<any>({});
   const handleSelectChangeB = (event:any) => {
     const key = 'country';
-    const value = event.target.value;
+    const value = event.target.value as string;
     // const selectedValue = event.target.value as string;
     let emp;
     // ------------------------------------------------
-    emp = { ...data, county: event }
+    emp = { ...data, country: event.target.value }
     setBShow(emp);
     //-------------------------------------------------
     handlerChange(key, value) 
@@ -55,10 +55,10 @@ export default function General({ data, handlerChange, edit }: ILogisticFormProp
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">State</label>
             <CitySelect
-              value={data?.state}
+              value={bShow?.state}
               onChange={(e) => handlerChange('state', e.target.value)}
               name="State"
-              country={bShow?.county}
+              country={bShow?.country}
             />
           </div>
           {/* <MUITextField label="State:" value={data?.state} onChange={(e) => handlerChange('state', e.target.value)} name="State" /> */}
@@ -77,7 +77,7 @@ export default function General({ data, handlerChange, edit }: ILogisticFormProp
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Country/Region</label>
             <CountrySelect
-              value={data?.country} onChange={handleSelectChangeB} name="Country"
+              value={bShow?.country} onChange={handleSelectChangeB} name="Country"
             />
           </div>
           <MUITextField label="Federal Tax ID:" value={data?.federalTaxID} onChange={(e) => handlerChange('federalTaxID', e.target.value)} name="FederalTaxID" />
