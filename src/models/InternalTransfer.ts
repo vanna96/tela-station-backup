@@ -88,6 +88,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
   dueDate?: string;
   series?: BPAddress[];
   contactPersonList?: ContactEmployee[];
+  shipToCode ?: string | undefined;
 
 
   constructor(json: any) {
@@ -126,7 +127,8 @@ export default class InternalTransfer extends Model implements MasterDocument {
     this.series = json['series'];
     this.shippingType = json['shippingType']
     this.shipToDefault = json['shipToDefault']
-    this.shipToDefault = json['S'];
+    this.shipToCode = json['ShipToCode'];
+
 
   }
 

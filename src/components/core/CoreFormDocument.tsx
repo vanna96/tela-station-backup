@@ -59,6 +59,7 @@ export interface CoreFormDocumentState {
     currency?: string | undefined | null,
     priceLists?: string | undefined | null,
     salePersonCode?: string | undefined | null,
+    shipToDefault ?: string | undefined | null,
     vendorRef?: string | undefined | null,
     documentStatus?: string | undefined | null,
     remark?: string | undefined | null,
@@ -131,6 +132,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             currency: null,
             priceLists: null,
             salePersonCode: null,
+            shipToDefault: null,
             renewal: false,
             items: [],
             series: [],
@@ -282,6 +284,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             currency: record.currency,
             priceLists: record.priceLists,
             salePersonCode : record.salePersonCode,
+            shipToDefault : record.shipToDefault
         });
     }
 
