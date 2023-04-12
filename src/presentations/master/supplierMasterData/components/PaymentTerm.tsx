@@ -1,10 +1,14 @@
 import FormCard from "@/components/card/FormCard";
 import MUITextField from "@/components/input/MUITextField";
+import CountrySelect from "@/components/selectbox/Country";
 import HolidaySelect from "@/components/selectbox/Holidays";
 import MUISelect from "@/components/selectbox/MUISelect";
 import PaymentTerm from "@/components/selectbox/PaymentTerm";
 import PriceListSelect from "@/components/selectbox/PriceList";
 import PrioritySelect from "@/components/selectbox/Priority";
+import BankSelect from "@/components/selectbox/bank";
+import Country from "@/models/Country";
+import { currencyFormat } from "@/utilies";
 
 export interface IPaymentTermProps {
   //   handlerOpenVendor: () => void;
@@ -28,19 +32,19 @@ export default function PaymentTerms({
                 Payment Terms
               </label>
               <PaymentTerm
-                name="PaymentGroupCode"
-                value={data.paymentGroupCode}
+                name="PayTermsGrpCode"
+                value={data.payTermsGrpCode}
                 onChange={(e) =>
-                  handlerChange("paymentGroupCode", e.target.value)
+                  handlerChange("payTermsGrpCode", e.target.value)
                 }
               />
             </div>
             <MUITextField
               label="Interest On Arieas %"
-              value={data?.interestAccount}
-              name="InterestAccount"
+              value={currencyFormat(data?.intrestRatePercent)}
+              name="IntrestRatePercent"
               onChange={(e: any) =>
-                handlerChange("interestAccount", e.target.value)
+                handlerChange("intrestRatePercent", e.target.value)
               }
             />
           </div>
@@ -59,18 +63,18 @@ export default function PaymentTerms({
               </div>
             </div>
             <MUITextField
-              label="Interest On Arieas %"
-              value={data?.interestAccount}
-              name="InterestAccount"
+              label="Total Discount %"
+              value={currencyFormat(data?.discountPercent)}
+              name="DiscountPercent"
               onChange={(e: any) =>
-                handlerChange("interestAccount", e.target.value)
+                handlerChange("discountPercent", e.target.value)
               }
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Credit Limit"
-              value={data?.creditLimit}
+              value={currencyFormat(data?.creditLimit)}
               name="CreditLimit"
               onChange={(e: any) =>
                 handlerChange("creditLimit", e.target.value)
@@ -78,7 +82,7 @@ export default function PaymentTerms({
             />
             <MUITextField
               label="Commitment Limit"
-              value={data?.maxCommitment}
+              value={currencyFormat(data?.maxCommitment)}
               name="MaxCommitment"
               onChange={(e: any) =>
                 handlerChange("maxCommitment", e.target.value)
@@ -132,20 +136,29 @@ export default function PaymentTerms({
             Business Partner Bank
           </label>
           <div className="grid grid-cols-2 gap-3">
-            <MUITextField
-              label="Bank Country/Region"
-              value={data?.bankCountry}
-              name="BankCountry"
-              onChange={(e: any) =>
-                handlerChange("bankCountry", e.target.value)
-              }
-            />
-            <MUITextField
-              label="Bank Name"
-              value={data?.houseBank}
-              name="HouseBank"
-              onChange={(e: any) => handlerChange("houseBank", e.target.value)}
-            />
+            <div>
+              <label htmlFor="Code" className=" text-gray-500 text-[14px]">
+                Bank Country/Region
+              </label>
+              <CountrySelect
+                value={data?.bankCountry}
+                disabled
+                name="BankCountry"
+                onChange={(e: any) =>
+                  handlerChange("bankCountry", e.target.value)
+                }
+              />
+            </div>
+            <div>
+              <label htmlFor="Code" className=" text-gray-500 text-[14px]">
+                Bank Name
+              </label>
+              <BankSelect
+                value={data?.defaultBankCode}
+                name="BankName"
+                onChange={(e: any) => handlerChange("defaultBankCode", e.target.value)}
+              />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
@@ -232,7 +245,7 @@ export default function PaymentTerms({
                 handlerChange("avarageLate", e.target.value)
               }
             />
-             <div className="flex flex-col gap-1 text-sm">
+            <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Priority
               </label>
@@ -249,11 +262,9 @@ export default function PaymentTerms({
               label="Default IBAN"
               value={data?.iBAN}
               name="IBAN"
-              onChange={(e: any) =>
-                handlerChange("iBAN", e.target.value)
-              }
+              onChange={(e: any) => handlerChange("iBAN", e.target.value)}
             />
-             <div className="flex flex-col gap-1 text-sm">
+            <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Holiday
               </label>
@@ -265,7 +276,7 @@ export default function PaymentTerms({
               </div>
             </div>
           </div>
-          </div>
+        </div>
       </FormCard>
     </>
   );

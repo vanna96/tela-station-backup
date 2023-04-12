@@ -1,6 +1,6 @@
 
 
-export  interface MasterDocument {
+export interface MasterDocument {
     serie: string;
     docNum: any;
     paymentMethod?: string;
@@ -34,4 +34,11 @@ export interface DocumentLine {
 }
 export interface ContactEmployees {
     name?: string;
+}
+
+export interface BPAddresses {
+    addressName?: string;
+    addressName2?: string;
+    addressName3?: string;
+
 }

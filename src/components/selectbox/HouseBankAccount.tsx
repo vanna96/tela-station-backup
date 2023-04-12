@@ -2,7 +2,6 @@
 import MUISelect from "./MUISelect";
 import { useQuery } from "react-query";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import HolidayRepository from "@/services/actions/holidaysRepository";
 import HousebankAccountRepository from "@/services/actions/houseBankAccountRepository";
 
 

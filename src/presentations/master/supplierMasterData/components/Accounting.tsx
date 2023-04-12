@@ -18,6 +18,7 @@ import { Checkbox } from "@mui/material";
 export interface IAccouttingProps {
   handlerChange: (key: string, value: any) => void;
   handlerOpenVendor: () => void;
+  handlerOpenVendor2: () => void;
   data: any;
   edit?: boolean;
   handlerOpenAccount: () => void;
@@ -29,6 +30,7 @@ export default function Accounting({
   handlerChange,
   handlerOpenAccount,
   handlerOpenVendor,
+  handlerOpenVendor2,
 }: IAccouttingProps) {
   return (
     <>
@@ -38,13 +40,13 @@ export default function Accounting({
             General
           </label>
           <div className="grid grid-cols-2 gap-3 mt-3">
-            <MUITextField
-              label="Consolidating Bussiness Partner:"
-              value={data?.cardForeignName}
-              name="CardForeignName"
-              onChange={(e: any) =>
-                handlerChange("cardForeignName", e.target.value)
-              }
+          <MUITextField
+              label="Cololidating"
+              value={data?.fatherCard}
+              disabled={edit}
+              name="FatherCard"
+              onClick={handlerOpenVendor2}
+              endAdornment={!edit}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -109,7 +111,7 @@ export default function Accounting({
               label="Vendor Code"
               value={data?.cardCode}
               disabled={edit}
-              name="BPCode"
+              name="CardCode"
               onClick={handlerOpenVendor}
               endAdornment={!edit}
             />

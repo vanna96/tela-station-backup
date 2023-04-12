@@ -33,7 +33,7 @@ export default class BussinessPartnersRepository extends Repository<BusinessPatn
 
   async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 
-    if (isUpdate) return await request('PATCH', this.url + "(" + id + ")", BusinessPatners.toUpdate(payload));
+    if (isUpdate) return await request('PATCH', this.url + "('" + id + "')", BusinessPatners.toUpdate(payload));
 
     return await request('POST', this.url, BusinessPatners.toCreate(payload));
   }

@@ -29,7 +29,7 @@ export default class BankRepository extends Repository<Bank> {
         const data = localStorage.getItem(this.key);
         if (!data) return {};
         const bank: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-        return bank.find((e: any) => e?.Code == code);
+        return bank.find((e: any) => e?.BankCode == code);
     }
 
     post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<Bank> {

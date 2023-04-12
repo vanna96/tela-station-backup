@@ -108,6 +108,22 @@ export default function PaymentRun({
               onChange={(e: any) => handlerChange("controlKey", e.target.value)}
             />
             <MUITextField
+              label="DME identification"
+              value={data?.dME}
+              name="DME"
+              onChange={(e: any) =>
+                handlerChange("dME", e.target.value)
+              }
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3 mt-3">
+            <MUITextField
+              label="Instruction key"
+              value={data?.instructionKey}
+              name="InstructionKey"
+              onChange={(e: any) => handlerChange("instructionKey", e.target.value)}
+            />
+            <MUITextField
               label="Reference Details"
               value={data?.referenceDetails}
               name="ReferenceDetails"

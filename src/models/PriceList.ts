@@ -9,7 +9,7 @@ export default class PriceList extends Model {
   constructor(json: any) {
     super()
 
-    this.code = json['BasePriceList']
+    this.code = json['PriceListNo']
     this.name = json['PriceListName']
   }
 

@@ -23,6 +23,11 @@ import PaymentTermTypeRepository from "@/services/actions/paymentTermTypeReposit
 import PriceListRepository from "@/services/actions/pricelistReporitory";
 import PriorityRepository from "@/services/actions/priorityReposiroty";
 import HolidayRepository from "@/services/actions/holidaysRepository";
+import BankRepository from "@/services/actions/bankRepository";
+import PaymentBlockRepository from "@/services/actions/paymentBlockReporitory";
+import BankChargesAllocationCodesSelect from "@/components/selectbox/BankChargesAllocationCodes";
+import BankChargesAllocationCodeRepository from "../../../../services/actions/bankChargesAllocationCodeRepository";
+import HousebankAccountRepository from "@/services/actions/houseBankAccountRepository";
 class SupplierDetail extends Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -169,6 +174,9 @@ class SupplierDetail extends Component<any, any> {
                 <ContactPerson data={this.state} />
                 <Address data={this.state} />
                 <Paymentterms data={this.state} />
+                <PaymentRun data={this.state} />
+                <Accounting data={this.state} />
+                <Remarks data={this.state} />
                 <PreviewAttachment
                   attachmentEntry={this.state.attachmentEntry}
                 />
@@ -238,11 +246,12 @@ function General(props: any) {
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Type Of Business</span>
-            <span className="w-8/12 font-medium">: {data?.companyPrivate}</span>
+            <span className="w-8/12 font-medium">: {BusinessPatners.getCompany(data.companyPrivate)}</span>
+            {/* <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'></span> <span className='col-span-2 font-medium'>:{BusinessPatners.getCompany(data.companyPrivate)}</span></div> */}
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Alias Name</span>
-            <span className="w-8/12 font-medium">: {data?.aliasName}</span>
+            <span className="w-4/1 text-gray-500">Alias Name</span>
+            <span className="w-8/12 f2ont-medium">: {data?.aliasName}</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
@@ -261,23 +270,24 @@ function General(props: any) {
             </span>
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Remark</span>
+            <span className="w-4/12 text-gray-500">Remarks</span>
             <span className="w-8/12 font-medium">: {data?.notes}</span>
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Industry</span>:{" "}
-            {new IndustryRepository().find(data?.industry)?.name ?? "N/A"}
+            <span className="w-4/12 text-gray-500">Buyer</span>:{" "}
+            {new BuyerRepository().find(data?.salesPersonCode)?.name ?? "N/A"}
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Teritory</span>:{" "}
             {new TerritoryRepository().find(data?.territory)?.name ?? "N/A"}
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Remark</span>
+            <span className="w-4/12 text-gray-500">GLN</span>
             <span className="w-8/12 font-medium">
               : {data?.globalLocationNumber}
             </span>
           </div>
+          
         </div>
       </div>
     </>
@@ -355,22 +365,39 @@ function ContactPerson(props: any) {
             <span className="w-4/12 text-gray-500">Remark 2</span>
             <span className="w-8/12 font-medium">: {data?.remarks1}</span>
           </div>
-
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Password</span>
+            <span className="w-8/12 font-medium">: {data?.password}</span>
+          </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">
               Country/Region Of Birth
             </span>
-            :{" "}
+            :
             {new CountryRepository().find(data?.industry)?.placeOfBirth ??
               "N/A"}
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Date Of Birth</span>:{" "}
+            <span className="w-4/12 text-gray-500">Date Of Birth</span>
             <span className="w-8/12 font-medium">: {data?.dateOfBirth}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Gender</span>
             <span className="w-8/12 font-medium">: {data?.gender}</span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Profession</span>
+            <span className="w-8/12 font-medium">: {data?.profession}</span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">City Of Birth</span>
+            <span className="w-8/12 font-medium">: {data?.cityOfBirth}</span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Connected Address</span>
+            <span className="w-8/12 font-medium">
+              : {data?.connectedAddressName}
+            </span>
           </div>
         </div>
       </div>
@@ -379,6 +406,7 @@ function ContactPerson(props: any) {
 }
 function Address(props: any) {
   const { data }: any = props;
+  const BPaddress = data?.bPAddresses
   return (
     <>
       <div className="grow w-full grid grid-cols-2 gap-2 text-sm py-2">
@@ -386,7 +414,7 @@ function Address(props: any) {
           <span className="text-black text-[18px]">Pay To</span>
           <div className="flex gap-2 mt-3">
             <span className="w-4/12 text-gray-500">Address ID</span>
-            <span className="w-8/12 font-medium">: {data?.addressName}</span>
+            <span className="w-8/12 font-medium">: {data.addressName}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Address Name 2</span>
@@ -474,8 +502,9 @@ function Address(props: any) {
             <span className="w-8/12 font-medium">: {data?.state}</span>
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Country/Region</span>
-            <span className="w-8/12 font-medium">: {data?.country}</span>
+            <span className="w-4/12 text-gray-500">Country/Region</span>:
+            {new CountryRepository().find(data?.country)?.Name ??
+              "N/A"}
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Street No.</span>
@@ -498,46 +527,55 @@ function Paymentterms(props: any) {
     <>
       <div className="grow w-full grid grid-cols-2 gap-2 text-sm py-2">
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Payment Terms</span>
-            {new PaymentTermTypeRepository().find(data?.payTermsGrpCode)
-              ?.Name ?? "N/A"}
+          <div className="grid grid-cols-3 gap-2">
+            <span className="text-gray-500">Payment Terms</span>
+            <span className="col-span-2 font-medium">:
+              {new PaymentTermTypeRepository().find(data?.payTermsGrpCode)
+                ?.PaymentTermsGroupName ?? "N/A"}
+            </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Interest On Arrears %</span>
             <span className="w-8/12 font-medium">
-              : {data?.intrestRatePercent}
+              : {currencyFormat(data?.intrestRatePercent)}
             </span>
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Price List</span>
-            {new PriceListRepository().find(data?.priceListNum)?.name ?? "N/A"}
+            <span className="w-4/12 text-gray-500">Price List</span>:
+            {new PriceListRepository().find(data?.priceListNum)
+              ?.PriceListName ?? "N/A"}
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Total Discount %</span>
             <span className="w-8/12 font-medium">
-              : {data?.discountPercent}
+              : {currencyFormat(data?.discountPercent)}
             </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Credit limit</span>
-            <span className="w-8/12 font-medium">: {data?.creditLimit}</span>
+            <span className="w-8/12 font-medium">
+              : {currencyFormat(data?.creditLimit)}
+            </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Commitment limit</span>
-            <span className="w-8/12 font-medium">: {data?.maxCommitment}</span>
+            <span className="w-8/12 font-medium">
+              : {currencyFormat(data?.maxCommitment)}
+            </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">
               Effective Discount Groups
             </span>
             <span className="w-8/12 font-medium">
-              : {data?.effectiveDiscount}
+              : {(data?.effectiveDiscount)?.replace("dgr", "")}
             </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Effective Price</span>
-            <span className="w-8/12 font-medium">: {data?.effectivePrice}</span>
+            <span className="w-8/12 font-medium">
+              : {(data?.effectivePrice)?.replace("ep", "")}
+            </span>
           </div>
           <span className="text-black text-[18px]">Business Partner Bank</span>
           <div className="flex gap-2">
@@ -545,55 +583,65 @@ function Paymentterms(props: any) {
             {new CountryRepository().find(data?.bankCountry)?.Name ?? "N/A"}
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Bank Name</span>
-            {new CountryRepository().find(data?.defaultBankCode)?.Name ?? "N/A"}
+            <span className="w-4/12 text-gray-500">Bank Name</span>:
+            {new BankRepository().find(data?.defaultBankCode)?.BankName ?? "N/A"}
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Bank Code</span>
-            <span className="w-8/12 font-medium">
-              : {data?.bankCode}
-            </span>
+            <span className="w-4/12 text-gray-500">Bank Name</span>:{new BankRepository().find(data?.defaultBankCode)?.BankCode ?? "N/A"}
           </div>
-
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Account</span>
-            <span className="w-8/12 font-medium">: {data?.defaultAccount}</span>
+            <span className="w-8/12 font-medium">
+              : {data?.defaultAccount ?? "N/A"}
+            </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">BIC/SWIFT Code</span>
-            <span className="w-8/12 font-medium">: {data?.bICSwiftCode}</span>
+            <span className="w-8/12 font-medium">
+              : {data?.bICSwiftCode ?? "N/A"}
+            </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Bank Account Name</span>
             <span className="w-8/12 font-medium">
-              : {data?.defaultBankCode}
+              : {data?.defaultBankCode ?? "N/A"}
             </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Branch</span>
-            <span className="w-8/12 font-medium">: {data?.defaultBranch}</span>
+            <span className="w-8/12 font-medium">
+              : {data?.defaultBranch ?? "N/A"}
+            </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">ControlKey</span>
-            <span className="w-8/12 font-medium">: {data?.controlKey}</span>
+            <span className="w-8/12 font-medium">
+              : {data?.controlKey ?? "N/A"}
+            </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">IBAN</span>
-            <span className="w-8/12 font-medium">: {data?.iBAN}</span>
+            <span className="w-8/12 font-medium">: {data?.iBAN ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Mandate ID</span>
-            <span className="w-8/12 font-medium">: {data?.mandateID}</span>
+            <span className="w-8/12 font-medium">
+              : {data?.mandateID ?? "N/A"}
+            </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Date Of Signature</span>
-            <span className="w-8/12 font-medium">: {data?.signatureDate}</span>
+            <span className="w-8/12 font-medium">
+              : {data?.signatureDate ?? "N/A"}
+            </span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Average Delay</span>
-            <span className="w-8/12 font-medium">: {data?.avarageLate}</span>
+            <span className="w-8/12 font-medium">
+              : {data?.avarageLate ?? "N/A"}
+            </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Price List</span>:{" "}
@@ -601,11 +649,157 @@ function Paymentterms(props: any) {
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Default IBAN</span>
-            <span className="w-8/12 font-medium">: {data?.iBAN}</span>
+            <span className="w-8/12 font-medium">: {data?.iBAN ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Holiday</span>:{" "}
             {new HolidayRepository().find(data?.priority)?.name ?? "N/A"}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+function PaymentRun(props: any) {
+  const { data }: any = props;
+  return (
+    <>
+      <div className="grow w-full grid grid-cols-2 gap-2 text-sm py-2">
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Country/Region</span>:
+            {new CountryRepository().find(data?.houseBankCountry)?.Name ??
+              "N/A"}
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Bank</span>:
+            {new BankRepository().find(data?.houseBank)?.BankName ?? "N/A"}
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Account</span>
+            <span className="w-8/12 font-medium">
+              : {data?.houseBankAccount ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Branch</span>
+            <span className="w-8/12 font-medium">
+              : {data?.houseBankBranch ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">IBAN</span>
+            <span className="w-8/12 font-medium">
+              : {data?.HouseBankIBAN ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">BIC/SWIFT Code</span>
+            <span className="w-8/12 font-medium">
+              : {data?.bICSwiftCode ?? "N/A"}
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Control No.</span>
+            <span className="w-8/12 font-medium">
+              : {data?.controlKey ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">DME identification</span>
+            <span className="w-8/12 font-medium">: {data?.dME ?? "N/A"}</span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Instrction Key</span>
+            <span className="w-8/12 font-medium">
+              : {data?.instructionKey ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Reference Details</span>
+            <span className="w-8/12 font-medium">
+              : {data?.referenceDetails ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Payment Block</span>:
+            {new PaymentBlockRepository().find(data?.paymentBlockDescription)
+              ?.name ?? "N/A"}
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">
+              Bank Charges Allocation Code
+            </span>
+            :
+            {new BankChargesAllocationCodeRepository().find(
+              data?.bankChargesAllocationCode
+            )?.name ?? "N/A"}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+function Accounting(props: any) {
+  const { data }: any = props;
+  return (
+    <>
+      <div className="grow w-full grid grid-cols-2 gap-2 text-sm py-2">
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Consolidating Business</span>
+            <span className="w-8/12 font-medium">
+              : {data?.fatherCard ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Account payable</span>
+            <span className="w-8/12 font-medium">
+              : {data?.debitorAccount ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Consolidating Business</span>
+            <span className="w-8/12 font-medium">
+              : {data?.downPaymentClearAct ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Consolidating Business</span>
+            <span className="w-8/12 font-medium">
+              : {data?.downPaymentInterimAccount ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Consolidating Business</span>
+            <span className="w-8/12 font-medium">
+              : {data?.linkedBusinessPartner ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Consolidating Business</span>
+            <span className="w-8/12 font-medium">
+              : {data?.planningGroup ?? "N/A"}
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+function Remarks(props: any) {
+  const { data }: any = props;
+  return (
+    <>
+      <div className="grow w-full grid grid-cols-2 gap-2 text-sm py-2">
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <span className="w-4/12 text-gray-500">Remarks</span>
+            <span className="w-8/12 font-medium">
+              : {data?.freeText ?? "N/A"}
+            </span>
           </div>
         </div>
       </div>

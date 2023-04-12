@@ -20,7 +20,7 @@ function PriceListSelect(props: PriceListProps) {
     {...props}
     items={data ?? []}
     aliaslabel="PriceListName"
-    aliasvalue="BasePriceList"
+    aliasvalue="PriceListNo"
     loading={isLoading}
   />
 }

@@ -20,8 +20,8 @@ export default function Remark({ data, edit }: IRemarkProps) {
                 multiline
                 rows={4}
                 fullWidth
-                name="Notes"
-                value={data?.notes}
+                name="FreeText"
+                value={data?.freeText}
               />
             </div>
           </div>

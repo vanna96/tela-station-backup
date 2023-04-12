@@ -46,14 +46,12 @@ export default function Heading({
                 onChange={(e: any) => handlerChange("series", e.target.value)}
               />
 
-              <TextField
-                size="small"
+              <MUITextField
                 name="CardCode"
-                key={data?.cardCode}
-                defaultValue={data?.cardCode}
+                value={data?.cardCode}
                 disabled={edit}
-                fullWidth
-                className="w-full text-field"
+                onChange={(e: any) => handlerChange("cardCode", e.target.value)}
+
               />
             </div>
           </div>

@@ -29,7 +29,7 @@ export default class PriceListRepository extends Repository<PriceList> {
     const data = localStorage.getItem(this.key);
     if (!data) return {};
     const priceList: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-    return new PriceList(priceList.find((e: any) => e?.BasePriceList === code) ?? {});
+    return (priceList.find((e: any) => e?.PriceListNo === code) ?? {});
   }
 
   post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<PriceList> {

@@ -17,19 +17,11 @@ import PaymentTerm from "../components/PaymentTerm";
 import PaymentRun from "../components/PaymentRun";
 import Accounting from "../components/Accounting";
 import Remark from "../components/Remarks";
+
+
 class Supplier extends CoreFormDocument {
   constructor(props: any) {
     super(props);
-    this.state = {
-      ...this.state,
-      //   docType: "I",
-      docDueDate: null,
-      taxDate: null,
-      cancelDate: null,
-    } as any;
-
-    // this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    // this.handlerAddItem = this.handlerAddItem.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
@@ -45,7 +37,6 @@ class Supplier extends CoreFormDocument {
           () =>
             this.setState({
               ...this.props.location.state,
-              isApproved: routeState?.status === "A",
               loading: false,
             }),
           500
@@ -80,13 +71,6 @@ class Supplier extends CoreFormDocument {
         });
       });
     }
-  }
-
-  handlerRemoveItem(code: string) {
-    let items = [...(this.state.items ?? [])];
-    const index = items.findIndex((e: any) => e?.ItemCode === code);
-    items.splice(index, 1);
-    this.setState({ ...this.state, items: items });
   }
   async handlerSubmit(event: any) {
     event.preventDefault();
@@ -161,6 +145,9 @@ class Supplier extends CoreFormDocument {
             handlerOpenAccount={() => this.handlerOpenAccount()}
             handlerOpenVendor={() => {
               this.handlerOpenVendor("customer");
+            }}
+            handlerOpenVendor2={() => {
+              this.handlerOpenVendor("supplier");
             }}
           />
            <Remark

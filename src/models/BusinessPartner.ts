@@ -1,12 +1,14 @@
 import { dateFormat } from '../utilies';
 import { ContactEmployee } from './BusinessParter';
 import Model from './Model';
-import { MasterDocument, DocumentLine, ContactEmployees } from './interface/index';
+import { MasterDocument, DocumentLine, ContactEmployees, BPAddresses } from './interface/index';
 import moment from 'moment';
 let index = 1;
 export interface BusinessPatnersProps {
     id: any;
     employeeID?: number;
+    linkedBusinessPartner?: string;
+    payTermsGrpCode?: string;
     currency?: number;
     cardCode?: number;
     cardName?: string;
@@ -15,7 +17,7 @@ export interface BusinessPatnersProps {
     contactPerson?: string
     cardForeignName?: string;
     federalTaxID?: number;
-    series?: string;
+    // series?: string;
     openOrdersBalance?: number;
     openDeliveryNotesBalance?: number;
     currentAccountBalance?: number;
@@ -58,9 +60,9 @@ export interface BusinessPatnersProps {
     gender?: string;
     profession?: string;
     cityOfBirth?: string;
-    addressName?: string;
-    addressName2?: string;
-    addressName3?: string;
+    // addressName?: string;
+    // addressName2?: string;
+    // addressName3?: string;
     street?: string;
     block?: string;
     zipCode?: number;
@@ -104,19 +106,27 @@ export interface BusinessPatnersProps {
     planningGroup?: string;
     paymentBlockDescription?: string;
     emailAddress?: string;
-    contactEmployees: BusinessPartnersContactEmployeesProps[];
-    items: BusinessPartnersContactEmployeesProps[];
+    instructionKey?: string
+    freeText?: string;
+    defaultBankCode?: string;
+    // contactEmployees: BusinessPartnersContactEmployeesProps[];
+    // bPAddresses: BusinessPartnersBPAddresses[];
+}
+export interface BusinessPartnersBPAddresses {
+    addressName?: string | undefined;
+    addressName2?: string | undefined;
+    addressName3?: string | undefined;
+}
 
-}
-export interface BusinessPartnersContactEmployeesProps {
-    name?: string | undefined;
-}
 
 
 export default class BusinessPatners extends Model {
     index?: number;
     id: any;
     employeeID?: number;
+    payTermsGrpCode?: string;
+    freeText?: string;
+    linkedBusinessPartner?: string;
     cardCode?: number;
     cardName?: string;
     cardType?: string;
@@ -124,7 +134,7 @@ export default class BusinessPatners extends Model {
     contactPerson?: string
     cardForeignName?: string;
     federalTaxID?: number;
-    series?: string;
+    // series?: string;
     currency?: number;
     openOrdersBalance?: number;
     openDeliveryNotesBalance?: number;
@@ -168,9 +178,9 @@ export default class BusinessPatners extends Model {
     gender?: string;
     profession?: string;
     cityOfBirth?: string;
-    addressName?: string;
-    addressName2?: string;
-    addressName3?: string;
+    // addressName?: string;
+    // addressName2?: string;
+    // addressName3?: string;
     street?: string;
     block?: string;
     zipCode?: number;
@@ -213,25 +223,30 @@ export default class BusinessPatners extends Model {
     downPaymentClearAct?: number;
     planningGroup?: string;
     paymentBlockDescription?: string;
+    instructionKey?: string
     emailAddress?: string;
-    items: BusinessPartnersContactEmployeesProps[];
+    defaultBankCode?: string;
+    // bPAddresses: BusinessPartnersBPAddresses[];
 
     constructor(json: any) {
         super();
         this.index = index++;
         this.id = json['CardCode'];
         this.cardName = json['CardName'];
+        this.payTermsGrpCode = json['PayTermsGrpCode'];
+        this.freeText = json['FreeText'];
         this.cardCode = json['CardCode'];
         this.cardType = json['CardType'];
+        this.instructionKey = json['InstructionKey']
         this.groupCode = json['GroupCode'];
         this.contactPerson = json['ContactPerson'];
         this.cardForeignName = json['CardForeignName'];
         this.federalTaxID = json['FederalTaxID'];
-        this.series = json['Series'];
+        // this.series = json['Series'];
         this.paymentBlockDescription = json['PaymentBlockDescription'];
         this.currency = json['Currency'];
         this.emailAddress = json['EmailAddress'];
-
+        this.linkedBusinessPartner = json['LinkedBusinessPartner']
         this.openOrdersBalance = json['OpenOrdersBalance'];
         this.openDeliveryNotesBalance = json['OpenDeliveryNotesBalance'];
         this.currentAccountBalance = json['CurrentAccountBalance'];
@@ -274,9 +289,9 @@ export default class BusinessPatners extends Model {
         this.gender = json['Gender'];
         this.profession = json['Profession'];
         this.cityOfBirth = json['CityOfBirth'];
-        this.addressName = json['AddressName'];
-        this.addressName2 = json['AddressName2'];
-        this.addressName3 = json['AddressName3'];
+        // this.addressName = json['AddressName'];
+        // this.addressName2 = json['AddressName2'];
+        // this.addressName3 = json['AddressName3'];
         this.street = json['Street'];
         this.block = json['Block'];
         this.zipCode = json['ZipCode'];
@@ -312,7 +327,6 @@ export default class BusinessPatners extends Model {
         this.controlKey = json['ControlKey'];
         this.dME = json['DME'];
         this.referenceDetails = json['ReferenceDetails'];
-        this.dME = json['DME'];
         this.referenceDetails = json['ReferenceDetails'];
         this.bankChargesAllocationCode = json['BankChargesAllocationCode'];
         this.fatherCard = json['FatherCard'];
@@ -320,7 +334,8 @@ export default class BusinessPatners extends Model {
         this.downPaymentInterimAccount = json['DownPaymentInterimAccount'];
         this.downPaymentClearAct = json['DownPaymentClearAct'];
         this.planningGroup = json['PlanningGroup'];
-        this.items = json['ContactEmployees']?.map((e: any) => new BusinessPartnersContactEmployeesProps(e));
+        this.defaultBankCode = json['DefaultBankCode'];
+        // this.bPAddresses = json['BPAddresses']?.map((e: any) => new BusinessPartnersBPAddresses(e));
 
     }
     toJson(update: boolean) {
@@ -332,6 +347,7 @@ export default class BusinessPatners extends Model {
 
         return {
             "EmployeeID": json['employeeID'],
+            "PayTermsGrpCode": json['payTermsGrpCode'],
             "CardName": json['cardName'],
             "CardCode": json['cardCode'],
             "CardType": json['cardType'],
@@ -339,11 +355,13 @@ export default class BusinessPatners extends Model {
             "ContactPerson": json['contactPerson'],
             "CardForeignName": json['cardForeignName'],
             "FederalTaxID": json['federalTaxID'],
-            "Series": json['series'],
+            // "Series": json['series'],
             "PaymentBlockDescription": json['paymentBlockDescription'],
             "Currency": json['currency'],
             "EmailAddress": json['emailAddress'],
-
+            "InstructionKey": json['instructionKey'],
+            "LinkedBusinessPartner": json['linkedBusinessPartner'],
+            "freetext": json['Freetext'],
             "OpenOrdersBalance": json['openOrdersBalance'],
             "OpenDeliveryNotesBalance": json['openDeliveryNotesBalance'],
             "CurrentAccountBalance": json['currentAccountBalance'],
@@ -366,14 +384,14 @@ export default class BusinessPatners extends Model {
             "GlobalLocationNumber": json['globalLocationNumber'],
             "AliasName": json['aliasName'],
             "Valid": json['valid'],
-            "validFrom": json['validFrom'],
+            "ValidFrom": json['validFrom'],
             "ValidTo": json['validTo'],
             "ValidRemarks": json['validRemarks'],
             "Name": json['name'],
             "firstName": json['firstName'],
             "LastName": json['lastName'],
             "MiddleName": json['middleName'],
-            "title": json['title'],
+            // "title": json['title'],
             "Position": json['position'],
             "Address": json['address'],
             "MobilePhone": json['mobilePhone'],
@@ -430,15 +448,15 @@ export default class BusinessPatners extends Model {
             "DownPaymentInterimAccount": json['downPaymentInterimAccount'],
             "DownPaymentClearAct": json['downPaymentClearAct'],
             "PlanningGroup": json['planningGroup'],
-            "ContactEmployees": json['items'].map((e: any) => BusinessPartnersContactEmployeesProps.toCreate(e, json['cardCode']))
-
+            "DefaultBankCode": json['defaultBankCode'],
+            // "BPAddresses": json['bPAddresses'].map((e: any) => BusinessPartnersBPAddresses),
         };
     }
-
-
     public static toUpdate(json: any) {
         return {
             "EmployeeID": json['employeeID'],
+            "DefaultBankCode": json['defaultBankCode'],
+            "PayTermsGrpCode": json['payTermsGrpCode'],
             "CardCode": json['cardCode'],
             "CardName": json['cardName'],
             "CardType": json['cardType'],
@@ -446,7 +464,7 @@ export default class BusinessPatners extends Model {
             "ContactPerson": json['contactPerson'],
             "CardForeignName": json['cardForeignName'],
             "FederalTaxID": json['federalTaxID'],
-            "Series": json['series'],
+            // "Series": json['series'],
             "PaymentBlockDescription": json['paymentBlockDescription'],
             "Currency": json['currency'],
             "OpenOrdersBalance": json['openOrdersBalance'],
@@ -456,6 +474,8 @@ export default class BusinessPatners extends Model {
             "Phone2": json['phone2'],
             "Cellular": json['cellular'],
             "Fax": json['fax'],
+            "freetext": json['Freetext'],
+
             "Website": json['website'],
             "ShippingType": json['shippingType'],
             "Password": json['password'],
@@ -463,6 +483,7 @@ export default class BusinessPatners extends Model {
             "ProjectCode": json['projectCode'],
             "Industry": json['industry'],
             "CompanyPrivate": json['companyPrivate'],
+            "InstructionKey": json['instructionKey'],
             "AdditionalID": json['additionalID'],
             "UnifiedFederalTaxID": json['unifiedFederalTaxID'],
             "Notes": json['notes'],
@@ -471,14 +492,14 @@ export default class BusinessPatners extends Model {
             "GlobalLocationNumber": json['globalLocationNumber'],
             "AliasName": json['aliasName'],
             "Valid": json['valid'],
-            "validFrom": json['validFrom'],
+            "ValidFrom": json['validFrom'],
             "ValidTo": json['validTo'],
             "ValidRemarks": json['validRemarks'],
             "Name": json['name'],
             "firstName": json['firstName'],
             "LastName": json['lastName'],
             "MiddleName": json['middleName'],
-            "Title": json['title'],
+            // "Title": json['title'],
             "Position": json['position'],
             "Address": json['address'],
             "MobilePhone": json['mobilePhone'],
@@ -517,6 +538,7 @@ export default class BusinessPatners extends Model {
             "AccountNo": json['accountNo'],
             "BICSwiftCode": json['bICSwiftCode'],
             "DefaultBranch": json['defaultBranch'],
+            "LinkedBusinessPartner": json['linkedBusinessPartner'],
             "IBAN": json['iBAN'],
             "MandateID": json['mandateID'],
             "SignatureDate": json['signatureDate'],
@@ -536,26 +558,46 @@ export default class BusinessPatners extends Model {
             "DownPaymentClearAct": json['downPaymentClearAct'],
             "PlanningGroup": json['planningGroup'],
             "EmailAddress": json['emailAddress'],
-            "ContactEmployees": json['items'].map((e: any) => BusinessPartnersContactEmployeesProps.toCreate(e, json['cardCode']))
+            // "BPAddresses": json['bPAddresses'].map((e: any) => BusinessPartnersBPAddresses),
+
         };
+    }
+    public static getCompany(companyPrivate : string | null): string {
+        switch (companyPrivate) {
+            case 'cCompany':
+                return 'Company'
+            case 'I':
+                return 'Private'
+            case 'G':
+               return 'Government'
+            default:
+                return '';
+        }
     }
 
 
 }
-export class BusinessPartnersContactEmployeesProps extends Model implements ContactEmployees {
-    name?: string | undefined;
+export class BusinessPartnersBPAddresses extends Model implements BPAddresses {
+    addressName?: string | undefined;
+    addressNam2?: string | undefined;
+    addressNam3?: string | undefined;
 
     constructor(json: any) {
         super();
-        this.name = json['Name;']
+        this.addressName = json['AddressName'];
+        this.addressName2 = json['AddressName2'];
+        this.addressName3 = json['AddressName3'];
+
     }
     toJson(update: boolean) {
         throw new Error('Method not implemented.');
-      }
-      public static toCreate(json: any, type: any) {
+    }
+    public static toCreate(json: any, type: any) {
 
         let line = {
-            "Name": json["name"],
+            "AddressName": json["addressName"],
+            "AddressName2": json["addressName2"],
+            "AddressName3": json["addressName3"],
 
         };
         return line;
