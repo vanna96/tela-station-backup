@@ -77,7 +77,7 @@ export default function General({ data, handlerChange, edit }: ILogisticFormProp
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Country/Region</label>
             <CountrySelect
-              value={bShow?.country} onChange={handleSelectChangeB} name="Country"
+              value={data?.country} onChange={handleSelectChangeB} name="Country"
             />
           </div>
           <MUITextField label="Federal Tax ID:" value={data?.federalTaxID} onChange={(e) => handlerChange('federalTaxID', e.target.value)} name="FederalTaxID" />

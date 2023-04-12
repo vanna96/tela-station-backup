@@ -1,6 +1,6 @@
 import Model from './Model';
 
-export default class city extends Model {
+export default class City extends Model {
 
   code: string;
   name: string;

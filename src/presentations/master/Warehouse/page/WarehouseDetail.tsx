@@ -20,6 +20,8 @@ import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
 import Warehouses from '@/models/Warehouses';
 import WarehouseRepository from '@/services/actions/WarehouseRepository';
 import CountryRepository from '@/services/actions/CountryRepository';
+import cityRepository from '@/services/actions/CityRepository';
+import CityRepository from '@/services/actions/CityRepository';
 
 
 
@@ -128,8 +130,8 @@ function General(props: any) {
     </div>
     <div className='flex flex-col gap-2'>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>County</span> <span className='col-span-2 font-medium'>: {data?.county || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Country/Region</span> <span className='col-span-2 font-medium'>: {data?.country ?? "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>State</span> <span className='col-span-2 font-medium'>: {data.state || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Country/Region</span> <span className='col-span-2 font-medium'>: {new CountryRepository().find(data.country)?.Name ?? "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>State</span> <span className='col-span-2 font-medium'>: {new CityRepository().find(data.state)?.Name || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Federal Tax ID</span> <span className='col-span-2 font-medium'>: {data?.federalTaxID || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>GLN</span> <span className='col-span-2 font-medium'>: {data.globalLocationNumber || "N/A"}</span></div>
     </div>
