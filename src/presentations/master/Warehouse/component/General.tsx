@@ -12,13 +12,17 @@ export interface ILogisticFormProps {
 
 export default function General({ data, handlerChange, edit }: ILogisticFormProps) {
   const [bShow, setBShow] = React.useState<any>({});
+  
   const handleSelectChangeB = (event:any) => {
     const key = 'country';
     const value = event.target.value as string;
     // const selectedValue = event.target.value as string;
     let emp;
     // ------------------------------------------------
-    emp = { ...data, country: event.target.value }
+    emp = {
+      ...data,
+      country: event.target.value
+    }
     setBShow(emp);
     //-------------------------------------------------
     handlerChange(key, value) 
@@ -54,6 +58,7 @@ export default function General({ data, handlerChange, edit }: ILogisticFormProp
           <MUITextField label="County:" value={data?.county} onChange={(e) => handlerChange('county', e.target.value)} name="County" />
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">State</label>
+            
             <CitySelect
               value={data?.state}
               onChange={(e) => handlerChange('state', e.target.value)}
