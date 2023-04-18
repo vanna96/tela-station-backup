@@ -134,8 +134,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                   fullWidth
                   name="address"
                   className="w-full "
-                  value={data.address}
-
+                  value={getShippingAddress(data.shipToCode, data.shippingType)}
 
                 />
               )}

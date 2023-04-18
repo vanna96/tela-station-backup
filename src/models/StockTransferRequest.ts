@@ -202,7 +202,7 @@ export default class StockTransferRequest extends Model implements MasterDocumen
       ShipToCode: json['shipToDefault'],
       // ContactPerson: json['contactPerson'],
       SalesPersonCode: json['salesPersonCode'],
-      JournalMemo: json['journalMemo'],
+      JournalMemo:json['journalMemo'],
       PriceList: json['priceList'],
       U_TRANSTYPE: "S",
 
