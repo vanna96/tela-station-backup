@@ -25,11 +25,20 @@ export default class UnitOfMeasurementRepository extends Repository<UnitOfMeasur
     }
 
 
+    // find<UnitOfMeasurement>(code: number | undefined | null): any {
+    //     const data = localStorage.getItem(this.key);
+    //     if (!data) return {};
+    //     const unitOfMeasurements: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
+    //     return new UnitOfMeasurement(unitOfMeasurements.find((e: any) => e?.BaseUoM == code) ?? {});
+    // }
+
+
+ 
     find<UnitOfMeasurement>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
         if (!data) return {};
         const unitOfMeasurements: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-        return new UnitOfMeasurement(unitOfMeasurements.find((e: any) => e?.BaseUoM == code) ?? {});
+        return unitOfMeasurements.find((e: any) => e?.AbsEntry == code);
     }
 
     post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<UnitOfMeasurement> {

@@ -32,6 +32,7 @@ import ItemMaster from "@/models/ItemMasterData";
 import ItemMasterDataRepository from "@/services/actions/itemMasterDataRepository";
 import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
 import ItemGroupRepository from "@/services/actions/itemGroupRepository";
+import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRepository";
 
 class ItemMasterDataDetails extends Component<any, any> {
   constructor(props: any) {
@@ -66,6 +67,8 @@ class ItemMasterDataDetails extends Component<any, any> {
           this.setState({ isError: true, message: e.message });
         });
     }
+console.log(data);
+
   }
 
   render() {
@@ -119,7 +122,6 @@ class ItemMasterDataDetails extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Item Group</span>
                   <span className="w-8/12 font-medium">
-                    {/* : {this.state.itemsGroupCode} */}
                     : {new ItemGroupRepository().find(this.state.itemsGroupCode)?.GroupName}
 
                   </span>
@@ -128,7 +130,7 @@ class ItemMasterDataDetails extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">UoM Group</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.itemsGroupCode}
+                    : {new UnitOfMeasurementRepository().find( this.state.uomGroupEntry)?.Name}
                   </span>
                 </div>
                 <div className="flex gap-2">
