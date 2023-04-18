@@ -22,11 +22,13 @@ interface CountryProps<T = unknown> {
 
 function CountrySelect(props: CountryProps) {
   const { data, isLoading }: any = useQuery({ queryKey: ['country'], queryFn: () => new CountryRepository().get(), staleTime: Infinity })
-
+  const items = useMemo(() =>
+    data?.map((e: any) => ({ label: e?.Name + "(" + e?.Code + ")", value: e?.Code })),
+    [data])
   return <MUISelect
     {...props}
-    items={data ?? []}
-    aliaslabel={"Name"}  
+    items={items ?? []}
+    aliaslabel={'Name'}
     aliasvalue="Code"
     loading={isLoading}
   />

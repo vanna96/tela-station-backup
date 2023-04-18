@@ -29,7 +29,7 @@ export default function General({ data, handlerChange, edit }: ILogisticFormProp
 
   };
   return (
-    <FormCard title='General'>
+    <FormCard title='General py-3'>
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-2">
           <div className="flex items-center text-sm">
