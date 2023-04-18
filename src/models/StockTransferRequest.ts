@@ -3,6 +3,7 @@ import { BPAddress, ContactEmployee } from "./BusinessParter";
 import Model from "./Model";
 import { MasterDocument, DocumentLine } from "./interface/index";
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
+import ShippingType from './ShippingType';
 
 export interface StockTransferRequestProps {
   id: any;
@@ -29,11 +30,14 @@ export interface StockTransferRequestProps {
   signeDate?: string;
   serie: string;
   paymentMethod?: string;
-  shippingType?: string | undefined;
+  shippingType?: BPAddress[];
   items: StockTransferRequestDocumentLineProps[];
-  stockTransferLines: StockTransferRequestDocumentLineProps[];
+  StockTransferLines: StockTransferRequestDocumentLineProps[];
   contactPersonList?: ContactEmployee[];
-  shippingList?: BPAddress[];
+  ShippingType? : BPAddress[]
+  shippingList ?: BPAddress[];
+  series?: BPAddress[];
+
 
 }
 
@@ -47,7 +51,7 @@ export interface StockTransferRequestDocumentLineProps {
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  shippingType?: string | undefined;
+  shippingType?: BPAddress[];
   project?: string | undefined;
   vatGroup?: string | undefined;
 }
@@ -66,15 +70,15 @@ export default class StockTransferRequest extends Model implements MasterDocumen
   journalMemo?: string;
   salesPersonCode?: string;
   contactPersonCode?: string;
-  series?: string;
+  // services?: string;
   taxDate?: string;
   address?: string;
   documentStatus?: string;
   serie: string;
-  shippingType?: string | undefined;
+  shippingType?: BPAddress[] ;
   items: StockTransferRequestDocumentLine[];
   documentowner?: string;
-  stockTransferLines?: StockTransferRequestDocumentLine[];
+  StockTransferLines?: StockTransferRequestDocumentLine[];
   fromWarehouse?: string;
   toWarehouse?: string;
   shipToDefault?: string;
@@ -82,8 +86,16 @@ export default class StockTransferRequest extends Model implements MasterDocumen
   status?: string;
   contactPerson?: string;
   dueDate?: string;
-  shippingList?: BPAddress[];
+  series?: BPAddress[];
   contactPersonList?: ContactEmployee[];
+  ShippingType ?: BPAddress[];
+  shipToCode ?: string | undefined;
+  priceList ?: string | undefined ;
+  distributionRule?: string | undefined;
+  distributionRule2?: string | undefined;
+  priceLists?: string | undefined;
+  ContactPerson?: string | undefined;
+  U_TRANSTYPE?: string | undefined;
 
 
   constructor(json: any) {
@@ -103,7 +115,7 @@ export default class StockTransferRequest extends Model implements MasterDocumen
     this.items = json["StockTransferLines"]?.map(
       (e: any) => new StockTransferRequestDocumentLine(e)
     );
-    this.stockTransferLines = json["StockTransferLines"]?.map(
+    this.StockTransferLines = json["StockTransferLines"]?.map(
       (e: any) => new StockTransferRequestDocumentLine(e)
     );
     this.documentStatus = json["DocumentStatus"]
@@ -111,7 +123,7 @@ export default class StockTransferRequest extends Model implements MasterDocumen
       ?.charAt(0);
     this.fromWarehouse = json['FromWarehouse'];
     this.toWarehouse = json['ToWarehouse'];
-    this.shipToDefault = json['ShipToCode'];
+    // this.shipToCode = json['ShipToCode'];
     this.salesPersonCode = json['SalesPersonCode']
     this.contactPerson = json['ContactPerson']
     this.address = json['Address']
@@ -119,7 +131,18 @@ export default class StockTransferRequest extends Model implements MasterDocumen
     this.journalMemo = json['JournalMemo']
     this.documentStatus = json['DocumentStatus']
     this.contactPersonList = json['contactPersonList'];
-    this.shippingList = json['shippingList'];
+    this.shippingType = json['shippingType']
+    this.series = json['series'];
+    this.shippingType = json['shippingType']
+    this.shipToDefault = json['shipToDefault']
+    this.priceList = json['PriceList']
+    this.priceLists = json['PriceList']
+    this.salesPersonCode = json["SalesPersonCode"]
+    this.distributionRule = json['DistributionRule']
+    this.distributionRule2 = json['DistributionRule2']
+    this.shippingType =  json['shippingList']
+    this.shipToCode = json['ShipToCode']
+
   }
 
   toJson(update: boolean) {
@@ -131,13 +154,15 @@ export default class StockTransferRequest extends Model implements MasterDocumen
 
     return {
       CardCode: json['cardCode'],
-      CardName : json['cardName'],
+      CardName: json['cardName'],
       TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       AttachmentEntry: json["attachmentEntry"],
       DocCurrency: json["docCurrency"],
       DocRate: json["docRate"],
       Comments: json["comments"],
+      U_TRANSTYPE: "S",
+
       // Serie: json["serie"],
       // Series: json["Series"],
 
@@ -148,16 +173,16 @@ export default class StockTransferRequest extends Model implements MasterDocumen
       ),
       FromWarehouse: json['fromWarehouse'],
       ToWarehouse: json['toWarehouse'],
-      ShipToDefault: json['shipToDefault'],
+      ShipToCode: json['shipToDefault'],
       ContactPerson: json['contactPerson'],
-      SalesPersonCode : json['SalesPersonCode']
+      SalesPersonCode: json['SalesPersonCode'],
+      PriceList: json['priceList']
+
     };
   }
 
   public static toUpdate(json: any) {
     return {
-       CardCode: json['cardCode'],
-      CardName : json['cardName'],
       TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       AttachmentEntry: json["attachmentEntry"],
@@ -175,9 +200,10 @@ export default class StockTransferRequest extends Model implements MasterDocumen
       FromWarehouse: json['fromWarehouse'],
       ToWarehouse: json['toWarehouse'],
       ShipToCode: json['shipToDefault'],
-      ContactPerson: json['contactPerson'],
-      SalesPersonCode : json['salesPersonCode'],
-      JournalMemo: json['journalMemo']
+      // ContactPerson: json['contactPerson'],
+      SalesPersonCode: json['salesPersonCode'],
+      JournalMemo: json['journalMemo'],
+      PriceList: json['priceList']
 
     };
   }
@@ -220,7 +246,7 @@ export class StockTransferRequestDocumentLine extends Model implements DocumentL
       Quantity: json["quantity"],
       ItemCode: json["itemCode"],
       ItemDescription: json["itemName"],
-      UnitPrice: json["unitPrice"],
+      // UnitPrice: json["unitPrice"],
       DocEntry: json["uomGroupEntry"],
       UoMCode: json["uomCode"],
       UoMEntry: json["uomEntry"],
@@ -228,7 +254,21 @@ export class StockTransferRequestDocumentLine extends Model implements DocumentL
       WarehouseCode: json["warehouseCode"],
     };
 
+    return line;
+  }
 
+  public static toUpdate(json: any, type: any) {
+    let line = {
+      Quantity: json["quantity"],
+      ItemCode: json["itemCode"],
+      ItemDescription: json["itemName"],
+      UnitPrice: json["unitPrice"],
+      DocEntry: json["uomGroupEntry"],
+      UoMCode: json["uomCode"],
+      // UoMEntry: json["uomEntry"],
+      FromWarehouseCode: json["fromWarehouseCode"],
+      WarehouseCode: json["warehouseCode"],
+    };
 
     return line;
   }
