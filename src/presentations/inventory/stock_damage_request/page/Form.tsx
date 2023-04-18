@@ -9,9 +9,8 @@ import GLAccount from "../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import Formular from "@/utilies/formular";
 import VatGroupRepository from "@/services/actions/VatGroupRepository";
-import DamageTransferRepository from "@/services/actions/damageTransferRequestRepository";
-import DamageTransfer from "@/models/DamageTransfer";
-
+import StockDamageRequest from "@/models/StockDamageRequest";
+import StockDamageRequestRepository from "@/services/actions/stockDamageRequestRepository";
 
 class StockDamageRequestForm extends CoreFormDocument {
   constructor(props: any) {
@@ -56,7 +55,7 @@ class StockDamageRequestForm extends CoreFormDocument {
           500
         );
       } else {
-        new DamageTransferRepository()
+        new StockDamageRequestRepository()
           .find(this.props.match.params.id)
           .then((res: any) => {
             this.setState({ ...res, loading: false });
@@ -68,14 +67,14 @@ class StockDamageRequestForm extends CoreFormDocument {
     }
 
     DocumentSerieRepository.getDocumentSeries(
-      DamageTransferRepository.documentSerie
+      StockDamageRequestRepository.documentSerie
     ).then((res: any) => {
       this.setState({ ...this.state, series: res, isLoadingSerie: false });
     });
 
     if (!this.props.edit) {
       DocumentSerieRepository.getDefaultDocumentSerie(
-        DamageTransferRepository.documentSerie
+        StockDamageRequestRepository.documentSerie
       ).then((res: any) => {
         this.setState({
           ...this.state,
@@ -140,10 +139,10 @@ class StockDamageRequestForm extends CoreFormDocument {
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params;
 
-    await new DamageTransferRepository()
+    await new StockDamageRequestRepository()
       .post(this.state, this.props?.edit, id)
       .then((res: any) => {
-        const stockTransfer = new DamageTransfer(res?.data);
+        const stockTransfer = new StockDamageRequest(res?.data);
 
         this.props.history.replace(
           this.props.location.pathname?.replace("create", stockTransfer.id),

@@ -7,24 +7,25 @@ import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
-import DamageTransferRepository from "@/services/actions/damageTransferRequestRepository";
+import StockDamageRequestRepository from "@/services/actions/stockDamageRequestRepository";
 
-export default function StockDamageRequestList() {
+export default function StockTransferRequestList() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["dtr"],
-    queryFn: () => new DamageTransferRepository().get(),
+    queryKey: ["stock-damage-request"],
+    queryFn: () => new StockDamageRequestRepository().get(),
   });
   console.log(data);
   const columns = React.useMemo(
     () => [
+
       {
         accessorKey: "docNum",
         header: "Doc Num", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
-        size: 88,
+        size: 99,
       },
       {
         accessorKey: "cardCode",
@@ -34,6 +35,7 @@ export default function StockDamageRequestList() {
       {
         accessorKey: "cardName",
         header: "BP Name",
+        enableClickToCopy: true,
         // size: 200, //increase the width of this column
       },
 
@@ -71,7 +73,7 @@ export default function StockDamageRequestList() {
           <div className="flex gap-4">
             <button
               onClick={() => {
-                route("/stock-damage-request/" + cell.row.original.id, {
+                route("/inventory/stock-transfer-request/" + cell.row.original.id, {
                   state: cell.row.original,
                 });
               }}

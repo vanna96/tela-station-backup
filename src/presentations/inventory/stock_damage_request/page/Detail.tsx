@@ -18,9 +18,10 @@ import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
 import BusinessPartner, { ContactEmployee } from '@/models/BusinessParter';
 import BuyerRepository from '@/services/actions/BuyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
+import InternalTransferRepository from '@/services/actions/internalTransferRepository';
 import WarehouseRepository from '@/services/warehouseRepository';
-import DamageTransfer from '@/models/DamageTransfer';
-import DamageTransferRepository from '../../../../services/actions/damageTransferRequestRepository';
+import InternalTransfer from '@/models/InternalTransfer';
+import PriceListRepository from '@/services/actions/pricelistRepository';
 
 
 class StockDamageRequestDetail extends Component<any, any> {
@@ -43,16 +44,17 @@ class StockDamageRequestDetail extends Component<any, any> {
 
   initData() {
     const { id } = this.props.match.params;
-    const data = this.props.location.state as DamageTransfer;
+    const data = this.props.location.state as InternalTransfer;
     console.log(data);
 
     if (data) {
       setTimeout(() => {
         let stockTransfer = data;
-        stockTransfer as DamageTransfer;
+        stockTransfer as InternalTransfer;
         if (stockTransfer.contactPerson) {
           new BusinessPartnerRepository().findContactEmployee(stockTransfer.cardCode!).then((res: BusinessPartner) => {
             stockTransfer.contactPersonList = res.contactEmployee || [];
+            stockTransfer.shippingType = res.bpAddress || [];
             this.setState({ ...stockTransfer, loading: false })
           })
         }
@@ -66,7 +68,7 @@ class StockDamageRequestDetail extends Component<any, any> {
         }
       }, 500)
     } else {
-      new DamageTransferRepository().find(id).then((res: any) => {
+      new InternalTransferRepository().find(id).then((res: any) => {
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {
         this.setState({ isError: true, message: e.message });
@@ -110,8 +112,16 @@ class StockDamageRequestDetail extends Component<any, any> {
 
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Ship To </span>
+                  <span className='w-4/12 text-gray-500'>Ship To Code</span>
+                  <span className='w-8/12 font-medium'>: {this.state?.shipToCode || "N/A"}</span>
+                </div>
+                <div className='flex gap-2'>
+                  <span className='w-4/12 text-gray-500'>Ship To Address</span>
                   <span className='w-8/12 font-medium'>: {this.state?.address || "N/A"}</span>
+                </div>
+                <div className='flex gap-2'>
+                  <span className='w-4/12 text-gray-500'>Price List</span>
+                  <span className='w-8/12 font-medium'>: {new PriceListRepository().find(this.state.priceList)?.PriceListName || "N/A"}</span>
                 </div>
 
               </div>
@@ -183,16 +193,16 @@ function Content(props: any) {
       header: "Descriptions",
 
     },
-    {
-      accessorKey: "fromWarehouseCode",
-      header: "	From Warehouse ",
-      enableClickToCopy: true,
-    },
-    {
-      accessorKey: "warehouseCode",
-      header: "	To Warehouse",
-      enableClickToCopy: true,
-    },
+    // {
+    //   accessorKey: "fromWarehouseCode",
+    //   header: "	From Warehouse ",
+    //   enableClickToCopy: true,
+    // },
+    // {
+    //   accessorKey: "warehouseCode",
+    //   header: "	To Warehouse",
+    //   enableClickToCopy: true,
+    // },
     {
       accessorKey: "quantity",
       header: "Quantity",
