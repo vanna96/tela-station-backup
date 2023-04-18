@@ -3,14 +3,17 @@ import request from "@/utilies/request";
 import StockTransferRequest from "@/models/StockTransferRequest";
 
 export default class StockTransferRequestRepository extends Repository<StockTransferRequest> {
-  url: string = "/InventoryTransferRequests?$filter=U_TRANSTYPE eq 'S'";
+  url: string = "/InventoryTransferRequests";
+  query: string = "?$filter=U_TRANSTYPE eq 'S'";
 
   public static documentSerie = {
     Document: "1470000113",
   };
 
+
+
   async get<T>(query?: string): Promise<T[]> {
-    const response: any = await request("GET", this.url)
+    const response: any = await request("GET", this.url + this.query)
       .then((res: any) => {
         const data = res?.data?.value?.map((e: any) => new StockTransferRequest(e));
         return data;
@@ -21,6 +24,7 @@ export default class StockTransferRequestRepository extends Repository<StockTran
     console.log(response)
     return response;
   }
+
 
   async find<T>(id: any): Promise<any> {
     const stockTransfer = await request("GET", `${this.url}(${id})`)

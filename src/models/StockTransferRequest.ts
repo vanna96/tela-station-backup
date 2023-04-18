@@ -34,8 +34,8 @@ export interface StockTransferRequestProps {
   items: StockTransferRequestDocumentLineProps[];
   StockTransferLines: StockTransferRequestDocumentLineProps[];
   contactPersonList?: ContactEmployee[];
-  ShippingType? : BPAddress[]
-  shippingList ?: BPAddress[];
+  ShippingType?: BPAddress[]
+  shippingList?: BPAddress[];
   series?: BPAddress[];
 
 
@@ -75,7 +75,7 @@ export default class StockTransferRequest extends Model implements MasterDocumen
   address?: string;
   documentStatus?: string;
   serie: string;
-  shippingType?: BPAddress[] ;
+  shippingType?: BPAddress[];
   items: StockTransferRequestDocumentLine[];
   documentowner?: string;
   StockTransferLines?: StockTransferRequestDocumentLine[];
@@ -88,9 +88,9 @@ export default class StockTransferRequest extends Model implements MasterDocumen
   dueDate?: string;
   series?: BPAddress[];
   contactPersonList?: ContactEmployee[];
-  ShippingType ?: BPAddress[];
-  shipToCode ?: string | undefined;
-  priceList ?: string | undefined ;
+  ShippingType?: BPAddress[];
+  shipToCode?: string | undefined;
+  priceList?: string | undefined;
   distributionRule?: string | undefined;
   distributionRule2?: string | undefined;
   priceLists?: string | undefined;
@@ -140,7 +140,7 @@ export default class StockTransferRequest extends Model implements MasterDocumen
     this.salesPersonCode = json["SalesPersonCode"]
     this.distributionRule = json['DistributionRule']
     this.distributionRule2 = json['DistributionRule2']
-    this.shippingType =  json['shippingList']
+    this.shippingType = json['shippingList']
     this.shipToCode = json['ShipToCode']
 
   }
@@ -203,7 +203,9 @@ export default class StockTransferRequest extends Model implements MasterDocumen
       // ContactPerson: json['contactPerson'],
       SalesPersonCode: json['salesPersonCode'],
       JournalMemo: json['journalMemo'],
-      PriceList: json['priceList']
+      PriceList: json['priceList'],
+      U_TRANSTYPE: "S",
+
 
     };
   }
@@ -249,7 +251,7 @@ export class StockTransferRequestDocumentLine extends Model implements DocumentL
       // UnitPrice: json["unitPrice"],
       DocEntry: json["uomGroupEntry"],
       UoMCode: json["uomCode"],
-      UoMEntry: json["uomEntry"],
+      // UoMEntry: json["uomEntry"],
       FromWarehouseCode: json["fromWarehouseCode"],
       WarehouseCode: json["warehouseCode"],
     };
@@ -263,11 +265,11 @@ export class StockTransferRequestDocumentLine extends Model implements DocumentL
       ItemCode: json["itemCode"],
       ItemDescription: json["itemName"],
       UnitPrice: json["unitPrice"],
-      DocEntry: json["uomGroupEntry"],
-      UoMCode: json["uomCode"],
+      // DocEntry: json["uomGroupEntry"],
+      // UoMCode: json["uomCode"],
       // UoMEntry: json["uomEntry"],
-      FromWarehouseCode: json["fromWarehouseCode"],
-      WarehouseCode: json["warehouseCode"],
+      // FromWarehouseCode: json["fromWarehouseCode"],
+      // WarehouseCode: json["warehouseCode"],
     };
 
     return line;

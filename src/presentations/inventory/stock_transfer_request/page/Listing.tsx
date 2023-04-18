@@ -9,22 +9,23 @@ import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
 import StockTransferRequestRepository from "@/services/actions/stockTransferRequestRepository";
 
-export default function StockTransferRequestLists() {
+export default function StockTransferRequestList() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["str"],
+    queryKey: ["stock-transfer-request"],
     queryFn: () => new StockTransferRequestRepository().get(),
   });
   console.log(data);
   const columns = React.useMemo(
     () => [
+     
       {
         accessorKey: "docNum",
         header: "Doc Num", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
-        size: 88,
+        size: 99,
       },
       {
         accessorKey: "cardCode",
@@ -34,6 +35,7 @@ export default function StockTransferRequestLists() {
       {
         accessorKey: "cardName",
         header: "BP Name",
+        enableClickToCopy: true,
         // size: 200, //increase the width of this column
       },
 
@@ -134,7 +136,7 @@ export default function StockTransferRequestLists() {
               return (
                 <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
                   <h3 className="font-bold text-base xl:text-sm">
-                    Stock Transfer Request
+                   Stock Transfer Request
                   </h3>
                   {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
                 </div>

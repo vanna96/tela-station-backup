@@ -38,11 +38,11 @@ export default function InventoryRoute() {
         <Route path=':id/edit' element={<StockDamageRequestForm edit={true} />} />
 
       </Route>
-      <Route path="/internal-damage-request">
-        <Route index element={<PurchaseAgreementLists />} />
-        <Route path=':id' element={<PurchaseAgreementDetail />} />
-        <Route path='create' element={<PurchaseAgreementForm />} />
-        <Route path=':id/edit' element={<PurchaseAgreementForm edit={true} />} />
+      <Route path="/stock-transfer-request">
+        <Route index element={<StockTransferRequestLists />} />
+        <Route path=':id' element={<StockTransferRequestDetail />} />
+        <Route path='create' element={<StockTransferRequestForm />} />
+        <Route path=':id/edit' element={<StockTransferRequestForm edit={true} />} />
 
       </Route>
       <Route path="/stock-transfer">

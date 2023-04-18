@@ -203,7 +203,8 @@ export default class InternalTransfer extends Model implements MasterDocument {
       // ContactPerson: json['contactPerson'],
       SalesPersonCode: json['salesPersonCode'],
       JournalMemo: json['journalMemo'],
-      PriceList: json['priceList']
+      PriceList: json['priceList'],
+      U_TRANSTYPE: "I",
 
     };
   }

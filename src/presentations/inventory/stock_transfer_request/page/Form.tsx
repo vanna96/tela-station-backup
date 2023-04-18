@@ -5,13 +5,12 @@ import ContentForm from "../component/ContentForm";
 import { LoadingButton } from "@mui/lab";
 import AttachmentForm from "@/components/attachment";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
-import StockTransferRequestRepository from "@/services/actions/stockTransferRequestRepository";
 import GLAccount from "../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import Formular from "@/utilies/formular";
 import VatGroupRepository from "@/services/actions/VatGroupRepository";
-import StockTransfer from "@/models/StockTransfer";
-
+import StockTransferRequest from "@/models/StockTransferRequest";
+import StockTransferRequestRepository from "@/services/actions/stockTransferRequestRepository";
 
 class StockTransferRequestForm extends CoreFormDocument {
   constructor(props: any) {
@@ -143,7 +142,7 @@ class StockTransferRequestForm extends CoreFormDocument {
     await new StockTransferRequestRepository()
       .post(this.state, this.props?.edit, id)
       .then((res: any) => {
-        const stockTransfer = new StockTransfer(res?.data);
+        const stockTransfer = new StockTransferRequest(res?.data);
 
         this.props.history.replace(
           this.props.location.pathname?.replace("create", stockTransfer.id),
