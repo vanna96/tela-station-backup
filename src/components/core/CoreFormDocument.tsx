@@ -68,7 +68,7 @@ export interface CoreFormDocumentState {
     attachmentEntry?: null,
     project?: string | undefined | null,
     contactPersonList?: any[],
-    // ShippingType?: any[],
+    ShippingType?: any[],
     shippingType?: any[]
     items?: any[],
     services?: any[],

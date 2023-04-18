@@ -53,6 +53,7 @@ class InternalTransferDetails extends Component<any, any> {
         if (stockTransfer.contactPerson) {
           new BusinessPartnerRepository().findContactEmployee(stockTransfer.cardCode!).then((res: BusinessPartner) => {
             stockTransfer.contactPersonList = res.contactEmployee || [];
+            stockTransfer.shippingType = res.bpAddress || [];
             this.setState({ ...stockTransfer, loading: false })
           })
         }
@@ -110,7 +111,11 @@ class InternalTransferDetails extends Component<any, any> {
 
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Ship To </span>
+                  <span className='w-4/12 text-gray-500'>Ship To Code</span>
+                  <span className='w-8/12 font-medium'>: {this.state?.shipToCode || "N/A"}</span>
+                </div>
+                <div className='flex gap-2'>
+                  <span className='w-4/12 text-gray-500'>Ship To Address</span>
                   <span className='w-8/12 font-medium'>: {this.state?.address || "N/A"}</span>
                 </div>
 

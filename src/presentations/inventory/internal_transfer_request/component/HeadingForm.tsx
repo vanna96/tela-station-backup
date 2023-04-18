@@ -37,8 +37,9 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <div className="">
                 <MUISelect
                   items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
+                  // onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
                   value={edit ? data?.contactPerson : data?.contactPersonCode}
+                  onChange={edit ? (e) => handlerChange('contactPerson', e.target.value) : (e) => handlerChange('contactPersonCode', e.target.value)}
                   // value={data?.contactPerson}
                   aliasvalue="id"
                   aliaslabel="name"
@@ -59,12 +60,12 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                   federalTaxId: e.federalTaxId,
                   addressType: e.addressType
                 }))}
-                onChange={(e) => handlerChange('shipToDefault', e.target.value)}
-                // value={data?.shipToDefault}
-                value={edit ? data?.shipToCode : data?.shipToDefault}
+                onChange={(e) => handlerChange('shipToCode', e.target.value)}
+                value={data?.shipToCode}
+                // value={edit ? data?.shipToCode : data?.shipToCode}
                 aliasvalue="addressName"
                 aliaslabel="addressName"
-                name="shipToDefault"
+                name="shipToCode"
               />
 
             </div>
@@ -85,15 +86,14 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To Address</label>
 
               <TextField
-                disabled={edit}
                 size="small"
                 multiline
                 rows={3}
                 fullWidth
+                onChange={(e) => handlerChange('shipToCode', e.target.value)}
                 name="address"
                 className="w-full "
-                // value={getShippingAddress(data.shipToCode, data.shippingType)}
-                value={edit ? data?.address : getShippingAddress(data.shipToDefault, data.shippingType)}
+                value={getShippingAddress(data.shipToCode, data.shippingType)}
 
               />
 

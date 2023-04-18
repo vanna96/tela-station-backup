@@ -46,8 +46,8 @@ export default class InternalTransferRepository extends Repository<InternalTrans
 
     // internalTransfer.email = businessPartner.email;
     // internalTransfer.phone = businessPartner.phone;
-    internalTransfer.contactPersonList = businessPartner.contactEmployee ?? [];
-    internalTransfer.shippingType = businessPartner.bpAddress ?? []
+    // internalTransfer.contactPersonList = businessPartner.contactEmployee ?? [];
+    // internalTransfer.shippingType = businessPartner.bpAddress ?? []
     console.log(businessPartner.bpAddress)
 
     return internalTransfer;

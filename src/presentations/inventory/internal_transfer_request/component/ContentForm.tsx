@@ -307,7 +307,9 @@ export default function ContentForm({
             <BuyerSelect
               
               onChange={(e) => handlerChange("salePersonCode", e.target.value)}
-              value={data?.salePersonCode}
+              // value={data?.salePersonCode}
+              value={edit ? data?.salesPersonCode : data?.salePersonCode}
+
               name="SalesPersonCode"
             />
             <div className="flex flex-col gap-1 text-sm">

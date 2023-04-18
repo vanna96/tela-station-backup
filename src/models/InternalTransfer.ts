@@ -88,7 +88,13 @@ export default class InternalTransfer extends Model implements MasterDocument {
   dueDate?: string;
   series?: BPAddress[];
   contactPersonList?: ContactEmployee[];
+  ShippingType ?: BPAddress[];
   shipToCode ?: string | undefined;
+  priceList ?: string | undefined ;
+  distributionRule?: string | undefined;
+  distributionRule2?: string | undefined;
+  priceLists?: string | undefined;
+  ContactPerson?: string | undefined;
 
 
   constructor(json: any) {
@@ -124,11 +130,17 @@ export default class InternalTransfer extends Model implements MasterDocument {
     this.journalMemo = json['JournalMemo']
     this.documentStatus = json['DocumentStatus']
     this.contactPersonList = json['contactPersonList'];
+    this.shippingType = json['shippingType']
     this.series = json['series'];
     this.shippingType = json['shippingType']
     this.shipToDefault = json['shipToDefault']
-    this.shipToCode = json['ShipToCode'];
-
+    this.priceList = json['PriceList']
+    this.priceLists = json['PriceList']
+    this.salesPersonCode = json["SalesPersonCode"]
+    this.distributionRule = json['DistributionRule']
+    this.distributionRule2 = json['DistributionRule2']
+    this.shippingType =  json['shippingList']
+    this.shipToCode = json['ShipToCode']
 
   }
 
@@ -161,7 +173,9 @@ export default class InternalTransfer extends Model implements MasterDocument {
       ToWarehouse: json['toWarehouse'],
       ShipToCode: json['shipToDefault'],
       ContactPerson: json['contactPerson'],
-      SalesPersonCode: json['SalesPersonCode']
+      SalesPersonCode: json['SalesPersonCode'],
+      PriceList: json['priceList']
+
     };
   }
 
@@ -184,7 +198,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
       FromWarehouse: json['fromWarehouse'],
       ToWarehouse: json['toWarehouse'],
       ShipToCode: json['shipToDefault'],
-      ContactPerson: json['contactPerson'],
+      // ContactPerson: json['contactPerson'],
       SalesPersonCode: json['salesPersonCode'],
       JournalMemo: json['journalMemo']
 
@@ -229,7 +243,7 @@ export class InternalTransferDocumentLine extends Model implements DocumentLine 
       Quantity: json["quantity"],
       ItemCode: json["itemCode"],
       ItemDescription: json["itemName"],
-      UnitPrice: json["unitPrice"],
+      // UnitPrice: json["unitPrice"],
       DocEntry: json["uomGroupEntry"],
       UoMCode: json["uomCode"],
       UoMEntry: json["uomEntry"],
