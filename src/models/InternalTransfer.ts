@@ -95,6 +95,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
   distributionRule2?: string | undefined;
   priceLists?: string | undefined;
   ContactPerson?: string | undefined;
+  U_TRANSTYPE?: string | undefined;
 
 
   constructor(json: any) {
@@ -160,6 +161,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
       DocCurrency: json["docCurrency"],
       DocRate: json["docRate"],
       Comments: json["comments"],
+      U_TRANSTYPE: "I",
 
       // Serie: json["serie"],
       // Series: json["Series"],

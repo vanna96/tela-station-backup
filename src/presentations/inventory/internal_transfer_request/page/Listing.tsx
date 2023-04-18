@@ -19,12 +19,13 @@ export default function InternalTransferLists() {
   console.log(data);
   const columns = React.useMemo(
     () => [
+     
       {
         accessorKey: "docNum",
         header: "Doc Num", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
-        size: 88,
+        size: 99,
       },
       {
         accessorKey: "cardCode",
@@ -34,6 +35,7 @@ export default function InternalTransferLists() {
       {
         accessorKey: "cardName",
         header: "BP Name",
+        enableClickToCopy: true,
         // size: 200, //increase the width of this column
       },
 

@@ -193,16 +193,16 @@ function Content(props: any) {
       header: "Descriptions",
 
     },
-    {
-      accessorKey: "fromWarehouseCode",
-      header: "	From Warehouse ",
-      enableClickToCopy: true,
-    },
-    {
-      accessorKey: "warehouseCode",
-      header: "	To Warehouse",
-      enableClickToCopy: true,
-    },
+    // {
+    //   accessorKey: "fromWarehouseCode",
+    //   header: "	From Warehouse ",
+    //   enableClickToCopy: true,
+    // },
+    // {
+    //   accessorKey: "warehouseCode",
+    //   header: "	To Warehouse",
+    //   enableClickToCopy: true,
+    // },
     {
       accessorKey: "quantity",
       header: "Quantity",

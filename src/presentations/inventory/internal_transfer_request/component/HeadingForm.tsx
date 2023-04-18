@@ -48,25 +48,45 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
 
               </div>
             </div>
+
+
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To </label>
-
-              <MUISelect
-                items={data?.shippingType?.filter((e: { addressName: string; }) => e.addressName !== 'Bill To').map((e: BPAddress) => ({
-                  addressName: e.addressName,
-                  street: e.street,
-                  city: e.city,
-                  country: e.city,
-                  federalTaxId: e.federalTaxId,
-                  addressType: e.addressType
-                }))}
-                onChange={(e) => handlerChange('shipToCode', e.target.value)}
-                value={data?.shipToCode}
-                // value={edit ? data?.shipToCode : data?.shipToCode}
-                aliasvalue="addressName"
-                aliaslabel="addressName"
-                name="shipToCode"
-              />
+              {edit ? (
+                <MUISelect
+                  items={data?.shippingType?.filter((e: { addressName: string; }) => e.addressName !== 'Bill To').map((e: BPAddress) => ({
+                    addressName: e.addressName,
+                    street: e.street,
+                    city: e.city,
+                    country: e.city,
+                    federalTaxId: e.federalTaxId,
+                    addressType: e.addressType
+                  }))}
+                  onChange={(e) => handlerChange('shipToCode', e.target.value)}
+                  value={data?.shipToCode}
+                  // value={edit ? data?.shipToCode : data?.shipToCode}
+                  aliasvalue="addressName"
+                  aliaslabel="addressName"
+                  name="shipToCode"
+                />
+              ) : (
+                <MUISelect
+                  items={data?.shippingType?.filter((e: { addressName: string; }) => e.addressName !== 'Bill To').map((e: BPAddress) => ({
+                    addressName: e.addressName,
+                    street: e.street,
+                    city: e.city,
+                    country: e.city,
+                    federalTaxId: e.federalTaxId,
+                    addressType: e.addressType
+                  }))}
+                  onChange={(e) => handlerChange('shipToDefault', e.target.value)}
+                  value={data?.shipToDefault}
+                  // value={edit ? data?.shipToDefault : data?.shipToDefault}
+                  aliasvalue="addressName"
+                  aliaslabel="addressName"
+                  name="shipToDefault"
+                />
+              )}
 
             </div>
           </div>
@@ -74,29 +94,51 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Price List</label>
               <div className="">
-                <PriceListSelect
-                  name="priceLists"
-                  value={data.priceList}
-                  onChange={(e: any) => handlerChange('priceList', e.target.value)}
-                />
+
+                {edit ? (
+                  <PriceListSelect
+                    name="priceLists"
+                    value={data.priceList}
+                    onChange={(e: any) => handlerChange('priceList', e.target.value)}
+                  />
+                ) : (
+                  <PriceListSelect
+                    disabled={edit}
+                    name="priceLists"
+                    value={data.priceLists}
+                    onChange={(e: any) => handlerChange('priceLists', e)}
+                  />
+                )}
 
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">Ship To Address</label>
 
-              <TextField
-                size="small"
-                multiline
-                rows={3}
-                fullWidth
-                onChange={(e) => handlerChange('shipToCode', e.target.value)}
-                name="address"
-                className="w-full "
-                value={getShippingAddress(data.shipToCode, data.shippingType)}
+              {edit === data.address ? (
+                <TextField
+                  size="small"
+                  multiline
+                  rows={3}
+                  fullWidth
+                  name="address"
+                  className="w-full "
+                  value={getShippingAddress(data.shipToDefault, data.shippingType)}
 
-              />
+                />
+              ) : (
+                <TextField
+                  size="small"
+                  multiline
+                  rows={3}
+                  fullWidth
+                  name="address"
+                  className="w-full "
+                  value={data.address}
 
+
+                />
+              )}
             </div>
           </div>
         </div>
