@@ -31,6 +31,7 @@ import BranchRepository from '../../../../services/actions/branchRepository';
 import ItemMaster from "@/models/ItemMasterData";
 import ItemMasterDataRepository from "@/services/actions/itemMasterDataRepository";
 import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
+import ItemGroupRepository from "@/services/actions/itemGroupRepository";
 
 class ItemMasterDataDetails extends Component<any, any> {
   constructor(props: any) {
@@ -112,13 +113,15 @@ class ItemMasterDataDetails extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Item Type</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.itemType}
+                    : {this.state.itemType.substring(2)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Item Group</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.itemsGroupCode}
+                    {/* : {this.state.itemsGroupCode} */}
+                    : {new ItemGroupRepository().find(this.state.itemsGroupCode)?.GroupName}
+
                   </span>
                 </div>
 
