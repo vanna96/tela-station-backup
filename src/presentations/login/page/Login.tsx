@@ -19,6 +19,7 @@ import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import BranchRepository from '../../../services/actions/branchRepository';
 import WarehouseRepository from '@/services/warehouseRepository';
 import DistributionRuleRepository from '@/services/actions/distributionRulesRepository';
+import PriceListRepository from '@/services/actions/pricelistRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -59,7 +60,8 @@ export default function Login() {
       await new VatGroupRepository().get(),
       await new BranchRepository().get(),
       await new WarehouseRepository().get(),
-      await new DistributionRuleRepository().get()
+      await new DistributionRuleRepository().get(),
+      await new PriceListRepository().get()
     ]);
   }
 

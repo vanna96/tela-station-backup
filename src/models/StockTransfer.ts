@@ -194,7 +194,8 @@ export default class StockTransfer extends Model implements MasterDocument {
       ShipToCode: json['shipToDefault'],
       ContactPerson: json['contactPerson'],
       SalesPersonCode: json['salesPersonCode'],
-      JournalMemo: json['journalMemo']
+      JournalMemo: json['journalMemo'],
+      PriceList: json['priceList']
 
     };
   }

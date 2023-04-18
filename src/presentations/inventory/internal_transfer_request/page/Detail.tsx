@@ -21,6 +21,7 @@ import BusinessPartnerRepository from '@/services/actions/bussinessPartnerReposi
 import InternalTransferRepository from '@/services/actions/internalTransferRepository';
 import WarehouseRepository from '@/services/warehouseRepository';
 import InternalTransfer from '@/models/InternalTransfer';
+import PriceListRepository from '@/services/actions/pricelistRepository';
 
 
 class InternalTransferDetails extends Component<any, any> {
@@ -117,6 +118,10 @@ class InternalTransferDetails extends Component<any, any> {
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Ship To Address</span>
                   <span className='w-8/12 font-medium'>: {this.state?.address || "N/A"}</span>
+                </div>
+                <div className='flex gap-2'>
+                  <span className='w-4/12 text-gray-500'>Price List</span>
+                  <span className='w-8/12 font-medium'>: {new PriceListRepository().find(this.state.priceList)?.PriceListName || "N/A"}</span>
                 </div>
 
               </div>

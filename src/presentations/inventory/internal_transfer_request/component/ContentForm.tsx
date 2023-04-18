@@ -325,11 +325,11 @@ export default function ContentForm({
                   name="journalMemo"
                   className="w-full "
                   // value={data?.journalMemo}
-                  value={"Stock Transfers - " + data?.cardCode ?? ""}
+                  value={"Inventory Transfer Request - " + data?.cardCode ?? ""}
                   onChange={(e) => handlerChange("cardCode", e.target.value)}
                 />
               </div>
-            </div>
+          </div>
           </div>
         </div>
       </div>

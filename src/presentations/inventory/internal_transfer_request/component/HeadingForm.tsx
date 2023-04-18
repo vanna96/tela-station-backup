@@ -76,8 +76,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <div className="">
                 <PriceListSelect
                   name="priceLists"
-                  value={data.priceLists}
-                  onChange={(e: any) => handlerChange('priceLists', e)}
+                  value={data.priceList}
+                  onChange={(e: any) => handlerChange('priceList', e.target.value)}
                 />
 
               </div>
