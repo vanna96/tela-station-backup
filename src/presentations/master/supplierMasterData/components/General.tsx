@@ -123,7 +123,7 @@ export default function General({
             </div>
             <div>
               <label
-                htmlFor="AgreementMethod"
+                htmlFor="Code"
                 className="text-gray-500 text-[14px]"
               >
                 Type of Business
@@ -133,8 +133,8 @@ export default function General({
                 items={[
                   { name: "Company", value: "cCompany" },
                   { name: "Employee", value: "E" },
-                  { name: "Government", value: "G" },
-                  { name: "Private", value: "I" },
+                  { name: "Government", value: "cGovernment" },
+                  { name: "Private", value: "cPrivate" },
                 ]}
                 aliaslabel="name"
                 aliasvalue="value"

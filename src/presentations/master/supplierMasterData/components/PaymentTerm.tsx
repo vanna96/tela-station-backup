@@ -96,16 +96,16 @@ export default function PaymentTerms({
               </label>
               <MUISelect
                 items={[
-                  { name: "Average", value: "A" },
-                  { name: "Highest Discount", value: "H" },
+                  { name: "Average", value: "dgrAverageDiscount" },
+                  { name: "Highest Discount", value: "dgrHighestDiscount" },
                   { name: "Lowest Discount", value: "dgrLowestDiscount" },
-                  { name: "Discount Multiples", value: "M" },
-                  { name: "Total", value: "S" },
+                  { name: "Discount Multiples", value: "dgrMultipliedDiscount" },
+                  { name: "Total", value: "dgrDiscountTotals" },
                 ]}
                 aliaslabel="name"
                 aliasvalue="value"
                 name="EffectiveDiscount"
-                value={data?.effectiveDiscount}
+                value={data?.effectiveDiscount ?? "L"}
                 onChange={(e) =>
                   handlerChange("effectiveDiscount", e.target.value)
                 }
@@ -119,8 +119,8 @@ export default function PaymentTerms({
               <MUISelect
                 items={[
                   { name: "Default Priority", value: "epDefaultPriority" },
-                  { name: "Highest Price", value: "H" },
-                  { name: "Lowest Price", value: "L" },
+                  { name: "Highest Price", value: "epHighestPrice" },
+                  { name: "Lowest Price", value: "epLowestPrice" },
                 ]}
                 aliaslabel="name"
                 aliasvalue="value"
@@ -163,9 +163,9 @@ export default function PaymentTerms({
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Bank Code"
-              value={data?.bankCode}
-              name="BankCode"
-              onChange={(e: any) => handlerChange("bankCode", e.target.value)}
+              value={data?.defaultBankCode}
+              name="DefaultBankCode"
+              onChange={(e: any) => handlerChange("defaultBankCode", e.target.value)}
             />
             <MUITextField
               label="Account"

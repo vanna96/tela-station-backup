@@ -95,19 +95,19 @@ class SupplierDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Card Code</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.cardCode}
+                    : {this.state.cardCode ?? "N/A"}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Card Name</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.cardName}
+                    : {this.state.cardName ?? "N/A"}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Foreign Name</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.cardForeignName}
+                    : {this.state.cardForeignName ?? "N/A"}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -130,7 +130,7 @@ class SupplierDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Federal Tax ID</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.federalTaxID}
+                    : {this.state.federalTaxID ?? "N/A"}
                   </span>
                 </div>
               </div>
@@ -138,7 +138,7 @@ class SupplierDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Account Balance</span>
                   <span className="w-8/12 font-medium">
-                    : {currencyFormat(this.state.currentAccountBalance)}
+                    : {currencyFormat(this.state.currentAccountBalance ?? "N/A")}
                   </span>
                 </div>
                 <div className="flex gap-2">
@@ -146,13 +146,13 @@ class SupplierDetail extends Component<any, any> {
                     Goods Receipt POs
                   </span>
                   <span className="w-8/12 font-medium">
-                    : {currencyFormat(this.state.openDeliveryNotesBalance)}
+                    : {currencyFormat(this.state.openDeliveryNotesBalance ?? "N/A")}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Purchase Orders</span>
                   <span className="w-8/12 font-medium">
-                    : {currencyFormat(this.state.openOrdersBalance)}
+                    : {currencyFormat(this.state.openOrdersBalance ?? "N/A")}
                   </span>
                 </div>
               </div>
@@ -199,27 +199,27 @@ function General(props: any) {
         <div className="flex flex-col gap-2">
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Tel 1</span>
-            <span className="w-8/12 font-medium">: {data?.phone1}</span>
+            <span className="w-8/12 font-medium">: {data?.phone1 ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Tel 2</span>
-            <span className="w-8/12 font-medium">: {data?.phone2}</span>
+            <span className="w-8/12 font-medium">: {data?.phone2 ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Mobile Phone</span>
-            <span className="w-8/12 font-medium">: {data?.cellular}</span>
+            <span className="w-8/12 font-medium">: {data?.cellular ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Fax</span>
-            <span className="w-8/12 font-medium">: {data?.fax}</span>
+            <span className="w-8/12 font-medium">: {data?.fax ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">E-Mail</span>
-            <span className="w-8/12 font-medium">: {data?.emailAddress}</span>
+            <span className="w-8/12 font-medium">: {data?.emailAddress ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Website</span>
-            <span className="w-8/12 font-medium">: {data?.website}</span>
+            <span className="w-8/12 font-medium">: {data?.website ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Shipping Type</span>:{" "}
@@ -228,50 +228,48 @@ function General(props: any) {
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Password</span>
-            <span className="w-8/12 font-medium">: {data?.password}</span>
+            <span className="w-8/12 font-medium">: {data?.password ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Factoring Indicator</span>
-            <span className="w-8/12 font-medium">: {data?.indicator}</span>
+            <span className="w-8/12 font-medium">: {data?.indicator ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">
               Business Partner Project
             </span>
-            <span className="w-8/12 font-medium">: {data?.projectCode}</span>
+            <span className="w-8/12 font-medium">: {data?.projectCode ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Industry</span>:{" "}
-            {new IndustryRepository().find(data?.industry)?.name ?? "N/A"}
+            <span className="w-4/12 text-gray-500">Industry</span>: {new IndustryRepository().find(data?.industry)?.name ?? "N/A"}
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Type Of Business</span>
-            <span className="w-8/12 font-medium">: {BusinessPatners.getCompany(data.companyPrivate)}</span>
-            {/* <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'></span> <span className='col-span-2 font-medium'>:{BusinessPatners.getCompany(data.companyPrivate)}</span></div> */}
+            <span className="w-8/12 font-medium"> : {BusinessPatners.getCompany(data.companyPrivate)}</span>
           </div>
           <div className="flex gap-2">
-            <span className="w-4/1 text-gray-500">Alias Name</span>
-            <span className="w-8/12 f2ont-medium">: {data?.aliasName}</span>
+            <span className="w-4/12 text-gray-500">Alias Name</span>
+            <span className="w-8/12 f2ont-medium">: {data?.aliasName ?? "N/A"}</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Contact Person</span>
-            <span className="w-8/12 font-medium">: {data?.contactPerson}</span>
+            <span className="w-8/12 font-medium">: {data?.contactPerson ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">ID No. 2</span>
-            <span className="w-8/12 font-medium">: {data?.additionalID}</span>
+            <span className="w-8/12 font-medium">: {data?.additionalID ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">unified Federal Tax ID</span>
             <span className="w-8/12 font-medium">
-              : {data?.unifiedFederalTaxID}
+              : {data?.unifiedFederalTaxID ?? "N/A"}
             </span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Remarks</span>
-            <span className="w-8/12 font-medium">: {data?.notes}</span>
+            <span className="w-8/12 font-medium">: {data?.notes?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Buyer</span>:{" "}
@@ -284,7 +282,7 @@ function General(props: any) {
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">GLN</span>
             <span className="w-8/12 font-medium">
-              : {data?.globalLocationNumber}
+              : {data?.globalLocationNumber?? "N/A"}
             </span>
           </div>
           
@@ -301,73 +299,73 @@ function ContactPerson(props: any) {
         <div className="flex flex-col gap-2">
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Contact ID</span>
-            <span className="w-8/12 font-medium">: {data?.name}</span>
+            <span className="w-8/12 font-medium">: {data?.name ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">First Name</span>
-            <span className="w-8/12 font-medium">: {data?.firstName}</span>
+            <span className="w-8/12 font-medium">: {data?.firstName ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Middle Name</span>
-            <span className="w-8/12 font-medium">: {data?.middleName}</span>
+            <span className="w-8/12 font-medium">: {data?.middleName ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Last Name</span>
-            <span className="w-8/12 font-medium">: {data?.lastName}</span>
+            <span className="w-8/12 font-medium">: {data?.lastName ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Title</span>
-            <span className="w-8/12 font-medium">: {data?.title}</span>
+            <span className="w-8/12 font-medium">: {data?.title ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Position</span>
-            <span className="w-8/12 font-medium">: {data?.position}</span>
+            <span className="w-8/12 font-medium">: {data?.position ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Address</span>
-            <span className="w-8/12 font-medium">: {data?.address}</span>
+            <span className="w-8/12 font-medium">: {data?.address ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">TelePhone 1</span>
-            <span className="w-8/12 font-medium">: {data?.phone1}</span>
+            <span className="w-8/12 font-medium">: {data?.phone1 ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">TelePhone 2</span>
-            <span className="w-8/12 font-medium">: {data?.phone2}</span>
+            <span className="w-8/12 font-medium">: {data?.phone2 ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
-            <span className="w-4/12 text-gray-500">Mobile Phone</span>:{" "}
-            <span className="w-8/12 font-medium">: {data?.mobilePhone}</span>
+            <span className="w-4/12 text-gray-500">Mobile Phone</span>
+            <span className="w-8/12 font-medium">: {data?.mobilePhone ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Fax</span>
-            <span className="w-8/12 font-medium">: {data?.fax}</span>
+            <span className="w-8/12 font-medium">: {data?.fax ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">E-Mail</span>
-            <span className="w-8/12 font-medium">: {data?.e_Mail}</span>
+            <span className="w-8/12 font-medium">: {data?.e_Mail ?? "N/A"}</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Email Group</span>
-            <span className="w-8/12 font-medium">: {data?.emailGroupCode}</span>
+            <span className="w-8/12 font-medium">: {data?.emailGroupCode ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Pager</span>
-            <span className="w-8/12 font-medium">: {data?.pager}</span>
+            <span className="w-8/12 font-medium">: {data?.pager ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Remark 1</span>
-            <span className="w-8/12 font-medium">: {data?.remarks1}</span>
+            <span className="w-8/12 font-medium">: {data?.remarks1 ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Remark 2</span>
-            <span className="w-8/12 font-medium">: {data?.remarks1}</span>
+            <span className="w-8/12 font-medium">: {data?.remarks1 ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Password</span>
-            <span className="w-8/12 font-medium">: {data?.password}</span>
+            <span className="w-8/12 font-medium">: {data?.password?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">
@@ -379,24 +377,24 @@ function ContactPerson(props: any) {
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Date Of Birth</span>
-            <span className="w-8/12 font-medium">: {data?.dateOfBirth}</span>
+            <span className="w-8/12 font-medium">: {data?.dateOfBirth ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Gender</span>
-            <span className="w-8/12 font-medium">: {data?.gender}</span>
+            <span className="w-8/12 font-medium">: {data?.gender ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Profession</span>
-            <span className="w-8/12 font-medium">: {data?.profession}</span>
+            <span className="w-8/12 font-medium">: {data?.profession ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">City Of Birth</span>
-            <span className="w-8/12 font-medium">: {data?.cityOfBirth}</span>
+            <span className="w-8/12 font-medium">: {data?.cityOfBirth ?? "N/A"}</span>
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Connected Address</span>
             <span className="w-8/12 font-medium">
-              : {data?.connectedAddressName}
+              : {data?.connectedAddressName ?? "N/A"}
             </span>
           </div>
         </div>
@@ -567,15 +565,12 @@ function Paymentterms(props: any) {
             <span className="w-4/12 text-gray-500">
               Effective Discount Groups
             </span>
-            <span className="w-8/12 font-medium">
-              : {(data?.effectiveDiscount)?.replace("dgr", "")}
-            </span>
+            <span className="w-8/12 font-medium">: {BusinessPatners.getEffectiveDiscount(data.effectiveDiscount)}</span>
+
           </div>
           <div className="flex gap-2">
             <span className="w-4/12 text-gray-500">Effective Price</span>
-            <span className="w-8/12 font-medium">
-              : {(data?.effectivePrice)?.replace("ep", "")}
-            </span>
+            <span className="w-8/12 font-medium">: {BusinessPatners.getEffectivePrice(data.effectivePrice)}</span>
           </div>
           <span className="text-black text-[18px]">Business Partner Bank</span>
           <div className="flex gap-2">
