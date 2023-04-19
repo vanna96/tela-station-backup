@@ -51,7 +51,7 @@ export interface ItemMasterDocumentLineProps {
   vatGroup?: string | undefined;
 }
 
-export default class ItemMaster extends Model implements MasterDocument {
+export default class ItemMaster  {
   id: any;
   index: number;
   docNum: any;
@@ -184,10 +184,11 @@ export default class ItemMaster extends Model implements MasterDocument {
   itemPrices?: any[] | undefined;
   itemWarehouseInfoCollection?: any[] | undefined;
   itemBarCodeCollection?: any[] | undefined;
+  itemPreferredVendors?: any[] | undefined;
   documentLine?: ItemMasterDocumentLine[];
 
   constructor(json: any) {
-    super();
+    // super();
     this.index = index++
     this.id = json["ItemCode"];
     this.itemCode = json["ItemCode"];
@@ -319,7 +320,7 @@ export default class ItemMaster extends Model implements MasterDocument {
     this.itemPrices = json['ItemPrices'];
     this.itemWarehouseInfoCollection = json['ItemWarehouseInfoCollection']
     this.itemBarCodeCollection = json['ItemBarCodeCollection']
-
+    this.itemPreferredVendors = json['ItemPreferredVendors']
     // this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
     // this.items = json["DocumentLines"]?.map(
     //   (e: any) => new ItemMasterDocumentLine(e)

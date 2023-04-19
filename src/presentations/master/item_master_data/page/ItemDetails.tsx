@@ -33,8 +33,14 @@ import ItemMasterDataRepository from "@/services/actions/itemMasterDataRepositor
 import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
 import ItemGroupRepository from "@/services/actions/itemGroupRepository";
 import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRepository";
+import ManufacturerRepository from "@/services/actions/manufacturerRepository";
+import CustomsGroupRepository from "@/services/actions/customsGroupRepository";
+import VatGroupRepository from "@/services/actions/VatGroupRepository";
 
 class ItemMasterDataDetails extends Component<any, any> {
+
+
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -67,9 +73,11 @@ class ItemMasterDataDetails extends Component<any, any> {
           this.setState({ isError: true, message: e.message });
         });
     }
-console.log(data);
+    console.log(data);
 
   }
+
+
 
   render() {
     return (
@@ -130,13 +138,13 @@ console.log(data);
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">UoM Group</span>
                   <span className="w-8/12 font-medium">
-                    : {new UnitOfMeasurementRepository().find( this.state.uomGroupEntry)?.Name}
+                    : {new UnitOfMeasurementRepository().find(this.state.uomGroupEntry)?.Name}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Price Lists</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.priceLists}
+                    : {this.state.priceLists ?? "N/A"}
                   </span>
                 </div>
 
@@ -154,44 +162,41 @@ console.log(data);
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Unit Price</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.priceLists}
+                    : {this.state.unitPrice ?? "N/A"}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Pricing Unit</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.pricingUnit}
+                    : {this.state.inventoryUOM ?? "N/A"}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Inventory Item </span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.inventoryItem}
+                    :  <input type="checkbox" checked={this.state.inventoryItem === 'tYES'} onChange={() => { }} />
+
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Sales Item </span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.salesItem}
+                    :  <input type="checkbox" checked={this.state.salesItem === 'tYES'} onChange={() => { }} />
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Purchasing Item </span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.purchaseItem}
+                    :  <input type="checkbox" checked={this.state.purchaseItem === 'tYES'} onChange={() => { }} />
                   </span>
                 </div>
-                {/* <div className="flex gap-2">
-                  <span className="w-4/12 text-gray-500">Required Date</span>
-                  <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.requriedDate)}
-                  </span>
-                </div> */}
+
               </div>
             </div>
             <div className="grow flex flex-col gap-3 p-6 shadow-sm rounded-lg bg-white">
               <Taps items={["General", "Purchasing", "Sales", "Inventory", "Attachment"]}>
-                <General data={this.state} />
+                {/* <GeneralItem data={this.state} /> */}
+                <GeneralItem data={this.state} />
                 <Purchasing data={this.state} />
                 <Sales data={this.state} />
                 <Inventory data={this.state} />
@@ -210,41 +215,41 @@ console.log(data);
 export default withRouter(ItemMasterDataDetails);
 
 
-function General(props: any) {
+function GeneralItem(props: any) {
   const { data } = props;
 
   let inventoryManagementType: string = "";
-  let SRIAndBatchManageMethod: string | undefined = data?.sriAndBatchManageMethod;
+  let sriAndBatchManageMethod: string | undefined = data?.sriAndBatchManageMethod;
   if (data?.sriAndBatchManageMethod === "bomm_OnEveryTransaction") {
-    SRIAndBatchManageMethod = "On Every Transaction";
-  } else if (data?.SRIAndBatchManageMethod === "bomm_OnReleaseOnly") {
-    SRIAndBatchManageMethod = "On Release Only";
+    sriAndBatchManageMethod = "On Every Transaction";
+  } else if (data?.sriAndBatchManageMethod === "bomm_OnReleaseOnly") {
+    sriAndBatchManageMethod = "On Release Only";
   }
 
   if (
-    data?.ManageBatchNumbers === "tYES" &&
-    data?.ManageSerialNumbers === "tNO"
+    data?.manageBatchNumbers === "tYES" &&
+    data?.manageSerialNumbers === "tNO"
   ) {
     inventoryManagementType = "Batches";
   } else if (
-    data?.ManageSerialNumbers === "tYES" &&
-    data?.ManageBatchNumbers === "tNO"
+    data?.manageSerialNumbers === "tYES" &&
+    data?.manageBatchNumbers === "tNO"
   ) {
     inventoryManagementType = "Serial Numbers";
   } else if (
-    data?.ManageSerialNumbers === "tNO" &&
-    data?.ManageBatchNumbers === "tNO"
+    data?.manageSerialNumbers === "tNO" &&
+    data?.manageBatchNumbers === "tNO"
   ) {
     inventoryManagementType = "None";
   }
 
   let status: string = "";
 
-  if (data?.Valid === "tYES" && data?.Frozen === "tNO") {
+  if (data?.valid === "tYES" && data?.frozen === "tNO") {
     status = "Active";
-  } else if (data?.Valid === "tNO" && data?.Frozen === "tYES") {
+  } else if (data?.valid === "tNO" && data?.frozen === "tYES") {
     status = "Inactive";
-  } else if (data?.Valid === "tYES" && data?.Frozen === "tYES") {
+  } else if (data?.valid === "tYES" && data?.frozen === "tYES") {
     status = "Advanced";
   } else {
     status = "N/A";
@@ -312,26 +317,26 @@ function General(props: any) {
           </>
         );
     }
-
-
-    return <div className='grow w-full grid grid-cols-2 sm:grid-cols-1 gap-2 text-[12px] py-2'>
-      <div className='flex flex-col gap-2'>
-
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'> Withhlding Tax Liable</span> <span className='col-span-2 font-medium'>: {data.wtLiable}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Do Not Apply Discount Group</span> <span className='col-span-2 font-medium'>: {data.noDiscounts}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manufacturer</span> <span className='col-span-2 font-medium'>: {data.manufacturer}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Additional Identifier</span> <span className='col-span-2 font-medium'>: {data.adfdf}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shipping Type</span> <span className='col-span-2 font-medium'>:  {new ShippingTypeRepository().find(data.shipType)?.Name}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manage Item by</span> <span className='col-span-2 font-medium'>: {data.manageitemby ?? 'N/A'}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {data.status ?? 'N/A'}</span></div>
-      </div>
-      <div className='flex flex-col gap-2'>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Standard Item Identification</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Commodity Classification</span> <span className='col-span-2 font-medium'>: {data.commodityclassificaiton}</span></div>
-      </div>
-    </div>
   }
+
+  return <div className='grow w-full grid grid-cols-2 sm:grid-cols-1 gap-2 text-[12px] py-2'>
+    <div className='flex flex-col gap-2'>
+
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'> Withhlding Tax Liable</span> <span className='col-span-2 font-medium'> :<input type="checkbox" checked={data.wtLiable === 'tYES'} /></span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Do Not Apply Discount Group</span> <span className='col-span-2 font-medium'>:<input type="checkbox" checked={data.noDiscounts === 'tYES'} /></span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manufacturer</span> <span className='col-span-2 font-medium'>  : {new ManufacturerRepository().find(data.manufacturer)?.ManufacturerName}{data.manufacturer}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Additional Identifier</span> <span className='col-span-2 font-medium'>: {data.additionalIdentifier ?? "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shipping Type</span> <span className='col-span-2 font-medium'>:  {new ShippingTypeRepository().find(data.shipType)?.Name}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manage Item by</span> <span className='col-span-2 font-medium'>: {inventoryManagementType ?? 'N/A'}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {status ?? 'N/A'}</span></div>
+    </div>
+    <div className='flex flex-col gap-2'>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Standard Item Identification</span> <span className='col-span-2 font-medium'>: {data.stdItemIdentificaiton ?? "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Commodity Classification</span> <span className='col-span-2 font-medium'>: {data.commodityclassificaiton ?? "N/A"}</span></div>
+    </div>
+  </div>
 }
+
 
 function Purchasing(props: any) {
   const { data } = props;
@@ -340,32 +345,32 @@ function Purchasing(props: any) {
     <div className='flex flex-col gap-2'>
 
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Prefered Vendor
-      </span> <span className='col-span-2 font-medium'>: {data.feofe}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Mfr Catalog No.</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Purchasing UoM Name</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      </span> <span className='col-span-2 font-medium'>: {data?.itemPreferredVendors[0]?.BPCode ?? "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Mfr Catalog No.</span> <span className='col-span-2 font-medium'>: {data.supplierCatalogNo}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Purchasing UoM Name</span> <span className='col-span-2 font-medium'>: {data.purchaseUnit}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Items Per Purchasing Unit
-      </span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      </span> <span className='col-span-2 font-medium'>: {data.purchaseItemsPerUnit}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Packaging UoM Name
-      </span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      </span> <span className='col-span-2 font-medium'>: {data.purchasePackagingUnit}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Quantity per Package
-      </span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      </span> <span className='col-span-2 font-medium'>: {data.purchaseQtyPerPackUnit}</span></div>
 
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Length</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Width</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Height</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Volume</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Weight</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Length</span> <span className='col-span-2 font-medium'>: {data.purchaseUnitLength}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Width</span> <span className='col-span-2 font-medium'>: {data.purchaseUnitWidth}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Height</span> <span className='col-span-2 font-medium'>: {data.purchaseUnitHeight}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Volume</span> <span className='col-span-2 font-medium'>: {data.purchaseUnitVolume}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Weight</span> <span className='col-span-2 font-medium'>: {data.purchaseUnitWeight}</span></div>
 
 
 
     </div>
     <div className='flex flex-col gap-2'>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 1</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 2</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 3</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 4</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Customs Group</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Tax Group</span> <span className='col-span-2 font-medium'>: {data.commodityclassificaiton}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 1</span> <span className='col-span-2 font-medium'>: {data?.purchaseFactor1}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 2</span> <span className='col-span-2 font-medium'>: {data?.purchaseFactor1}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 3</span> <span className='col-span-2 font-medium'>: {data?.purchaseFactor1}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 4</span> <span className='col-span-2 font-medium'>: {data?.purchaseFactor1}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Customs Group</span> <span className='col-span-2 font-medium'>: {new CustomsGroupRepository().find(data.customsGroupCode)?.Name}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Tax Group</span> <span className='col-span-2 font-medium'>: {data?.purchaseVATGroup}</span></div>
     </div>
   </div>
 
@@ -377,33 +382,31 @@ function Sales(props: any) {
   return <div className='grow w-full grid grid-cols-2 sm:grid-cols-1 gap-2 text-[12px] py-2'>
     <div className='flex flex-col gap-2'>
 
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Prefered Vendor
-      </span> <span className='col-span-2 font-medium'>: {data.feofe}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Mfr Catalog No.</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Purchasing UoM Name</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Tax Group
+      </span> <span className='col-span-2 font-medium'>: {data?.salesVATGroup ?? "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Sales UoM Name</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Items Per Purchasing Unit
-      </span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      </span> <span className='col-span-2 font-medium'>: {data.salesUnit}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Packaging UoM Name
-      </span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      </span> <span className='col-span-2 font-medium'>: {data.salesPackagingUnit}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Quantity per Package
-      </span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      </span> <span className='col-span-2 font-medium'>: {data.salesQtyPerPackUnit}</span></div>
 
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Length</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Width</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Height</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Volume</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Weight</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Length</span> <span className='col-span-2 font-medium'>: {data.SalesUnitWidth}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Width</span> <span className='col-span-2 font-medium'>: {data.SalesUnitWidth}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Height</span> <span className='col-span-2 font-medium'>: {data.SalesUnitHeight}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Volume</span> <span className='col-span-2 font-medium'>: {data.SalesUnitVolume}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Weight</span> <span className='col-span-2 font-medium'>: {data.SalesUnitWeight}</span></div>
 
 
 
     </div>
     <div className='flex flex-col gap-2'>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 1</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 2</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 3</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 4</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Customs Group</span> <span className='col-span-2 font-medium'>: {'ee'}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Tax Group</span> <span className='col-span-2 font-medium'>: {data.commodityclassificaiton}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 1</span> <span className='col-span-2 font-medium'>: {data?.salesFactor1}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 2</span> <span className='col-span-2 font-medium'>: {data?.salesFactor2}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 3</span> <span className='col-span-2 font-medium'>: {data?.salesFactor3}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Factor 4</span> <span className='col-span-2 font-medium'>: {data?.salesFactor4}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Create QR Code From</span> <span className='col-span-2 font-medium'>: {data?.createQRCodeFrom}</span></div>
     </div>
   </div>
 
@@ -412,79 +415,138 @@ function Sales(props: any) {
 
 function Inventory(props: any) {
   const { data } = props;
+
+
   const itemColumn = useMemo(() => [
+    // {
+    //   accessorKey: "index",
+    //   header: "#", //uses the default width from defaultColumn prop
+    // },
     {
-      accessorKey: "itemCode",
-      header: "Item NO.", //uses the default width from defaultColumn prop
+      accessorKey: "WarehouseCode",
+      header: "Whse Code.", //uses the default width from defaultColumn prop
       enableClickToCopy: true,
       enableFilterMatchHighlighting: true,
       size: 88,
     },
+    // {
+    //   accessorKey: "WarehouseName",
+    //   header: "Whse Name", //uses the default width from defaultColumn prop
+    //   enableClickToCopy: true,
+    //   enableFilterMatchHighlighting: true,
+    //   size: 88,
+    // },
+    // {
+    //   accessorKey: "branch",
+    //   header: "Branch",
+    //   enableClickToCopy: true,
+    // },
     {
-      accessorKey: "itemName",
-      header: "Item Description",
-      enableClickToCopy: true,
+      accessorKey: "Locked",
+      header: "Locked",
+      Cell: ({ cell }: any) =>  <input type="checkbox" disabled checked={cell.getValue() === 'tYES'} />,
     },
+    // <input type="checkbox" checked={this.state.purchaseItem === 'tYES'} onChange={() => { }} />
     {
-      accessorKey: "itemGroup",
-      header: "Item Group",
-      Cell: ({ cell }: any) => cell.getValue(),
-    },
-    {
-      accessorKey: "quantity",
-      header: "Quantity",
+      accessorKey: "InStock",
+      header: "In Stock",
       Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
     },
     {
-      accessorKey: "unitPrice",
-      header: "Unit Price",
+      accessorKey: "Committed",
+      header: "Committed",
+      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+    },
+    {
+      accessorKey: "Ordered",
+      header: "Ordered",
+      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+    },
+    {
+      accessorKey: "Available",
+      header: "Available",
+      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+    },
+
+    {
+      accessorKey: "MinimalStock",
+      header: "Min. Inventory",
+      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+    },
+    {
+      accessorKey: "MaximalStock",
+      header: "Max. Inventory",
+      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+    },
+    {
+      accessorKey: "MinimalOrder",
+      header: "Req. Inv. Level",
       Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
     },
   ], [data]);
 
 
-  return <div>
-    <div className='grow w-full grid grid-cols-2 sm:grid-cols-1 gap-2 text-[12px] py-2'>
-      <div className='flex flex-col gap-2'>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'></span> Set G/L Account by<span className='col-span-2 font-medium'>: {data.status ?? 'N/A'}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'></span> UoM Name<span className='col-span-2 font-medium'>: {data.status ?? 'N/A'}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'></span> Weight<span className='col-span-2 font-medium'>: {data.status ?? 'N/A'}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'></span>Manage Inventory by Warehouse <span className='col-span-2 font-medium'>: {data.status ?? 'N/A'}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'></span> Inventory Level<span className='col-span-2 font-medium'>: {data.status ?? 'N/A'}</span></div>
-      </div>
-      <div className='flex flex-col gap-2'>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'> </span>Required (Purchasing UoM) <span className='col-span-2 font-medium'>: {data.commodityclassificaiton}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'> </span> Minimum<span className='col-span-2 font-medium'>: {data.commodityclassificaiton}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'> </span>Maximum <span className='col-span-2 font-medium'>: {data.commodityclassificaiton}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'> </span> Valuation Method<span className='col-span-2 font-medium'>: {data.commodityclassificaiton}</span></div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'> </span>Item Cost <span className='col-span-2 font-medium'>: {data.commodityclassificaiton}</span></div>
-      </div>
-    </div>
-    <div className="data-table  border-none p-0 mt-3">
 
-    </div>
-    <div className='grow w-full grid grid-cols-2 sm:grid-cols-1 gap-2 text-[12px] py-2'>
-    </div>
-    <MaterialReactTable
-      columns={itemColumn}
-      data={data?.items ?? []}
-      enableHiding={true}
-      initialState={{ density: "compact" }}
-      enableDensityToggle={false}
-      enableColumnResizing
-      enableStickyHeader={true}
-      enableStickyFooter={true}
-      enableTableHead={true}
-      enableTopToolbar={false}
-      enableColumnActions={false}
-      enableGlobalFilter={false}
-      enableFilters={false}
-      enableFullScreenToggle={false}
-      enablePagination={false}
-      getRowId={(row: any) => row.DocEntry}
-      state={{
-        // isLoading: true,
-      }}
-    />
-  </div>
+  return (
+    <div>
+      <div className='grow w-full grid grid-cols-2 sm:grid-cols-1 gap-2 text-[12px] py-2'>
+        <div className='flex flex-col gap-2'>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Set G/L Account by
+          </span> <span className='col-span-2 font-medium'>: {data?.glMethod === "glm_WH"
+            ? "Warehouse"
+            : data?.glMethod === "glm_ItemClass"
+              ? "Item Class"
+              : data?.glMethod === "glm_ItemLevel"
+                ? "Item Level"
+                : data?.glMethod ?? "N/A"}</span></div>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'> UoM Name</span> <span className='col-span-2 font-medium'>: {data.inventoryUOM}</span></div>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Weight
+          </span> <span className='col-span-2 font-medium'>: {data.inventoryWeight}</span></div>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manage Inventory by Warehouse
+          </span> <span className='col-span-2 font-medium'>: <input type="checkbox" checked={data.manageStockByWarehouse === 'tYES'} onChange={() => { }} /></span></div>
+          {/*  */}
+        </div>
+        <div className='flex flex-col gap-2'>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Required (Purchasing UoM)</span> <span className='col-span-2 font-medium'>: {data.desiredInventory}</span></div>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Minimum</span> <span className='col-span-2 font-medium'>: {data.minInventory}</span></div>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Maximum</span> <span className='col-span-2 font-medium'>: {data.maxInventory}</span></div>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Valuation Method</span> <span className='col-span-2 font-medium'>:  {data?.costAccountingMethod === "bis_MovingAverage"
+            ? "Moving Average"
+            : data?.costAccountingMethod === "bis_Standard"
+              ? "Standard"
+              : data?.costAccountingMethod === "bis_FIFO"
+                ? "FIFO"
+                : data?.costAccountingMethod === "bis_SNB"
+                  ? "SNB"
+                  : data?.costAccountingMethod ?? "N/A"}</span></div>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Item Cost </span> <span className='col-span-2 font-medium'>: {data?.itemCost}</span></div>
+        </div>
+
+      </div>
+      <div>
+        <MaterialReactTable
+          columns={itemColumn}
+          data={data?.itemWarehouseInfoCollection ?? []}
+          enableHiding={true}
+          initialState={{ density: "compact" }}
+          enableDensityToggle={false}
+          enableColumnResizing
+          enableStickyHeader={true}
+          enableStickyFooter={true}
+          enableTableHead={true}
+          enableTopToolbar={false}
+          enableColumnActions={false}
+          enableGlobalFilter={false}
+          enableFilters={false}
+          enableFullScreenToggle={false}
+          enablePagination={false}
+          getRowId={(row: any) => row.DocEntry}
+          state={{
+            // isLoading: true,
+          }}
+        />
+      </div>
+    </div>)
+
+  // </div>
 }
