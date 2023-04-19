@@ -21,7 +21,7 @@ const Router = () => {
                 <Routes>
                     <Route path='/login' element={<Login />} />
                     <Route path='/' element={<App />} >
-                        <Route path="/system-initialize" element={<SystemInitialize />} />
+                        <Route path="/system-initialize/*" element={<SystemInitialize />} errorElement={<span>Error</span>} />
                         <Route path='/procument/*' element={<ProcumentRoute />} errorElement={<span>Error</span>} />
                         <Route path='/master-data/*' element={<MasterDataRoute />} errorElement={<span>Error</span>} />
                         <Route path='/sale/*' element={<SaleRoute />} errorElement={<span>Error</span>} />
