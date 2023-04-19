@@ -24,7 +24,6 @@ import RequesterModal from '../modal/RequesterModal';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import GLAccount from '@/models/GLAccount';
 import Formular from '@/utilies/formular';
-import DistributionRuleTextField from '../input/DimensionTextField';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -52,10 +51,13 @@ export interface CoreFormDocumentState {
     email?: string | undefined | null,
     owner?: string | undefined | null,
     buyer?: string | undefined | null,
-    shippingType?: number | undefined | null,
+    // shippingType?: number | any | null,
     paymentTermType?: string | undefined | null,
     paymentMethod?: string | undefined | null,
     currency?: string | undefined | null,
+    priceLists?: string | undefined | null,
+    salePersonCode?: string | undefined | null,
+    shipToDefault?: string | undefined | null,
     vendorRef?: string | undefined | null,
     documentStatus?: string | undefined | null,
     remark?: string | undefined | null,
@@ -64,6 +66,8 @@ export interface CoreFormDocumentState {
     attachmentEntry?: null,
     project?: string | undefined | null,
     contactPersonList?: any[],
+    ShippingType?: any[],
+    shippingType?: any[]
     items?: any[],
     services?: any[],
     attachments?: any[],
@@ -105,6 +109,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             cardName: null,
             contactPersonCode: undefined,
             contactPersonList: [],
+            shippingType: [],
             phone: null,
             email: null,
             owner: null,
@@ -120,10 +125,12 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             isOpenVendor: false,
             isOpenAccount: false,
             isOpenProject: false,
-            shippingType: undefined,
             paymentMethod: null,
             paymentTermType: null,
             currency: null,
+            priceLists: null,
+            salePersonCode: null,
+            shipToDefault: null,
             renewal: false,
             items: [],
             series: [],
@@ -265,14 +272,17 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             cardName: record.cardName,
             contactPersonCode: record.contactEmployee!.length > 0 ? record.contactEmployee![0].id : undefined,
             contactPersonList: record.contactEmployee ?? [],
+            shippingType: record.bpAddress ?? [],
             email: record.email,
             phone: record.phone,
-            shippingType: record.shippingType,
             paymentTermType: record.paymentTermTypeCode,
             paymentMethod: record.paymentMethod,
             isOpenProject: false,
             isOpenVendor: false,
             currency: record.currency,
+            priceLists: record.priceLists,
+            salePersonCode: record.salePersonCode,
+            shipToDefault: record.shipToDefault
         });
     }
 

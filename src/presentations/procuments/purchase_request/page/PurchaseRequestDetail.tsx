@@ -21,7 +21,7 @@ import { AttachmentLine } from "@/models/Attachment";
 import Modal from "@/components/modal/Modal";
 import { CircularProgress } from "@mui/material";
 import BackButton from "@/components/button/BackButton";
-import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
+import PurchaseRequestRepository from "@/services/actions/purchaseRequestRepository";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import {
   PurchaseRequestProps,

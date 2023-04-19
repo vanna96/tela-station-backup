@@ -1,11 +1,10 @@
 import Repository from '@/astractions/repository';
 import request from '@/utilies/request';
-import PurchaseRequest from '../models/PurchaseRequest';
-import PurchaseAgreement from '../models/PurchaseAgreement';
+import ItemMasterData from '../../models/ItemMasterData';
 
-export default class PurchaseRequestRepository extends Repository<PurchaseRequest> {
+export default class ItemMasterDataRepository extends Repository<ItemMasterData> {
     
-    url: string = '/PurchaseRequests';
+    url: string = '/Items';
     
     public static documentSerie = {
         Document: "1470000113"
@@ -13,7 +12,7 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
     
     async get<T>(query?: string): Promise<T[]> {
         const response: any = await request('GET', this.url).then((res: any) => {
-            const data = res?.data?.value?.map((e: any) => new PurchaseRequest(e));
+            const data = res?.data?.value?.map((e: any) => new ItemMasterData(e));
             return data;
         }).catch((e) => {
             throw new Error(e);
@@ -23,7 +22,7 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
     }
 
     async find<T>(id: any): Promise<any> {
-        const purchasRequest = await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseRequest(res.data))
+        const items = await request('GET', `${this.url}(${id})`).then((res: any) => new ItemMasterData(res.data))
             .catch((e: Error) => {
             throw new Error(e.message)
             })
@@ -34,7 +33,7 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
         // purchaseAgreement.phone = businessPartner.phone;
         // purchaseAgreement.contactPersonList = businessPartner.contactEmployee ?? [];
 
-        return PurchaseRequest;
+        return ItemMasterData;
     }
 
 
@@ -42,18 +41,18 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
    
     async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 
-        if(isUpdate) return await request('PATCH', this.url + "("+id+")", PurchaseRequest.toUpdate(payload));
+        if(isUpdate) return await request('PATCH', this.url + "("+id+")", ItemMasterData.toUpdate(payload));
 
-        return await request('POST', this.url, PurchaseRequest.toCreate(payload));
+        return await request('POST', this.url, ItemMasterData.toCreate(payload));
     }
 
 
     async patch(id: any, payload: any): Promise<any> {
-         return await request('PATCH', this.url, PurchaseRequest.toUpdate(payload));
+         return await request('PATCH', this.url, ItemMasterData.toUpdate(payload));
     }
 
 
-    async delete(id: any): Promise<PurchaseRequest> {
+    async delete(id: any): Promise<ItemMasterData> {
         throw new Error('Method not implemented.');
     }
 

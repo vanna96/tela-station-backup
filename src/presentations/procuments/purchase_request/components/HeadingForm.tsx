@@ -2,7 +2,7 @@ import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import MUISelect from "@/components/selectbox/MUISelect";
-import { ContactEmployee } from "@/models/BusinessParter";
+import { yee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
 import Department from "@/models/Department";
 import Branch from "@/models/Branch";
@@ -16,6 +16,7 @@ import Checkbox from "@mui/material/Checkbox";
 export interface IHeadingFormProps {
   handlerOpenRequester: () => void;
   handlerChange: (key: string, value: any) => void;
+  edit?: boolean;
   data: any;
 }
 
@@ -28,7 +29,7 @@ export default function HeadingForm({
   return (
     <>
       <FormCard title="Information">
-        <div className="flex flex-col ">
+        <div className="flex flex-col gap-2">
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
@@ -48,24 +49,22 @@ export default function HeadingForm({
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-1 text-sm">
-              <MUITextField
-                label="Requester"
-                value={data?.cardCode}
-                name="BPCode"
-                onClick={handlerOpenRequester}
-                endAdornment={true}
-              />
-            </div>
+            <MUITextField
+              label="Requester"
+              value={data?.cardCode}
+              name="BPCode"
+              onClick={handlerOpenRequester}
+              endAdornment={true}
+            />
+          </div>
 
+          <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
-              <div className="flex flex-col gap-1 text-sm">
-                <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                  Requester name
-                </label>
-                <div className="">
-                  <MUITextField name="CardName" value={data.cardName} />
-                </div>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                Requester name
+              </label>
+              <div className="">
+                <MUITextField name="CardName" value={data.cardName} />
               </div>
             </div>
 
@@ -81,24 +80,31 @@ export default function HeadingForm({
                 />
               </div>
             </div>
-
+          </div>
+          <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Branch
               </label>
+              <div className="">
+                <BranchSelect
+                  name="Branch"
+                  value={data.branch}
+                  onChange={(e) => handlerChange("branch", e.target.value)}
+                />
+              </div>
+            </div>
 
-              <BranchSelect
-                name="Branch"
-                value={data.branch}
-                onChange={(e) => handlerChange("branch", e.target.value)}
+            <div className="flex flex-col gap-1 text-sm">
+              <MUITextField
+                label="Email"
+                value={data?.email}
+                name="RequesterEmail"
               />
             </div>
-            <MUITextField
-              label="Email"
-              value={data?.email}
-              name="RequesterEmail"
-            />
+          </div>
 
+          <div className="grid grid-cols- gap-3">
             <div className="flex flex-col gap-1 text-sm">
               <div className="flex items-center gap-1 text-sm">
                 <Checkbox />
@@ -109,7 +115,6 @@ export default function HeadingForm({
             </div>
           </div>
         </div>
-
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1 text-sm">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
@@ -123,40 +128,30 @@ export default function HeadingForm({
                 name="Series"
                 loading={data?.isLoadingSerie}
                 value={data?.serie}
+                // disabled={edit}
                 onChange={(e: any) => handlerChange("serie", e.target.value)}
               />
-              <TextField
-                size="small"
-                name="DocNum"
-                key={data?.docNum}
-                defaultValue={data?.docNum}
-                disabled={data?.isLoadingSerie}
-                placeholder="Document No"
-                fullWidth
-                className="w-full text-field"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Status
-              </label>
-              <div className="">
-                <MUISelect
-                  value={data?.documentStatus}
-                  items={[
-                    { value: "O", label: "Open" },
-                    { value: "C", label: "Closed" },
-                  ]}
-                  name="DocumentStatus"
-                  onChange={(e) =>
-                    handlerChange("documentStatus", e.target.value)
-                  }
+              <div className="-mt-1">
+                <MUITextField
+                  size="small"
+                  name="DocNum"
+                  value={data?.docNum}
+                  placeholder="Document No"
                 />
               </div>
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3">
+            {/* <MUISelect
+                  items={[{ name: 'Item Method', value: 'I' }, { name: 'Monetary Method', value: 'M' }]}
+                  aliaslabel='name'
+                  aliasvalue='value'
+                  name="AgreementMethod"
+                  value={data.agreementMethod}
+                  onChange={(e) => handlerChange('agreementMethod', e.target.value)}
+                /> */}
+            <MUITextField label="Status" value={"open"} name="DocumentStatus" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -171,7 +166,6 @@ export default function HeadingForm({
                 />
               </div>
             </div>
-
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Valid Until
@@ -196,7 +190,6 @@ export default function HeadingForm({
                 />
               </div>
             </div>
-
             <div className="flex flex-col gap-1 text-sm">
               <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Required Date
@@ -210,6 +203,7 @@ export default function HeadingForm({
             </div>
           </div>
         </div>
+        {/* <div className='col-span-2'></div> */}
       </FormCard>
     </>
   );

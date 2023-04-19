@@ -25,6 +25,8 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
     staleTime: Infinity,
   });
 
+  // console.log(data)
+
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 8,
