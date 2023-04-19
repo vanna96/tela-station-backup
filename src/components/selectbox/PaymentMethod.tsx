@@ -2,8 +2,6 @@ import React, { useMemo, FC } from "react";
 
 import MUISelect from "./MUISelect";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import QueryHook from "@/utilies/useQueryHook";
-import InitializeData from "@/services/actions";
 import { useQuery } from "react-query";
 import PaymentMethodRepository from "@/services/actions/paymentMethodRepository";
 

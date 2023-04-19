@@ -13,6 +13,9 @@ import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository"
 import LogisticForm from "../components/Logistic";
 import AccounttingForm from "../components/Accountting";
 import GLAccount from "@/models/GLAccount";
+
+
+
 class PurchaseOrder extends CoreFormDocument {
   constructor(props: any) {
     super(props);
@@ -27,6 +30,8 @@ class PurchaseOrder extends CoreFormDocument {
   }
 
   componentDidMount(): void {
+    this.setState({ ...this.state, vendorType : 'customer'})
+
     if (!this.props?.edit) {
       setTimeout(() => this.setState({ ...this.state, loading: false }), 500);
     }

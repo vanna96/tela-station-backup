@@ -10,11 +10,6 @@ export default function InventoryRoute() {
     return (
         <Routes>
             <Route index element={<InventoryMasterPage />} />
-            {/* <Route path='/purchase-agreement' >
-                <Route index element={<PurchaseAgreementLists />} />
-                <Route path=':id' element={<PurchaseAgreementDetail />} />
-                <Route path='create' element={<PurchaseAgreementForm />} />
-            </Route> */}
         </Routes>
     )
 }

@@ -24,6 +24,7 @@ import RequesterModal from '../modal/RequesterModal';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import GLAccount from '@/models/GLAccount';
 import Formular from '@/utilies/formular';
+import DistributionRuleTextField from '../input/DimensionTextField';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -164,7 +165,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     abstract FormRender(): JSX.Element;
 
     render() {
-
         return (
             <>
                 <ItemModal open={this.state.isOpenItem} onClose={() => this.handlerCloseItem()} type='purchase' onOk={this.handlerConfirmItem} />
@@ -192,6 +192,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 >
                     <CircularProgress color="inherit" />
                 </Backdrop>
+
                 <div className='bg-gray-100 flex flex-col  w-full h-full p-4 relative'>
                     <div className=" rounded-lg px-6 py-4 flex items-center justify-between sticky top-3 gap-3  border-b bg-white shadow-sm xl:text-sm font-bold z-20">
                         <div className="flex gap-3 items-center">
