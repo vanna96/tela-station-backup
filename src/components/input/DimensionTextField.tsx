@@ -18,6 +18,7 @@ const DistributionRuleTextField: FC<DistributionRuleTextField> = ({ value, onCha
     }
 
     const onClose = () => setOpen(false);
+    
 
     return <>
         <DistributionRuleModal open={open} onClose={onClose} onOk={handlerConfirm} inWhichNum={inWhichNum} />

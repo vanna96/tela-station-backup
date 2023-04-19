@@ -1,4 +1,6 @@
+import GLAccountRepository from '@/services/actions/GLAccountRepository';
 import { dateFormat } from '../utilies';
+import { ContactEmployee } from './BusinessParter';
 import Model from './Model';
 import { MasterDocument, DocumentLine } from './interface/index';
 import moment from 'moment';
@@ -16,7 +18,7 @@ export interface PurchaseOrderProps {
   terminateDate?: string;
   description?: string;
   status?: string;
-  owner?: string;
+  documentsOwner?: string;
   docTotalSys?: number;
   remark?: string;
   attachmentEntry?: number;
@@ -24,7 +26,6 @@ export interface PurchaseOrderProps {
   priceList?: number;
   serie: string;
   paymentMethod?: string;
-  shippingType?: string | undefined;
   journalMemo?: string;
   taxDate: string;
   comments: string;
@@ -35,6 +36,7 @@ export interface PurchaseOrderProps {
   extraDays: string;
   cashDiscountDateOffset: number;
   createQRCodeFrom: string;
+  transportationCode?: string;
   cancelDate: string;
   indicator: string;
   federalTaxID: string;
@@ -43,6 +45,8 @@ export interface PurchaseOrderProps {
   documentStatus: string;
   numAtCard?: string;
   uomCode?: string;
+  salesPersonCode?: number;
+  contactPersonList?: ContactEmployee[];
   documentLine: PurchaseOrderDocumentLineProps[];
   requiredDate: string
 }
@@ -56,7 +60,7 @@ export interface PurchaseOrderDocumentLineProps {
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  TransportationCode?: string | undefined;
+  transportationCode?: string | undefined;
   project?: string | undefined;
   address2?: string | undefined;
   taxCode?: string | undefined;
@@ -70,22 +74,24 @@ export interface PurchaseOrderDocumentLineProps {
   blanketAgreementNumber?: string | undefined
   discountPercent?:string
 }
-export default class PurchaseOrder extends Model implements MasterDocument {
+export default class PurchaseOrders extends Model implements MasterDocument {
   id: any;
   docNum: any;
   cardCode?: string;
   cardName?: string;
-  constactPersonCode?: number;
+  contactPersonCode?: number;
   docDate?: string;
   docDueDate?: string;
   requriedDate?: string
   terminateDate?: string;
   docTotalSys?: number;
   description?: string;
+  contactPersonList?: ContactEmployee[];
   vatSum?: number;
   status?: string;
-  owner?: string;
+  documentsOwner?: string;
   remark?: string;
+  transportationCode?: string;
   attachmentEntry?: number;
   paymentGroupCode?: string;
   priceList?: number;
@@ -96,6 +102,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
   items: PurchaseOrderDocumentLineProps[];
   taxDate: string;
   comments: string;
+  salesPersonCode?: number;
   docType: string;
   address: string;
   address2: string;
@@ -126,15 +133,17 @@ export default class PurchaseOrder extends Model implements MasterDocument {
     this.vatSum = json['VatSum'];
     this.journalMemo = json['JournalMemo']
     this.cardName = json['CardName'];
+    this.contactPersonList = json['contactPersonList'];
     this.cardCode = json['CardCode'];
     this.docTotalSys = json['DocTotalSys'];
-    this.owner = json['DocumentsOwner'];
+    this.documentsOwner = json['DocumentsOwner'];
     this.numAtCard = json['NumAtCard'];
-    this.constactPersonCode = json['ContactPersonCode'];
+    this.salesPersonCode = json['SalesPersonCode'];
+    this.contactPersonCode= json['ContactPersonCode'];
     this.description = json['Description'];
     this.docDate = json['DocDate'];
     this.docDueDate = json['DocDueDate'];
-    this.shippingType = json['TransportationCode'];
+    this.transportationCode = json['TransportationCode'];
     this.paymentGroupCode= json['PaymentGroupCode'];
     this.taxDate = json['TaxDate'];
     this.comments = json['Comments'];
@@ -163,6 +172,7 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "FederalTaxID": json['federalTaxID'],
       "Indicator": json['indicator'],
       "CancelDate": json['cancelDate'],
+      "SalesPersonCode": json['salesPersonCode'],
       "DocTotalSys": json['docTotalSys'],
       "CashDiscountDateOffset": json['cashDiscountDateOffset'],
       "ExtraMonth": json['extraMonth'],
@@ -183,14 +193,14 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "TerminateDate": json['terminateDate'],
       "Description": json['description'],
       "Status": json['status'],
-      "Owner": json['owner'],
+      "DocumentsOwner": json['documentsOwner'],
       "Remarks": json['remarks'],
-      "UoMcode": json['uomcode'],
+      "UoMcode": json['uomCode'],
       "AttachmentEntry": json['attachmentEntry'],
       "PaymentGroupCode":  json['paymentGroupCode'],
       "Series": json['series'],
       "PaymentMethod": json['paymentMethod'],
-      "TransportationCode": json['TransportationCode'],
+      "TransportationCode": json['transportationCode'],
       "Project": json['project'],
       "DocNum": json['docNum'],
       "DocCurrency": json['docCurrency'],
@@ -214,7 +224,8 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "Address2": json['address2'],
       "NumAtCard": json['numAtCard'],
       "VatSum": json['vatSum'],
-      "UoMcode": json['uomcode'],
+      "UoMCode": json['uomCode'],
+      "SalesPersonCode": json['salesPersonCode'],
       "DocType": json['docType'],
       "DocTotalSys": json['docTotalSys'],
       "Comments": json['comments'],
@@ -228,14 +239,14 @@ export default class PurchaseOrder extends Model implements MasterDocument {
       "TerminateDate": json['terminateDate'],
       "Description": json['description'],
       "Status": json['status'],
-      "Owner": json['owner'],
+      "DocumentsOwner": json['documentsOwner'],
       "Remarks": json['remarks'],
       "AttachmentEntry": json['attachmentEntry'],
       "PaymentGroupCode":  json['paymentGroupCode'],
       "Series": json['series'],
       "DocNum": json['docNum'],
       "PaymentMethod": json['paymentMethod'],
-      "ShippingType": json['shippingType'],
+      "TransportationCode": json['transportationCode'],
       "Project": json['project'],
       "DocCurrency": json['docCurrency'],
       "CreateQRCodeFrom": json['createQRCodeFrom'],
@@ -257,7 +268,7 @@ export class PurchaseOrderDocumentLineProps extends Model implements DocumentLin
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  TransportationCode?: string | undefined;
+  transportationCode?: string | undefined;
   project?: string | undefined;
   taxCode?: string | undefined;
   taxRate?: number | undefined;
@@ -270,6 +281,8 @@ export class PurchaseOrderDocumentLineProps extends Model implements DocumentLin
   blanketAgreementNumber?: string | undefined;
   discountPercent?: string;
   requriedDate?: string;
+  accountNameD: string;
+
   constructor(json: any) {
     super();
     this.itemCode = json['ItemCode'];
@@ -289,6 +302,8 @@ export class PurchaseOrderDocumentLineProps extends Model implements DocumentLin
     this.accountName = json['AccountName'];
     this.lineTotal = json['LineTotal'];
     this.blanketAgreementNumber = json['BlanketAgreementNumber']
+    this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
+
   }
   toJson(update: boolean) {
     throw new Error('Method not implemented.');

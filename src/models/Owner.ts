@@ -13,6 +13,8 @@ export default class Owner extends Model {
         this.name = `${json['FirstName'] ?? ''} ${ json['LastName'] ?? ''} `
     }
     
+
+    
     toJson(update?: boolean) {
         return {
             id: this.id,

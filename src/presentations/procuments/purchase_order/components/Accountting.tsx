@@ -1,6 +1,7 @@
 import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
+import IndicatorSelect from "@/components/selectbox/Indicator";
 import MUISelect from "@/components/selectbox/MUISelect";
 import Owner from "@/components/selectbox/Owner";
 import PaymentMethod from "@/components/selectbox/PaymentMethod";
@@ -14,10 +15,12 @@ export interface IAccounttingProps {
   data: any;
   handlerChange: (key: string, value: any) => void;
   handlerOpenProject?: () => void;
+  edit: boolean;
 }
 
 export default function AccounttingForm({
   data,
+  edit,
   handlerChange,
   handlerOpenProject,
 }: IAccounttingProps) {
@@ -26,8 +29,7 @@ export default function AccounttingForm({
       <div className="mt-2">
         <MUITextField
           label="Journal Remarks"
-          value={ `Purchase Order - ${data?.vendor?.CardCode ?? ""}`
-        }
+          value={`Purchase Order - ${data?.vendor?.CardCode ?? ""}`}
           name="DocumentStatus"
         />
         <div className="flex gap-3 mt-3">
@@ -35,15 +37,25 @@ export default function AccounttingForm({
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Payment Terms
             </label>
-            <PaymentTerm name="PaymentTerms" value={data.paymentGroupCode} onChange={(e) => handlerChange('paymentGroupCode', e.target.value)} />
-
+            <PaymentTerm
+              name="PaymentGroupCode"
+              value={data.paymentGroupCode}
+              onChange={(e) =>
+                handlerChange("paymentGroupCode", e.target.value)
+              }
+            />
           </div>
           <div className="w-[50%]">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Payment Method
             </label>
             <div className="">
-            <PaymentMethod type='outgoing' name="PaymentMethod" value={data.paymentMethod} onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
+              <PaymentMethod
+                type="outgoing"
+                name="PaymentMethod"
+                value={data.paymentMethod}
+                onChange={(e) => handlerChange("paymentMethod", e.target.value)}
+              />
             </div>
           </div>
         </div>
@@ -65,6 +77,7 @@ export default function AccounttingForm({
                 aliaslabel="name"
                 aliasvalue="value"
                 name="AgreementMethod"
+                disabled={edit}
                 value={data.agreementMethod}
                 onChange={(e) =>
                   handlerChange("agreementMethod", e.target.value)
@@ -74,12 +87,14 @@ export default function AccounttingForm({
             <div className="w-[24%] -mt-6">
               <MUITextField
                 label="Month+"
+                disabled={edit}
                 value={data?.extraMonth}
                 name="ExtraMonth"
               />
             </div>
             <div className="w-[24%] -mt-6">
               <MUITextField
+                disabled={edit}
                 label="Days+"
                 value={data?.extraDays}
                 name="ExtraDays"
@@ -92,7 +107,9 @@ export default function AccounttingForm({
             label="Cash Discount Date Offset"
             value={data?.cashDiscountDateOffset}
             name="CashDiscountDateOffset"
-            onChange={(e) => handlerChange('cashDiscountDateOffset', e.target.value)}
+            onChange={(e) =>
+              handlerChange("cashDiscountDateOffset", e.target.value)
+            }
           />
         </div>
       </div>
@@ -147,14 +164,14 @@ export default function AccounttingForm({
             </div>
           </div>
         </div>
-        <div className="mt-2">
+        <div>
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Indicator
           </label>
-          <Owner
-            name="Indicator"
+          <IndicatorSelect
+            onChange={(e) => handlerChange("indicator", e.target.value)}
             value={data?.indicator}
-            onChange={(e: any) => handlerChange("owner", e.target.value)}
+            name="Indicator"
           />
         </div>
         <div className="flex gap-5 mt-2">
@@ -164,6 +181,9 @@ export default function AccounttingForm({
                 label="Federal Tax ID"
                 value={data?.federalTaxID}
                 name="FederalTaxID"
+                onChange={(e: any) =>
+                  handlerChange("federalTaxID", e.target.value)
+                }
               />
             </div>
           </div>
@@ -173,6 +193,9 @@ export default function AccounttingForm({
                 label="Order Number"
                 value={data?.importFileNum}
                 name="ImportFileNum"
+                onChange={(e: any) =>
+                  handlerChange("importFileNum", e.target.value)
+                }
               />
             </div>
           </div>

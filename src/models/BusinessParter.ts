@@ -39,10 +39,12 @@ export default class BusinessPartner extends Model {
     bpAddress?: BPAddress[] | null | undefined;;
     contactEmployee?: ContactEmployee[] | null | undefined;
     bpPaymentMethod?: [] | null | undefined;;
-    internalCode?: number | null | undefined;;
+    internalCode?: number | null | undefined;
+    id?: number;
 
-    constructor(json: any) {
+    constructor (json: any, index:number ) {
         super();
+        this.id = index + 1;
         this.cardCode = json?.CardCode;
         this.cardName = json?.CardName;
         this.internalCode = json?.InternalCode;

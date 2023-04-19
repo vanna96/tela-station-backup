@@ -20,22 +20,32 @@ export default function GeneralForm({
   return (
     <FormCard title="Logistic">
       <div className="mt-2">
+          <label htmlFor="Code" className="text-gray-500 text-[14px]">
+            Ship To
+          </label>
+          <div className="">
+            <TextField
+              size="small"
+              multiline
+              rows={4}
+              fullWidth
+              name="Address2"
+              defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
+            />
+          </div>
+        <div className="mt-2 w-[50%]">
         <label htmlFor="Code" className="text-gray-500 text-[14px]">
-          Ship To
+          Shipping Type
         </label>
-        <div className="">
-          <TextField
-            size="small"
-            multiline
-            rows={4}
-            fullWidth
-            name="Address2"
-            defaultValue={
-              data?.address2 ?? "Level 1 - 168 Walker Street''"
-            }
-          />
+        <ShippingType
+          name="TransportationCode"
+          value={data?.transportationCode}
+          onChange={(e) => handlerChange("transportationCode", e.target.value)}
+        />
         </div>
-        <div className="">
+      </div>
+      <div>
+        <div className="mt-2">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Pay To
           </label>
@@ -49,16 +59,6 @@ export default function GeneralForm({
               defaultValue={data?.address}
             />
           </div>
-        </div>
-        <div className="">
-          <label htmlFor="Code" className="text-gray-500 text-[14px]">
-            Shipping Type
-          </label>
-          <ShippingType
-            name="TransportationCode"
-            value={data?.shippingType}
-            onChange={(e) => handlerChange('shippingType', e.target.value)}
-          />
         </div>
       </div>
     </FormCard>
