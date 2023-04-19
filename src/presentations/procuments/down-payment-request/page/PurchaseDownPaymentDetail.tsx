@@ -13,9 +13,6 @@ import { AttachmentLine } from '../../../../models/Attachment';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { CircularProgress } from '@mui/material';
-import BackButton from '@/components/button/BackButton';
-import PurchaseAgreementRepository from '../../../../services/actions/purchaseQoutationRepository';
-import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
 import PurchaseQoutation from '@/models/PurchaseQoutation';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
 import OwnerRepository from '@/services/actions/ownerRepository';
@@ -25,9 +22,11 @@ import BusinessPartner, { ContactEmployee } from '@/models/BusinessParter';
 import BuyerRepository from '@/services/actions/BuyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
+import PurchaseDownPayment from '@/models/DownPaymentRequest';
+import PurchaseDownPaymentRepository from '@/services/actions/DownPaymentRequestRepository';
 
 
-class PurchaseQoutationDetail extends Component<any, any> {
+class PurchaseDownPaymentDetail extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
@@ -47,24 +46,24 @@ class PurchaseQoutationDetail extends Component<any, any> {
 
   initData() {
     const { id } = this.props.match.params;
-    const data = this.props.location.state as PurchaseQoutation;
+    const data = this.props.location.state as PurchaseDownPayment;
     console.log(data);
 
     if (data) {
       setTimeout(() => {
-        let purchaseQoutation = data;
-        purchaseQoutation as PurchaseAgreement;
-        if (purchaseQoutation.contactPersonCode) {
-          new BusinessPartnerRepository().findContactEmployee(purchaseQoutation.cardCode!).then((res: BusinessPartner) => {
-            purchaseQoutation.contactPersonList = res.contactEmployee || [];
-            this.setState({ ...purchaseQoutation, loading: false })
+        let purchaseDownPayment = data;
+        purchaseDownPayment as PurchaseDownPayment;
+        if (purchaseDownPayment.contactPersonCode) {
+          new BusinessPartnerRepository().findContactEmployee(purchaseDownPayment.cardCode!).then((res: BusinessPartner) => {
+            purchaseDownPayment.contactPersonList = res.contactEmployee || [];
+            this.setState({ ...purchaseDownPayment, loading: false })
           })
         } else {
-          this.setState({ ...purchaseQoutation, loading: false })
+          this.setState({ ...purchaseDownPayment, loading: false })
         }
       }, 500)
     } else {
-      new PurchaseQoutationRepository().find(id).then((res: any) => {
+      new PurchaseDownPaymentRepository().find(id).then((res: any) => {
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {
         this.setState({ isError: true, message: e.message });
@@ -92,7 +91,7 @@ class PurchaseQoutationDetail extends Component<any, any> {
             <div className='min-h-[10rem] grid grid-cols-2 gap-3 w-full shadow-sm rounded-lg bg-white text-[12px] p-6'>
               <div className='flex flex-col gap-1'>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Document Number</span>
+                  <span className='w-4/12 text-gray-500'>Document Numbear</span>
                   <span className='w-8/12 font-medium'>: {this.state.docNum || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
@@ -126,16 +125,12 @@ class PurchaseQoutationDetail extends Component<any, any> {
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Valid Until</span>
+                  <span className='w-4/12 text-gray-500'>Delivery Date</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDueDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Document Date</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.taxDate) || "N/A"}</span>
-                </div>
-                <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>Required Date</span>
-                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.requriedDate) || "N/A"}</span>
                 </div>
 
               </div>
@@ -160,7 +155,7 @@ class PurchaseQoutationDetail extends Component<any, any> {
   }
 }
 
-export default withRouter(PurchaseQoutationDetail);
+export default withRouter(PurchaseDownPaymentDetail);
 
 
 
@@ -315,6 +310,14 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Remark</span>
         <span className='w-8/12 font-medium text-sm'>: {data?.comments || "N/A"}</span>
+      </div>
+      <div className='flex gap-2'>
+        <span className='w-4/12 text-gray-500 text-sm'>Applied Amount</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?. applied|| "N/A"}</span>
+      </div>
+      <div className='flex gap-2'>
+        <span className='w-4/12 text-gray-500 text-sm'>Balance Due</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.docTotalSys || "N/A"}</span>
       </div>
     </div>
   </div>

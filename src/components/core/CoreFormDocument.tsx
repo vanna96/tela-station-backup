@@ -37,7 +37,6 @@ const contextClass: any = {
 
 type ModelDialog = 'success' | 'error'
 
-
 export interface CoreFormDocumentState {
     collapse: boolean,
     isOpenItem: boolean,
