@@ -55,6 +55,7 @@ export default class ItemMaster {
   id: any;
   index: number;
   docNum: any;
+  cardCode?: string;
   itemCode?: string;
   itemName?: string;
   foreignName?: string | undefined;
@@ -193,6 +194,7 @@ export default class ItemMaster {
   constructor(json: any) {
     // super();
     this.index = index++
+    this.cardCode = json['CardCode'];
     this.id = json["ItemCode"];
     this.itemCode = json["ItemCode"];
     this.itemName = json["ItemName"];
@@ -471,7 +473,11 @@ export default class ItemMaster {
       "ItemPrices": json["itemPrices"],
       "ItemWarehouseInfoCollection": json["itemWarehouseInfoCollection"],
       "ItemBarCodeCollection": json["itemBarCodeCollection"],
-      "ItemPreferredVendors": json["itemPreferredVendors"],
+      "ItemPreferredVendors": [
+        {
+          "BPCode": json["cardCode"]
+        }
+      ],
       DocumentStatus: json["DocumentStatus"],
       // DocumentLines: json["items"]?.map((e: any) =>
       //   ItemMasterDocumentLine.toCreate(e, json["docType"])
@@ -613,7 +619,14 @@ export default class ItemMaster {
       "ItemPrices": json["itemPrices"],
       "ItemWarehouseInfoCollection": json["itemWarehouseInfoCollection"],
       "ItemBarCodeCollection": json["itemBarCodeCollection"],
-      "ItemPreferredVendors": json["itemPreferredVendors"],
+      // "ItemPreferredVendors": json["itemPreferredVendors"],
+      // "ItemPreferredVendors": json["cardCode"]  ,
+      "ItemPreferredVendors": [
+        {
+          "BPCode": json["cardCode"]
+        }
+      ],
+      // 
       DocumentStatus: json["DocumentStatus"],
       // DocumentLines: json["items"]?.map((e: any) =>
       //   ItemMasterDocumentLine.toCreate(e, json["docType"])

@@ -162,8 +162,8 @@ class ItemMasterDataForm extends CoreFormDocument {
     const { id } = this.props?.match?.params;
 
 
-console.log(this.state)
-return 
+    // console.log(this.state)
+    // return 
     await new ItemMasterDataRepository()
       .post(this.state, this.props?.edit, id)
       .then((res: any) => {
@@ -211,7 +211,7 @@ return
           <GeneralForm
             data={this?.state}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-            // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
+          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
           <PurchasingForm
             handlerOpenVendor={() => {
@@ -219,7 +219,7 @@ return
             }}
             data={this?.state}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-            // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
+          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
           <SalesForm
             handlerOpenVendor={() => {
@@ -227,12 +227,12 @@ return
             }}
             data={this?.state}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-            // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
+          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
 
-          <InventoryFom data={this?.state} 
+          <InventoryFom data={this?.state}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-/>
+          />
 
           <AttachmentForm />
 
