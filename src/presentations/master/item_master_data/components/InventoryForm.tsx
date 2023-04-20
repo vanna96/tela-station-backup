@@ -44,33 +44,22 @@ export default function InventoryFom({
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-1 text-sm">
-                            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                UoM Name:
 
-                            </label>
-                            <div className="mt-1">
-                                <MUITextField
-                                    name="uomName"
-                                    value={data.uomName}
-                                    onChange={(e) => handlerChange("uomName", e.target.value)}
-                                />
-                            </div>
-                        </div>
+                        <MUITextField
+                            label=" UoM Name"
+                            name="uomName"
+                            value={data.uomName}
+                            onChange={(e) => handlerChange("uomName", e.target.value)}
+                        />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
-                        <div className="flex flex-col gap-1 text-sm">
-                            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                Weight:
-                            </label>
-                            <div className="">
-                                <MUITextField
-                                    name="weight"
-                                    value={data.weight}
-                                    onChange={(e) => handlerChange("weight", e.target.value)}
-                                />
-                            </div>
-                        </div>
+
+                        <MUITextField
+                            label="Weight"
+                            name="weight"
+                            value={data.weight}
+                            onChange={(e) => handlerChange("weight", e.target.value)}
+                        />
                         <div className="flex flex-col gap-1 text-sm">
                             <label htmlFor="Code" className="text-gray-500 text-[14px]">
                                 Valuation Method
@@ -93,18 +82,13 @@ export default function InventoryFom({
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
-                        <div className="flex flex-col gap-1 text-sm">
-                            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                Item Cost
-                            </label>
-                            <div className="">
-                                <MUITextField
-                                    name="itemCost"
-                                    value={data.itemCost}
-                                    onChange={(e) => handlerChange("itemCost", e.target.value)}
-                                />
-                            </div>
-                        </div>
+
+                        <MUITextField
+                            label="Item Cost"
+                            name="itemCost"
+                            value={data.itemCost}
+                            onChange={(e) => handlerChange("itemCost", e.target.value)}
+                        />
 
                     </div>
 
@@ -113,20 +97,14 @@ export default function InventoryFom({
                 </div>
                 <div className="flex flex-col gap-2">
 
-                    <div className="grid grid-cols-2 gap-3">
 
-                        <div className="grid grid-cols- gap-3">
-                            <div className="flex flex-col gap-1 text-sm">
-                                <div className="flex items-center gap-1 text-sm">
-                                    <Checkbox />
-                                    <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                        Manage Inventory by Warehouse
-                                    </label>
-                                </div>
-                            </div>
+                        <div className="flex items-center gap-1 text-sm">
+                            <Checkbox />
+                            <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                                Manage Inventory by Warehouse
+                            </label>
                         </div>
 
-                    </div>
                     Inventory Level
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1 text-sm">

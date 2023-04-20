@@ -2,6 +2,7 @@ import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import MUISelect from "@/components/selectbox/MUISelect";
+import VatGroup from "@/components/selectbox/VatGroup";
 import { ContactEmployee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
 
@@ -22,20 +23,21 @@ export default function SalesForm({
                 <div className="flex flex-col gap-2">
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1 text-sm">
-                            <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                            <label htmlFor="Code" className="text-gray-500 text-[13px]">
                                 Sales Tax Group
                             </label>
-                            <div className="">
-                                <MUITextField
+                            <div className="mt-1">
+                                <VatGroup category='OutputTax'
                                     name="salesVATGroup"
                                     value={data.salesVATGroup}
                                     onChange={(e) => handlerChange("salesVATGroup", e.target.value)}
                                 />
                             </div>
                         </div>
-                        <MUITextField label="Sales UOM Name" name="salesUnit" value={data?.salesUnit}
+                        <div className="mt-1"><MUITextField label="Sales UOM Name" name="salesUnit" value={data?.salesUnit}
                             onChange={(e) => handlerChange("salesUnit", e.target.value)}
                         />
+                        </div>
 
                     </div>
 

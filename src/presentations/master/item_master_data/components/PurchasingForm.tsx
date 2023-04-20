@@ -2,6 +2,7 @@ import FormCard from "@/components/card/FormCard";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import MUISelect from "@/components/selectbox/MUISelect";
+import VatGroup from "@/components/selectbox/VatGroup";
 import { ContactEmployee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
 
@@ -63,12 +64,22 @@ export default function PurchasingForm({
                     <div className="flex flex-col gap-1 text-sm">
                         <div className="grid grid-cols-2 gap-3">
 
-                            <MUITextField label="Customs Groups" name="customsGroupCode" value={data?.customsGroupCode}
+                           <div className="mt-1"><MUITextField label="Customs Groups" name="customsGroupCode" value={data?.customsGroupCode}
                                 onChange={(e) => handlerChange("quantityPerPackage", e.target.value)}
                             />
-                            <MUITextField label="Tax Group" name="purchaseVATGroup" value={data?.purchaseVATGroup}
-                                onChange={(e) => handlerChange("purchaseVATGroup", e.target.value)}
-                                />
+                            </div> 
+                            <div className="flex flex-col gap-1 text-sm ">
+                                <label htmlFor="Code" className="text-gray-500 text-[13px]">
+                                    Purchase VAT Group </label>
+                                <div className="mt-1">
+                                    <VatGroup category='InputTax'
+                                        name="purchaseVATGroup"
+                                        value={data.purchaseVATGroup}
+                                        onChange={(e) => handlerChange("purchaseVATGroup", e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                           
                         </div>
                     </div>
                 </div>
@@ -80,21 +91,21 @@ export default function PurchasingForm({
 
                             <MUITextField label="Length" name="purchaseUnitLength" value={data?.purchaseUnitLength}
                                 onChange={(e) => handlerChange("purchaseVATGroup", e.target.value)}
-                                />
-                            <MUITextField label="Width" name="purchaseUnitWidth" value={data?.purchaseUnitWidth} 
+                            />
+                            <MUITextField label="Width" name="purchaseUnitWidth" value={data?.purchaseUnitWidth}
                                 onChange={(e) => handlerChange("purchaseUnitWidth", e.target.value)}
-                                />
+                            />
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 text-sm">
                         <div className="grid grid-cols-2 gap-3">
 
-                            <MUITextField label="Height" name="purchaseUnitHeight" value={data?.purchaseUnitHeight} 
+                            <MUITextField label="Height" name="purchaseUnitHeight" value={data?.purchaseUnitHeight}
                                 onChange={(e) => handlerChange("purchaseUnitHeight", e.target.value)}
-                                />
+                            />
                             <MUITextField label="Volume" name="purchaseUnitVolume" value={data?.purchaseUnitVolume}
                                 onChange={(e) => handlerChange("purchaseUnitVolume", e.target.value)}
-                                />
+                            />
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 text-sm">
@@ -102,7 +113,7 @@ export default function PurchasingForm({
 
                             <MUITextField label="Weight" name="purchaseUnitWeight" value={data?.purchaseUnitWeight}
                                 onChange={(e) => handlerChange("purchaseUnitWeight", e.target.value)}
-                                />
+                            />
 
                         </div>
                     </div>
@@ -111,10 +122,10 @@ export default function PurchasingForm({
 
                             <MUITextField label="Factor 1" name="purchaseFactor1" value={data?.purchaseFactor1}
                                 onChange={(e) => handlerChange("purchaseFactor1", e.target.value)}
-                                />
+                            />
                             <MUITextField label="Factor 2" name="purchaseFactor2" value={data?.purchaseFactor2}
                                 onChange={(e) => handlerChange("purchaseFactor2", e.target.value)}
-                                />
+                            />
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 text-sm">
@@ -122,10 +133,10 @@ export default function PurchasingForm({
 
                             <MUITextField label="Factor 3" name="purchaseFactor3" value={data?.purchaseFactor3}
                                 onChange={(e) => handlerChange("purchaseFactor3", e.target.value)}
-                                />
-                            <MUITextField label="Factor 4" name="purchaseFactor4" value={data?.purchaseFactor4} 
+                            />
+                            <MUITextField label="Factor 4" name="purchaseFactor4" value={data?.purchaseFactor4}
                                 onChange={(e) => handlerChange("purchaseFactor4", e.target.value)}
-                                />
+                            />
                         </div>
                     </div>
                 </div>

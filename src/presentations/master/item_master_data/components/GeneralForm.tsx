@@ -40,18 +40,13 @@ export default function GeneralForm({
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-1 text-sm">
-                            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                Additional Identifier:
-                            </label>
-                            <div className="mt-1">
-                                <MUITextField
-                                    name="additionalIdentifier"
-                                    value={data.additionalIdentifier}
-                                    onChange={(e) => handlerChange("additionalIdentifier", e.target.value)}
-                                />
-                            </div>
-                        </div>
+
+                        <MUITextField
+                            label="   Additional Identifier:"
+                            name="additionalIdentifier"
+                            value={data.additionalIdentifier}
+                            onChange={(e) => handlerChange("additionalIdentifier", e.target.value)}
+                        />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1 text-sm">
@@ -153,36 +148,26 @@ export default function GeneralForm({
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
-                        <div className="flex flex-col gap-1 text-sm">
-                            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                Standard Item Identification
-                            </label>
-                            <div className="">
-                                <MUITextField
-                                    name="stdItemIdentification"
-                                    value={data.stdItemIdentification}
-                                    onChange={(e) => handlerChange("stdItemIdentification", e.target.value)}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-1 text-sm">
-                            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                Commodity Classification:
-                            </label>
-                            <div className="">
-                                <MUITextField
-                                    name="commodityClassification"
-                                    value={data.commodityClassification}
-                                    onChange={(e) => handlerChange("commodityClassification", e.target.value)}
-                                />
-                            </div>
-                        </div>
+
+                        <MUITextField
+                            label="Standard Item Identification"
+                            name="stdItemIdentification"
+                            value={data.stdItemIdentification}
+                            onChange={(e) => handlerChange("stdItemIdentification", e.target.value)}
+                        />
+
+                        <MUITextField
+                            label=" Commodity Classification:"
+                            name="commodityClassification"
+                            value={data.commodityClassification}
+                            onChange={(e) => handlerChange("commodityClassification", e.target.value)}
+                        />
                     </div>
 
 
 
                 </div>
-            </FormCard>
+            </FormCard >
         </>
     );
 }
