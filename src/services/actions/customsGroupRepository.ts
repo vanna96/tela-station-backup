@@ -8,7 +8,7 @@ export default class CustomsGroupRepository extends Repository<CustomsGroup> {
     url = '/CustomsGroups?$select=Name,Code';
     
     // specific key
-    key = 'customsGroups';
+    key = 'custom-group';
 
     async get<CustomsGroup>(query?: string | undefined): Promise<CustomsGroup[]> {
         const data = localStorage.getItem(this.key);
