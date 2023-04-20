@@ -44,11 +44,11 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
       {
         accessorKey: "IsActive",
         header: "Active",
-        render: (cell: any) => (<span>{
-        
-          cell.IsActive === ""
-          
-        }</span>)
+        Cell: ({ cell }: any) => {
+          // return ;
+          return cell.IsActive === "YES" ? <span className='bg-red-50 text-red-600 py-1 px-2 border-emerald-400 text-[10px] rounded-sm border'>{cell?.IsActive === "YES"?"NO":"YES"}</span>:
+            <span className='bg-lime-50 text-green-600 py-1 px-2 border-emerald-400 text-[10px] rounded-sm border'>{cell?.IsActive === "YES" ? "NO" : "YES"}</span>
+        },
       },
       {
         accessorKey: "DimensionDescription",
@@ -57,18 +57,6 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
     ],
     []
   );
-  // const items = React.useMemo(() => {
-  //   switch (IsActive) {
-  //     case 'purchase':
-  //       return data?.filter((e: any) => e?.PurchaseItem === 'tYES');
-  //     case 'sale':
-  //       return data?.filter((e: any) => e?.SalesItem === 'tYES');
-  //     case 'inventory':
-  //       return data?.filter((e: any) => e?.InventoryItem === 'tYES');
-  //     default:
-  //       return [];
-  //   }
-  // }, [data]);
 
   return (
     <Modal
