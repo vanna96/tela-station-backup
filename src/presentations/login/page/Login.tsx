@@ -66,6 +66,7 @@ export default function Login() {
       await new PriceListRepository().get(),
       await new CustomsGroupRepository().get(),
       await new ManufacturerRepository().get()
+      
     ]);
   }
 

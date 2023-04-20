@@ -161,6 +161,9 @@ class ItemMasterDataForm extends CoreFormDocument {
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params;
 
+
+console.log(this.state)
+return 
     await new ItemMasterDataRepository()
       .post(this.state, this.props?.edit, id)
       .then((res: any) => {

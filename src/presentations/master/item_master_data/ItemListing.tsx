@@ -44,7 +44,7 @@ export default function ItemMasterDataListing() {
         // size: 200, //increase the width of this column
       },
       {
-        accessorKey: "creationDate",
+        accessorKey: "createDate",
         header: "Create Date",
         Cell: ({ cell }: any) => (
           <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>
