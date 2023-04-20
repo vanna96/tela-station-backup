@@ -43,9 +43,9 @@ export default function GeneralForm({
 
                         <MUITextField
                             label="   Additional Identifier:"
-                            name="additionalIdentifier"
-                            value={data.additionalIdentifier}
-                            onChange={(e) => handlerChange("additionalIdentifier", e.target.value)}
+                            name="sWW"
+                            value={data.sWW}
+                            onChange={(e) => handlerChange("sWW", e.target.value)}
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-3">

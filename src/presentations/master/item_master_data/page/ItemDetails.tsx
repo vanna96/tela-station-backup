@@ -325,7 +325,7 @@ function GeneralItem(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'> Withhlding Tax Liable</span> <span className='col-span-2 font-medium'> :<input type="checkbox" checked={data.wtLiable === 'tYES'} /></span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Do Not Apply Discount Group</span> <span className='col-span-2 font-medium'>:<input type="checkbox" checked={data.noDiscounts === 'tYES'} /></span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manufacturer</span> <span className='col-span-2 font-medium'>  : {new ManufacturerRepository().find(data.manufacturer)?.ManufacturerName}{data.manufacturer}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Additional Identifier</span> <span className='col-span-2 font-medium'>: {data.additionalIdentifier ?? "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Additional Identifier</span> <span className='col-span-2 font-medium'>: {data.sWW ?? "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shipping Type</span> <span className='col-span-2 font-medium'>:  {new ShippingTypeRepository().find(data.shipType)?.Name}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manage Item by</span> <span className='col-span-2 font-medium'>: {inventoryManagementType ?? 'N/A'}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {status ?? 'N/A'}</span></div>
@@ -351,7 +351,7 @@ function Purchasing(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Items Per Purchasing Unit
       </span> <span className='col-span-2 font-medium'>: {data.purchaseItemsPerUnit}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Packaging UoM Name
-      </span> <span className='col-span-2 font-medium'>: {data.purchasePackagingUnit}</span></div>
+      </span> <span className='col-span-2 font-medium'>: {data.purchaseUnit}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Quantity per Package
       </span> <span className='col-span-2 font-medium'>: {data.purchaseQtyPerPackUnit}</span></div>
 

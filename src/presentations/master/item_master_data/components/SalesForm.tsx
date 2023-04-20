@@ -45,7 +45,7 @@ export default function SalesForm({
                         <div className="grid grid-cols-2 gap-3">
 
                             <MUITextField label="Items Per Sales Unit" name="" value={data?.numAtCard} />
-                            <MUITextField label="Packing UoM Name" name="" value={data?.numAtCard} />
+                            <MUITextField label="Packing UoM Name" name="" value={data?.salesUnit} />
 
                         </div>
                     </div>

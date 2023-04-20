@@ -190,6 +190,7 @@ export default class ItemMaster {
 
   createDate?: string | undefined;
   updateDate?: string | undefined;
+sWW ? : string | undefined;
 
   constructor(json: any) {
     // super();
@@ -218,6 +219,7 @@ export default class ItemMaster {
     this.frozenFrom = json['FrozenFrom']
     this.frozenTo = json['FrozenTo']
     this.frozenRemarks = json['FrozenRemarks']
+    this.sWW = json['SWW']
     // Code for Item class
     this.salesItemsPerUnit = json['SalesItemsPerUnit']
     // this.salesPackagingUnit = json['SalesPackagingUnit']
@@ -487,6 +489,7 @@ export default class ItemMaster {
 
       // documentLine: json["items"]?.map((e: any) =>
       // ItemMasterDocumentLine.toCreate(e, json["DocType"])),
+      "SWW" : json['sWW']
     };
   }
 
