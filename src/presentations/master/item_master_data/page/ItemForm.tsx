@@ -23,9 +23,12 @@ class ItemMasterDataForm extends CoreFormDocument {
     this.state = {
       ...this.state,
       loading: true,
-      docType: "I",
-      documentStatus: "O",
-      requriedDate: null,
+      priceList: 1,
+      itemsGroupCode :100,
+      itemType: "itItems",
+      salesItem: true,
+      inventoryItem: true,
+      purchaseItem: true,
       docDate: new Date().toISOString(),
       taxDate: new Date().toISOString(),
       docDueDate: new Date().toISOString(),
@@ -201,6 +204,7 @@ class ItemMasterDataForm extends CoreFormDocument {
       <>
         <form onSubmit={this.handlerSubmit} className="flex flex-col gap-4">
           <HeadingForm
+            name={this.props?.name}
             edit={this.props?.edit}
             data={this.state}
             handlerChange={(key, value) => {

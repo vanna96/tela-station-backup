@@ -6,27 +6,27 @@ import Checkbox from "@mui/material/Checkbox";
 import ItemGroupSelect from "@/components/selectbox/ItemGroup";
 import UOMSelect from "@/components/selectbox/UnitofMeasurment";
 import PriceListSelect from "@/components/selectbox/PriceList";
-import MUICheckbox from "@/components/input/MUICheckbox";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export interface IHeadingFormProps {
   handlerChange: (key: string, value: any) => void;
   edit?: boolean;
   data: any;
+  name: string
 }
 
 export default function HeadingForm({
   handlerChange,
   edit,
-  data,
+  data, name
 }: IHeadingFormProps) {
 
-  const salesItemRef = useRef<HTMLInputElement>(null);
 
-  const handleSalesItemChange = () => {
-    const salesItem = salesItemRef.current?.checked ? 'tYES' : 'tNO';
-    console.log(salesItem);
-  };
+  const [isCheckedInventory, setIsCheckedInventory] = useState<boolean>(false);
+  const [isCheckedPurchase, setIsCheckedPurchase] = useState<boolean>(false);
+  const [isCheckedSales, setIsCheckedSales] = useState<boolean>(false);
+ 
+
   console.log(data);
   return (
     <>
@@ -180,23 +180,15 @@ export default function HeadingForm({
             <div className="grid grid-cols- gap-3">
               <div className="flex flex-col gap-1 text-sm">
                 <div className="flex items-center gap-1 text-sm">
-                  {/* <Checkbox defaultChecked={true} checked={data.inventoryItem === 'tYES' ? true : false} /> */}
-                  {/* <MUICheckbox name='SalesItem' value={data.inventoryItem} /> */}
-                  {/* <input type="checkbox" name="InventoryItem" value={data.inventoryItem}  
-                
-                  onChange={(e) => handlerChange("inventoryItem", e.target.value)}
-                  
-                  ></input> */}
-                  {/* <MUICheckb  ox name="InventoryItem" value={data.inventoryItem}
 
-                    onChange={(e) => handlerChange("inventoryItem", e.getValue())}
-                  /> */}
-
-                  {/* <input type="checkbox" name='inventoryItem' onChange={(e) => handlerChange("inventoryItem", e.target.value)}
-                  
-                  /> */}
-                  < input type="checkbox"  name="inventoryItem" value="tYES"/>
-
+                  <input type="checkbox" name='inventoryItem'
+                  checked={edit ? data?.inventoryItem : isCheckedInventory}
+                    onChange={(e) => {
+                      const { checked } = e.target;
+                      const value = checked ? true : false;
+                      setIsCheckedInventory(value);
+                      handlerChange("inventoryItem", value);
+                    }} />
                   <label htmlFor="Code" className="text-gray-500 text-[14px]">
                     Inventory Item
                   </label>
@@ -206,10 +198,15 @@ export default function HeadingForm({
             <div className="grid grid-cols- gap-3">
               <div className="flex flex-col gap-1 text-sm">
                 <div className="flex items-center gap-1 text-sm">
-                  {/* { edit ? <Checkbox checked={data.salesItem === 'tYES' ? true : false} /> : <Checkbox defaultChecked={true} name="SalesItem" checked={data.salesItem } />} */}
-                  {/* <MUICheckbox name='SalesItem' value={data.salesItem} /> */}
-                  < input type="checkbox"  name="salesItem" value="tYES" onChange={(e) => handlerChange("salesItem", e.target.value)}/>
 
+                  <input type="checkbox" name='salesItem' 
+                    checked={edit ? data?.salesItem : isCheckedSales}
+                    onChange={(e) => {
+                      const { checked } = e.target;
+                      const value = checked ? true : false;
+                      setIsCheckedSales(value);
+                      handlerChange("salesItem", value);
+                    }} />
                   <label htmlFor="Code" className="text-gray-500 text-[14px]">
                     Sales Item
                   </label>
@@ -221,7 +218,17 @@ export default function HeadingForm({
             <div className="grid grid-cols- gap-3">
               <div className="flex flex-col gap-1 text-sm">
                 <div className="flex items-center gap-1 text-sm">
-                  <input type="checkbox" checked={data.purchaseItem} name='purchaseItem' onChange={(e) => handlerChange("purchaseItem", e.target.value)} />
+                  <input
+                    type="checkbox"
+                    name="purchaseItem"
+                    checked={edit ? data?.purchaseItem : isCheckedPurchase}
+                    onChange={(e) => {
+                      const { checked } = e.target;
+                      const value = checked ? true : false;
+                      setIsCheckedPurchase(value);
+                      handlerChange("purchaseItem", value);
+                    }} />
+
                   <label htmlFor="Code" className="text-gray-500 text-[14px]">
                     Purchasing Item
                   </label>

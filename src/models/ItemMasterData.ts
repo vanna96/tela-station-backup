@@ -64,9 +64,9 @@ export default class ItemMaster {
   salesVATGroup?: string | undefined;
   barCode?: string | undefined;
   vatLiable?: string | undefined;
-  purchaseItem?: string | undefined;
-  salesItem?: string | undefined;
-  inventoryItem?: string | undefined;
+  purchaseItem?: boolean | undefined;
+  salesItem?: boolean | undefined;
+  inventoryItem?: boolean | undefined;
   //?: string | undefined; picture
   user_Text?: string | undefined;
   serialNum?: string | undefined;
@@ -360,9 +360,9 @@ export default class ItemMaster {
       "SalesVATGroup": json["salesVATGroup"],
       "BarCode": json["barCode"],
       "VatLiable": json["vatLiable"],
-      "PurchaseItem": json["purchaseItem"],
-      "SalesItem": json["salesItem"],
-      "InventoryItem": json["inventoryItem"],
+      "PurchaseItem": json["purchaseItem"]? 'tYES' : 'tNO',
+      "SalesItem": json["salesItem"]? 'tYES' : 'tNO',
+      "InventoryItem": json["inventoryItem"] ? 'tYES' : 'tNO',
       "User_Text": json["user_Text"],
       "SerialNum": json["serialNum"],
       "Manufacturer": json["manufacturer"],
@@ -509,9 +509,9 @@ export default class ItemMaster {
       "SalesVATGroup": json["salesVATGroup"],
       "BarCode": json["barCode"],
       "VatLiable": json["vatLiable"],
-      "PurchaseItem": json["purchaseItem"],
-      "SalesItem": json["salesItem"],
-      "InventoryItem": json["inventoryItem"],
+      "PurchaseItem": json["purchaseItem"]? 'tYES' : 'tNO',
+      "SalesItem": json["salesItem"]? 'tYES' : 'tNO',
+      "InventoryItem": json["inventoryItem"] ? 'tYES' : 'tNO',
       "User_Text": json["user_Text"],
       "SerialNum": json["serialNum"],
       "Manufacturer": json["manufacturer"],
