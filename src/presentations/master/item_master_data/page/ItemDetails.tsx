@@ -384,19 +384,19 @@ function Sales(props: any) {
 
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Tax Group
       </span> <span className='col-span-2 font-medium'>: {data?.salesVATGroup ?? "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Sales UoM Name</span> <span className='col-span-2 font-medium'>: {data.donotapplydiscountgroup}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Items Per Purchasing Unit
-      </span> <span className='col-span-2 font-medium'>: {data.salesUnit}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Sales UoM Name</span> <span className='col-span-2 font-medium'>: {data.salesUnit}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Items Per Sales Unit
+      </span> <span className='col-span-2 font-medium'>: {data.salesItemsPerUnit}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Packaging UoM Name
       </span> <span className='col-span-2 font-medium'>: {data.salesPackagingUnit}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Quantity per Package
       </span> <span className='col-span-2 font-medium'>: {data.salesQtyPerPackUnit}</span></div>
 
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Length</span> <span className='col-span-2 font-medium'>: {data.SalesUnitWidth}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Width</span> <span className='col-span-2 font-medium'>: {data.SalesUnitWidth}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Height</span> <span className='col-span-2 font-medium'>: {data.SalesUnitHeight}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Volume</span> <span className='col-span-2 font-medium'>: {data.SalesUnitVolume}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Weight</span> <span className='col-span-2 font-medium'>: {data.SalesUnitWeight}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Length</span> <span className='col-span-2 font-medium'>: {data.salesUnitWidth}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Width</span> <span className='col-span-2 font-medium'>: {data.salesUnitWidth}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Height</span> <span className='col-span-2 font-medium'>: {data.salesUnitHeight}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Volume</span> <span className='col-span-2 font-medium'>: {data.salesUnitVolume}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Weight</span> <span className='col-span-2 font-medium'>: {data.salesUnitWeight}</span></div>
 
 
 

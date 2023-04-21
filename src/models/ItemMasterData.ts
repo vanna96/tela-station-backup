@@ -190,7 +190,9 @@ export default class ItemMaster {
 
   createDate?: string | undefined;
   updateDate?: string | undefined;
-sWW ? : string | undefined;
+  sWW?: string | undefined;
+  salesUnit?: string | undefined;
+  salesQtyPerPackUnit?: string| undefined;
 
   constructor(json: any) {
     // super();
@@ -338,6 +340,8 @@ sWW ? : string | undefined;
     //   ?.charAt(0);
     this.createDate = json['CreateDate']
     this.updateDate = json['UpdateDate']
+    this.salesUnit = json['SalesUnit']
+    this.salesQtyPerPackUnit = json['SalesQtyPerPackUnit']
   }
 
   toJson(update: boolean) {
@@ -489,7 +493,9 @@ sWW ? : string | undefined;
 
       // documentLine: json["items"]?.map((e: any) =>
       // ItemMasterDocumentLine.toCreate(e, json["DocType"])),
-      "SWW" : json['sWW']
+      "SWW": json['sWW'],
+      "SalesUnit" : json['salesUnit'],
+      "SalesQtyPerPackUnit" : json['salesQtyPerPackUnit']
     };
   }
 

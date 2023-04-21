@@ -44,8 +44,12 @@ export default function SalesForm({
                     <div className="flex flex-col gap-1 text-sm">
                         <div className="grid grid-cols-2 gap-3">
 
-                            <MUITextField label="Items Per Sales Unit" name="" value={data?.numAtCard} />
-                            <MUITextField label="Packing UoM Name" name="" value={data?.salesUnit} />
+                            <MUITextField label="Items Per Sales Unit" name="salesItemsPerUnit" value={data?.salesItemsPerUnit}
+                                onChange={(e) => handlerChange("salesItemsPerUnit", e.target.value)}
+                                />
+                            <MUITextField label="Packing UoM Name" name="salesPackagingUnit" value={data?.salesPackagingUnit} 
+                                onChange={(e) => handlerChange("salesPackagingUnit", e.target.value)}
+                                />
 
                         </div>
                     </div>
@@ -53,18 +57,17 @@ export default function SalesForm({
                     <div className="flex flex-col gap-1 text-sm">
                         <div className="grid grid-cols-2 gap-3">
 
-                            <MUITextField label="Quantity per Package" name="" value={data?.numAtCard} />
-                            <MUITextField label="Customs Groups" name="" value={data?.numAtCard} />
+                            <MUITextField label="Quantity per Package" name="salesQtyPerPackUnit" value={data?.salesQtyPerPackUnit} 
+                                onChange={(e) => handlerChange("salesQtyPerPackUnit", e.target.value)}
+                                />
+                            <MUITextField label="Create QR Code From" name="createQRCodeFrom" value={data?.createQRCodeFrom}
+                                onChange={(e) => handlerChange("createQRCodeFrom", e.target.value)}
+                            />
 
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-1 text-sm">
-                        <div className="grid grid-cols-2 gap-3">
-
-                            <MUITextField label="Create QR Code From" name="" value={data?.numAtCard} />
-                        </div>
-                    </div>
+                   
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -73,7 +76,7 @@ export default function SalesForm({
                         <div className="grid grid-cols-2 gap-3">
 
                             <MUITextField label="Length" name="salesUnitLength" value={data?.salesUnitLength}
-                                onChange={(e) => handlerChange("purchaseVATGroup", e.target.value)}
+                                onChange={(e) => handlerChange("salesUnitLength", e.target.value)}
                             />
                             <MUITextField label="Width" name="salesUnitWidth" value={data?.salesUnitWidth}
                                 onChange={(e) => handlerChange("salesUnitWidth", e.target.value)}
