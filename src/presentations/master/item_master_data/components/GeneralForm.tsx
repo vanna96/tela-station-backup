@@ -22,10 +22,6 @@ export default function GeneralForm({
         <>
             <FormCard title="General">
                 <div className="flex flex-col gap-2">
-
-
-
-
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1 text-sm">
                             <label htmlFor="Code" className="text-gray-500 text-[14px]">
@@ -140,10 +136,10 @@ export default function GeneralForm({
                                 multiline
                                 rows={2}
                                 fullWidth
-                                name="remarks"
+                                name="user_Text"
                                 className="w-full "
-                                value={data?.remarks}
-                                onChange={(e) => handlerChange("remarks", e.target.value)}
+                                value={data?.user_Text}
+                                onChange={(e) => handlerChange("user_Text", e.target.value)}
                             /></div>
                     </div>
 
