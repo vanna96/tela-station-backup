@@ -63,7 +63,7 @@ export default class ItemMaster {
   customsGroupCode?: string | undefined;
   salesVATGroup?: string | undefined;
   barCode?: string | undefined;
-  vatLiable?: string | undefined;
+  vatLiable?: boolean | undefined;
   purchaseItem?: boolean | undefined;
   salesItem?: boolean | undefined;
   inventoryItem?: boolean | undefined;
@@ -122,7 +122,7 @@ export default class ItemMaster {
   glMethod?: string | undefined;
   taxType?: string | undefined;
   maxInventory?: string | undefined;
-  manageStockByWarehouse?: string | undefined;
+  manageStockByWarehouse?: boolean | undefined;
   purchaseHeightUnit1?: string | undefined;
   purchaseUnitHeight1?: string | undefined;
   purchaseLengthUnit1?: string | undefined;
@@ -141,7 +141,7 @@ export default class ItemMaster {
   salesUnitWidth1?: string | undefined;
   forceSelectionOfSerialNumber?: string | undefined;
   manageSerialNumbersOnReleaseOnly?: string | undefined;
-  wtLiable?: string | undefined;
+  wtLiable?: boolean | undefined;
   costAccountingMethod?: string | undefined;
   itemCountryOrg?: string | undefined;
   issueMethod?: string | undefined;
@@ -158,7 +158,7 @@ export default class ItemMaster {
   autoCreateSerialNumbersOnRelease?: string | undefined;
   series?: string | undefined;
   issuePrimarilyBy?: string | undefined;
-  noDiscounts?: string | undefined;
+  noDiscounts?: boolean | undefined;
   assetClass?: string | undefined;
   assetGroup?: string | undefined;
   inventoryNumber?: string | undefined;
@@ -192,12 +192,13 @@ export default class ItemMaster {
   updateDate?: string | undefined;
   sWW?: string | undefined;
   salesUnit?: string | undefined;
-  salesQtyPerPackUnit?: string| undefined;
+  salesQtyPerPackUnit?: string | undefined;
+  manageItemByDrop?: string | undefined;
 
   constructor(json: any) {
     // super();
     this.index = index++
-    this.cardCode = json['CardCode'];
+    this.cardCode = json['ItemPreferredVendors'][0]?.BPCode;
     this.id = json["ItemCode"];
     this.itemCode = json["ItemCode"];
     this.itemName = json["ItemName"];
@@ -342,6 +343,23 @@ export default class ItemMaster {
     this.updateDate = json['UpdateDate']
     this.salesUnit = json['SalesUnit']
     this.salesQtyPerPackUnit = json['SalesQtyPerPackUnit']
+    if (
+      json['manageBatchNumbers'] === "tYES" &&
+      json['manageSerialNumbers'] === "tNO"
+    ) {
+      this.manageItemByDrop = "T";
+    } else if (
+      json['manageSerialNumbers'] === "tYES" &&
+      json['manageBatchNumbers'] === "tNO"
+    ) {
+      this.manageItemByDrop = "L";
+    } else if (
+      json['manageSerialNumbers'] === "tNO" &&
+      json['manageBatchNumbers'] === "tNO"
+    ) {
+      this.manageItemByDrop = "I";
+    }
+    // this.manageItemByDrop = "T";
   }
 
   toJson(update: boolean) {
@@ -360,8 +378,8 @@ export default class ItemMaster {
       "SalesVATGroup": json["salesVATGroup"],
       "BarCode": json["barCode"],
       "VatLiable": json["vatLiable"],
-      "PurchaseItem": json["purchaseItem"]? 'tYES' : 'tNO',
-      "SalesItem": json["salesItem"]? 'tYES' : 'tNO',
+      "PurchaseItem": json["purchaseItem"] ? 'tYES' : 'tNO',
+      "SalesItem": json["salesItem"] ? 'tYES' : 'tNO',
       "InventoryItem": json["inventoryItem"] ? 'tYES' : 'tNO',
       "User_Text": json["user_Text"],
       "SerialNum": json["serialNum"],
@@ -417,7 +435,7 @@ export default class ItemMaster {
       "GLMethod": json["glMethod"],
       "TaxType": json["taxType"],
       "MaxInventory": json["maxInventory"],
-      "ManageStockByWarehouse": json["manageStockByWarehouse"],
+      "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
       "PurchaseHeightUnit1": json["purchaseHeightUnit1"],
       "PurchaseUnitHeight1": json["purchaseUnitHeight1"],
       "PurchaseLengthUnit1": json["purchaseLengthUnit1"],
@@ -433,7 +451,7 @@ export default class ItemMaster {
       "SalesUnitWidth1": json["salesUnitWidth1"],
       "ForceSelectionOfSerialNumber": json["forceSelectionOfSerialNumber"],
       "ManageSerialNumbersOnReleaseOnly": json["manageSerialNumbersOnReleaseOnly"],
-      "WTLiable": json["wtLiable"],
+      "WTLiable": json["wtLiable"] ? 'tYES' : 'tNO',
       "CostAccountingMethod": json["costAccountingMethod"],
       "ItemCountryOrg": json["itemCountryOrg"],
       "IssueMethod": json["issueMethod"],
@@ -451,7 +469,7 @@ export default class ItemMaster {
       "AutoCreateSerialNumbersOnRelease": json["autoCreateSerialNumbersOnRelease"],
       // "Series": json["series"],
       "IssuePrimarilyBy": json["issuePrimarilyBy"],
-      "NoDiscounts": json["noDiscounts"],
+      "NoDiscounts": json["noDiscounts"] ? 'tYES' : 'tNO',
       "AssetClass": json["assetClass"],
       "AssetGroup": json["assetGroup"],
       "InventoryNumber": json["inventoryNumber"],
@@ -472,8 +490,8 @@ export default class ItemMaster {
       "DefaultCountingUnit": json["defaultCountingUnit"],
       "CountingItemsPerUnit": json["countingItemsPerUnit"],
       "DefaultCountingUoMEntry": json["defaultCountingUoMEntry"],
-      "ManageSerialNumbers": json["manageSerialNumbers"],
-      "ManageBatchNumbers": json["manageBatchNumbers"],
+      // "ManageSerialNumbers": json["manageSerialNumbers"],
+      // "ManageBatchNumbers": json["manageBatchNumbers"],
       "AttachmentEntry": json["attachmentEntry"],
       "CreateQRCodeFrom": json["createQRCodeFrom"],
       "ItemPrices": json["itemPrices"],
@@ -494,8 +512,21 @@ export default class ItemMaster {
       // documentLine: json["items"]?.map((e: any) =>
       // ItemMasterDocumentLine.toCreate(e, json["DocType"])),
       "SWW": json['sWW'],
-      "SalesUnit" : json['salesUnit'],
-      "SalesQtyPerPackUnit" : json['salesQtyPerPackUnit']
+      "SalesUnit": json['salesUnit'],
+      "SalesQtyPerPackUnit": json['salesQtyPerPackUnit'],
+      // "ManageItemByDrop": json['manageItemByDrop'] ,
+      "ManageSerialNumbers" : json['manageItemByDrop'] === 'B' ? "tYES" : "tNO",
+      "ManageBatchNumbers" : json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
+      //   check if json['manageItemByDrop'] = 'T' 
+      //   ManageBatchNumbers === "tYES" &&
+      //   ManageSerialNumbers === "tNO"
+      //   else if  json['manageItemByDrop'] = 'B' 
+      //   ManageBatchNumbers === "tNO" &&
+      //     ManageSerialNumbers === "tYES"
+      // else
+      //   ManageBatchNumbers === "tNO" &&
+      //     ManageSerialNumbers === "tNO"
+
     };
   }
 
@@ -509,8 +540,8 @@ export default class ItemMaster {
       "SalesVATGroup": json["salesVATGroup"],
       "BarCode": json["barCode"],
       "VatLiable": json["vatLiable"],
-      "PurchaseItem": json["purchaseItem"]? 'tYES' : 'tNO',
-      "SalesItem": json["salesItem"]? 'tYES' : 'tNO',
+      "PurchaseItem": json["purchaseItem"] ? 'tYES' : 'tNO',
+      "SalesItem": json["salesItem"] ? 'tYES' : 'tNO',
       "InventoryItem": json["inventoryItem"] ? 'tYES' : 'tNO',
       "User_Text": json["user_Text"],
       "SerialNum": json["serialNum"],
@@ -566,7 +597,7 @@ export default class ItemMaster {
       "GLMethod": json["glMethod"],
       "TaxType": json["taxType"],
       "MaxInventory": json["maxInventory"],
-      "ManageStockByWarehouse": json["manageStockByWarehouse"],
+      "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
       "PurchaseHeightUnit1": json["purchaseHeightUnit1"],
       "PurchaseUnitHeight1": json["purchaseUnitHeight1"],
       "PurchaseLengthUnit1": json["purchaseLengthUnit1"],
@@ -582,7 +613,7 @@ export default class ItemMaster {
       "SalesUnitWidth1": json["salesUnitWidth1"],
       "ForceSelectionOfSerialNumber": json["forceSelectionOfSerialNumber"],
       "ManageSerialNumbersOnReleaseOnly": json["manageSerialNumbersOnReleaseOnly"],
-      "WTLiable": json["wtLiable"],
+      "WTLiable": json["wtLiable"] ? 'tYES' : 'tNO',
       "CostAccountingMethod": json["costAccountingMethod"],
       "ItemCountryOrg": json["itemCountryOrg"],
       "IssueMethod": json["issueMethod"],
@@ -600,7 +631,7 @@ export default class ItemMaster {
       "AutoCreateSerialNumbersOnRelease": json["autoCreateSerialNumbersOnRelease"],
       // "Series": json["series"],
       "IssuePrimarilyBy": json["issuePrimarilyBy"],
-      "NoDiscounts": json["noDiscounts"],
+      "NoDiscounts": json["noDiscounts"] ? 'tYES' : 'tNO',
       "AssetClass": json["assetClass"],
       "AssetGroup": json["assetGroup"],
       "InventoryNumber": json["inventoryNumber"],
@@ -621,8 +652,8 @@ export default class ItemMaster {
       "DefaultCountingUnit": json["defaultCountingUnit"],
       "CountingItemsPerUnit": json["countingItemsPerUnit"],
       "DefaultCountingUoMEntry": json["defaultCountingUoMEntry"],
-      "ManageSerialNumbers": json["manageSerialNumbers"],
-      "ManageBatchNumbers": json["manageBatchNumbers"],
+      // "ManageSerialNumbers": json["manageSerialNumbers"],
+      // "ManageBatchNumbers": json["manageBatchNumbers"],
       "AttachmentEntry": json["attachmentEntry"],
       "CreateQRCodeFrom": json["createQRCodeFrom"],
       "ItemPrices": json["itemPrices"],
@@ -636,6 +667,8 @@ export default class ItemMaster {
         }
       ],
       // 
+      "ManageSerialNumbers" : json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
+      "ManageBatchNumbers" : json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
       DocumentStatus: json["DocumentStatus"],
       // DocumentLines: json["items"]?.map((e: any) =>
       //   ItemMasterDocumentLine.toCreate(e, json["docType"])

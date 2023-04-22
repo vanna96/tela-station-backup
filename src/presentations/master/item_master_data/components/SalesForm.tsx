@@ -10,11 +10,13 @@ export interface SalesFormProps {
     handlerOpenVendor: () => void;
     handlerChange: (key: string, value: any) => void;
     data: any;
+    edit?: boolean;
+
 }
 
 export default function SalesForm({
     handlerOpenVendor,
-    data,
+    data, edit,
     handlerChange,
 }: SalesFormProps) {
     return (
@@ -46,10 +48,10 @@ export default function SalesForm({
 
                             <MUITextField label="Items Per Sales Unit" name="salesItemsPerUnit" value={data?.salesItemsPerUnit}
                                 onChange={(e) => handlerChange("salesItemsPerUnit", e.target.value)}
-                                />
-                            <MUITextField label="Packing UoM Name" name="salesPackagingUnit" value={data?.salesPackagingUnit} 
+                            />
+                            <MUITextField label="Packing UoM Name" name="salesPackagingUnit" value={data?.salesPackagingUnit}
                                 onChange={(e) => handlerChange("salesPackagingUnit", e.target.value)}
-                                />
+                            />
 
                         </div>
                     </div>
@@ -57,9 +59,9 @@ export default function SalesForm({
                     <div className="flex flex-col gap-1 text-sm">
                         <div className="grid grid-cols-2 gap-3">
 
-                            <MUITextField label="Quantity per Package" name="salesQtyPerPackUnit" value={data?.salesQtyPerPackUnit} 
+                            <MUITextField label="Quantity per Package" name="salesQtyPerPackUnit" value={data?.salesQtyPerPackUnit}
                                 onChange={(e) => handlerChange("salesQtyPerPackUnit", e.target.value)}
-                                />
+                            />
                             <MUITextField label="Create QR Code From" name="createQRCodeFrom" value={data?.createQRCodeFrom}
                                 onChange={(e) => handlerChange("createQRCodeFrom", e.target.value)}
                             />
@@ -67,7 +69,7 @@ export default function SalesForm({
                         </div>
                     </div>
 
-                   
+
                 </div>
 
                 <div className="flex flex-col gap-2">

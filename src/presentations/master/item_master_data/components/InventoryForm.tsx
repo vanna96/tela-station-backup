@@ -4,6 +4,7 @@ import MUISelect from "@/components/selectbox/MUISelect";
 import BranchSelect from "../../../../components/selectbox/Branch";
 import Checkbox from "@mui/material/Checkbox";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import { useState } from "react";
 
 export interface InventoryFomProps {
     handlerChange: (key: string, value: any) => void;
@@ -12,16 +13,17 @@ export interface InventoryFomProps {
 }
 
 export default function InventoryFom({
-    handlerChange,
+    handlerChange,edit,
     data,
 }: InventoryFomProps) {
+
+    const [isCheckedManage, setIsCheckedManage] = useState<boolean>(false);
+
     console.log(data);
     return (
         <>
             <FormCard title="Inventory">
                 <div className="flex flex-col gap-2">
-
-
 
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1 text-sm">
@@ -93,12 +95,19 @@ export default function InventoryFom({
                     </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-1 text-sm">
-                            <Checkbox />
-                            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                Manage Inventory by Warehouse
-                            </label>
-                        </div>
+                    <div className="flex items-center gap-1 text-sm">
+                        <input type="checkbox" name='manageStockByWarehouse'
+                            checked={edit ? data?.manageStockByWarehouse : isCheckedManage}
+                            onChange={(e) => {
+                                const { checked } = e.target;
+                                const value = checked ? true : false;
+                                setIsCheckedManage(value);
+                                handlerChange("manageStockByWarehouse", value);
+                            }} />
+                        <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                            Manage Inventory by Warehouse
+                        </label>
+                    </div>
                     Inventory Level
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1 text-sm">

@@ -6,6 +6,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from "@mui/material";
 import ManufacturerSelect from "@/components/selectbox/Manufacturer";
 import ShippingType from "@/components/selectbox/ShippingType";
+import { useState } from "react";
 
 export interface GeneralFormProps {
     handlerChange: (key: string, value: any) => void;
@@ -15,9 +16,12 @@ export interface GeneralFormProps {
 
 export default function GeneralForm({
     handlerChange,
-    data,
+    data, edit
 }: GeneralFormProps) {
     console.log(data);
+    const [isCheckedTaxLiable, setIsCheckedTaxLiable] = useState<boolean>(false);
+    const [isCheckedDiscount, setIsCheckedDiscount] = useState<boolean>(false);
+
     return (
         <>
             <FormCard title="General">
@@ -51,7 +55,6 @@ export default function GeneralForm({
                             </label>
                             <div className="">
                                 <ShippingType
-
                                     name="shipType"
                                     value={data.shipType}
                                     onChange={(e) => handlerChange("shipType", e.target.value)}
@@ -62,19 +65,21 @@ export default function GeneralForm({
                             <label htmlFor="Code" className="text-gray-500 text-[14px]">
                                 Manage Item By
                             </label>
-                            <div className="">
+                            <div className="">{
                                 <MUISelect
                                     items={[
                                         { name: "None", value: "I" },
                                         { name: "Serial Numbers", value: "L" },
                                         { name: "Batches", value: "T" },
                                     ]}
-                                    onChange={(e) => handlerChange("manageItemBy", e.target.value)}
+                                    onChange={(e) => handlerChange("manageItemByDrop", e.target.value)}
                                     name="manageItemBy"
-                                    value={data?.manageItemBy}
+                                    value={data.manageItemByDrop}
                                     aliasvalue="id"
                                     aliaslabel="name"
-                                />
+                                /> 
+                            }
+
                             </div>
                         </div>
                     </div>
@@ -93,35 +98,40 @@ export default function GeneralForm({
                     </FormControl>
 
                 </div>
-
-
-
-
                 <div className="flex flex-col gap-2">
 
-
-
-                    <div className="grid grid-cols-2 gap-3">
-
-                        <div className="grid grid-cols- gap-3">
-                            <div className="flex flex-col gap-1 text-sm">
-                                <div className="flex items-center gap-1 text-sm">
-                                    <Checkbox />
-                                    <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                        Withholding Tax Liable
-                                    </label>
-                                </div>
+                    <div className="grid grid-cols- gap-3">
+                        <div className="flex flex-col gap-1 text-sm">
+                            <div className="flex items-center gap-1 text-sm">
+                                <input type="checkbox" name='wtLiable'
+                                    checked={edit ? data?.wtLiable : isCheckedTaxLiable}
+                                    onChange={(e) => {
+                                        const { checked } = e.target;
+                                        const value = checked ? true : false;
+                                        setIsCheckedTaxLiable(value);
+                                        handlerChange("wtLiable", value);
+                                    }} />
+                                <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                                    Withholding Tax Liable
+                                </label>
                             </div>
                         </div>
-                        <div className="grid grid-cols- gap-3">
-                            <div className="flex flex-col gap-1 text-sm">
-                                <div className="flex items-center gap-1 text-sm">
-                                    <Checkbox />
-                                    <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                                        Do Not Apply Discount Groups
+                    </div>
+                    <div className="grid grid-cols- gap-3">
+                        <div className="flex flex-col gap-1 text-sm">
+                            <div className="flex items-center gap-1 text-sm">
+                                <input type="checkbox" name='noDiscounts'
+                                    checked={edit ? data?.noDiscounts : isCheckedDiscount}
+                                    onChange={(e) => {
+                                        const { checked } = e.target;
+                                        const value = checked ? true : false;
+                                        setIsCheckedDiscount(value);
+                                        handlerChange("noDiscounts", value);
+                                    }} />
+                                <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                                    Do Not Apply Discount Groups
 
-                                    </label>
-                                </div>
+                                </label>
                             </div>
                         </div>
                     </div>

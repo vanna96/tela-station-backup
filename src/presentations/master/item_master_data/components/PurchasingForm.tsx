@@ -11,13 +11,18 @@ export interface PurchasingFormProps {
     handlerOpenVendor: () => void;
     handlerChange: (key: string, value: any) => void;
     data: any;
+    edit?: boolean;
 }
 
 export default function PurchasingForm({
     handlerOpenVendor,
     data,
+    edit,
     handlerChange,
 }: PurchasingFormProps) {
+
+  
+
     return (
         <>
             <FormCard title="Purchasing">
@@ -25,7 +30,7 @@ export default function PurchasingForm({
                     <div className="grid grid-cols-2 gap-3">
                         <MUITextField
                             label="Prefered Vendor"
-                            value={data?.cardCode}
+                            value={ data?.cardCode}
                             name="BPCode"
                             onClick={handlerOpenVendor}
                             endAdornment={true}

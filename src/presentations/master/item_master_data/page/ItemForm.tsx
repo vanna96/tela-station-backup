@@ -24,7 +24,7 @@ class ItemMasterDataForm extends CoreFormDocument {
       ...this.state,
       loading: true,
       priceList: 1,
-      itemsGroupCode :100,
+      itemsGroupCode: 100,
       itemType: "itItems",
       salesItem: true,
       inventoryItem: true,
@@ -214,10 +214,12 @@ class ItemMasterDataForm extends CoreFormDocument {
 
           <GeneralForm
             data={this?.state}
+            edit={this.props?.edit}
             handlerChange={(key, value) => this.handlerChange(key, value)}
           // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
           <PurchasingForm
+            edit={this.props?.edit}
             handlerOpenVendor={() => {
               this.handlerOpenVendor("customer");
             }}
@@ -226,15 +228,18 @@ class ItemMasterDataForm extends CoreFormDocument {
           // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
           <SalesForm
+            edit={this.props?.edit}
             handlerOpenVendor={() => {
               this.handlerOpenVendor("supplier");
             }}
             data={this?.state}
+
             handlerChange={(key, value) => this.handlerChange(key, value)}
           // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
 
           <InventoryFom data={this?.state}
+            edit={this.props?.edit}
             handlerChange={(key, value) => this.handlerChange(key, value)}
           />
 
