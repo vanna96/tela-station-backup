@@ -466,7 +466,7 @@ function Inventory(props: any) {
                 : data?.costAccountingMethod === "bis_SNB"
                   ? "SNB"
                   : data?.costAccountingMethod ?? "N/A"}</span></div>
-          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Item Cost </span> <span className='col-span-2 font-medium'>: {data?.itemCost ?? "N/A"}</span></div>
+          <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Item Cost </span> <span className='col-span-2 font-medium'>: {data?.countingItemsPerUnit ?? "N/A"}</span></div>
         </div>
 
       </div>

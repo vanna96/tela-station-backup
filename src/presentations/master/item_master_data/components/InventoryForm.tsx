@@ -33,13 +33,13 @@ export default function InventoryFom({
                             <div className="">
                                 <MUISelect
                                     items={[
-                                        { name: "Warehouse", value: "W" },
-                                        { name: "Item Group", value: "C" },
-                                        { name: "Item Level", value: "L" },
+                                        { name: "Warehouse", value: "glm_WH" },
+                                        { name: "Item Group", value: "glm_ItemClass" },
+                                        { name: "Item Level", value: "glm_ItemLevel" },
                                     ]}
-                                    onChange={(e) => handlerChange("setGLAccountBy", e.target.value)}
-                                    name="setGLAccountBy"
-                                    value={data?.setGLAccountBy}
+                                    onChange={(e) => handlerChange("glMethod", e.target.value)}
+                                    name="glMethod"
+                                    value={data?.glMethod}
                                     aliasvalue="id"
                                     aliaslabel="name"
                                 />
@@ -49,30 +49,39 @@ export default function InventoryFom({
 
                         <MUITextField
                             label=" UoM Name"
-                            name="uomName"
-                            value={data.uomName}
-                            onChange={(e) => handlerChange("uomName", e.target.value)}
+                            name="inventoryUOM"
+                            value={data.inventoryUOM}
+                            onChange={(e) => handlerChange("inventoryUOM", e.target.value)}
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
 
                         <MUITextField
                             label="Weight"
-                            name="weight"
-                            value={data.weight}
-                            onChange={(e) => handlerChange("weight", e.target.value)}
+                            name="inventoryWeight"
+                            value={data.inventoryWeight}
+                            onChange={(e) => handlerChange("inventoryWeight", e.target.value)}
                         />
                         <div className="flex flex-col gap-1 text-sm">
                             <label htmlFor="Code" className="text-gray-500 text-[14px]">
                                 Valuation Method
                             </label>
                             <div className="">
+                                {/* {data?.costAccountingMethod === "bis_MovingAverage"
+            ? "Moving Average"
+            : data?.costAccountingMethod === "bis_Standard"
+              ? "Standard"
+              : data?.costAccountingMethod === "bis_FIFO"
+                ? "FIFO"
+                : data?.costAccountingMethod === "bis_SNB"
+                  ? "SNB"
+                  : data?.costAccountingMethod ?? "N/A"}</span></div> */}
                                 <MUISelect
                                     items={[
-                                        { name: "Moving Average", value: "A" },
-                                        { name: "Standard", value: "S" },
-                                        { name: "FIFO", value: "F" },
-                                        { name: "Serial/Batch", value: "B" },
+                                        { name: "Moving Average", value: "bis_MovingAverage" },
+                                        { name: "Standard", value: "bis_Standard" },
+                                        { name: "FIFO", value: "bis_FIFO" },
+                                        { name: "Serial/Batch", value: "bis_SNB" },
                                     ]}
                                     onChange={(e) => handlerChange("costAccountingMethod", e.target.value)}
                                     name="costAccountingMethod"
@@ -87,9 +96,9 @@ export default function InventoryFom({
 
                         <MUITextField
                             label="Item Cost"
-                            name="itemCost"
-                            value={data.itemCost}
-                            onChange={(e) => handlerChange("itemCost", e.target.value)}
+                            name="countingItemsPerUnit"
+                            value={data.countingItemsPerUnit}
+                            onChange={(e) => handlerChange("countingItemsPerUnit", e.target.value)}
                         />
 
                     </div>
@@ -116,9 +125,9 @@ export default function InventoryFom({
                             </label>
                             <div className="">
                                 <MUITextField
-                                    name="requiredPurchasingUoM"
-                                    value={data.requiredPurchasingUoM}
-                                    onChange={(e) => handlerChange("requiredPurchasingUoM", e.target.value)}
+                                    name="ç"
+                                    value={data.desiredInventory}
+                                    onChange={(e) => handlerChange("desiredInventory", e.target.value)}
                                 />
                             </div>
                         </div>
@@ -128,9 +137,9 @@ export default function InventoryFom({
                             </label>
                             <div className="">
                                 <MUITextField
-                                    name="minimum"
-                                    value={data.minimum}
-                                    onChange={(e) => handlerChange("minimum", e.target.value)}
+                                    name="ç"
+                                    value={data.minInventory}
+                                    onChange={(e) => handlerChange("minInventory", e.target.value)}
                                 />
                             </div>
                         </div>
@@ -142,9 +151,9 @@ export default function InventoryFom({
                             </label>
                             <div className="">
                                 <MUITextField
-                                    name="maximum"
-                                    value={data.maximum}
-                                    onChange={(e) => handlerChange("maximum", e.target.value)}
+                                    name="maxInventory"
+                                    value={data.maxInventory}
+                                    onChange={(e) => handlerChange("maxInventory", e.target.value)}
                                 />
                             </div>
                         </div>

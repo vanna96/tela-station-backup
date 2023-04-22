@@ -122,6 +122,8 @@ export default class ItemMaster {
   glMethod?: string | undefined;
   taxType?: string | undefined;
   maxInventory?: string | undefined;
+  desiredInventory?: string | undefined;
+  minInventory?: string | undefined;
   manageStockByWarehouse?: boolean | undefined;
   purchaseHeightUnit1?: string | undefined;
   purchaseUnitHeight1?: string | undefined;
@@ -267,6 +269,8 @@ export default class ItemMaster {
     this.glMethod = json['GLMethod']
     this.taxType = json['TaxType']
     this.maxInventory = json['MaxInventory']
+    this.desiredInventory = json['DesiredInventory']
+    this.minInventory = json['MinInventory']
     this.manageStockByWarehouse = json['ManageStockByWarehouse']
     this.purchaseHeightUnit1 = json['PurchaseHeightUnit1']
     this.purchaseUnitHeight1 = json['PurchaseUnitHeight1']
@@ -435,6 +439,8 @@ export default class ItemMaster {
       "GLMethod": json["glMethod"],
       "TaxType": json["taxType"],
       "MaxInventory": json["maxInventory"],
+      "DesiredInventory" : json['desiredInventory'],
+      "MinInventory" : json['minInventory'],
       "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
       "PurchaseHeightUnit1": json["purchaseHeightUnit1"],
       "PurchaseUnitHeight1": json["purchaseUnitHeight1"],
@@ -515,8 +521,8 @@ export default class ItemMaster {
       "SalesUnit": json['salesUnit'],
       "SalesQtyPerPackUnit": json['salesQtyPerPackUnit'],
       // "ManageItemByDrop": json['manageItemByDrop'] ,
-      "ManageSerialNumbers" : json['manageItemByDrop'] === 'B' ? "tYES" : "tNO",
-      "ManageBatchNumbers" : json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
+      "ManageSerialNumbers": json['manageItemByDrop'] === 'B' ? "tYES" : "tNO",
+      "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
       //   check if json['manageItemByDrop'] = 'T' 
       //   ManageBatchNumbers === "tYES" &&
       //   ManageSerialNumbers === "tNO"
@@ -597,6 +603,8 @@ export default class ItemMaster {
       "GLMethod": json["glMethod"],
       "TaxType": json["taxType"],
       "MaxInventory": json["maxInventory"],
+      "DesiredInventory" : json['desiredInventory'],
+      "MinInventory" : json['minInventory'],
       "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
       "PurchaseHeightUnit1": json["purchaseHeightUnit1"],
       "PurchaseUnitHeight1": json["purchaseUnitHeight1"],
@@ -667,8 +675,8 @@ export default class ItemMaster {
         }
       ],
       // 
-      "ManageSerialNumbers" : json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
-      "ManageBatchNumbers" : json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
+      "ManageSerialNumbers": json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
+      "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
       DocumentStatus: json["DocumentStatus"],
       // DocumentLines: json["items"]?.map((e: any) =>
       //   ItemMasterDocumentLine.toCreate(e, json["docType"])
