@@ -196,11 +196,12 @@ export default class ItemMaster {
   salesUnit?: string | undefined;
   salesQtyPerPackUnit?: string | undefined;
   manageItemByDrop?: string | undefined;
+  mainsupplier?: string | undefined;
 
   constructor(json: any) {
     // super();
     this.index = index++
-    this.cardCode = json['ItemPreferredVendors'][0]?.BPCode;
+    this.cardCode = json['Mainsupplier'];
     this.id = json["ItemCode"];
     this.itemCode = json["ItemCode"];
     this.itemName = json["ItemName"];
@@ -347,22 +348,31 @@ export default class ItemMaster {
     this.updateDate = json['UpdateDate']
     this.salesUnit = json['SalesUnit']
     this.salesQtyPerPackUnit = json['SalesQtyPerPackUnit']
-    if (
-      json['manageBatchNumbers'] === "tYES" &&
-      json['manageSerialNumbers'] === "tNO"
-    ) {
-      this.manageItemByDrop = "T";
-    } else if (
-      json['manageSerialNumbers'] === "tYES" &&
-      json['manageBatchNumbers'] === "tNO"
-    ) {
-      this.manageItemByDrop = "L";
-    } else if (
-      json['manageSerialNumbers'] === "tNO" &&
-      json['manageBatchNumbers'] === "tNO"
-    ) {
-      this.manageItemByDrop = "I";
-    }
+    this.mainsupplier = json['Mainsupplier']
+    // if (
+    //   json['manageBatchNumbers'] === "tYES" &&
+    //   json['manageSerialNumbers'] === "tNO"
+    // ) {
+    //   this.manageItemByDrop = "T";
+    // } else if (
+    //   json['manageSerialNumbers'] === "tYES" &&
+    //   json['manageBatchNumbers'] === "tNO"
+    // ) {
+    //   this.manageItemByDrop = "L";
+    // } else if (
+    //   json['manageSerialNumbers'] === "tNO" &&
+    //   json['manageBatchNumbers'] === "tNO"
+    // ) {
+    //   this.manageItemByDrop = "I";
+    // }
+if( this.manageItemByDrop = 'T') {
+  json['manageBatchNumbers'] === "tYES"
+}
+else if
+( this.manageItemByDrop = 'L') {
+  json['manageSerialNumbers'] === "tYES"
+}
+
     // this.manageItemByDrop = "T";
   }
 
@@ -508,6 +518,7 @@ export default class ItemMaster {
           "BPCode": json["cardCode"]
         }
       ],
+      // "Mainsupplier" : json['cardCode'],
       DocumentStatus: json["DocumentStatus"],
       // DocumentLines: json["items"]?.map((e: any) =>
       //   ItemMasterDocumentLine.toCreate(e, json["docType"])
@@ -521,7 +532,7 @@ export default class ItemMaster {
       "SalesUnit": json['salesUnit'],
       "SalesQtyPerPackUnit": json['salesQtyPerPackUnit'],
       // "ManageItemByDrop": json['manageItemByDrop'] ,
-      "ManageSerialNumbers": json['manageItemByDrop'] === 'B' ? "tYES" : "tNO",
+      "ManageSerialNumbers": json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
       "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
       //   check if json['manageItemByDrop'] = 'T' 
       //   ManageBatchNumbers === "tYES" &&
@@ -678,6 +689,8 @@ export default class ItemMaster {
       "ManageSerialNumbers": json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
       "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
       DocumentStatus: json["DocumentStatus"],
+      // "Mainsupplier" : json['cardCode'],
+
       // DocumentLines: json["items"]?.map((e: any) =>
       //   ItemMasterDocumentLine.toCreate(e, json["docType"])
       // ),

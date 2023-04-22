@@ -65,7 +65,7 @@ export default function GeneralForm({
                             <label htmlFor="Code" className="text-gray-500 text-[14px]">
                                 Manage Item By
                             </label>
-                            <div className="">{
+                            <div className="">
                                 <MUISelect
                                     items={[
                                         { name: "None", value: "I" },
@@ -77,11 +77,53 @@ export default function GeneralForm({
                                     value={data.manageItemByDrop}
                                     aliasvalue="id"
                                     aliaslabel="name"
-                                /> 
-                            }
+                                />
+                                <TextField type="hidden" name="manageSerialNumbers" value={data.manageItemByDrop === "L" ? "tYES" : ""}
 
+                                />
+                                <TextField type="hidden" name="manageBatchNumbers" value={data.manageItemByDrop === "T" ? "tYES" : ""}
+
+                                />
                             </div>
                         </div>
+                        {data?.manageItemByDrop !== "I" && (
+                            <div className="flex flex-col gap-1 text-sm">
+                                <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                                    Manage Item By
+                                </label>
+                                <div className="">
+                                    <MUISelect
+                                        items={[
+                                            { name: "On Every Transaction", value: "bomm_OnEveryTransaction" },
+                                            { name: "On Release Only", value: "bomm_OnReleaseOnly" },
+
+                                        ]}
+                                        onChange={(e) => handlerChange("sriAndBatchManageMethod", e.target.value)}
+                                        name="manageItemBy"
+                                        value={data.sriAndBatchManageMethod}
+                                        aliasvalue="id"
+                                        aliaslabel="name"
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* {data?.manageItemByDrop !== "I" && (
+                                    <div>
+                                        <MUISelect
+                                            items={[
+                                                { name: "None", value: "I" },
+                                                { name: "Serial Numbers", value: "L" },
+                                                { name: "Batches", value: "T" },
+                                            ]}
+                                            onChange={(e) => handlerChange("manageItemByDrop", e.target.value)}
+                                            name="manageItemBy"
+                                            value={data.manageItemByDrop}
+                                            aliasvalue="id"
+                                            aliaslabel="name"
+                                        />
+                                    </div>
+                                )} */}
                     </div>
 
                     <FormControl>

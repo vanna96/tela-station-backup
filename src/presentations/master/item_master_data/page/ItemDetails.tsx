@@ -288,6 +288,7 @@ function GeneralItem(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Additional Identifier</span> <span className='col-span-2 font-medium'>: {data?.sWW ?? "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shipping Type</span> <span className='col-span-2 font-medium'>:  {new ShippingTypeRepository().find(data?.shipType)?.Name}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manage Item by</span> <span className='col-span-2 font-medium'>: {inventoryManagementType ?? 'N/A'}</span></div>
+      {data?.manageBatchNumbers === "tYES" || data?.manageSerialNumbers === 'tYES' ? <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Management Method</span> <span className='col-span-2 font-medium'>: {sriAndBatchManageMethod ?? 'N/A'}</span></div> : null}
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {status ?? 'N/A'}</span></div>
     </div>
     <div className='flex flex-col gap-2'>
@@ -379,7 +380,7 @@ function Inventory(props: any) {
 
 
   const itemColumn = useMemo(() => [
-   
+
     {
       accessorKey: "WarehouseCode",
       header: "Whse Code.", //uses the default width from defaultColumn prop
@@ -387,11 +388,11 @@ function Inventory(props: any) {
       enableFilterMatchHighlighting: true,
       size: 88,
     },
-  
+
     {
       accessorKey: "Locked",
       header: "Locked",
-      Cell: ({ cell }: any) =>  <input type="checkbox" disabled checked={cell.getValue() === 'tYES'} />,
+      Cell: ({ cell }: any) => <input type="checkbox" disabled checked={cell.getValue() === 'tYES'} />,
     },
     // <input type="checkbox" checked={this.state.purchaseItem === 'tYES'} onChange={() => { }} />
     {
