@@ -67,15 +67,7 @@ export default function InventoryFom({
                                 Valuation Method
                             </label>
                             <div className="">
-                                {/* {data?.costAccountingMethod === "bis_MovingAverage"
-            ? "Moving Average"
-            : data?.costAccountingMethod === "bis_Standard"
-              ? "Standard"
-              : data?.costAccountingMethod === "bis_FIFO"
-                ? "FIFO"
-                : data?.costAccountingMethod === "bis_SNB"
-                  ? "SNB"
-                  : data?.costAccountingMethod ?? "N/A"}</span></div> */}
+                               
                                 <MUISelect
                                     items={[
                                         { name: "Moving Average", value: "bis_MovingAverage" },

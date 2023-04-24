@@ -381,6 +381,7 @@ function Inventory(props: any) {
 
   const itemColumn = useMemo(() => [
 
+
     {
       accessorKey: "WarehouseCode",
       header: "Whse Code.", //uses the default width from defaultColumn prop

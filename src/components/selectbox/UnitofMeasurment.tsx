@@ -21,7 +21,7 @@ function UOMSelect(props: UOMProps) {
     return <MUISelect
         {...props}
         aliaslabel="Name"
-        aliasvalue="BaseUoM"
+        aliasvalue="AbsEntry"
         loading={isLoading}
         items={data}
     />

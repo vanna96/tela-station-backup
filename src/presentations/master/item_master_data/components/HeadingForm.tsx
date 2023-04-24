@@ -167,9 +167,9 @@ export default function HeadingForm({
               </label>
               <div className="">
                 <MUITextField
-                  name="PricingUnit"
-                  value={data.pricingUnit}
-                  onChange={(e) => handlerChange("pricingUnit", e.target.value)}
+                  name="inventoryUOM"
+                  value={data.inventoryUOM}
+                  onChange={(e) => handlerChange("inventoryUOM", e.target.value)}
                 />
               </div>
             </div>
