@@ -44,11 +44,13 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
       {
         accessorKey: "IsActive",
         header: "Active",
-        Cell: ({ cell }: any) => {
-          // return ;
-          return cell.IsActive === "YES" ? <span className='bg-red-50 text-red-600 py-1 px-2 border-emerald-400 text-[10px] rounded-sm border'>{cell?.IsActive === "YES"?"NO":"YES"}</span>:
-            <span className='bg-lime-50 text-green-600 py-1 px-2 border-emerald-400 text-[10px] rounded-sm border'>{cell?.IsActive === "YES" ? "NO" : "YES"}</span>
-        },
+        Cell: ({ cell }: any) => (
+        <span>
+            {cell?.IsActive === "YES" ? <span className='bg-lime-50 text-green-600 py-1 px-2 border-emerald-400 text-[10px] rounded-sm border'>YES</span> :
+              <span className='bg-red-50 text-red-600 py-1 px-2 border-red-400 text-[10px] rounded-sm border'>NO</span>
+            }
+        </span>
+        ),
       },
       {
         accessorKey: "DimensionDescription",
