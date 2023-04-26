@@ -106,23 +106,6 @@ class ItemMasterDataForm extends CoreItemDocument {
     warehouse.splice(index, 1);
     this.setState({ ...this.state, warehouse: warehouse });
   }
-
-  // handlerAddWarehouse({ value, record, field }: any) {
-  //   let warehouse = [...(this.state.warehouse ?? [])];
-  //   console.log(this.state.warehouse)
-  //   let wh = this.state.warehouse?.find(
-  //     (e: any) => e?.warehouseCode === record?.warehouseCode
-  //   );
-
-  //   const index = warehouse.findIndex((e: any) => e?.warehouseCode === record.warehouseCode);
-  //   if (index > 0) warehouse[index] = wh;
-
-  //   this.setState({
-  //     ...this.state,
-  //     warehouse: warehouse,
-  //   });
-  // }
-
  
   async handlerSubmit(event: any) {
     event.preventDefault();

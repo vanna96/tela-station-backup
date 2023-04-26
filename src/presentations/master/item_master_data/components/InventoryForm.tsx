@@ -37,14 +37,18 @@ export default function InventoryFom({
 
     const [tableKey, setTableKey] = React.useState(Date.now());
 
+
     const handlerChangeInput = (event: any, row: any, field: any) => {
-        let value = event.target.value;
+        let value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
         handlerChangeWarehouse({ value: value, record: row, field });
-    };
+      };
 
     const handlerRemoveRow = (row: any) => {
         handlerRemoveWarehouse(row.WarehouseCode);
     };
+
+    const [isCheckedLock, setIsCheckedLock] = useState<boolean>(false);
+
     const WHColumns = React.useMemo(
         () => [
             {
@@ -93,24 +97,22 @@ export default function InventoryFom({
             },
 
             {
-                accessorKey: "lock",
+                accessorKey: "locked",
                 header: "Lock ",
-
-                // Cell: ({ cell }: any) => {
-                //     return <MUITextField
-                //         value={(cell.getValue())}
-
-                //     />;
-
-                // },
                 Cell: ({ cell }: any) => (
-                    <input
-                        type="checkbox"
-                        disabled={!edit}
-                        checked={cell.getValue() === "tYES"}
-                    />
+                    <input type="checkbox" name='locked'
+                        checked={edit ? cell.getValue() : isCheckedLock}
+                        onChange={(e) => {
+                            const { checked } = e.target;
+                            const value = checked ? true : false;
+                            setIsCheckedLock(value);
+                            handlerChangeInput(e, cell?.row?.original, "locked")
+                        }} />
                 ),
             },
+                //   onChange={(e) => handlerChange('fromWarehouse', e.target.value)}
+                            // handlerChange("locked", value);
+
             {
                 accessorKey: "inStock",
                 header: "In Stock ",

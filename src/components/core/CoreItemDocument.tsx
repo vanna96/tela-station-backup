@@ -210,9 +210,6 @@ export default abstract class CoreItemDocument extends React.Component<any, Core
         let temps: any = { ...this.state };
         temps[key] = value;
 
-
-
-
         this.setState(temps)
     }
 

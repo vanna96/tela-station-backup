@@ -694,7 +694,8 @@ export default class ItemMaster {
 }
 export class ItemWarehouseInfo extends Model {
 
-  lock?: string | undefined;
+  // lock?: string | undefined;
+  locked?: boolean | undefined;
   inStock?: string | undefined;
   committed?: string | undefined;
   ordered?: string | undefined;
@@ -710,7 +711,7 @@ export class ItemWarehouseInfo extends Model {
 
   constructor(json: any) {
     super();
-    this.lock = json['Lock']
+    this.locked = json['Locked']
     this.inStock = json['InStock'];
     this.committed = json['Committed'];
     this.ordered = json['Ordered'];
@@ -722,7 +723,6 @@ export class ItemWarehouseInfo extends Model {
     this.standardAveragePrice = json['StandardAveragePrice']
     this.defaultBin = json['DefaultBin']
     this.defaultBinEnforced = json['DefaultBinEnforced']
-    this.lock = json['Lock']
     this.available = json['Available']
   }
   toJson(update: boolean) {
@@ -731,7 +731,8 @@ export class ItemWarehouseInfo extends Model {
 
   public static toCreate(json: any,) {
     let line = {
-      Lock: json['lock'],
+      // Lock: json['lock'],
+      Locked: json["locked"] ? 'tYES' : 'tNO',
       InStock: json['inStock'],
       Committed: json['committed'],
       Ordered: json['ordered'],
