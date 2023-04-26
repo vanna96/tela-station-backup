@@ -7,7 +7,6 @@ import { ContactEmployee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
 
 export interface SalesFormProps {
-    handlerOpenVendor: () => void;
     handlerChange: (key: string, value: any) => void;
     data: any;
     edit?: boolean;
@@ -15,7 +14,6 @@ export interface SalesFormProps {
 }
 
 export default function SalesForm({
-    handlerOpenVendor,
     data, edit,
     handlerChange,
 }: SalesFormProps) {

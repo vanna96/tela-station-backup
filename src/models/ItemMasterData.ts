@@ -4,52 +4,55 @@ import { MasterDocument, DocumentLine } from "./interface/index";
 import Department from "./Department";
 import ItemGroup from './ItemGroup';
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
+import WarehouseRepository from "@/services/warehouseRepository";
+
 
 let index = 1;
-export interface ItemMasterProps {
-  id: any;
-  docNum: any;
-  cardCode?: string;
-  cardName?: string;
-  constactPersonCode?: number;
-  startDate?: string;
-  endDate?: string;
-  terminateDate?: string;
-  description?: string;
-  agreementType?: string;
-  status?: string;
-  owner?: string;
-  renewal?: boolean;
-  remindUnit?: string;
-  remindTime?: string;
-  remark?: string;
-  attachmentEntry?: number;
-  settlementProbability?: number;
-  agreementMethod?: string;
-  paymentTerm?: string;
-  priceList?: number;
-  signeDate?: string;
-  serie: string;
-  paymentMethod?: string;
-  shippingType?: string | undefined;
-  items: ItemMasterDocumentLineProps[];
-  documentLine: ItemMasterDocumentLineProps[];
-}
+// export interface ItemMasterProps {
+//   id: any;
+//   docNum: any;
+//   cardCode?: string;
+//   cardName?: string;
+//   constactPersonCode?: number;
+//   startDate?: string;
+//   endDate?: string;
+//   terminateDate?: string;
+//   description?: string;
+//   agreementType?: string;
+//   status?: string;
+//   owner?: string;
+//   renewal?: boolean;
+//   remindUnit?: string;
+//   remindTime?: string;
+//   remark?: string;
+//   attachmentEntry?: number;
+//   settlementProbability?: number;
+//   agreementMethod?: string;
+//   paymentTerm?: string;
+//   priceList?: number;
+//   signeDate?: string;
+//   serie: string;
+//   paymentMethod?: string;
+//   shippingType?: string | undefined;
+//   items: ItemWarehouseProps[];
+//   warehouse: ItemWarehouseProps[];
+// }
 
-export interface ItemMasterDocumentLineProps {
-  itemNo?: string | undefined;
-  itemDescription?: string | undefined;
-  itemGroup?: string | undefined;
-  quantity?: number | undefined;
-  unitPrice?: number | undefined;
-  currency?: string | undefined;
-  lineDiscount?: number;
-  uomEntry?: number | undefined;
-  uomCode?: string | undefined;
-  shippingType?: string | undefined;
-  project?: string | undefined;
-  vatGroup?: string | undefined;
-}
+// export interface ItemWarehouseProps {
+//   warehouseCode?: string | undefined;
+//   warehouseName?: string | undefined;
+//   lock?: string | undefined;
+//   minimalStock?: string | undefined;
+//   maximalStock?: string | undefined;
+//   minimalOrder?: string | undefined;
+//   standardAveragePrice?: string | undefined;
+//   inStock?: string | undefined;
+//   committed?: string | undefined;
+//   ordered?: string | undefined;
+//   defaultBin?: string | undefined;
+//   defaultBinEnforced?: string | undefined;
+
+// }
 
 export default class ItemMaster {
   id: any;
@@ -184,12 +187,6 @@ export default class ItemMaster {
   manageBatchNumbers?: string | undefined;
   attachmentEntry?: string | undefined;
   createQRCodeFrom?: string | undefined;
-  itemPrices?: any[] | undefined;
-  itemWarehouseInfoCollection?: any[] | undefined;
-  itemBarCodeCollection?: any[] | undefined;
-  itemPreferredVendors?: any[] | undefined;
-  documentLine?: ItemMasterDocumentLine[];
-
   createDate?: string | undefined;
   updateDate?: string | undefined;
   sWW?: string | undefined;
@@ -197,6 +194,13 @@ export default class ItemMaster {
   salesQtyPerPackUnit?: string | undefined;
   manageItemByDrop?: string | undefined;
   mainsupplier?: string | undefined;
+  itemPrices?: any[] | undefined;
+  itemWarehouseInfoCollection?: any[] | undefined;
+  itemBarCodeCollection?: any[] | undefined;
+  itemPreferredVendors?: any[] | undefined;
+  items?: ItemWarehouseInfo[];
+  warehouse?: ItemWarehouseInfo[]
+
 
   constructor(json: any) {
     // super();
@@ -334,6 +338,14 @@ export default class ItemMaster {
     this.createQRCodeFrom = json['CreateQRCodeFrom'];
     this.itemPrices = json['ItemPrices'];
     this.itemWarehouseInfoCollection = json['ItemWarehouseInfoCollection']
+    // this.items = json['Items']
+    // this.items = json["ItemBarCodeCollection"]?.map(
+    //   (e: any) => new ItemMasterDocumentLine(e)
+    // );
+    this.warehouse = json["ItemWarehouseInfoCollection"]?.map(
+      (e: any) => new ItemWarehouseInfo(e)
+    );
+
     this.itemBarCodeCollection = json['ItemBarCodeCollection']
     this.itemPreferredVendors = json['ItemPreferredVendors']
     // this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
@@ -349,29 +361,14 @@ export default class ItemMaster {
     this.salesUnit = json['SalesUnit']
     this.salesQtyPerPackUnit = json['SalesQtyPerPackUnit']
     this.mainsupplier = json['Mainsupplier']
-    // if (
-    //   json['manageBatchNumbers'] === "tYES" &&
-    //   json['manageSerialNumbers'] === "tNO"
-    // ) {
-    //   this.manageItemByDrop = "T";
-    // } else if (
-    //   json['manageSerialNumbers'] === "tYES" &&
-    //   json['manageBatchNumbers'] === "tNO"
-    // ) {
-    //   this.manageItemByDrop = "L";
-    // } else if (
-    //   json['manageSerialNumbers'] === "tNO" &&
-    //   json['manageBatchNumbers'] === "tNO"
-    // ) {
-    //   this.manageItemByDrop = "I";
-    // }
-if( this.manageItemByDrop = 'T') {
-  json['manageBatchNumbers'] === "tYES"
-}
-else if
-( this.manageItemByDrop = 'L') {
-  json['manageSerialNumbers'] === "tYES"
-}
+
+    if (this.manageItemByDrop = 'T') {
+      json['manageBatchNumbers'] === "tYES"
+    }
+    else if
+      (this.manageItemByDrop = 'L') {
+      json['manageSerialNumbers'] === "tYES"
+    }
 
     // this.manageItemByDrop = "T";
   }
@@ -449,8 +446,8 @@ else if
       "GLMethod": json["glMethod"],
       "TaxType": json["taxType"],
       "MaxInventory": json["maxInventory"],
-      "DesiredInventory" : json['desiredInventory'],
-      "MinInventory" : json['minInventory'],
+      "DesiredInventory": json['desiredInventory'],
+      "MinInventory": json['minInventory'],
       "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
       "PurchaseHeightUnit1": json["purchaseHeightUnit1"],
       "PurchaseUnitHeight1": json["purchaseUnitHeight1"],
@@ -511,7 +508,7 @@ else if
       "AttachmentEntry": json["attachmentEntry"],
       "CreateQRCodeFrom": json["createQRCodeFrom"],
       "ItemPrices": json["itemPrices"],
-      "ItemWarehouseInfoCollection": json["itemWarehouseInfoCollection"],
+      // "ItemWarehouseInfoCollection": json["itemWarehouseInfoCollection"],
       "ItemBarCodeCollection": json["itemBarCodeCollection"],
       "ItemPreferredVendors": [
         {
@@ -520,9 +517,9 @@ else if
       ],
       // "Mainsupplier" : json['cardCode'],
       DocumentStatus: json["DocumentStatus"],
-      // DocumentLines: json["items"]?.map((e: any) =>
-      //   ItemMasterDocumentLine.toCreate(e, json["docType"])
-      // ),
+      "ItemWarehouseInfoCollection": json["warehouse"]?.map((e: any) =>
+        ItemWarehouseInfo.toCreate(e)
+      ),
       // "Type": "dDocument_Items",
 
 
@@ -531,18 +528,8 @@ else if
       "SWW": json['sWW'],
       "SalesUnit": json['salesUnit'],
       "SalesQtyPerPackUnit": json['salesQtyPerPackUnit'],
-      // "ManageItemByDrop": json['manageItemByDrop'] ,
       "ManageSerialNumbers": json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
       "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
-      //   check if json['manageItemByDrop'] = 'T' 
-      //   ManageBatchNumbers === "tYES" &&
-      //   ManageSerialNumbers === "tNO"
-      //   else if  json['manageItemByDrop'] = 'B' 
-      //   ManageBatchNumbers === "tNO" &&
-      //     ManageSerialNumbers === "tYES"
-      // else
-      //   ManageBatchNumbers === "tNO" &&
-      //     ManageSerialNumbers === "tNO"
 
     };
   }
@@ -614,8 +601,8 @@ else if
       "GLMethod": json["glMethod"],
       "TaxType": json["taxType"],
       "MaxInventory": json["maxInventory"],
-      "DesiredInventory" : json['desiredInventory'],
-      "MinInventory" : json['minInventory'],
+      "DesiredInventory": json['desiredInventory'],
+      "MinInventory": json['minInventory'],
       "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
       "PurchaseHeightUnit1": json["purchaseHeightUnit1"],
       "PurchaseUnitHeight1": json["purchaseUnitHeight1"],
@@ -676,7 +663,6 @@ else if
       "AttachmentEntry": json["attachmentEntry"],
       "CreateQRCodeFrom": json["createQRCodeFrom"],
       "ItemPrices": json["itemPrices"],
-      "ItemWarehouseInfoCollection": json["itemWarehouseInfoCollection"],
       "ItemBarCodeCollection": json["itemBarCodeCollection"],
       // "ItemPreferredVendors": json["itemPreferredVendors"],
       // "ItemPreferredVendors": json["cardCode"]  ,
@@ -689,6 +675,10 @@ else if
       "ManageSerialNumbers": json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
       "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
       DocumentStatus: json["DocumentStatus"],
+      "ItemWarehouseInfoCollection": json["warehouse"]?.map((e: any) =>
+        ItemWarehouseInfo.toCreate(e)
+      ),
+      
       // "Mainsupplier" : json['cardCode'],
 
       // DocumentLines: json["items"]?.map((e: any) =>
@@ -702,97 +692,59 @@ else if
     };
   }
 }
-export class ItemMasterDocumentLine extends Model implements DocumentLine {
-  itemCode?: string | undefined;
-  itemDescription?: string | undefined;
-  itemGroup?: string | undefined;
-  quantity?: number | undefined;
-  unitPrice?: number | undefined;
-  currency?: string | undefined;
-  lineDiscount?: number;
-  uomEntry?: number | undefined;
-  uomCode?: string | undefined;
-  TransportationCode?: string | undefined;
-  project?: string | undefined;
-  taxCode?: string | undefined;
-  taxRate?: number | undefined;
-  vatGroup?: string | undefined;
-  lineTotal?: string | undefined;
-  requiredDate?: string | undefined;
-  shipDate?: string | undefined;
-  accountCode?: number | undefined;
-  accountNo?: number | undefined;
-  accountName?: string | undefined;
-  blanketAgreementNumber?: string | undefined;
-  discountPercent?: number;
-  requriedDate?: string;
-  itemName?: string;
-  saleVatGroup?: string;
-  lineVendor?: string;
-  purchaseVatGroup?: string;
-  accountNameD?: string;
+export class ItemWarehouseInfo extends Model {
 
+  lock?: string | undefined;
+  inStock?: string | undefined;
+  committed?: string | undefined;
+  ordered?: string | undefined;
+  warehouseCode?: string | undefined;
+  warehouseName?: string | undefined;
+  minimalStock?: string | undefined;
+  maximalStock?: string | undefined;
+  minimalOrder?: string | undefined;
+  standardAveragePrice?: string | undefined;
+  defaultBin?: string | undefined;
+  defaultBinEnforced?: string | undefined;
+  available?: string | undefined;
 
   constructor(json: any) {
     super();
-    this.saleVatGroup = json["VatGroup"];
-    this.itemCode = json["ItemCode"];
-    this.itemDescription = json["ItemDescription"];
-    this.itemGroup = json["ItemGroup"];
-    this.quantity = json["Quantity"];
-    this.unitPrice = json["UnitPrice"];
-    this.currency = json["PriceCurrency"];
-    this.lineDiscount = json["LineDiscount"];
-    this.uomEntry = json["UoMEntry"];
-    this.uomCode = json["UoMCode"];
-    this.vatGroup = json["VatGroup"];
-    this.purchaseVatGroup = json["VatGroup"];
-    this.requiredDate = json["RequiredDate"];
-    this.discountPercent = json["DiscountPercent"];
-    this.shipDate = json["ShipDate"];
-    this.accountCode = json["AccountCode"];
-    this.accountNo = json["AccountNo"];
-    this.accountName = json["AccountName"];
-    this.lineTotal = json["LineTotal"];
-    this.lineVendor = json["LineVendor"];
-    this.itemName = json["ItemDescription"];
-    this.taxRate = json["Rate"]
-    this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
-    // {(new OwnerRepository().find(data.owner)?.name) || "N/A"}
+    this.lock = json['Lock']
+    this.inStock = json['InStock'];
+    this.committed = json['Committed'];
+    this.ordered = json['Ordered'];
+    this.warehouseCode = json['WarehouseCode']
+    this.warehouseName = new WarehouseRepository().find(json['WarehouseCode'])?.WarehouseName ?? "N/A"
+    this.minimalStock = json['MinimalStock']
+    this.maximalStock = json['MaximalStock']
+    this.minimalOrder = json['MinimalOrder']
+    this.standardAveragePrice = json['StandardAveragePrice']
+    this.defaultBin = json['DefaultBin']
+    this.defaultBinEnforced = json['DefaultBinEnforced']
+    this.lock = json['Lock']
+    this.available = json['Available']
   }
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
   }
 
-  public static toCreate(json: any, type: any) {
+  public static toCreate(json: any,) {
     let line = {
-      Quantity: json["quantity"],
-      ItemCode: json["itemCode"],
-      ItemDescription: json["itemName"],
-      // ItemGroup: json["itemGroup"],
-      UnitPrice: json["unitPrice"],
-      // LineDiscount: 0.0,
-      DocEntry: json["uomGroupEntry"],
-      UoMCode: json["uomCode"],
-      // TransportationCode: 1,
-      // Project: null,
-      // TaxCode: null,
-      // TAXRate: null,
-      UoMEntry: json["uomEntry"],
-      // VatGroup: json["vatGroup"],
-      VatGroup: json["purchaseVatGroup"],
-      LineVendor: json["lineVendor"],
-      LineTotal: json["lineTotal"],
-      RequiredDate: json["requiredDate"],
-      AccountCode: json["AccountNo"],
-      // AccountName: json["AccountName"],
-      DiscountPercent: json["discountPercent"],
+      Lock: json['lock'],
+      InStock: json['inStock'],
+      Committed: json['committed'],
+      Ordered: json['ordered'],
+      Available: json['available'],
+      WarehouseCode: json['warehouseCode'],
+      // warehouseName : new WarehouseRepository().find,(json['WarehouseCode'])?.WarehouseName ?? "N/A"
+      MinimalStock: json['minimalStock'],
+      MaximalStock: json['maximalStock'],
+      MinimalOrder: json['minimalOrder'],
+      StandardAveragePrice: json['standardAveragePrice'],
+      DefaultBin: json['defaultBin'],
+      DefaultBinEnforced: json['defaultBinEnforced'],
     };
-
-    if (type === "S") {
-      delete line.ItemCode;
-      delete line.UnitPrice;
-    }
 
     return line;
   }

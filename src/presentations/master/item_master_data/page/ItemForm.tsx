@@ -16,8 +16,9 @@ import GeneralForm from "../components/GeneralForm";
 import PurchasingForm from "../components/PurchasingForm";
 import SalesForm from "../components/SalesForm";
 import InventoryFom from "../components/InventoryForm";
+import CoreItemDocument from "@/components/core/CoreItemDocument";
 
-class ItemMasterDataForm extends CoreFormDocument {
+class ItemMasterDataForm extends CoreItemDocument {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -32,16 +33,15 @@ class ItemMasterDataForm extends CoreFormDocument {
       salesItem: true,
       inventoryItem: true,
       purchaseItem: true,
-      // manageSerialNumbers: 'tNO',
-      // manageBatchNumbers: 'tNO',
       manageItemByDrop: 'I',
       docDate: new Date().toISOString(),
       taxDate: new Date().toISOString(),
       docDueDate: new Date().toISOString(),
     } as any;
 
-    this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    this.handlerAddItem = this.handlerAddItem.bind(this);
+    this.handlerSubmit = this.handlerSubmit.bind(this);
+    this.handlerRemoveWarehouse = this.handlerRemoveWarehouse.bind(this);
+    // this.handlerAddWarehouse = this.handlerAddWarehouse.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
@@ -64,7 +64,6 @@ class ItemMasterDataForm extends CoreFormDocument {
           () =>
             this.setState({
               ...this.props.location.state,
-              isApproved: routeState?.status === "A",
               loading: false,
             }),
           500
@@ -101,69 +100,30 @@ class ItemMasterDataForm extends CoreFormDocument {
     }
   }
 
-  handlerRemoveItem(code: string) {
-    let items = [...(this.state.items ?? [])];
-    const index = items.findIndex((e: any) => e?.itemCode === code);
-    items.splice(index, 1);
-    this.setState({ ...this.state, items: items });
+  handlerRemoveWarehouse(code: string) {
+    let warehouse = [...(this.state.warehouse ?? [])];
+    const index = warehouse.findIndex((e: any) => e?.warehouseCode === code);
+    warehouse.splice(index, 1);
+    this.setState({ ...this.state, warehouse: warehouse });
   }
 
-  handlerAddItem({ value, record, field }: any) {
-    let items = [...(this.state.items ?? [])];
-    let item = this.state.items?.find(
-      (e: any) => e?.itemCode === record?.itemCode
-    );
+  // handlerAddWarehouse({ value, record, field }: any) {
+  //   let warehouse = [...(this.state.warehouse ?? [])];
+  //   console.log(this.state.warehouse)
+  //   let wh = this.state.warehouse?.find(
+  //     (e: any) => e?.warehouseCode === record?.warehouseCode
+  //   );
 
-    if (field === "AccountNo") {
-      const account = value as GLAccount;
-      item[field] = account.code;
-      item["AccountName"] = account.name;
-    } else {
-      item[field] = value;
-    }
+  //   const index = warehouse.findIndex((e: any) => e?.warehouseCode === record.warehouseCode);
+  //   if (index > 0) warehouse[index] = wh;
 
-    if (
-      field === "quantity" ||
-      field === "unitPrice" ||
-      field === "discountPercent"
-    ) {
-      const total = Formular.findLineTotal(
-        item["quantity"],
-        item["unitPrice"],
-        item["discountPercent"]
-      );
-      item["lineTotal"] = total;
-    }
-
-    if (field === "purchaseVatGroup")
-      item["vatRate"] = new VatGroupRepository().find(value)?.vatRate;
-
-    const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-    if (index > 0) items[index] = item;
-
-    this.setState({
-      ...this.state,
-      items: items,
-      docTotal: Formular.findTotalBeforeDiscount(items),
-    });
-  }
-
-  // async handlerSubmit(event: any) {
-  //   event.preventDefault();
-  //   this.setState({ ...this.state, isSubmitting: true });
-
-  //   const { id } = this.props?.match?.params;
-
-  //   await new ItemMasterDataRepository()
-  //     .post(this.state, this.props?.edit, id)
-  //     .then((res: any) => {
-  //       this.showMessage("Success", "Create Successfully");
-  //     })
-  //     .catch((e: Error) => {
-  //       this.showMessage("Errors", e.message);
-  //     });
+  //   this.setState({
+  //     ...this.state,
+  //     warehouse: warehouse,
+  //   });
   // }
 
+ 
   async handlerSubmit(event: any) {
     event.preventDefault();
 
@@ -171,16 +131,15 @@ class ItemMasterDataForm extends CoreFormDocument {
     const { id } = this.props?.match?.params;
 
 
-    // console.log(this.state)
-    // return 
+   
     await new ItemMasterDataRepository()
       .post(this.state, this.props?.edit, id)
       .then((res: any) => {
-        const purchaseRequest = new ItemMaster(res?.data);
+        const warehouse = new ItemMaster(res?.data);
 
         this.props.history.replace(
-          this.props.location.pathname?.replace("create", purchaseRequest.id),
-          purchaseRequest
+          this.props.location.pathname?.replace("create", warehouse.id),
+          warehouse
         );
         this.dialog.current?.success("Create Successfully.");
       })
@@ -191,7 +150,6 @@ class ItemMasterDataForm extends CoreFormDocument {
             {
               ...this.state,
               isSubmitting: false,
-              isApproved: this.state.documentStatus === "A",
             }
           );
           this.dialog.current?.success(e.message);
@@ -222,31 +180,28 @@ class ItemMasterDataForm extends CoreFormDocument {
             data={this?.state}
             edit={this.props?.edit}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
           <PurchasingForm
-            edit={this.props?.edit}
-            handlerOpenVendor={() => {
-              this.handlerOpenVendor("customer");
-            }}
-            data={this?.state}
-            handlerChange={(key, value) => this.handlerChange(key, value)}
-          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
-          />
-          <SalesForm
             edit={this.props?.edit}
             handlerOpenVendor={() => {
               this.handlerOpenVendor("supplier");
             }}
             data={this?.state}
-
             handlerChange={(key, value) => this.handlerChange(key, value)}
-          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
+          />
+          <SalesForm
+            edit={this.props?.edit}
+            data={this?.state}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
           />
 
           <InventoryFom data={this?.state}
             edit={this.props?.edit}
+            handlerAddWarehouse={() => this.handlerOpenWarehouse()}
+            handlerChangeWarehouse = {this.handlerChangeWarehouse}
+            handlerRemoveWarehouse = {this.handlerRemoveWarehouse}
             handlerChange={(key, value) => this.handlerChange(key, value)}
+
           />
 
           <AttachmentForm />

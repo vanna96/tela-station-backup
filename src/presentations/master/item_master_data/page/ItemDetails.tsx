@@ -36,6 +36,7 @@ import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRep
 import ManufacturerRepository from "@/services/actions/manufacturerRepository";
 import CustomsGroupRepository from "@/services/actions/customsGroupRepository";
 import VatGroupRepository from "@/services/actions/VatGroupRepository";
+import WarehouseRepository from "@/services/warehouseRepository";
 
 class ItemMasterDataDetails extends Component<any, any> {
 
@@ -384,10 +385,16 @@ function Inventory(props: any) {
 
     {
       accessorKey: "WarehouseCode",
-      header: "Whse Code.", //uses the default width from defaultColumn prop
+      header: "Warehouse Code", //uses the default width from defaultColumn prop
       enableClickToCopy: true,
       enableFilterMatchHighlighting: true,
       size: 88,
+    },
+
+    {
+      accessorKey: "WarehouseCode",
+      header: "Warehouse Name",
+      Cell: ({ cell }: any) => new WarehouseRepository().find(cell.getValue())?.WarehouseName ?? "N/A",
     },
 
     {

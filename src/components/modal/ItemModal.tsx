@@ -111,7 +111,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 total: 0
             })
         });
-
+console.log(selectItems)
         onOk(selectItems)
     }
 
