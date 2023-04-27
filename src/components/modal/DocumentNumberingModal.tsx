@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC ,memo} from 'react'
 import Modal from './Modal';
 import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
@@ -9,7 +9,11 @@ import Dimension from '@/models/Dimension';
 import DimensionRepository from '@/services/actions/DimensionRepostsitory';
 import { BsTag } from 'react-icons/bs';
 import DocumentNumberingRepository from '@/services/actions/DocumentNumberingRepository';
-
+import request from '@/utilies/request';
+import shortid from 'shortid';
+import { useCallback } from 'react';
+import DocumentSeriesModal from './DocumentSeriesModal';
+import { log } from 'console';
 interface DocumentNumberingModalProps {
   open: boolean,
   onClose: () => void,
@@ -23,10 +27,13 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
     staleTime: Infinity,
   });
 
-  const [pagination, setPagination] = React.useState({
+  const [pagination, setPagination] = React.useState<any>({
     pageIndex: 0,
     pageSize: 8,
   });
+  const [openSeries, setOpenSeries] = React.useState<boolean>(false);
+  const [series, setSeries] = React.useState<any>({});
+  const closeSeries = React.useCallback(() => setOpenSeries(false), []);
 
   const handlerConfirm = () => {
   }
@@ -35,8 +42,18 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
   const columns = React.useMemo(
     () => [
       {
+        accessorKey: "None",
+        header: "Detail",
+        Cell: (record: any) => (
+          <span className='bg-sky-500 p-1 text-sm text-white rounded-sm' onClick={() => fetchSeries(record)}>
+            Detail
+          </span>
+        ),
+      },
+      {
         accessorKey: "ObjectName",
         header: "Document",
+
       },
       {
         accessorKey: "DfltSeries",
@@ -49,7 +66,7 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
       {
         accessorKey: "as",
         header: "Next No",
-  
+
       },
       {
         accessorKey: "AutoKey",
@@ -63,18 +80,35 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
     ],
     []
   );
-  // const items = React.useMemo(() => {
-  //   switch (IsActive) {
-  //     case 'purchase':
-  //       return data?.filter((e: any) => e?.PurchaseItem === 'tYES');
-  //     case 'sale':
-  //       return data?.filter((e: any) => e?.SalesItem === 'tYES');
-  //     case 'inventory':
-  //       return data?.filter((e: any) => e?.InventoryItem === 'tYES');
-  //     default:
-  //       return [];
-  //   }
-  // }, [data]);
+
+
+  const fetchSeries = async (record:any) => {
+    setOpenSeries(true)
+    setSeries({ title: record?.row?.original?.ObjectName,isLoading:true, data: [] });
+    const payload:any = {
+      DocumentTypeParams: {
+        Document: record?.row?.original.ObjectCode,
+        DocumentSubType: record?.row?.original.DocSubType
+      }
+    
+      // const payload: any = {
+      //   DocumentTypeParams: {
+      //     Document: "1250000001",
+      //     DocumentSubType: "--"
+      //   }
+    };
+console.log(record)
+    const { data }:any = await request('POST', '/SeriesService_GetDocumentSeries', payload);
+
+    let reponseData = [];
+    if (data) {
+      reponseData = data?.value?.map((e: any) => { return { key: shortid.generate(), ...e } })
+    }
+
+    setSeries({ title: record?.ObjectName, data: reponseData, isLoading: false });
+  }
+
+
 
   return (
     <Modal
@@ -85,44 +119,48 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
       disableTitle={true}
       disableFooter={true}
     >
-      <div className="data-table" >
-        <MaterialReactTable
-          columns={columns}
-          data={data ?? []}
-          enableStickyHeader={true}
-          enableStickyFooter={true}
-          enablePagination={true}
-          enableTopToolbar={true}
-          enableDensityToggle={false}
-          initialState={{ density: "compact" }}
-          enableRowSelection={false}
-          onPaginationChange={setPagination}
-          onRowSelectionChange={setRowSelection}
-          getRowId={(row: any) => row.ItemCode}
-          enableSelectAll={true}
-          enableFullScreenToggle={false}
-          enableColumnVirtualization={false}
-          positionToolbarAlertBanner="bottom"
-          muiTablePaginationProps={{
-            rowsPerPageOptions: [5, 8, 15],
-            showFirstButton: false,
-            showLastButton: false,
-          }}
-          muiTableBodyRowProps={() => ({
-            sx: { cursor: 'pointer' },
-          })}
-          state={
-            {
-              isLoading,
-              pagination: pagination,
-              rowSelection
+      <>
+        <div className="data-table" >
+          <MaterialReactTable
+            columns={columns}
+            data={data ?? []}
+            enableStickyHeader={true}
+            enableStickyFooter={true}
+            enablePagination={true}
+            enableTopToolbar={true}
+            enableDensityToggle={false}
+            initialState={{ density: "compact" }}
+            enableRowSelection={false}
+            onPaginationChange={setPagination}
+            onRowSelectionChange={setRowSelection}
+            getRowId={(row: any) => row.ItemCode}
+            enableSelectAll={true}
+            enableFullScreenToggle={false}
+            enableColumnVirtualization={false}
+            positionToolbarAlertBanner="bottom"
+            muiTablePaginationProps={{
+              rowsPerPageOptions: [5, 8, 15],
+              showFirstButton: false,
+              showLastButton: false,
+            }}
+            muiTableBodyRowProps={({ row }) => ({
+              sx: { cursor: 'pointer' },
+              onClick: row.getToggleSelectedHandler(),
+            })}
+            state={
+              {
+                isLoading,
+                pagination: pagination,
+                rowSelection,
+              }
             }
-          }
-          renderTopToolbarCustomActions={({ table }) => {
-            return <h2 className=" text-lg font-bold">List Of Document Numbering</h2>
-          }}
-        />
-      </div>
+            renderTopToolbarCustomActions={({ table }) => {
+              return <h2 className=" text-lg font-bold">List Of Document Numbering</h2>
+            }}
+          />
+        </div>
+        <DocumentSeriesModal isLoading={series?.isLoading} series={series} open={openSeries} onClose={closeSeries} />
+      </>
     </Modal>
   )
 }

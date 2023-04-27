@@ -19,12 +19,16 @@ export default class DocumentNumberingRepository extends Repository<DocumentNumb
     }
 
     const document = await request('GET', this.url).then((res: any) => res?.data?.value?.map((e: any) => {
-
+      const code = getDocumentNumberingByCode(e?.ObjectCode);
       return {
-        ...e,
         key: e["id__"],
-        ObjectName: getDocumentNumberingByCode(e?.ObjectCode),
-      }
+        ...e,
+        InitialNum: e?.UpdCounter,
+        LastNum: e?.AutoKey,
+        ObjectName: code,
+        ObjectCode: e?.ObjectCode,
+        DocSubType: e?.DocSubType
+      };
     }));
     const enc = Encryption.encrypt(this.key, JSON.stringify(document));
     localStorage.setItem(this.key, enc);
