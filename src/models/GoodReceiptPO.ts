@@ -7,7 +7,7 @@ import ShippingType from './ShippingType';
 
 let index = 1;
 
-export default class GoodIssue extends Model implements MasterDocument {
+export default class GoodReceiptPO extends Model implements MasterDocument {
   index: number;
   id: any;
   docNum: any;
@@ -29,9 +29,9 @@ export default class GoodIssue extends Model implements MasterDocument {
   documentStatus?: string;
   serie: string;
   shippingType?: BPAddress[] ;
-  items: GoodIssueDocumentLine[];
+  items: GoodReceiptPODocumentLine[];
   documentowner?: string;
-  StockTransferLines?: GoodIssueDocumentLine[];
+  StockTransferLines?: GoodReceiptPODocumentLine[];
   fromWarehouse?: string;
   toWarehouse?: string;
   shipToDefault?: string;
@@ -68,7 +68,7 @@ export default class GoodIssue extends Model implements MasterDocument {
     // this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
     this.comments = json["Comments"];
     this.items = json["DocumentLines"]?.map(
-      (e: any) => new GoodIssueDocumentLine(e)
+      (e: any) => new GoodReceiptPODocumentLine(e)
     );
    
     this.documentStatus = json["DocumentStatus"]
@@ -120,11 +120,12 @@ export default class GoodIssue extends Model implements MasterDocument {
       Address2: json["Address2"],
       DocumentStatus: json["DocumentStatus"],
       DocumentLines: json["items"]?.map((e: any) =>
-        GoodIssueDocumentLine.toCreate(e, json["docType"])
+        GoodReceiptPODocumentLine.toCreate(e, json["docType"])
       ),
     
       PriceList: json['priceList'],
       U_DOCTYPE : "I"
+
 
     };
   }
@@ -143,7 +144,7 @@ export default class GoodIssue extends Model implements MasterDocument {
       Address2: json["Address2"],
       DocumentStatus: json["DocumentStatus"],
       DocumentLines: json["items"]?.map((e: any) =>
-        GoodIssueDocumentLine.toCreate(e, json["docType"])
+        GoodReceiptPODocumentLine.toCreate(e, json["docType"])
       ),
       FromWarehouse: json['fromWarehouse'],
       ToWarehouse: json['toWarehouse'],
@@ -157,7 +158,7 @@ export default class GoodIssue extends Model implements MasterDocument {
     };
   }
 }
-export class GoodIssueDocumentLine extends Model implements DocumentLine {
+export class GoodReceiptPODocumentLine extends Model implements DocumentLine {
   itemCode?: string | undefined;
   itemDescription?: string | undefined;
   itemGroup?: string | undefined;

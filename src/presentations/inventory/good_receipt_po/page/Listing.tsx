@@ -4,17 +4,16 @@ import { Button, TextField } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import moment from "moment/moment";
-//Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
-import GoodIssueRepository from "@/services/actions/goodIssueRepository";
+import GoodReceiptPORepository from "@/services/actions/goodReceiptPORepository";
 
-export default function GoodIssueListing() {
+export default function GoodReceiptPOList() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["good-issue"],
-    queryFn: () => new GoodIssueRepository().get(),
+    queryKey: ["good-receipt-po"],
+    queryFn: () => new GoodReceiptPORepository().get(),
   });
   console.log(data);
   const columns = React.useMemo(
@@ -78,7 +77,7 @@ export default function GoodIssueListing() {
           <div className="flex gap-4">
             <button
               onClick={() => {
-                route("/inventory/good-issue/" + cell.row.original.id, {
+                route("/inventory/good-receipt-po/" + cell.row.original.id, {
                   state: cell.row.original,
                 });
               }}
@@ -111,7 +110,7 @@ export default function GoodIssueListing() {
             variant="outlined"
             disableElevation
             size="small"
-            onClick={() => route("/inventory/good-issue/create")}
+            onClick={() => route("/inventory/good-receipt-po/create")}
           >
             <span className="text-xs">Create</span>
           </Button>

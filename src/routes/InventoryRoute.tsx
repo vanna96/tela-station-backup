@@ -20,6 +20,9 @@ import StockDamageRequestForm from "../presentations/inventory/stock_damage_requ
 import GoodIssueList from "@/presentations/inventory/good_issue/page/Listing";
 import GoodIssueDetail from "@/presentations/inventory/good_issue/page/Detail";
 import GoodIssueForm from "../presentations/inventory/good_issue/page/Form"
+import GoodReceiptPOList from "@/presentations/inventory/good_receipt_po/page/Listing";
+import GoodReceiptPODetail from "@/presentations/inventory/good_receipt_po/page/Detail";
+import GoodReceiptPOForm from "../presentations/inventory/good_receipt_po/page/Form"
 
 export default function InventoryRoute() {
   return (
@@ -64,10 +67,10 @@ export default function InventoryRoute() {
 
       </Route>
       <Route path="/good-receipt-po">
-        <Route index element={<Lists />} />
-        <Route path=':id' element={<Detail />} />
-        <Route path='create' element={<Form />} />
-        <Route path=':id/edit' element={<Form edit={true} />} />
+        <Route index element={<GoodReceiptPOList />} />
+        <Route path=':id' element={<GoodReceiptPODetail />} />
+        <Route path='create' element={<GoodReceiptPOForm />} />
+        <Route path=':id/edit' element={<GoodReceiptPOForm edit={true} />} />
 
       </Route>
     </Routes>
