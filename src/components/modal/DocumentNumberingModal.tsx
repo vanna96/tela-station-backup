@@ -14,6 +14,7 @@ import shortid from 'shortid';
 import { useCallback } from 'react';
 import DocumentSeriesModal from './DocumentSeriesModal';
 import { log } from 'console';
+import { AiOutlineExpandAlt } from "react-icons/ai"
 interface DocumentNumberingModalProps {
   open: boolean,
   onClose: () => void,
@@ -45,8 +46,8 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
         accessorKey: "None",
         header: "Detail",
         Cell: (record: any) => (
-          <span className='bg-sky-500 p-1 text-sm text-white rounded-sm' onClick={() => fetchSeries(record)}>
-            Detail
+          <span className=' p-0 text-[22px] text-neutral-500 rounded-sm' onClick={() => fetchSeries(record)}>
+            <AiOutlineExpandAlt/>
           </span>
         ),
       },

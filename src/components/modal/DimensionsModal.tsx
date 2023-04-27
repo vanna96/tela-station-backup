@@ -8,6 +8,7 @@ import BranchRepository from '@/services/actions/branchRepository';
 import Dimension from '@/models/Dimension';
 import DimensionRepository from '@/services/actions/DimensionRepostsitory';
 import { BsTag } from 'react-icons/bs';
+import { log } from 'console';
 
 interface DimensionModalProps {
   open: boolean,
@@ -44,13 +45,6 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
       {
         accessorKey: "IsActive",
         header: "Active",
-        Cell: ({ cell }: any) => (
-        <span>
-            {cell?.IsActive === "YES" ? <span className='bg-lime-50 text-green-600 py-1 px-2 border-emerald-400 text-[10px] rounded-sm border'>YES</span> :
-              <span className='bg-red-50 text-red-600 py-1 px-2 border-red-400 text-[10px] rounded-sm border'>NO</span>
-            }
-        </span>
-        ),
       },
       {
         accessorKey: "DimensionDescription",
@@ -59,7 +53,6 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
     ],
     []
   );
-
   return (
     <Modal
       open={open}
