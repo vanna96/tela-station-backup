@@ -17,6 +17,9 @@ import InternalTransferForm from '../presentations/inventory/internal_transfer_r
 import StockDamageRequestList from "@/presentations/inventory/stock_damage_request/page/Listing";
 import StockDamageRequestDetail from "@/presentations/inventory/stock_damage_request/page/Detail";
 import StockDamageRequestForm from "../presentations/inventory/stock_damage_request/page/Form"
+import GoodIssueList from "@/presentations/inventory/good_issue/page/Listing";
+import GoodIssueDetail from "@/presentations/inventory/good_issue/page/Detail";
+import GoodIssueForm from "../presentations/inventory/good_issue/page/Form"
 
 export default function InventoryRoute() {
   return (
@@ -46,6 +49,21 @@ export default function InventoryRoute() {
 
       </Route>
       <Route path="/stock-transfer">
+        <Route index element={<Lists />} />
+        <Route path=':id' element={<Detail />} />
+        <Route path='create' element={<Form />} />
+        <Route path=':id/edit' element={<Form edit={true} />} />
+
+      </Route>
+
+      <Route path="/good-issue">
+        <Route index element={<GoodIssueList />} />
+        <Route path=':id' element={<GoodIssueDetail />} />
+        <Route path='create' element={<GoodIssueForm />} />
+        <Route path=':id/edit' element={<GoodIssueForm edit={true} />} />
+
+      </Route>
+      <Route path="/good-receipt-po">
         <Route index element={<Lists />} />
         <Route path=':id' element={<Detail />} />
         <Route path='create' element={<Form />} />

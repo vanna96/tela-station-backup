@@ -255,12 +255,21 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.setState({ ...this.state, isOpenItem: true })
     }
 
+    // protected handlerConfirmItem(data: any[]) {
+    //     let oldItems = [...this.state.items ?? []];
+
+
+    //     this.setState({ ...this.state, isOpenItem: false, items: [...oldItems, ...data] })
+    // }
+
     protected handlerConfirmItem(data: any[]) {
         let oldItems = [...this.state.items ?? []];
-
-
-        this.setState({ ...this.state, isOpenItem: false, items: [...oldItems, ...data] })
-    }
+      
+        // Filter out items that already exist in the state
+        const newItems = data.filter((newItem) => !oldItems.some((oldItem) => oldItem.itemCode === newItem.itemCode));
+      
+        this.setState({ ...this.state, isOpenItem: false, items: [...oldItems, ...newItems] });
+      }
 
     private handlerCloseItem() {
         // this.setState({ ...this.state, isOpenItem: false })

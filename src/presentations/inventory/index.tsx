@@ -17,8 +17,8 @@ export default function InventoryMasterPage() {
                 <ItemCard title='Damage Transfer Request' onClick={() => goTo('stock-damage-request')} icon={<AiOutlineFileExclamation />} />
                 <div className='col-span-6 border-b mt-3'></div>
                 <div className='col-span-6 mb-3'>Transaction Document</div>
-                <ItemCard title='Good Issue' icon={<AiOutlineFileText />} />
-                <ItemCard title='Good Receipt' icon={<AiOutlineFileText />} />
+                <ItemCard title='Good Issue' icon={<AiOutlineFileText />}  onClick={() => goTo('good-issue')} />
+                <ItemCard title='Good Receipt' icon={<AiOutlineFileText />} onClick={() => goTo('good-receipt-po')}  />
                 <ItemCard title='Stock Transfer' onClick={() => goTo('stock-transfer')} icon={<AiOutlineFileSync />} />
             </MainContainer>
         </>
