@@ -90,14 +90,7 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
         Document: record?.row?.original.ObjectCode,
         DocumentSubType: record?.row?.original.DocSubType
       }
-    
-      // const payload: any = {
-      //   DocumentTypeParams: {
-      //     Document: "1250000001",
-      //     DocumentSubType: "--"
-      //   }
     };
-console.log(record)
     const { data }:any = await request('POST', '/SeriesService_GetDocumentSeries', payload);
 
     let reponseData = [];
@@ -105,7 +98,7 @@ console.log(record)
       reponseData = data?.value?.map((e: any) => { return { key: shortid.generate(), ...e } })
     }
 
-    setSeries({ title: record?.ObjectName, data: reponseData, isLoading: false });
+    setSeries({ title: record?.row?.original?.ObjectName, data: reponseData, isLoading: false });
   }
 
 

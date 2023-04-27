@@ -121,7 +121,7 @@ console.log(series?.data)
             }
           }
           renderTopToolbarCustomActions={({ table }) => {
-            return <h2 className=" text-lg font-bold">{`Series - ${series?.title}`}</h2>
+            return <h2 className=" text-lg font-bold">{`Series - ${series?.title || "Document"}`}</h2>
           }}
         />
       </div>
