@@ -66,7 +66,7 @@ export default function InventoryRoute() {
         <Route path=':id/edit' element={<GoodIssueForm edit={true} />} />
 
       </Route>
-      <Route path="/good-receipt-po">
+      <Route path="/good-receipt">
         <Route index element={<GoodReceiptPOList />} />
         <Route path=':id' element={<GoodReceiptPODetail />} />
         <Route path='create' element={<GoodReceiptPOForm />} />

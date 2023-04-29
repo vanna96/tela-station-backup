@@ -24,7 +24,7 @@ class GoodReceiptPOForm extends CoreFormDocument {
       taxDate: new Date().toISOString(),
       docDueDate: new Date().toISOString(),
       warehouse: "01",
-      journalMemo : "Good Receipt PO"
+      journalMemo : "Good Receipt"
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);

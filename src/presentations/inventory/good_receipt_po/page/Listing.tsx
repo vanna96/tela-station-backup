@@ -12,7 +12,7 @@ export default function GoodReceiptPOList() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["good-receipt-po"],
+    queryKey: ["good-receipt"],
     queryFn: () => new GoodReceiptPORepository().get(),
   });
   console.log(data);
@@ -77,7 +77,7 @@ export default function GoodReceiptPOList() {
           <div className="flex gap-4">
             <button
               onClick={() => {
-                route("/inventory/good-receipt-po/" + cell.row.original.id, {
+                route("/inventory/good-receipt/" + cell.row.original.id, {
                   state: cell.row.original,
                 });
               }}
@@ -104,13 +104,13 @@ export default function GoodReceiptPOList() {
       <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
         <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full bg-white py-3">
           <h3 className="text-lg 2xl:text-base xl:text-sm">
-            Inventory / Good Receipt PO
+            Inventory / Good Receipt 
           </h3>
           <Button
             variant="outlined"
             disableElevation
             size="small"
-            onClick={() => route("/inventory/good-receipt-po/create")}
+            onClick={() => route("/inventory/good-receipt/create")}
           >
             <span className="text-xs">Create</span>
           </Button>
@@ -140,7 +140,7 @@ export default function GoodReceiptPOList() {
               return (
                 <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
                   <h3 className="font-bold text-base xl:text-sm">
-                   Good Receipt PO
+                   Good Receipt 
                   </h3>
                   {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
                 </div>
