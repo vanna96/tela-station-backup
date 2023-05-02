@@ -213,16 +213,20 @@ function Content(props: any) {
       Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
     {
-      accessorKey: "department",
-      header: "	Department",
-      Cell: ({ cell }: any) => discountFormat(cell.getValue()),
-    },
-    {
-      accessorKey: "lineofbusiness",
+      accessorKey: "distributionRule",
       header: "Line of Business",
       Cell: ({ cell }: any) => cell.getValue(),
     },
-
+    {
+      accessorKey: "distributionRule1",
+      header: "Product Line",
+      Cell: ({ cell }: any) => cell.getValue(),
+    },
+    {
+      accessorKey: "distributionRule2",
+      header: "	Department",
+      Cell: ({ cell }: any) => (cell.getValue()),
+    },
   ], [data]);
 
   return <div className="data-table  border-none p-0 mt-3">

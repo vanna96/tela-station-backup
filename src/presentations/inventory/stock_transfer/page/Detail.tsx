@@ -217,15 +217,19 @@ function Content(props: any) {
     },
     {
       accessorKey: "distributionRule",
-      header: "	Department",
-      Cell: ({ cell }: any) => discountFormat(cell.getValue()),
-    },
-    {
-      accessorKey: "distributionRule2",
       header: "Line of Business",
       Cell: ({ cell }: any) => cell.getValue(),
     },
-
+    {
+      accessorKey: "distributionRule1",
+      header: "Product Line",
+      Cell: ({ cell }: any) => cell.getValue(),
+    },
+    {
+      accessorKey: "distributionRule2",
+      header: "	Department",
+      Cell: ({ cell }: any) => (cell.getValue()),
+    },
   ], [data]);
 
   return <div className="data-table  border-none p-0 mt-3">
