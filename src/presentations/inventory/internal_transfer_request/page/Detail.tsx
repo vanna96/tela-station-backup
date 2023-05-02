@@ -217,12 +217,12 @@ function Content(props: any) {
       Cell: ({ cell }: any) => cell.getValue(),
     },
     {
-      accessorKey: "distributionRule1",
+      accessorKey: "distributionRule2",
       header: "Product Line",
       Cell: ({ cell }: any) => cell.getValue(),
     },
     {
-      accessorKey: "distributionRule2",
+      accessorKey: "distributionRule3",
       header: "	Department",
       Cell: ({ cell }: any) => (cell.getValue()),
     },
