@@ -15,7 +15,6 @@ export default function GoodReceiptPOList() {
     queryKey: ["good-receipt"],
     queryFn: () => new GoodReceiptPORepository().get(),
   });
-  console.log(data);
   const columns = React.useMemo(
     () => [
      

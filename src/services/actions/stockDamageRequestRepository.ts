@@ -22,7 +22,6 @@ export default class StockDamageRequestRepository extends Repository<StockDamage
       .catch((e) => {
         throw new Error(e);
       });
-    console.log(response)
     return response;
   }
 

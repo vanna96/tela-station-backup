@@ -16,7 +16,6 @@ export default function GoodIssueListing() {
     queryKey: ["good-issue"],
     queryFn: () => new GoodIssueRepository().get(),
   });
-  console.log(data);
   const columns = React.useMemo(
     () => [
      

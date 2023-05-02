@@ -17,7 +17,6 @@ export default function StockTransferLists() {
     queryKey: ["st"],
     queryFn: () => new StockTransferRepository().get(),
   });
-  console.log(data);
   const columns = React.useMemo(
     () => [
       {

@@ -20,7 +20,6 @@ export default class StockTransferRepository extends Repository<StockTransfer> {
       .catch((e) => {
         throw new Error(e);
       });
-    console.log(response)
     return response;
   }
 

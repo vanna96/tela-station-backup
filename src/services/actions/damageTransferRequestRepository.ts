@@ -18,7 +18,6 @@ export default class DamageTransferRepository extends Repository<DamageTransfer>
       .catch((e) => {
         throw new Error(e);
       });
-    console.log(response)
     return response;
   }
 

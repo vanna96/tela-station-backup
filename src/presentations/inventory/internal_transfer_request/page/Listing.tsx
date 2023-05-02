@@ -16,7 +16,6 @@ export default function InternalTransferLists() {
     queryKey: ["itr"],
     queryFn: () => new InternalTransferRepository().get(),
   });
-  console.log(data);
   const columns = React.useMemo(
     () => [
      

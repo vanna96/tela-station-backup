@@ -19,7 +19,6 @@ export default class GoodIssueRepository extends Repository<GoodIssue> {
       .catch((e) => {
         throw new Error(e);
       });
-    console.log(response)
     return response;
   }
 
