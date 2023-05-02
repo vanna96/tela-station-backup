@@ -19,6 +19,10 @@ import PurchaseQoutationDetail from '@/presentations/procuments/purchase_qoutati
 import PurchaseOrderLists from '@/presentations/procuments/purchase_order';
 import PurchaseOrderDetail from '@/presentations/procuments/purchase_order/page/PurchaseOrderDetail';
 import PurchaseorderForm from '@/presentations/procuments/purchase_order/page/PurchaseorderForm';
+import PurchaseDownPaymentList from '@/presentations/procuments/down-payment-request';
+import PurchaseDownPaymentDetail from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentDetail';
+import PurchaseDownForm from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentForm';
+import PurchaseDownPaymentForm from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentForm';
 
 export default function ProcumentRoute() {
     return (
@@ -55,6 +59,12 @@ export default function ProcumentRoute() {
                 <Route path=':id' element={<PurchaseOrderDetail />} />
                 <Route path='create' element={<PurchaseorderForm />} />
                 <Route path=':id/edit' element={<PurchaseorderForm edit={true} />} />
+            </Route>
+            <Route path='/purchase-down-payment' >
+                <Route index element={<PurchaseDownPaymentList />} />
+                <Route path=':id' element={<PurchaseDownPaymentDetail />} />
+                <Route path='create' element={<PurchaseDownPaymentForm/>} />
+                <Route path=':id/edit' element={<PurchaseDownPaymentForm edit={true} />} />
             </Route>
         </Routes>
     )

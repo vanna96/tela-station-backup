@@ -1,16 +1,14 @@
 import Model from './Model';
 
 
-export default class Warehouse extends Model {
-    code: string;
+export default class BusinessPartnerGroups extends Model {
+    code: number;
     name: string;
-
 
     constructor(json: any) {
         super();
-
-        this.code = json['WarehouseCode'];
-        this.name = json['WarehouseName'];
+        this.code = json['Code'];
+        this.name = json['Name'];
     }
     
     

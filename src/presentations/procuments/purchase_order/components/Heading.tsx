@@ -9,12 +9,14 @@ export interface IHeadingFormProps {
   handlerOpenVendor: () => void;
   handlerChange: (key: string, value: any) => void;
   data: any;
+  edit?: boolean;
   handlerOpenProject?: () => void;
 }
 
 export default function HeadingForm({
   handlerOpenVendor,
   data,
+  edit,
   handlerChange,
   handlerOpenProject,
 }: IHeadingFormProps) {
@@ -26,14 +28,16 @@ export default function HeadingForm({
             <MUITextField
               label="Vendor Code"
               value={data?.cardCode}
+              disabled={edit}
               name="BPCode"
               onClick={handlerOpenVendor}
-              endAdornment={true}
+              endAdornment={!edit}
             />
             <MUITextField
               label="Name"
               value={data?.cardName}
               name="BPName"
+              disabled={edit}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -58,7 +62,12 @@ export default function HeadingForm({
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
-              <MUITextField label="Vender Ref.No" name="" value={data?.numAtCard} />
+              <MUITextField
+                label="Vender Ref.No"
+                name="NumAtCard"
+                value={data?.numAtCard}
+                onChange={(e) => handlerChange('numAtCard', e.target.value)}
+              />
             </div>
           </div>
 
@@ -92,6 +101,7 @@ export default function HeadingForm({
                 aliasvalue="Series"
                 aliaslabel="Name"
                 name="Series"
+                disabled={edit}
                 loading={data?.isLoadingSerie}
                 value={data?.serie}
                 onChange={(e: any) => handlerChange("serie", e.target.value)}
@@ -101,7 +111,7 @@ export default function HeadingForm({
                 name="DocNum"
                 key={data?.docNum}
                 defaultValue={data?.docNum}
-                disabled={data?.isLoadingSerie}
+                disabled={edit}
                 placeholder="Document No"
                 fullWidth
                 className="w-full text-field"
@@ -109,7 +119,12 @@ export default function HeadingForm({
             </div>
           </div>
           <div className="grid grid-cols-1 gap-3">
-            <MUITextField label="Status" value={"open"} name="DocumentStatus" />
+            <MUITextField
+              label="Status"
+              disabled={edit}
+              value={data?.documentStatus?.replace("bost_", "")}
+              name="DocumentStatus"
+            />
           </div>
           <div className="grid grid-cols-1 gap-3">
             <div className="flex flex-col gap-1 text-sm">
@@ -117,7 +132,11 @@ export default function HeadingForm({
                 Posting Date
               </label>
               <div className="">
-                <MUIDatePicker error={data?.message?.includes('DocDate')} value={data.docDate} onChange={(e: any) => handlerChange('docDate', e)} />
+                <MUIDatePicker
+                  error={data?.message?.includes("DocDate")}
+                  value={data.docDate}
+                  onChange={(e: any) => handlerChange("docDate", e)}
+                />
               </div>
             </div>
 

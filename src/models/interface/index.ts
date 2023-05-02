@@ -1,6 +1,6 @@
 
 
-export  interface MasterDocument {
+export interface MasterDocument {
     serie: string;
     docNum: any;
     paymentMethod?: string;
@@ -27,8 +27,18 @@ export interface DocumentLine {
     project?: string;
     taxCode?: string;
     taxRate?: number;
-    discountPercent?: number;
+    // discountPercent?: number;
     vatGroup?: string;
     accountName?: string;
-    accountCode?: number;
+    // accountCode?: number;
+}
+export interface ContactEmployees {
+    name?: string;
+}
+
+export interface BPAddresses {
+    addressName?: string;
+    addressName2?: string;
+    addressName3?: string;
+
 }

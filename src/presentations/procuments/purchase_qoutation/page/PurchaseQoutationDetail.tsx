@@ -220,7 +220,7 @@ function Content(props: any) {
         accessorKey: "itemDescription",
         header: "	Descrition",
         Cell: ({ cell }: any) => cell.getValue(),
-    
+
       },
       {
         accessorKey: "shipDate",

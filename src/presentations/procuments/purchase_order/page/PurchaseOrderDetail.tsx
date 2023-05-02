@@ -1,20 +1,5 @@
 import { withRouter } from "@/routes/withRouter";
 import React, { Component, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import {
-  PurchaseAgreementProps,
-  PurchaseAgreementDocumentLineProps,
-} from "../../../../models/PurchaseAgreement";
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  HiOutlineEye,
-  HiChevronDoubleLeft,
-  HiChevronDoubleRight,
-  HiChevronLeft,
-  HiChevronRight,
-  HiOutlineDocumentAdd,
-  HiOutlineChevronDown,
-} from "react-icons/hi";
 import Taps from "@/components/button/Taps";
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useMemo } from "react";
@@ -24,14 +9,16 @@ import Modal from "@/components/modal/Modal";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import { CircularProgress } from "@mui/material";
 import BackButton from "@/components/button/BackButton";
-// import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
-// import PurchaseQouatation from '@/models/PurchaseQouatation';
 import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
 import PurchaseOrder from "@/models/PurchaseOrder";
 import OwnerRepository from "@/services/actions/ownerRepository";
 import PaymentTermTypeRepository from "@/services/actions/paymentTermTypeRepository";
 import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
 import DocumentHeaderComponent from "@/components/DocumenHeaderComponent";
+import BusinessPartner, { ContactEmployee } from "@/models/BusinessParter";
+import { dateFormat } from "../../../../utilies/index";
+import BuyerRepository from "../../../../services/actions/buyerRepository";
+import BusinessPartnerRepository from "@/services/actions/bussinessPartnerRepository";
 
 class PurchaseOrderDetail extends Component<any, any> {
   constructor(props: any) {
@@ -55,7 +42,20 @@ class PurchaseOrderDetail extends Component<any, any> {
     console.log(data);
 
     if (data) {
-      setTimeout(() => this.setState({ ...data, loading: false }), 500);
+      setTimeout(() => {
+        let PurchaseOrder = data;
+        PurchaseOrder as PurchaseOrder;
+        if (PurchaseOrder.contactPersonCode) {
+          new BusinessPartnerRepository()
+            .findContactEmployee(PurchaseOrder.cardCode!)
+            .then((res: BusinessPartner) => {
+              PurchaseOrder.contactPersonList = res.contactEmployee ?? [];
+              this.setState({ ...PurchaseOrder, loading: false });
+            });
+        } else {
+          this.setState({ ...PurchaseOrder, loading: false });
+        }
+      }, 500);
     } else {
       new PurchaseOrderRepository()
         .find(id)
@@ -110,7 +110,15 @@ class PurchaseOrderDetail extends Component<any, any> {
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Contact Person</span>
-                  <span className="w-8/12 font-medium">: N/A</span>
+                  <span className="w-8/12 font-medium">
+                    :
+                    {
+                      this.state?.contactPersonList?.find(
+                        (e: ContactEmployee) =>
+                          e.id === this.state.contactPersonCode
+                      )?.name
+                    }
+                  </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Vendor Ref .No</span>
@@ -119,14 +127,14 @@ class PurchaseOrderDetail extends Component<any, any> {
                     : {this.state.numAtCard}
                   </span>
                 </div>
-              </div>
-              <div className="flex flex-col gap-1">
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500 ">Local Currency</span>
                   <span className="w-8/12 font-medium">
                     : {this.state.docCurrency}
                   </span>
                 </div>
+              </div>
+              <div className="flex flex-col gap-1">
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Status</span>
                   <span className="w-8/12 font-medium">
@@ -136,19 +144,19 @@ class PurchaseOrderDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Posting Date</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.docDate}
+                    : {dateFormat(this.state.docDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Delivery Date</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.docDueDate}
+                    : {dateFormat(this.state.docDueDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Document Date</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.taxDate}
+                    : {dateFormat(this.state.taxDate)}
                   </span>
                 </div>
               </div>
@@ -214,7 +222,7 @@ function Content(props: any) {
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "uomCode ",
+        accessorKey: "uomCode",
         header: "UoM Code",
         Cell: ({ cell }: any) => cell.getValue(),
       },
@@ -235,7 +243,7 @@ function Content(props: any) {
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "accountName",
+        accessorKey: "accountNameD",
         header: "G/L Account Name",
         Cell: ({ cell }: any) => cell.getValue(),
       },
@@ -261,9 +269,7 @@ function Content(props: any) {
   return (
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
-        columns={
-          data?.docType === "I" ? itemColumn : serviceColumns
-        }
+        columns={data?.docType === "I" ? itemColumn : serviceColumns}
         data={data?.items ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
@@ -288,12 +294,14 @@ function Content(props: any) {
       <div className="flex flex-col gap-3">
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Buyer</span>
-          <span className="w-8/12 font-medium text-sm">: {data?.Buyer}</span>
+          <span className="w-8/12 font-medium text-sm">
+            : {new BuyerRepository().find(data.salesPersonCode)?.name ?? "N/A"}
+          </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Owner</span>
           <span className="w-8/12 font-medium text-sm">
-            : {new OwnerRepository().find(data.owner)?.name}
+            : {new OwnerRepository().find(data.documentsOwner)?.name}
           </span>
         </div>
         <div className="flex gap-2">
@@ -306,7 +314,9 @@ function Content(props: any) {
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Freight</span>
-          <span className="w-8/12 font-medium text-sm">: </span>
+          <span className="w-8/12 font-medium text-sm">
+            : {data?.freight || "N/A"}
+          </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Tax</span>
@@ -322,7 +332,9 @@ function Content(props: any) {
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Remark</span>
-          <span className="w-8/12 font-medium text-sm">: {data?.comments}</span>
+          <span className="w-8/12 font-medium text-sm">
+            : {data?.comments ?? "N/A"}
+          </span>
         </div>
       </div>
     </div>
@@ -337,10 +349,20 @@ function Account(props: any) {
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Jounral Remark</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.journalMemo?.replace("at", "")}
+            : {data.journalMemo?.replace("at", "") ?? "N/A"}
           </span>
         </div>
-        <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data.paymentTermType)?.PaymentTermsGroupName}</span></div>
+        <div className="grid grid-cols-3 gap-2">
+          <span className="text-gray-500">Payment Terms</span>{" "}
+          <span className="col-span-2 font-medium">
+            :{" "}
+            {
+              new PaymentTermTypeRepository().find(
+                data.paymentGroupCode ?? "N/A"
+              )?.PaymentTermsGroupName
+            }
+          </span>
+        </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Payment Methods</span>
           <span className="col-span-2 font-medium">
@@ -349,41 +371,53 @@ function Account(props: any) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Manually Recalulate Due Date</span>{" "}
-          <span className="col-span-2 font-medium">: {data.ManualNumber}</span>
+          <span className="col-span-2 font-medium">
+            : {data.ManualNumber ?? "N/A"}
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Cash Discount Date Offset</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.cashDiscountDateOffset}
+            : {data.cashDiscountDateOffset ?? "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Bussiness partner Projec</span>{" "}
-          <span className="col-span-2 font-medium">: {data.project}</span>
+          <span className="col-span-2 font-medium">
+            : {data.project ?? "N/A"}
+          </span>
         </div>
       </div>
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Create QR Code From</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.status?.replace("as", "")}
+            : {data.createQRCodeFrom || "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Cancellation Date</span>{" "}
-          <span className="col-span-2 font-medium">: {data.cancelDate}</span>
+          <span className="col-span-2 font-medium">
+            : {dateFormat(data.cancelDate)}
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Indicator</span>{" "}
-          <span className="col-span-2 font-medium">: {data.Indicator}</span>
+          <span className="col-span-2 font-medium">
+            : {data.indicator ?? "N/A"}
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Federal Tax ID</span>{" "}
-          <span className="col-span-2 font-medium">: {data.federalTaxID}</span>
+          <span className="col-span-2 font-medium">
+            : {data.federalTaxID ?? "N/A"}
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Order Number</span>{" "}
-          <span className="col-span-2 font-medium">: {data.importFileNum}</span>
+          <span className="col-span-2 font-medium">
+            : {data.importFileNum ?? "N/A"}
+          </span>
         </div>
       </div>
     </div>
@@ -407,7 +441,7 @@ function Logistic(props: any) {
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Shiping Type</span>{" "}
           <span className="col-span-2 font-medium">
-            : {new ShippingTypeRepository().find(data.shippingType)?.Name}
+            : {new ShippingTypeRepository().find(data.transportationCode)?.Name}
           </span>
         </div>
       </div>

@@ -2,8 +2,6 @@ import React, { useMemo, FC } from "react";
 
 import MUISelect from "./MUISelect";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import QueryHook from "@/utilies/useQueryHook";
-import InitializeData from "@/services/actions";
 import { useQuery } from "react-query";
 import PaymentMethodRepository from "@/services/actions/paymentMethodRepository";
 
@@ -33,7 +31,7 @@ const PaymentMethod: FC<PaymentMethodProps> = ({ type, name, defaultValue, value
         disabled={disabled}
         aliaslabel="PaymentMethodCode"
         aliasvalue="PaymentMethodCode"
-        items={items ?? []}
+        items={items ?? "No Item"}
         onChange={onChange}
         loading={isLoading}
         value={value}

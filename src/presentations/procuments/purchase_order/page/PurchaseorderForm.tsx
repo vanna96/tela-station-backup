@@ -13,20 +13,29 @@ import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository"
 import LogisticForm from "../components/Logistic";
 import AccounttingForm from "../components/Accountting";
 import GLAccount from "@/models/GLAccount";
+import { UpdateDataSuccess } from "@/utilies/ClientError";
+import PurchaseOrders from "../../../../models/PurchaseOrder";
+import VatGroupRepository from "@/services/actions/VatGroupRepository";
+import Formular from '../../../../utilies/formular';
 class PurchaseOrder extends CoreFormDocument {
   constructor(props: any) {
     super(props);
     this.state = {
       ...this.state,
       docType: "I",
+      docDueDate: null,
+      taxDate: null,
+      cancelDate: null,
     } as any;
 
-    this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    this.handlerAddItem = this.handlerAddItem.bind(this);
+    // this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
+    // this.handlerAddItem = this.handlerAddItem.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
   componentDidMount(): void {
+    this.setState({ ...this.state, vendorType : 'customer'})
+
     if (!this.props?.edit) {
       setTimeout(() => this.setState({ ...this.state, loading: false }), 500);
     }
@@ -76,43 +85,63 @@ class PurchaseOrder extends CoreFormDocument {
   }
 
   handlerRemoveItem(code: string) {
-    let items = [...(this.state.items ?? [])];
+    let items = [...this.state.items ?? []];
     const index = items.findIndex((e: any) => e?.ItemCode === code);
-    items.splice(index, 1);
-    this.setState({ ...this.state, items: items });
+    items.splice(index, 1)
+    this.setState({ ...this.state, items: items })
   }
 
   handlerAddItem({ value, record, field }: any) {
     let items = [...(this.state.items ?? [])];
     let item = this.state.items?.find(
-      (e: any) => e?.ItemCode === record?.ItemCode
+      (e: any) => e?.itemCode === record?.itemCode
     );
 
     if (field === "accountCode") {
       const account = value as GLAccount;
-      item["accountCode"] = account.code;
-      item["AccountName"] = account.name;
+      item[field] = account.code;
+      item["accountName"] = account.name;
     } else {
       item[field] = value;
     }
 
+    if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
+      const total = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
+      item['lineTotal'] = total;
+    }
+
+    if (field === 'purchaseVatGroup')
+      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
-    this.setState({ ...this.state, items: items });
+
+    this.setState({ ...this.state, items: items, docTotal: Formular.findTotalBeforeDiscount(items) });
   }
 
   async handlerSubmit(event: any) {
     event.preventDefault();
-    this.setState({ ...this.state, isSubmitting: true });
 
+    this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params
 
     await new PurchaseOrderRepository().post(this.state, this.props?.edit, id).then((res: any) => {
-        this.showMessage('Success', 'Create Successfully');
-    }).catch((e: Error) => {
-        this.showMessage('Errors', e.message);
+      const purchaseOrder = new PurchaseOrders(res?.data)
+
+      this.props.history.replace(this.props.location.pathname?.replace('create', purchaseOrder.id), purchaseOrder);
+      this.dialog.current?.success("Create Successfully.");
+    }).catch((e: any) => {
+      if (e instanceof UpdateDataSuccess) {
+        this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.documentStatus === 'A' });
+        this.dialog.current?.success(e.message);
+        // const query = this.props.query.query as QueryClient;
+        return;
+      }
+      this.dialog.current?.error(e.message);
+    }).finally(() => {
+      this.setState({ ...this.state, isSubmitting: false })
     });
-}
+  }
 
   FormRender = () => {
     return (
@@ -120,16 +149,18 @@ class PurchaseOrder extends CoreFormDocument {
         <form onSubmit={this.handlerSubmit} className="flex flex-col gap-4">
           <HeadingForm
             data={this.state}
+            edit={this.props?.edit}
             handlerOpenVendor={() => {
               this.handlerOpenVendor("supplier");
             }}
             handlerChange={(key, value) => this.handlerChange(key, value)}
           />
           <ContentForm
+            edit={this.props?.edit}
             data={this.state}
             handlerAddItem={() => this.handlerOpenItem()}
-            handlerRemoveItem={this.handlerRemoveItem}
-            handlerChangeItem={this.handlerAddItem}
+            handlerRemoveItem={this.handlerDeleteItem}
+            handlerChangeItem={this.handlerChangeItems}
             handlerChange={(key, value) => this.handlerChange(key, value)}
             // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
@@ -138,6 +169,7 @@ class PurchaseOrder extends CoreFormDocument {
             handlerChange={(key, value) => this.handlerChange(key, value)}
           />
           <AccounttingForm
+            edit={this.props?.edit}
             data={this.state}
             handlerChange={(key, value) => this.handlerChange(key, value)}
             handlerOpenProject={() => this.handlerOpenProject()}

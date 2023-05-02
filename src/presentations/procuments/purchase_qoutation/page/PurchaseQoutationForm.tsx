@@ -52,7 +52,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
         const routeState = this.props.location.state;
         setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
       } else {
-        new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
+        new purchaseQoutationRepository().find(this.props.match.params.id).then((res: any) => {
           this.setState({ ...res, loading: false });
         }).catch((e: Error) => {
           this.setState({ message: e.message });
