@@ -28,6 +28,7 @@ import UOMSelect from "@/components/selectbox/UnitofMeasurment";
 import DistributionRule from "@/models/DistributionRule";
 import DistributionRuleModal from "@/components/modal/DistributionRuleModal";
 import DistributionRuleSelect from "@/components/selectbox/DistributionRule";
+import DistributionRuleTextField from "@/components/input/DimensionTextField";
 
 interface ContentFormProps {
   handlerAddItem: () => void;
@@ -152,57 +153,50 @@ export default function ContentForm({
         ),
       },
 
+    
       {
         accessorKey: "distributionRule",
-        header: "Department",
+        header: "Line of Business",
         Cell: ({ cell }: any) => {
           return (
-            <DistributionRuleSelect
+            <DistributionRuleTextField
               value={cell.getValue()}
-              name="distributionRule"
+              inWhichNum={1}
               onChange={(event) =>
-                handlerChangeInput(
-                  event,
-                  cell?.row?.original,
-                  "distributionRule"
-                )
-              }
-            />
-          );
-        },
+                handlerChangeInput(event, cell?.row?.original, "distributionRule")
+              } />
+          )
+        }
       },
 
       {
         accessorKey: "distributionRule2",
-        header: "Line of Business",
+        header: "Product Line",
         Cell: ({ cell }: any) => {
           return (
-            <DistributionRuleSelect
+            <DistributionRuleTextField
               value={cell.getValue()}
-              name="distributionRule2"
+              inWhichNum={2}
               onChange={(event) =>
-                handlerChangeInput(
-                  event,
-                  cell?.row?.original,
-                  "distributionRule2"
-                )
-              }
-            />
-          );
-        },
+                handlerChangeInput(event, cell?.row?.original, "distributionRule2")
+              } />
+          )
+        }
       },
-      // {
-      //   accessorKey: "department",
-      //   header: "Department",
-      // },
-      // {
-      //   accessorKey: "branch",
-      //   header: "Branch",
-      // },
-      // {
-      //   accessorKey: "productline",
-      //   header: "Product Line",
-      // },
+      {
+        accessorKey: "distributionRule3",
+        header: "Department",
+        Cell: ({ cell }: any) => {
+          return (
+            <DistributionRuleTextField
+              inWhichNum={3}
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "distributionRule3")
+              } />
+          )
+        }
+      },
     ],
     []
   );

@@ -169,7 +169,11 @@ export class GoodIssueDocumentLine extends Model implements DocumentLine {
   uomCode?: string | undefined;
   accountCode?: number | undefined;
   warehouseCode?: number | undefined;
-
+  distributionRule?: number;
+  distributionRule2?: number;
+  distributionRule3?: number;
+  distributionRule4?: number;
+  distributionRule5?: number;
 
   constructor(json: any) {
     super();
@@ -184,6 +188,12 @@ export class GoodIssueDocumentLine extends Model implements DocumentLine {
     this.uomCode = json["UoMCode"];
     this.accountCode = json['AccountCode']
     this.warehouseCode = this.warehouseCode
+    this.distributionRule = json['DistributionRule']
+    this.distributionRule2 = json['DistributionRule2']
+    this.distributionRule3 = json['DistributionRule3']
+    this.distributionRule4 = json['DistributionRule4']
+    this.distributionRule5 = json['DistributionRule5']
+
   }
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
@@ -200,8 +210,12 @@ export class GoodIssueDocumentLine extends Model implements DocumentLine {
       UoMEntry: json["uomEntry"],
       AccountCode: json['accountCode'],
       UnitPrice: json["unitPrice"],
-      WarehouseCode : json['warehouse']
-
+      WarehouseCode : json['warehouse'],
+      DistributionRule: json['distributionRule'],
+      DistributionRule2: json['distributionRule2'],
+      DistributionRule3: json['distributionRule3'],
+      DistributionRule4: json['distributionRule4'],
+      DistributionRule5: json['distributionRule5'],
 
     };
 
@@ -218,6 +232,11 @@ export class GoodIssueDocumentLine extends Model implements DocumentLine {
       UoMCode: json["uomCode"],
       // UoMEntry: json["uomEntry"],
       WarehouseCode: json["warehouseCode"],
+      DistributionRule: json['distributionRule'],
+      DistributionRule2: json['distributionRule2'],
+      DistributionRule3: json['distributionRule3'],
+      DistributionRule4: json['distributionRule4'],
+      DistributionRule5: json['distributionRule5'],
     };
 
     return line;

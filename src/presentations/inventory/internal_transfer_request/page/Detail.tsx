@@ -45,11 +45,11 @@ class InternalTransferDetails extends Component<any, any> {
   initData() {
     const { id } = this.props.match.params;
     const data = this.props.location.state as InternalTransfer;
-    console.log(data);
 
     if (data) {
       setTimeout(() => {
         let stockTransfer = data;
+        console.log(data)
         stockTransfer as InternalTransfer;
         if (stockTransfer.contactPerson) {
           new BusinessPartnerRepository().findContactEmployee(stockTransfer.cardCode!).then((res: BusinessPartner) => {
@@ -75,7 +75,6 @@ class InternalTransferDetails extends Component<any, any> {
       })
     }
   }
-
   render() {
 
     return (
@@ -143,12 +142,12 @@ class InternalTransferDetails extends Component<any, any> {
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.taxDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>From Warehouse</span>
-                  <span className='w-8/12 font-medium'>: {this.state.fromWarehouse} {new WarehouseRepository().find(parseFloat(this.state.fromWarehouse))?.WarehouseName}</span>
+                  <span className='w-4/12 text-gray-500'>From Branch</span>
+                  <span className='w-8/12 font-medium'>: {this.state.fromBranch} {new WarehouseRepository().find(parseFloat(this.state.fromWarehouse))?.WarehouseName}</span>
                 </div>
                 <div className='flex gap-2'>
-                  <span className='w-4/12 text-gray-500'>To Warehouse</span>
-                  <span className='w-8/12 font-medium'>: {this.state.toWarehouse}   {new WarehouseRepository().find(this.state.toWarehouse)?.WarehouseName}</span>
+                  <span className='w-4/12 text-gray-500'>To Branch</span>
+                  <span className='w-8/12 font-medium'>: {this.state.toBranch}   {new WarehouseRepository().find(this.state.toWarehouse)?.WarehouseName}</span>
 
                 </div>
 
@@ -213,15 +212,21 @@ function Content(props: any) {
       Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
     {
-      accessorKey: "department",
-      header: "	Department",
-      Cell: ({ cell }: any) => discountFormat(cell.getValue()),
-    },
-    {
-      accessorKey: "lineofbusiness",
+      accessorKey: "distributionRule",
       header: "Line of Business",
       Cell: ({ cell }: any) => cell.getValue(),
     },
+    {
+      accessorKey: "distributionRule1",
+      header: "Product Line",
+      Cell: ({ cell }: any) => cell.getValue(),
+    },
+    {
+      accessorKey: "distributionRule2",
+      header: "	Department",
+      Cell: ({ cell }: any) => (cell.getValue()),
+    },
+    
 
   ], [data]);
 

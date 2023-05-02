@@ -164,44 +164,32 @@ export default function ContentForm({
         ),
       },
 
-      // {
-      //   accessorKey: "uomCode",
-      //   header: "UoM Name",
-      //   Cell: ({ cell }: any) => (
-      //     <MUITextField
-      //       disabled
-      //       value={
-      //         new UnitOfMeasurementRepository().find(cell.getValue())?.Name
-      //       }
-      //     />
-      //   ),
-      // },
 
       {
-        accessorKey: "distributionRule2",
+        accessorKey: "distributionRule",
         header: "Line of Business",
         Cell: ({ cell }: any) => {
           return (
             <DistributionRuleTextField
               value={cell.getValue()}
-              inWhichNum={4}
+              inWhichNum={1}
               onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "distributionRule2")
+                handlerChangeInput(event, cell?.row?.original, "distributionRule")
               } />
           )
         }
       },
 
       {
-        accessorKey: "distributionRule",
+        accessorKey: "distributionRule2",
         header: "Product Line",
         Cell: ({ cell }: any) => {
           return (
             <DistributionRuleTextField
               value={cell.getValue()}
-              inWhichNum={5}
+              inWhichNum={2}
               onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "distributionRule")
+                handlerChangeInput(event, cell?.row?.original, "distributionRule2")
               } />
           )
         }
@@ -212,7 +200,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <DistributionRuleTextField
-              inWhichNum={1}
+              inWhichNum={3}
               value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "distributionRule3")
