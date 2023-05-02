@@ -202,7 +202,9 @@ export class GoodIssueDocumentLine extends Model implements DocumentLine {
       UoMCode: json["uomCode"],
       UoMEntry: json["uomEntry"],
       WarehouseCode: json["warehouseCode"],
-      AccountCode : json['accountCode']
+      AccountCode : json['accountCode'],
+      UnitPrice: json["unitPrice"],
+
     };
 
     return line;

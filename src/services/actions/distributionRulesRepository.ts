@@ -14,6 +14,7 @@ export default class DistributionRuleRepository extends Repository<DistributionR
         const data = localStorage.getItem(this.key);
         if (data) {
             const distributionRules = JSON.parse(Encryption.decrypt(this.key, data));
+            console.log(distributionRules)
             return JSON.parse(distributionRules);
         }
 

@@ -130,6 +130,20 @@ export default function ContentForm({
         },
       },
       {
+        accessorKey: "unitPrice",
+        header: "Unit Price",
+        Cell: ({ cell }: any) => {
+          return <MUITextField
+            startAdornment={'USD'}
+            type="number"
+            name="UnitPrice"
+            error={(cell.getValue() as number) <= 0}
+            value={cell.getValue()}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
+          />;
+        },
+      },
+      {
         accessorKey: "accountCode",
         header: "Account Code",
         Cell: ({ cell }: any) => {

@@ -184,7 +184,7 @@ export default function ContentForm({
           return (
             <DistributionRuleTextField
               value={cell.getValue()}
-              inWhichNum={3}
+              inWhichNum={4}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "distributionRule2")
               } />
@@ -199,7 +199,7 @@ export default function ContentForm({
           return (
             <DistributionRuleTextField
               value={cell.getValue()}
-              inWhichNum={2}
+              inWhichNum={5}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "distributionRule")
               } />
@@ -212,7 +212,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <DistributionRuleTextField
-            inWhichNum={1}
+              inWhichNum={1}
               value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "distributionRule3")
