@@ -74,8 +74,8 @@ export default function HeadingForm({
               </label>
               <div className="">
                 <WarehouseSelect
-                  onChange={(e) => handlerChange("warehouse", e.target.value)}
-                  value={data?.warehouse}
+                  onChange={(e) => handlerChange("warehouseCode", e.target.value)}
+                  value={data?.warehouseCode}
                 />
               </div>
             </div>

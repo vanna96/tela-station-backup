@@ -28,7 +28,7 @@ export default class GoodIssue extends Model implements MasterDocument {
   address?: string;
   documentStatus?: string;
   serie: string;
-  shippingType?: BPAddress[] ;
+  shippingType?: BPAddress[];
   items: GoodIssueDocumentLine[];
   documentowner?: string;
   StockTransferLines?: GoodIssueDocumentLine[];
@@ -41,9 +41,9 @@ export default class GoodIssue extends Model implements MasterDocument {
   dueDate?: string;
   series?: BPAddress[];
   contactPersonList?: ContactEmployee[];
-  ShippingType ?: BPAddress[];
-  shipToCode ?: string | undefined;
-  priceList ?: string | undefined ;
+  ShippingType?: BPAddress[];
+  shipToCode?: string | undefined;
+  priceList?: string | undefined;
   distributionRule?: string | undefined;
   distributionRule2?: string | undefined;
   priceLists?: string | undefined;
@@ -70,7 +70,7 @@ export default class GoodIssue extends Model implements MasterDocument {
     this.items = json["DocumentLines"]?.map(
       (e: any) => new GoodIssueDocumentLine(e)
     );
-   
+
     this.documentStatus = json["DocumentStatus"]
       .replace("bost_", "")
       ?.charAt(0);
@@ -93,7 +93,7 @@ export default class GoodIssue extends Model implements MasterDocument {
     this.salesPersonCode = json["SalesPersonCode"]
     this.distributionRule = json['DistributionRule']
     this.distributionRule2 = json['DistributionRule2']
-    this.shippingType =  json['shippingList']
+    this.shippingType = json['shippingList']
     this.shipToCode = json['ShipToCode']
 
   }
@@ -106,7 +106,7 @@ export default class GoodIssue extends Model implements MasterDocument {
     console.log(json);
 
     return {
-     
+
       TaxDate: json["taxDate"],
       DocDate: json["docDate"],
       AttachmentEntry: json["attachmentEntry"],
@@ -116,15 +116,15 @@ export default class GoodIssue extends Model implements MasterDocument {
 
       // Serie: json["serie"],
       // Series: json["Series"],
-
-      Address2: json["Address2"],
+      // WarehouseCode: json['warehouseCode'],
+      Address2: json["address2"],
       DocumentStatus: json["DocumentStatus"],
       DocumentLines: json["items"]?.map((e: any) =>
         GoodIssueDocumentLine.toCreate(e, json["docType"])
       ),
-    
+      // Warehouse: warehouseCode,
       PriceList: json['priceList'],
-      U_DOCTYPE : "I"
+      U_DOCTYPE: "I"
 
     };
   }
@@ -138,15 +138,15 @@ export default class GoodIssue extends Model implements MasterDocument {
       DocRate: json["docRate"],
       Comments: json["comments"],
       // Serie: json["serie"],
+      // WarehouseCode: json['warehouseCode'],
       // Series: json["Series"],
-
-      Address2: json["Address2"],
+      Address2: json["address2"],
       DocumentStatus: json["DocumentStatus"],
       DocumentLines: json["items"]?.map((e: any) =>
         GoodIssueDocumentLine.toCreate(e, json["docType"])
       ),
-      FromWarehouse: json['fromWarehouse'],
-      ToWarehouse: json['toWarehouse'],
+      // WarehouseCode: json['fromWarehouse'],
+      // ToWarehouse: json['toWarehouse'],
       ShipToCode: json['shipToDefault'],
       // ContactPerson: json['contactPerson'],
       SalesPersonCode: json['salesPersonCode'],
@@ -167,9 +167,8 @@ export class GoodIssueDocumentLine extends Model implements DocumentLine {
   lineDiscount?: number;
   uomEntry?: number | undefined;
   uomCode?: string | undefined;
-  warehouseCode?: string;
-  fromWarehouseCode?: string;
   accountCode?: number | undefined;
+  warehouseCode?: number | undefined;
 
 
   constructor(json: any) {
@@ -183,10 +182,8 @@ export class GoodIssueDocumentLine extends Model implements DocumentLine {
     this.lineDiscount = json["LineDiscount"];
     this.uomEntry = json["UoMEntry"];
     this.uomCode = json["UoMCode"];
-    this.fromWarehouseCode = json["FromWarehouseCode"];
-    this.warehouseCode = json["WarehouseCode"]
     this.accountCode = json['AccountCode']
-
+    this.warehouseCode = this.warehouseCode
   }
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
@@ -201,9 +198,10 @@ export class GoodIssueDocumentLine extends Model implements DocumentLine {
       DocEntry: json["uomGroupEntry"],
       UoMCode: json["uomCode"],
       UoMEntry: json["uomEntry"],
-      WarehouseCode: json["warehouseCode"],
-      AccountCode : json['accountCode'],
+      AccountCode: json['accountCode'],
       UnitPrice: json["unitPrice"],
+      WarehouseCode : json['warehouse']
+
 
     };
 
