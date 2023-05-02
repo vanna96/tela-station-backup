@@ -7,10 +7,9 @@ import TextField from '@mui/material/TextField';
 import { documentStatusList } from '@/constants';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import IconButton from '@mui/material/IconButton';
-import WarehouseSelect from '@/components/selectbox/Warehouse';
 import { getShippingAddress } from '@/models/BusinessParter';
-import PriceList from '@/models/PriceList';
 import PriceListSelect from '@/components/selectbox/PriceList';
+import BranchSelect from '@/components/selectbox/Branch';
 
 export interface IHeadingFormProps {
   handlerOpenVendor: () => void,
@@ -217,43 +216,23 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">From Warehouse</label>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">From Branch</label>
               <div className="">
-                <WarehouseSelect
-                  disabled={edit}
-                  // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  onChange={(e) => handlerChange('fromWarehouse', e.target.value)}
-                  value={data?.fromWarehouse}
-
+                <BranchSelect
+                  onChange={(e) => handlerChange('fromBranch', e.target.value)}
+                  value={data?.fromBranch}
                 />
-
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">To Warehouse</label>
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">To Branch</label>
               <div className="">
-                <WarehouseSelect
-                  disabled={edit}
-                  // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  onChange={(e) => handlerChange('toWarehouse', e.target.value)}
-                  value={data?.toWarehouse}
-
+                <BranchSelect
+                  onChange={(e) => handlerChange('toBranch', e.target.value)}
+                  value={data?.toBranch}
                 />
-
               </div>
             </div>
-            {/* <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">To Bin Location</label>
-              <div className="">
-                <MUITextField
-                  // items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                  // onChange={(e) => handlerChange('toWarehouse', e.target.value)}
-                  // value={data?.toWarehouse}
-
-                />
-
-              </div>
-            </div> */}
           </div>
         </div>
       </FormCard>

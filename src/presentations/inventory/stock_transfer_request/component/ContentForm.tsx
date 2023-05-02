@@ -130,21 +130,6 @@ export default function ContentForm({
         },
       },
 
-      // {
-      //   accessorKey: "unitPrice",
-      //   header: "Item Cost",
-      //   Cell: ({ cell }: any) => {
-      //     return <MUITextField
-      //       startAdornment={'USD'}
-      //       type="number"
-      //       disabled
-      //       name="UnitPrice"
-      //       error={(cell.getValue() as number) <= 0}
-      //       value={cell.getValue()}
-      //       onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
-      //     />;
-      //   },
-      // },
       {
         accessorKey: "uomEntry",
         header: "UoM Code",
@@ -163,38 +148,7 @@ export default function ContentForm({
         ),
       },
 
-      // {
-      //   accessorKey: "uomCode",
-      //   header: "UoM Name",
-      //   Cell: ({ cell }: any) => (
-      //     <MUITextField
-      //       disabled
-      //       value={
-      //         new UnitOfMeasurementRepository().find(cell.getValue())?.Name
-      //       }
-      //     />
-      //   ),
-      // },
-
-      // {
-      //   accessorKey: "fromWarehouseCode",
-      //   header: "From Warehouse",
-      //   Cell: ({ cell }: any) => {
-      //     return (
-      //       <WarehouseSelect
-      //         value={cell.getValue()}
-      //         name="fromWarehouseCode"
-      //         onChange={(event) =>
-      //           handlerChangeInput(
-      //             event,
-      //             cell?.row?.original,
-      //             "fromWarehouseCode"
-      //           )
-      //         }
-      //       />
-      //     );
-      //   },
-      // },
+   
 
       {
         accessorKey: "distributionRule",
@@ -225,18 +179,7 @@ export default function ContentForm({
           )
         }
       },
-      // {
-      //   accessorKey: "department",
-      //   header: "Department",
-      // },
-      // {
-      //   accessorKey: "branch",
-      //   header: "Branch",
-      // },
-      // {
-      //   accessorKey: "productline",
-      //   header: "Product Line",
-      // },
+   
 
     ],
     []
