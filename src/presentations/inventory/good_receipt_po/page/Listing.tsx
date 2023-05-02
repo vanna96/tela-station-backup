@@ -54,16 +54,8 @@ export default function GoodReceiptPOList() {
         header: "Status",
         Cell: ({ cell }) => <>{(cell.getValue())?.split("bost_")}</>,
       },
-      {
-        accessorKey: "docTotalSys",
-        header: "Total",
-        Cell: ({ cell }) => <>{'$ ' + moment(cell.getValue())}</>,
-      },
-      {
-        accessorKey: "comments",
-        header: "Remarks",
-        Cell: ({ cell }) => <>{(cell.getValue())}</>,
-      },
+     
+   
       {
         accessorKey: "id",
         enableFilterMatchHighlighting: false,
