@@ -31,6 +31,7 @@ export default class WarehouseRepository extends Repository<Warehouse> {
         return warehouse.find((e: any) => e?.WarehouseCode == code);
     }
 
+
     post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<Warehouse> {
         throw new Error("Method not implemented.");
     }

@@ -41,14 +41,14 @@ export default class ItemMasterDataRepository extends Repository<ItemMasterData>
    
     async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 
-        if(isUpdate) return await request('PATCH', this.url + "("+id+")", ItemMasterData.toUpdate(payload));
+        if(isUpdate) return await request('PATCH',  this.url + "('"  + id + "')", ItemMasterData.toUpdate(payload));
 
         return await request('POST', this.url, ItemMasterData.toCreate(payload));
     }
 
 
     async patch(id: any, payload: any): Promise<any> {
-         return await request('PATCH', this.url, ItemMasterData.toUpdate(payload));
+         return await request('PATCH',  this.url + "('" + id + "')", ItemMasterData.toUpdate(payload));
     }
 
 

@@ -1,47 +1,34 @@
 import CoreFormDocument from "@/components/core/CoreFormDocument";
-import HeadingForm from "../components/HeadingForm";
+import HeadingForm from "../component/HeadingForm";
 import { withRouter } from "@/routes/withRouter";
+import ContentForm from "../component/ContentForm";
 import { LoadingButton } from "@mui/lab";
-import { FormEventHandler } from "react";
-import AttachmentForm from "../components/AttachmentForm";
+import AttachmentForm from "@/components/attachment";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
-import { ToastOptions } from "react-toastify";
 import GLAccount from "../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import Formular from "@/utilies/formular";
 import VatGroupRepository from "@/services/actions/VatGroupRepository";
-import ItemMasterDataRepository from "@/services/actions/itemMasterDataRepository";
-import ItemMaster from "@/models/ItemMasterData";
-import GeneralForm from "../components/GeneralForm";
-import PurchasingForm from "../components/PurchasingForm";
-import SalesForm from "../components/SalesForm";
-import InventoryFom from "../components/InventoryForm";
-import CoreItemDocument from "@/components/core/CoreItemDocument";
+import GoodReceiptPORepository from "@/services/actions/goodReceiptPORepository";
+import GoodReceiptPO from "@/models/GoodReceiptPO";
 
-class ItemMasterDataForm extends CoreItemDocument {
+
+class GoodReceiptPOForm extends CoreFormDocument {
   constructor(props: any) {
     super(props);
     this.state = {
       ...this.state,
       loading: true,
-      priceList: 1,
-      uomGroupEntry: -1,
-      itemsGroupCode: 100,
-      manufacturer: -1,
-      shipType: 1,
-      itemType: "itItems",
-      salesItem: true,
-      inventoryItem: true,
-      purchaseItem: true,
-      manageItemByDrop: 'I',
+      documentStatus: "O",
       docDate: new Date().toISOString(),
       taxDate: new Date().toISOString(),
       docDueDate: new Date().toISOString(),
+      warehouse: "01",
+      journalMemo : "Good Receipt"
     } as any;
 
-    this.handlerSubmit = this.handlerSubmit.bind(this);
-    this.handlerRemoveWarehouse = this.handlerRemoveWarehouse.bind(this);
-    // this.handlerAddWarehouse = this.handlerAddWarehouse.bind(this);
+    this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
+    this.handlerAddItem = this.handlerAddItem.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
@@ -69,7 +56,7 @@ class ItemMasterDataForm extends CoreItemDocument {
           500
         );
       } else {
-        new ItemMasterDataRepository()
+        new GoodReceiptPORepository()
           .find(this.props.match.params.id)
           .then((res: any) => {
             this.setState({ ...res, loading: false });
@@ -81,14 +68,14 @@ class ItemMasterDataForm extends CoreItemDocument {
     }
 
     DocumentSerieRepository.getDocumentSeries(
-      ItemMasterDataRepository.documentSerie
+      GoodReceiptPORepository.documentSerie
     ).then((res: any) => {
       this.setState({ ...this.state, series: res, isLoadingSerie: false });
     });
 
     if (!this.props.edit) {
       DocumentSerieRepository.getDefaultDocumentSerie(
-        ItemMasterDataRepository.documentSerie
+        GoodReceiptPORepository.documentSerie
       ).then((res: any) => {
         this.setState({
           ...this.state,
@@ -100,29 +87,67 @@ class ItemMasterDataForm extends CoreItemDocument {
     }
   }
 
-  handlerRemoveWarehouse(code: string) {
-    let warehouse = [...(this.state.warehouse ?? [])];
-    const index = warehouse.findIndex((e: any) => e?.warehouseCode === code);
-    warehouse.splice(index, 1);
-    this.setState({ ...this.state, warehouse: warehouse });
+  handlerRemoveItem(code: string) {
+    let items = [...(this.state.items ?? [])];
+    const index = items.findIndex((e: any) => e?.itemCode === code);
+    items.splice(index, 1);
+    this.setState({ ...this.state, items: items });
   }
- 
+
+  handlerAddItem({ value, record, field }: any) {
+    let items = [...(this.state.items ?? [])];
+    let item = this.state.items?.find(
+      (e: any) => e?.itemCode === record?.itemCode
+    );
+
+    if (field === "AccountNo") {
+      const account = value as GLAccount;
+      item[field] = account.code;
+      item["AccountName"] = account.name;
+    } else {
+      item[field] = value;
+    }
+
+    if (
+      field === "quantity" ||
+      field === "unitPrice" ||
+      field === "discountPercent"
+    ) {
+      const total = Formular.findLineTotal(
+        item["quantity"],
+        item["unitPrice"],
+        item["discountPercent"]
+      );
+      item["lineTotal"] = total;
+    }
+
+    if (field === "purchaseVatGroup")
+      item["vatRate"] = new VatGroupRepository().find(value)?.vatRate;
+
+    const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
+    if (index > 0) items[index] = item;
+
+    this.setState({
+      ...this.state,
+      items: items,
+      docTotal: Formular.findTotalBeforeDiscount(items),
+    });
+  }
+
   async handlerSubmit(event: any) {
     event.preventDefault();
 
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params;
 
-
-   
-    await new ItemMasterDataRepository()
+    await new GoodReceiptPORepository()
       .post(this.state, this.props?.edit, id)
       .then((res: any) => {
-        const warehouse = new ItemMaster(res?.data);
+        const stockTransfer = new GoodReceiptPO(res?.data);
 
         this.props.history.replace(
-          this.props.location.pathname?.replace("create", warehouse.id),
-          warehouse
+          this.props.location.pathname?.replace("create", stockTransfer.id),
+          stockTransfer
         );
         this.dialog.current?.success("Create Successfully.");
       })
@@ -150,42 +175,20 @@ class ItemMasterDataForm extends CoreItemDocument {
     return (
       <>
         <form onSubmit={this.handlerSubmit} className="flex flex-col gap-4">
-          <HeadingForm
-            name={this.props?.name}
-            edit={this.props?.edit}
-            data={this.state}
-            handlerChange={(key, value) => {
-              this.handlerChange(key, value);
-            }}
-          />
+        <HeadingForm
+          data={this.state}
+          edit={this.props?.edit}
+          handlerChange={(key, value) => this.handlerChange(key, value)}
+        />
 
-          <GeneralForm
-            data={this?.state}
-            edit={this.props?.edit}
-            handlerChange={(key, value) => this.handlerChange(key, value)}
-          />
-          <PurchasingForm
-            edit={this.props?.edit}
-            handlerOpenVendor={() => {
-              this.handlerOpenVendor("supplier");
-            }}
-            data={this?.state}
-            handlerChange={(key, value) => this.handlerChange(key, value)}
-          />
-          <SalesForm
-            edit={this.props?.edit}
-            data={this?.state}
-            handlerChange={(key, value) => this.handlerChange(key, value)}
-          />
-
-          <InventoryFom data={this?.state}
-            edit={this.props?.edit}
-            handlerAddWarehouse={() => this.handlerOpenWarehouse()}
-            handlerChangeWarehouse = {this.handlerChangeWarehouse}
-            handlerRemoveWarehouse = {this.handlerRemoveWarehouse}
-            handlerChange={(key, value) => this.handlerChange(key, value)}
-
-          />
+        <ContentForm
+          edit={this.props?.edit}
+          data={this.state}
+          handlerAddItem={() => this.handlerOpenItem()}
+          handlerRemoveItem={this.handlerRemoveItem}
+          handlerChangeItem={this.handlerChangeItems}
+          handlerChange={(key, value) => this.handlerChange(key, value)}
+        />
 
           <AttachmentForm />
 
@@ -222,4 +225,4 @@ class ItemMasterDataForm extends CoreItemDocument {
   };
 }
 
-export default withRouter(ItemMasterDataForm);
+export default withRouter(GoodReceiptPOForm);

@@ -7,55 +7,65 @@ import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
-import ItemMasterDataRepository from "@/services/actions/itemMasterDataRepository";
+import GoodIssueRepository from "@/services/actions/goodIssueRepository";
 
-export default function ItemMasterDataListing() {
+export default function GoodIssueListing() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["item-master"],
-    queryFn: () => new ItemMasterDataRepository().get(),
+    queryKey: ["good-issue"],
+    queryFn: () => new GoodIssueRepository().get(),
   });
   console.log(data);
   const columns = React.useMemo(
     () => [
+     
       {
         accessorKey: "index",
         header: "No.", //uses the default width from defaultColumn prop
+      },
+    
+      {
+        accessorKey: "docNum",
+        header: "Doc Num", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
-        size: 88,
+        size: 99,
       },
+    
+
       {
-        accessorKey: "itemCode",
-        header: "Item Code",
-        enableClickToCopy: true,
-      },
-      {
-        accessorKey: "itemName",
-        header: "Item Name",
-        enableClickToCopy: true,
-        // size: 200, //increase the width of this column
-      },
-      {
-        accessorKey: "foreignName",
-        header: "Foreign Name",
-        enableClickToCopy: true,
-        // size: 200, //increase the width of this column
-      },
-      {
-        accessorKey: "createDate",
-        header: "Create Date",
+        accessorKey: "taxDate",
+        header: "Posting Date",
         Cell: ({ cell }: any) => (
           <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>
         ),
       },
       {
-        accessorKey: "updateDate",
-        header: "Update Date",
+        accessorKey: "docDate",
+        header: "Document Date",
         Cell: ({ cell }) => <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>,
       },
-    
+      {
+        accessorKey: "docDueDate",
+        header: "Valid Date",
+        Cell: ({ cell }) => <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>,
+      },
+      {
+        accessorKey: "documentStatus",
+        header: "Status",
+        Cell: ({ cell }) => <>{(cell.getValue())?.split("bost_")}</>,
+      },
+      {
+        accessorKey: "docTotalSys",
+        header: "Total",
+        Cell: ({ cell }) => <>{'$ ' + moment(cell.getValue())}</>,
+      },
+      {
+        accessorKey: "comments",
+        header: "Remarks",
+        Cell: ({ cell }) => <>{(cell.getValue())}</>,
+      },
       {
         accessorKey: "id",
         enableFilterMatchHighlighting: false,
@@ -68,7 +78,7 @@ export default function ItemMasterDataListing() {
           <div className="flex gap-4">
             <button
               onClick={() => {
-                route("/master-data/item-master-data/" + cell.row.original.id, {
+                route("/inventory/good-issue/" + cell.row.original.id, {
                   state: cell.row.original,
                 });
               }}
@@ -95,13 +105,13 @@ export default function ItemMasterDataListing() {
       <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
         <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full bg-white py-3">
           <h3 className="text-lg 2xl:text-base xl:text-sm">
-            Item Master / Item Master Data 
+            Inventory / Good Issue
           </h3>
           <Button
             variant="outlined"
             disableElevation
             size="small"
-            onClick={() => route("/master-data/item-master-data/create")}
+            onClick={() => route("/inventory/good-issue/create")}
           >
             <span className="text-xs">Create</span>
           </Button>
@@ -131,7 +141,7 @@ export default function ItemMasterDataListing() {
               return (
                 <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
                   <h3 className="font-bold text-base xl:text-sm">
-                    Item Master Data 
+                   Good Issue
                   </h3>
                   {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
                 </div>

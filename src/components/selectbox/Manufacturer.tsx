@@ -3,9 +3,9 @@ import MUISelect from "./MUISelect";
 import { useQuery } from "react-query";
 import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import UnitOfMeasurementRepository from "@/services/actions/unitOfMeasurementRepository";
+import ManufacturerRepository from "@/services/actions/manufacturerRepository";
 
-interface UOMProps<T = unknown> {
+interface BranchProps<T = unknown> {
     name?: string,
     defaultValue?: any,
     value?: any,
@@ -13,18 +13,18 @@ interface UOMProps<T = unknown> {
 }
 
 
-function UOMSelect(props: UOMProps) {
+function ManufacturerSelect(props: BranchProps) {
 
-    const { data, isLoading }: any = useQuery({ queryKey: ['uom'], queryFn: () => new UnitOfMeasurementRepository().get(), staleTime: Infinity });
+    const { data, isLoading }: any = useQuery({ queryKey: ['manufacturer'], queryFn: () => new ManufacturerRepository().get(), staleTime: Infinity })
 
 
     return <MUISelect
         {...props}
-        aliaslabel="Name"
-        aliasvalue="AbsEntry"
+        aliaslabel="ManufacturerName"
+        aliasvalue="Code"
         loading={isLoading}
         items={data}
     />
 }
 
-export default UOMSelect;
+export default ManufacturerSelect;

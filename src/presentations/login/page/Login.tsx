@@ -21,6 +21,8 @@ import WarehouseRepository from '@/services/warehouseRepository';
 import DistributionRuleRepository from '@/services/actions/distributionRulesRepository';
 import PriceListRepository from '@/services/actions/pricelistRepository';
 import UsersRepository from '@/services/actions/usersRepository';
+import CustomsGroupRepository from '@/services/actions/customsGroupRepository';
+import ManufacturerRepository from '@/services/actions/manufacturerRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -65,6 +67,8 @@ export default function Login() {
       await new PriceListRepository().get(),
       await new UsersRepository().get(),
       await new DistributionRuleRepository().get,
+      await new CustomsGroupRepository().get(),
+      await new ManufacturerRepository().get()
     ]);
   }
 

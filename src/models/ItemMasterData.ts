@@ -4,57 +4,61 @@ import { MasterDocument, DocumentLine } from "./interface/index";
 import Department from "./Department";
 import ItemGroup from './ItemGroup';
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
+import WarehouseRepository from "@/services/warehouseRepository";
+
 
 let index = 1;
-export interface ItemMasterProps {
-  id: any;
-  docNum: any;
-  cardCode?: string;
-  cardName?: string;
-  constactPersonCode?: number;
-  startDate?: string;
-  endDate?: string;
-  terminateDate?: string;
-  description?: string;
-  agreementType?: string;
-  status?: string;
-  owner?: string;
-  renewal?: boolean;
-  remindUnit?: string;
-  remindTime?: string;
-  remark?: string;
-  attachmentEntry?: number;
-  settlementProbability?: number;
-  agreementMethod?: string;
-  paymentTerm?: string;
-  priceList?: number;
-  signeDate?: string;
-  serie: string;
-  paymentMethod?: string;
-  shippingType?: string | undefined;
-  items: ItemMasterDocumentLineProps[];
-  documentLine: ItemMasterDocumentLineProps[];
-}
+// export interface ItemMasterProps {
+//   id: any;
+//   docNum: any;
+//   cardCode?: string;
+//   cardName?: string;
+//   constactPersonCode?: number;
+//   startDate?: string;
+//   endDate?: string;
+//   terminateDate?: string;
+//   description?: string;
+//   agreementType?: string;
+//   status?: string;
+//   owner?: string;
+//   renewal?: boolean;
+//   remindUnit?: string;
+//   remindTime?: string;
+//   remark?: string;
+//   attachmentEntry?: number;
+//   settlementProbability?: number;
+//   agreementMethod?: string;
+//   paymentTerm?: string;
+//   priceList?: number;
+//   signeDate?: string;
+//   serie: string;
+//   paymentMethod?: string;
+//   shippingType?: string | undefined;
+//   items: ItemWarehouseProps[];
+//   warehouse: ItemWarehouseProps[];
+// }
 
-export interface ItemMasterDocumentLineProps {
-  itemNo?: string | undefined;
-  itemDescription?: string | undefined;
-  itemGroup?: string | undefined;
-  quantity?: number | undefined;
-  unitPrice?: number | undefined;
-  currency?: string | undefined;
-  lineDiscount?: number;
-  uomEntry?: number | undefined;
-  uomCode?: string | undefined;
-  shippingType?: string | undefined;
-  project?: string | undefined;
-  vatGroup?: string | undefined;
-}
+// export interface ItemWarehouseProps {
+//   warehouseCode?: string | undefined;
+//   warehouseName?: string | undefined;
+//   lock?: string | undefined;
+//   minimalStock?: string | undefined;
+//   maximalStock?: string | undefined;
+//   minimalOrder?: string | undefined;
+//   standardAveragePrice?: string | undefined;
+//   inStock?: string | undefined;
+//   committed?: string | undefined;
+//   ordered?: string | undefined;
+//   defaultBin?: string | undefined;
+//   defaultBinEnforced?: string | undefined;
 
-export default class ItemMaster extends Model implements MasterDocument {
+// }
+
+export default class ItemMaster {
   id: any;
   index: number;
   docNum: any;
+  cardCode?: string;
   itemCode?: string;
   itemName?: string;
   foreignName?: string | undefined;
@@ -62,10 +66,10 @@ export default class ItemMaster extends Model implements MasterDocument {
   customsGroupCode?: string | undefined;
   salesVATGroup?: string | undefined;
   barCode?: string | undefined;
-  vatLiable?: string | undefined;
-  purchaseItem?: string | undefined;
-  salesItem?: string | undefined;
-  inventoryItem?: string | undefined;
+  vatLiable?: boolean | undefined;
+  purchaseItem?: boolean | undefined;
+  salesItem?: boolean | undefined;
+  inventoryItem?: boolean | undefined;
   //?: string | undefined; picture
   user_Text?: string | undefined;
   serialNum?: string | undefined;
@@ -121,7 +125,9 @@ export default class ItemMaster extends Model implements MasterDocument {
   glMethod?: string | undefined;
   taxType?: string | undefined;
   maxInventory?: string | undefined;
-  manageStockByWarehouse?: string | undefined;
+  desiredInventory?: string | undefined;
+  minInventory?: string | undefined;
+  manageStockByWarehouse?: boolean | undefined;
   purchaseHeightUnit1?: string | undefined;
   purchaseUnitHeight1?: string | undefined;
   purchaseLengthUnit1?: string | undefined;
@@ -140,7 +146,7 @@ export default class ItemMaster extends Model implements MasterDocument {
   salesUnitWidth1?: string | undefined;
   forceSelectionOfSerialNumber?: string | undefined;
   manageSerialNumbersOnReleaseOnly?: string | undefined;
-  wtLiable?: string | undefined;
+  wtLiable?: boolean | undefined;
   costAccountingMethod?: string | undefined;
   itemCountryOrg?: string | undefined;
   issueMethod?: string | undefined;
@@ -157,7 +163,7 @@ export default class ItemMaster extends Model implements MasterDocument {
   autoCreateSerialNumbersOnRelease?: string | undefined;
   series?: string | undefined;
   issuePrimarilyBy?: string | undefined;
-  noDiscounts?: string | undefined;
+  noDiscounts?: boolean | undefined;
   assetClass?: string | undefined;
   assetGroup?: string | undefined;
   inventoryNumber?: string | undefined;
@@ -181,14 +187,25 @@ export default class ItemMaster extends Model implements MasterDocument {
   manageBatchNumbers?: string | undefined;
   attachmentEntry?: string | undefined;
   createQRCodeFrom?: string | undefined;
+  createDate?: string | undefined;
+  updateDate?: string | undefined;
+  sWW?: string | undefined;
+  salesUnit?: string | undefined;
+  salesQtyPerPackUnit?: string | undefined;
+  manageItemByDrop?: string | undefined;
+  mainsupplier?: string | undefined;
   itemPrices?: any[] | undefined;
   itemWarehouseInfoCollection?: any[] | undefined;
   itemBarCodeCollection?: any[] | undefined;
-  documentLine?: ItemMasterDocumentLine[];
+  itemPreferredVendors?: any[] | undefined;
+  items?: ItemWarehouseInfo[];
+  warehouse?: ItemWarehouseInfo[]
+
 
   constructor(json: any) {
-    super();
+    // super();
     this.index = index++
+    this.cardCode = json['Mainsupplier'];
     this.id = json["ItemCode"];
     this.itemCode = json["ItemCode"];
     this.itemName = json["ItemName"];
@@ -212,6 +229,7 @@ export default class ItemMaster extends Model implements MasterDocument {
     this.frozenFrom = json['FrozenFrom']
     this.frozenTo = json['FrozenTo']
     this.frozenRemarks = json['FrozenRemarks']
+    this.sWW = json['SWW']
     // Code for Item class
     this.salesItemsPerUnit = json['SalesItemsPerUnit']
     // this.salesPackagingUnit = json['SalesPackagingUnit']
@@ -256,6 +274,8 @@ export default class ItemMaster extends Model implements MasterDocument {
     this.glMethod = json['GLMethod']
     this.taxType = json['TaxType']
     this.maxInventory = json['MaxInventory']
+    this.desiredInventory = json['DesiredInventory']
+    this.minInventory = json['MinInventory']
     this.manageStockByWarehouse = json['ManageStockByWarehouse']
     this.purchaseHeightUnit1 = json['PurchaseHeightUnit1']
     this.purchaseUnitHeight1 = json['PurchaseUnitHeight1']
@@ -318,8 +338,16 @@ export default class ItemMaster extends Model implements MasterDocument {
     this.createQRCodeFrom = json['CreateQRCodeFrom'];
     this.itemPrices = json['ItemPrices'];
     this.itemWarehouseInfoCollection = json['ItemWarehouseInfoCollection']
-    this.itemBarCodeCollection = json['ItemBarCodeCollection']
+    // this.items = json['Items']
+    // this.items = json["ItemBarCodeCollection"]?.map(
+    //   (e: any) => new ItemMasterDocumentLine(e)
+    // );
+    this.warehouse = json["ItemWarehouseInfoCollection"]?.map(
+      (e: any) => new ItemWarehouseInfo(e)
+    );
 
+    this.itemBarCodeCollection = json['ItemBarCodeCollection']
+    this.itemPreferredVendors = json['ItemPreferredVendors']
     // this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
     // this.items = json["DocumentLines"]?.map(
     //   (e: any) => new ItemMasterDocumentLine(e)
@@ -328,6 +356,21 @@ export default class ItemMaster extends Model implements MasterDocument {
     // this.documentStatus = json["DocumentStatus"]
     //   .replace("bost_", "")
     //   ?.charAt(0);
+    this.createDate = json['CreateDate']
+    this.updateDate = json['UpdateDate']
+    this.salesUnit = json['SalesUnit']
+    this.salesQtyPerPackUnit = json['SalesQtyPerPackUnit']
+    this.mainsupplier = json['Mainsupplier']
+
+    if (this.manageItemByDrop = 'T') {
+      json['manageBatchNumbers'] === "tYES"
+    }
+    else if
+      (this.manageItemByDrop = 'L') {
+      json['manageSerialNumbers'] === "tYES"
+    }
+
+    // this.manageItemByDrop = "T";
   }
 
   toJson(update: boolean) {
@@ -338,190 +381,371 @@ export default class ItemMaster extends Model implements MasterDocument {
     console.log(json);
 
     return {
-      Requester: json["cardCode"],
-      RequesterName: json["cardName"],
-      RequesterEmail: json["email"],
-      RequesterBranch: json["branch"],
-      RequesterDepartment: json["department"],
-      ReqType: json["reqType"],
-      DocType: json["docType"],
-      TaxDate: json["taxDate"],
-      DocDate: json["docDate"],
-      RequriedDate: json["requriedDate"],
-      DocDueDate: json["docDueDate"],
-      DocumentOwner: json["owner"],
-      AttachmentEntry: ["attachmentEntry"],
-      DocCurrency: json["docCurrency"],
-      DocRate: json["docRate"],
-      Comments: json["comments"],
-      PriceList: json["priceList"],
-      // Serie: json["serie"],
-      // Series: json["Series"],
-      DocTotalSys: json["DocTotalSys"],
-      DiscountPercent: json["DiscountPercent"],
-      Rounding: json["Rounding"],
-      Address2: json["Address2"],
+      "ItemCode": json["itemCode"],
+      "ItemName": json["itemName"],
+      "ForeignName": json["foreignName"],
+      "ItemsGroupCode": json["itemsGroupCode"],
+      "CustomsGroupCode": json["customsGroupCode"],
+      "SalesVATGroup": json["salesVATGroup"],
+      "BarCode": json["barCode"],
+      "VatLiable": json["vatLiable"],
+      "PurchaseItem": json["purchaseItem"] ? 'tYES' : 'tNO',
+      "SalesItem": json["salesItem"] ? 'tYES' : 'tNO',
+      "InventoryItem": json["inventoryItem"] ? 'tYES' : 'tNO',
+      "User_Text": json["user_Text"],
+      "SerialNum": json["serialNum"],
+      "Manufacturer": json["manufacturer"],
+      "Valid": json["valid"],
+      "ValidFrom": json["validFrom"],
+      "ValidTo": json["validTo"],
+      "ValidRemarks": json["validRemarks"],
+      "Frozen": json["frozen"],
+      "FrozenFrom": json["frozenFrom"],
+      "FrozenTo": json["frozenTo"],
+      "FrozenRemarks": json["frozenRemarks"],
+
+      "SalesItemsPerUnit": json["salesItemsPerUnit"],
+      "SalesUnitLength": json["salesUnitLength"],
+      "SalesLengthUnit": json["salesLengthUnit"],
+      "SalesUnitWidth": json["salesUnitWidth"],
+      "SalesWidthUnit": json["salesWidthUnit"],
+      "SalesUnitHeight": json["salesUnitHeight"],
+      "SalesHeightUnit": json["salesHeightUnit"],
+      "SalesUnitVolume": json["salesUnitVolume"],
+      "SalesVolumeUnit": json["salesVolumeUnit"],
+      "SalesUnitWeight": json["salesUnitWeight"],
+      "SalesWeightUnit": json["salesWeightUnit"],
+      "PurchaseUnit": json["purchaseUnit"],
+      "PurchaseItemsPerUnit": json["purchaseItemsPerUnit"],
+      "PurchaseQtyPerPackUnit": json["purchaseQtyPerPackUnit"],
+
+      "PurchaseUnitLength": json["purchaseUnitLength"],
+      "PurchaseLengthUnit": json["purchaseLengthUnit"],
+      "PurchaseUnitWidth": json["purchaseUnitWidth"],
+      "PurchaseWidthUnit": json["purchaseWidthUnit"],
+      "PurchaseUnitHeight": json["purchaseUnitHeight"],
+      "PurchaseHeightUnit": json["purchaseHeightUnit"],
+      "PurchaseUnitVolume": json["purchaseUnitVolume"],
+      "PurchaseVolumeUnit": json["purchaseVolumeUnit"],
+      "PurchaseUnitWeight": json["purchaseUnitWeight"],
+      "PurchaseWeightUnit": json["purchaseWeightUnit"],
+      "PurchaseVATGroup": json["purchaseVATGroup"],
+      "SalesFactor1": json["salesFactor1"],
+      "SalesFactor2": json["salesFactor2"],
+      "SalesFactor3": json["salesFactor3"],
+      "SalesFactor4": json["salesFactor4"],
+      "PurchaseFactor1": json["purchaseFactor1"],
+      "PurchaseFactor2": json["purchaseFactor2"],
+      "PurchaseFactor3": json["purchaseFactor3"],
+      "PurchaseFactor4": json["purchaseFactor4"],
+
+      "MovingAveragePrice": json["movingAveragePrice"],
+      "AvgStdPrice": json["avgStdPrice"],
+      "DefaultWarehouse": json["defaultWarehouse"],
+      "ShipType": json["shipType"],
+      "GLMethod": json["glMethod"],
+      "TaxType": json["taxType"],
+      "MaxInventory": json["maxInventory"],
+      "DesiredInventory": json['desiredInventory'],
+      "MinInventory": json['minInventory'],
+      "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
+      "PurchaseHeightUnit1": json["purchaseHeightUnit1"],
+      "PurchaseUnitHeight1": json["purchaseUnitHeight1"],
+      "PurchaseLengthUnit1": json["purchaseLengthUnit1"],
+      "PurchaseUnitLength1": json["purchaseUnitLength1"],
+      "PurchaseWeightUnit1": json["purchaseWeightUnit1"],
+      "PurchaseUnitWeight1": json["purchaseUnitWeight1"],
+      "PurchaseWidthUnit1": json["purchaseWidthUnit1"],
+      "PurchaseUnitWidth1": json["purchaseUnitWidth1"],
+      "SalesHeightUnit1": json["salesHeightUnit1"],
+      "SalesUnitHeight1": json["salesUnitHeight1"],
+
+      "SalesWidthUnit1": json["salesWidthUnit1"],
+      "SalesUnitWidth1": json["salesUnitWidth1"],
+      "ForceSelectionOfSerialNumber": json["forceSelectionOfSerialNumber"],
+      "ManageSerialNumbersOnReleaseOnly": json["manageSerialNumbersOnReleaseOnly"],
+      "WTLiable": json["wtLiable"] ? 'tYES' : 'tNO',
+      "CostAccountingMethod": json["costAccountingMethod"],
+      "ItemCountryOrg": json["itemCountryOrg"],
+      "IssueMethod": json["issueMethod"],
+      "SRIAndBatchManageMethod": json["sriAndBatchManageMethod"],
+      "InventoryUOM": json["inventoryUOM"],
+      "ItemType": json["itemType"],
+      "ItemClass": json["itemClass"],
+      "OutgoingServiceCode": json["outgoingServiceCode"],
+      "IncomingServiceCode": json["incomingServiceCode"],
+      "ServiceGroup": json["serviceGroup"],
+      "NCMCode": json["ncmCode"],
+      "MaterialType": json["materialType"],
+      "MaterialGroup": json["materialGroup"],
+
+      "AutoCreateSerialNumbersOnRelease": json["autoCreateSerialNumbersOnRelease"],
+      // "Series": json["series"],
+      "IssuePrimarilyBy": json["issuePrimarilyBy"],
+      "NoDiscounts": json["noDiscounts"] ? 'tYES' : 'tNO',
+      "AssetClass": json["assetClass"],
+      "AssetGroup": json["assetGroup"],
+      "InventoryNumber": json["inventoryNumber"],
+      "Technician": json["technician"],
+      "Employee": json["employee"],
+      "Location": json["location"],
+      "AssetStatus": json["assetStatus"],
+      "ManageByQuantity": json["manageByQuantity"],
+      "UoMGroupEntry": json["uomGroupEntry"],
+      "InventoryUoMEntry": json["inventoryUoMEntry"],
+      "DefaultSalesUoMEntry": json["defaultSalesUoMEntry"],
+      "DefaultPurchasingUoMEntry": json["defaultPurchasingUoMEntry"],
+      "InventoryWeight": json["inventoryWeight"],
+      "InventoryWeightUnit": json["inventoryWeightUnit"],
+      "InventoryWeight1": json["inventoryWeight1"],
+      "InventoryWeightUnit1": json["inventoryWeightUnit1"],
+
+      "DefaultCountingUnit": json["defaultCountingUnit"],
+      "CountingItemsPerUnit": json["countingItemsPerUnit"],
+      "DefaultCountingUoMEntry": json["defaultCountingUoMEntry"],
+      // "ManageSerialNumbers": json["manageSerialNumbers"],
+      // "ManageBatchNumbers": json["manageBatchNumbers"],
+      "AttachmentEntry": json["attachmentEntry"],
+      "CreateQRCodeFrom": json["createQRCodeFrom"],
+      "ItemPrices": json["itemPrices"],
+      // "ItemWarehouseInfoCollection": json["itemWarehouseInfoCollection"],
+      "ItemBarCodeCollection": json["itemBarCodeCollection"],
+      "ItemPreferredVendors": [
+        {
+          "BPCode": json["cardCode"]
+        }
+      ],
+      // "Mainsupplier" : json['cardCode'],
       DocumentStatus: json["DocumentStatus"],
-      DocumentLines: json["items"]?.map((e: any) =>
-        ItemMasterDocumentLine.toCreate(e, json["docType"])
+      "ItemWarehouseInfoCollection": json["warehouse"]?.map((e: any) =>
+        ItemWarehouseInfo.toCreate(e)
       ),
+      // "Type": "dDocument_Items",
+
 
       // documentLine: json["items"]?.map((e: any) =>
       // ItemMasterDocumentLine.toCreate(e, json["DocType"])),
+      "SWW": json['sWW'],
+      "SalesUnit": json['salesUnit'],
+      "SalesQtyPerPackUnit": json['salesQtyPerPackUnit'],
+      "ManageSerialNumbers": json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
+      "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
+
     };
   }
 
   public static toUpdate(json: any) {
     return {
-      Requester: json["userCode"],
-      RequesterName: json["userName"],
-      RequesterEmail: json["requesterEmail"],
-      RequesterBranch: json["requesterBranch"],
-      RequesterDepartment: json["requesterDepartment"],
-      docDueDate: json["DocDueDate"],
-      attachmentEntry: ["AttachmentEntry"],
-      docCurrency: json["DocCurrency"],
-      docRate: json["DocRate"],
-      reference1: json["Reference1"],
-      reference2: json["Reference2"],
-      comments: json["Comments"],
-      journalMemo: json["JournalMemo"],
-      paymentGroupCode: json["PaymentGroupCode"],
-      salesPersonCode: json["SalesPersonCode"],
-      transportationCode: json["TransportationCode"],
-      confirmed: json["Confirmed"],
-      contactPersonCode: json["ContactPersonCode"],
-      series: json["Series"],
-      taxDate: json["TaxDate"],
-      partialSupply: json["PartialSupply"],
-      docObjectCode: json["DocObjectCode"],
-      indicator: json["Indicator"],
-      federalTaxID: json["FederalTaxID"],
-      discountPercent: json["DiscountPercent"],
-      creationDate: json["CreationDate"],
-      updateDate: json["UpdateDate"],
-      userSign: json["UserSign"],
-      vatSum: json["VatSum"],
-      docTotalSys: json["DocTotalSys"],
-      requiredDate: json["RequriedDate"],
-      cancelDate: json["CancelDate"],
-      rounding: json["Rounding"],
-      address2: json["Address2"],
-      documentStatus: json["DocumentStatus"],
-      periodIndicator: json["PeriodIndicator"],
-      payToCode: json["PayToCode"],
-      manualNumber: json["ManualNumber"],
-      useShpdGoodsAct: json["UseShpdGoodsAct"],
-      totalDiscount: json["TotalDiscount"],
-      vatPercent: json["VatPercent"],
-      extraMonth: json["ExtraMonth"],
-      extraDays: json["ExtraDays"],
-      startFrom: json["StartFrom"],
-      downPaymentStatus: json["DownPaymentStatus"],
-      bPLName: json["BPLName"],
-      vatRegNum: json["VATRegNum"],
-      paymentTerm: json["PaymentTerm"],
-      priceList: json["PriceList"],
-      serie: json["Serie"],
-      paymentMethod: json["PaymentMethod"],
-      shippingType: json["ShippingType"],
-      DocTotalSys: json["DocTotalSys"],
-      docType: json["DocType"],
-      items: [],
+      "ItemCode": json["itemCode"],
+      "ItemName": json["itemName"],
+      "ForeignName": json["foreignName"],
+      "ItemsGroupCode": json["itemsGroupCode"],
+      "CustomsGroupCode": json["customsGroupCode"],
+      "SalesVATGroup": json["salesVATGroup"],
+      "BarCode": json["barCode"],
+      "VatLiable": json["vatLiable"],
+      "PurchaseItem": json["purchaseItem"] ? 'tYES' : 'tNO',
+      "SalesItem": json["salesItem"] ? 'tYES' : 'tNO',
+      "InventoryItem": json["inventoryItem"] ? 'tYES' : 'tNO',
+      "User_Text": json["user_Text"],
+      "SerialNum": json["serialNum"],
+      "Manufacturer": json["manufacturer"],
+      "Valid": json["valid"],
+      "ValidFrom": json["validFrom"],
+      "ValidTo": json["validTo"],
+      "ValidRemarks": json["validRemarks"],
+      "Frozen": json["frozen"],
+      "FrozenFrom": json["frozenFrom"],
+      "FrozenTo": json["frozenTo"],
+      "FrozenRemarks": json["frozenRemarks"],
+
+      "SalesItemsPerUnit": json["salesItemsPerUnit"],
+      "SalesUnitLength": json["salesUnitLength"],
+      "SalesLengthUnit": json["salesLengthUnit"],
+      "SalesUnitWidth": json["salesUnitWidth"],
+      "SalesWidthUnit": json["salesWidthUnit"],
+      "SalesUnitHeight": json["salesUnitHeight"],
+      "SalesHeightUnit": json["salesHeightUnit"],
+      "SalesUnitVolume": json["salesUnitVolume"],
+      "SalesVolumeUnit": json["salesVolumeUnit"],
+      "SalesUnitWeight": json["salesUnitWeight"],
+      "SalesWeightUnit": json["salesWeightUnit"],
+      "PurchaseUnit": json["purchaseUnit"],
+      "PurchaseItemsPerUnit": json["purchaseItemsPerUnit"],
+      "PurchaseQtyPerPackUnit": json["purchaseQtyPerPackUnit"],
+
+      "PurchaseUnitLength": json["purchaseUnitLength"],
+      "PurchaseLengthUnit": json["purchaseLengthUnit"],
+      "PurchaseUnitWidth": json["purchaseUnitWidth"],
+      "PurchaseWidthUnit": json["purchaseWidthUnit"],
+      "PurchaseUnitHeight": json["purchaseUnitHeight"],
+      "PurchaseHeightUnit": json["purchaseHeightUnit"],
+      "PurchaseUnitVolume": json["purchaseUnitVolume"],
+      "PurchaseVolumeUnit": json["purchaseVolumeUnit"],
+      "PurchaseUnitWeight": json["purchaseUnitWeight"],
+      "PurchaseWeightUnit": json["purchaseWeightUnit"],
+      "PurchaseVATGroup": json["purchaseVATGroup"],
+      "SalesFactor1": json["salesFactor1"],
+      "SalesFactor2": json["salesFactor2"],
+      "SalesFactor3": json["salesFactor3"],
+      "SalesFactor4": json["salesFactor4"],
+      "PurchaseFactor1": json["purchaseFactor1"],
+      "PurchaseFactor2": json["purchaseFactor2"],
+      "PurchaseFactor3": json["purchaseFactor3"],
+      "PurchaseFactor4": json["purchaseFactor4"],
+
+      "MovingAveragePrice": json["movingAveragePrice"],
+      "AvgStdPrice": json["avgStdPrice"],
+      "DefaultWarehouse": json["defaultWarehouse"],
+      "ShipType": json["shipType"],
+      "GLMethod": json["glMethod"],
+      "TaxType": json["taxType"],
+      "MaxInventory": json["maxInventory"],
+      "DesiredInventory": json['desiredInventory'],
+      "MinInventory": json['minInventory'],
+      "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
+      "PurchaseHeightUnit1": json["purchaseHeightUnit1"],
+      "PurchaseUnitHeight1": json["purchaseUnitHeight1"],
+      "PurchaseLengthUnit1": json["purchaseLengthUnit1"],
+      "PurchaseUnitLength1": json["purchaseUnitLength1"],
+      "PurchaseWeightUnit1": json["purchaseWeightUnit1"],
+      "PurchaseUnitWeight1": json["purchaseUnitWeight1"],
+      "PurchaseWidthUnit1": json["purchaseWidthUnit1"],
+      "PurchaseUnitWidth1": json["purchaseUnitWidth1"],
+      "SalesHeightUnit1": json["salesHeightUnit1"],
+      "SalesUnitHeight1": json["salesUnitHeight1"],
+
+      "SalesWidthUnit1": json["salesWidthUnit1"],
+      "SalesUnitWidth1": json["salesUnitWidth1"],
+      "ForceSelectionOfSerialNumber": json["forceSelectionOfSerialNumber"],
+      "ManageSerialNumbersOnReleaseOnly": json["manageSerialNumbersOnReleaseOnly"],
+      "WTLiable": json["wtLiable"] ? 'tYES' : 'tNO',
+      "CostAccountingMethod": json["costAccountingMethod"],
+      "ItemCountryOrg": json["itemCountryOrg"],
+      "IssueMethod": json["issueMethod"],
+      "SRIAndBatchManageMethod": json["sriAndBatchManageMethod"],
+      "InventoryUOM": json["inventoryUOM"],
+      "ItemType": json["itemType"],
+      "ItemClass": json["itemClass"],
+      "OutgoingServiceCode": json["outgoingServiceCode"],
+      "IncomingServiceCode": json["incomingServiceCode"],
+      "ServiceGroup": json["serviceGroup"],
+      "NCMCode": json["ncmCode"],
+      "MaterialType": json["materialType"],
+      "MaterialGroup": json["materialGroup"],
+
+      "AutoCreateSerialNumbersOnRelease": json["autoCreateSerialNumbersOnRelease"],
+      // "Series": json["series"],
+      "IssuePrimarilyBy": json["issuePrimarilyBy"],
+      "NoDiscounts": json["noDiscounts"] ? 'tYES' : 'tNO',
+      "AssetClass": json["assetClass"],
+      "AssetGroup": json["assetGroup"],
+      "InventoryNumber": json["inventoryNumber"],
+      "Technician": json["technician"],
+      "Employee": json["employee"],
+      "Location": json["location"],
+      "AssetStatus": json["assetStatus"],
+      "ManageByQuantity": json["manageByQuantity"],
+      "UoMGroupEntry": json["uomGroupEntry"],
+      "InventoryUoMEntry": json["inventoryUoMEntry"],
+      "DefaultSalesUoMEntry": json["defaultSalesUoMEntry"],
+      "DefaultPurchasingUoMEntry": json["defaultPurchasingUoMEntry"],
+      "InventoryWeight": json["inventoryWeight"],
+      "InventoryWeightUnit": json["inventoryWeightUnit"],
+      "InventoryWeight1": json["inventoryWeight1"],
+      "InventoryWeightUnit1": json["inventoryWeightUnit1"],
+
+      "DefaultCountingUnit": json["defaultCountingUnit"],
+      "CountingItemsPerUnit": json["countingItemsPerUnit"],
+      "DefaultCountingUoMEntry": json["defaultCountingUoMEntry"],
+      // "ManageSerialNumbers": json["manageSerialNumbers"],
+      // "ManageBatchNumbers": json["manageBatchNumbers"],
+      "AttachmentEntry": json["attachmentEntry"],
+      "CreateQRCodeFrom": json["createQRCodeFrom"],
+      "ItemPrices": json["itemPrices"],
+      "ItemBarCodeCollection": json["itemBarCodeCollection"],
+      // "ItemPreferredVendors": json["itemPreferredVendors"],
+      // "ItemPreferredVendors": json["cardCode"]  ,
+      "ItemPreferredVendors": [
+        {
+          "BPCode": json["cardCode"]
+        }
+      ],
+      // 
+      "ManageSerialNumbers": json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
+      "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
+      DocumentStatus: json["DocumentStatus"],
+      "ItemWarehouseInfoCollection": json["warehouse"]?.map((e: any) =>
+        ItemWarehouseInfo.toCreate(e)
+      ),
+      
+      // "Mainsupplier" : json['cardCode'],
+
+      // DocumentLines: json["items"]?.map((e: any) =>
+      //   ItemMasterDocumentLine.toCreate(e, json["docType"])
+      // ),
+      // "Type": "dDocument_Items",
+
+
+      // documentLine: json["items"]?.map((e: any) =>
+      // ItemMasterDocumentLine.toCreate(e, json["DocType"])),
     };
   }
 }
-export class ItemMasterDocumentLine extends Model implements DocumentLine {
-  itemCode?: string | undefined;
-  itemDescription?: string | undefined;
-  itemGroup?: string | undefined;
-  quantity?: number | undefined;
-  unitPrice?: number | undefined;
-  currency?: string | undefined;
-  lineDiscount?: number;
-  uomEntry?: number | undefined;
-  uomCode?: string | undefined;
-  TransportationCode?: string | undefined;
-  project?: string | undefined;
-  taxCode?: string | undefined;
-  taxRate?: number | undefined;
-  vatGroup?: string | undefined;
-  lineTotal?: string | undefined;
-  requiredDate?: string | undefined;
-  shipDate?: string | undefined;
-  accountCode?: number | undefined;
-  accountNo?: number | undefined;
-  accountName?: string | undefined;
-  blanketAgreementNumber?: string | undefined;
-  discountPercent?: number;
-  requriedDate?: string;
-  itemName?: string;
-  saleVatGroup?: string;
-  lineVendor?: string;
-  purchaseVatGroup?: string;
-  accountNameD?: string;
+export class ItemWarehouseInfo extends Model {
 
+  // lock?: string | undefined;
+  locked?: boolean | undefined;
+  inStock?: string | undefined;
+  committed?: string | undefined;
+  ordered?: string | undefined;
+  warehouseCode?: string | undefined;
+  warehouseName?: string | undefined;
+  minimalStock?: string | undefined;
+  maximalStock?: string | undefined;
+  minimalOrder?: string | undefined;
+  standardAveragePrice?: string | undefined;
+  defaultBin?: string | undefined;
+  defaultBinEnforced?: string | undefined;
+  available?: string | undefined;
 
   constructor(json: any) {
     super();
-    this.saleVatGroup = json["VatGroup"];
-    this.itemCode = json["ItemCode"];
-    this.itemDescription = json["ItemDescription"];
-    this.itemGroup = json["ItemGroup"];
-    this.quantity = json["Quantity"];
-    this.unitPrice = json["UnitPrice"];
-    this.currency = json["PriceCurrency"];
-    this.lineDiscount = json["LineDiscount"];
-    this.uomEntry = json["UoMEntry"];
-    this.uomCode = json["UoMCode"];
-    this.vatGroup = json["VatGroup"];
-    this.purchaseVatGroup = json["VatGroup"];
-    this.requiredDate = json["RequiredDate"];
-    this.discountPercent = json["DiscountPercent"];
-    this.shipDate = json["ShipDate"];
-    this.accountCode = json["AccountCode"];
-    this.accountNo = json["AccountNo"];
-    this.accountName = json["AccountName"];
-    this.lineTotal = json["LineTotal"];
-    this.lineVendor = json["LineVendor"];
-    this.itemName = json["ItemDescription"];
-    this.taxRate = json["Rate"]
-    this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
-    // {(new OwnerRepository().find(data.owner)?.name) || "N/A"}
+    this.locked = json['Locked']
+    this.inStock = json['InStock'];
+    this.committed = json['Committed'];
+    this.ordered = json['Ordered'];
+    this.warehouseCode = json['WarehouseCode']
+    this.warehouseName = new WarehouseRepository().find(json['WarehouseCode'])?.WarehouseName ?? "N/A"
+    this.minimalStock = json['MinimalStock']
+    this.maximalStock = json['MaximalStock']
+    this.minimalOrder = json['MinimalOrder']
+    this.standardAveragePrice = json['StandardAveragePrice']
+    this.defaultBin = json['DefaultBin']
+    this.defaultBinEnforced = json['DefaultBinEnforced']
+    this.available = json['Available']
   }
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
   }
 
-  public static toCreate(json: any, type: any) {
+  public static toCreate(json: any,) {
     let line = {
-      Quantity: json["quantity"],
-      ItemCode: json["itemCode"],
-      ItemDescription: json["itemName"],
-      // ItemGroup: json["itemGroup"],
-      UnitPrice: json["unitPrice"],
-      // LineDiscount: 0.0,
-      DocEntry: json["uomGroupEntry"],
-      UoMCode: json["uomCode"],
-      // TransportationCode: 1,
-      // Project: null,
-      // TaxCode: null,
-      // TAXRate: null,
-      UoMEntry: json["uomEntry"],
-      // VatGroup: json["vatGroup"],
-      VatGroup: json["purchaseVatGroup"],
-      LineVendor: json["lineVendor"],
-      LineTotal: json["lineTotal"],
-      RequiredDate: json["requiredDate"],
-      AccountCode: json["AccountNo"],
-      // AccountName: json["AccountName"],
-      DiscountPercent: json["discountPercent"],
+      // Lock: json['lock'],
+      Locked: json["locked"] ? 'tYES' : 'tNO',
+      InStock: json['inStock'],
+      Committed: json['committed'],
+      Ordered: json['ordered'],
+      Available: json['available'],
+      WarehouseCode: json['warehouseCode'],
+      // warehouseName : new WarehouseRepository().find,(json['WarehouseCode'])?.WarehouseName ?? "N/A"
+      MinimalStock: json['minimalStock'],
+      MaximalStock: json['maximalStock'],
+      MinimalOrder: json['minimalOrder'],
+      StandardAveragePrice: json['standardAveragePrice'],
+      DefaultBin: json['defaultBin'],
+      DefaultBinEnforced: json['defaultBinEnforced'],
     };
-
-    if (type === "S") {
-      delete line.ItemCode;
-      delete line.UnitPrice;
-    }
 
     return line;
   }

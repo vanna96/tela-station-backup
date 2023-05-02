@@ -3,17 +3,30 @@ import MUITextField from "@/components/input/MUITextField";
 import MUISelect from "@/components/selectbox/MUISelect";
 import BranchSelect from "../../../../components/selectbox/Branch";
 import Checkbox from "@mui/material/Checkbox";
+import ItemGroupSelect from "@/components/selectbox/ItemGroup";
+import UOMSelect from "@/components/selectbox/UnitofMeasurment";
+import PriceListSelect from "@/components/selectbox/PriceList";
+import { useRef, useState } from "react";
 
 export interface IHeadingFormProps {
   handlerChange: (key: string, value: any) => void;
   edit?: boolean;
   data: any;
+  name: string
 }
 
 export default function HeadingForm({
   handlerChange,
-  data,
+  edit,
+  data, name
 }: IHeadingFormProps) {
+
+
+  const [isCheckedInventory, setIsCheckedInventory] = useState<boolean>(false);
+  const [isCheckedPurchase, setIsCheckedPurchase] = useState<boolean>(false);
+  const [isCheckedSales, setIsCheckedSales] = useState<boolean>(false);
+ 
+
   console.log(data);
   return (
     <>
@@ -42,6 +55,8 @@ export default function HeadingForm({
               label=" No."
               value={data?.itemCode}
               name="ItemCode"
+              onChange={(e) => handlerChange("itemCode", e.target.value)}
+
             />
           </div>
 
@@ -74,10 +89,18 @@ export default function HeadingForm({
                 Item Type
               </label>
               <div className="">
-                <BranchSelect
-                  name="Item Type"
-                  value={data.itemType}
-                  onChange={(e) => handlerChange("Item Type", e.target.value)}
+                <MUISelect
+                  items={[
+                    { name: "Items", value: "itItems" },
+                    { name: "Labor", value: "itLabor" },
+                    { name: "Travel", value: "itTravel" },
+                    { name: "Fixed Assets", value: "itFixedAssets" },
+                  ]}
+                  onChange={(e) => handlerChange("itemType", e.target.value)}
+                  name="itemType"
+                  value={data?.itemType}
+                  aliasvalue="id"
+                  aliaslabel="name"
                 />
               </div>
             </div>
@@ -86,10 +109,10 @@ export default function HeadingForm({
                 Item Group
               </label>
               <div className="">
-                <BranchSelect
-                  name="Item Group"
-                  value={data.itemType}
-                  onChange={(e) => handlerChange("Item Type", e.target.value)}
+                <ItemGroupSelect
+                  name="itemsGroupCode"
+                  value={data.itemsGroupCode}
+                  onChange={(e) => handlerChange("itemsGroupCode", e.target.value)}
                 />
               </div>
             </div>
@@ -103,11 +126,12 @@ export default function HeadingForm({
                 UoM Group
               </label>
               <div className="">
-                <BranchSelect
-                  name="Item Type"
-                  value={data.itemType}
-                  onChange={(e) => handlerChange("Item Type", e.target.value)}
+                <UOMSelect
+                  name="uomGroupEntry"
+                  value={data.uomGroupEntry}
+                  onChange={(e) => handlerChange("uomGroupEntry", e.target.value)}
                 />
+
               </div>
             </div>
             <div className="flex flex-col gap-1 text-sm">
@@ -115,10 +139,10 @@ export default function HeadingForm({
                 Price Lists
               </label>
               <div className="">
-                <BranchSelect
-                  name="Item Group"
-                  value={data.itemType}
-                  onChange={(e) => handlerChange("Item Type", e.target.value)}
+                <PriceListSelect
+                  name="PriceList"
+                  value={data.priceList}
+                  onChange={(e) => handlerChange("priceList", e.target.value)}
                 />
               </div>
             </div>
@@ -130,10 +154,10 @@ export default function HeadingForm({
 
               </label>
               <div className="">
-                <BranchSelect
-                  name="Item Type"
-                  value={data.itemType}
-                  onChange={(e) => handlerChange("Item Type", e.target.value)}
+                <MUITextField
+                  name="Barcode"
+                  value={data.barCode}
+                  onChange={(e) => handlerChange("barCode", e.target.value)}
                 />
               </div>
             </div>
@@ -142,10 +166,10 @@ export default function HeadingForm({
                 Unit Price
               </label>
               <div className="">
-                <BranchSelect
-                  name="Item Group"
-                  value={data.itemType}
-                  onChange={(e) => handlerChange("Item Type", e.target.value)}
+                <MUITextField
+                  name="inventoryUOM"
+                  value={data.inventoryUOM}
+                  onChange={(e) => handlerChange("inventoryUOM", e.target.value)}
                 />
               </div>
             </div>
@@ -156,7 +180,15 @@ export default function HeadingForm({
             <div className="grid grid-cols- gap-3">
               <div className="flex flex-col gap-1 text-sm">
                 <div className="flex items-center gap-1 text-sm">
-                  <Checkbox />
+
+                  <input type="checkbox" name='inventoryItem'
+                  checked={edit ? data?.inventoryItem : isCheckedInventory}
+                    onChange={(e) => {
+                      const { checked } = e.target;
+                      const value = checked ? true : false;
+                      setIsCheckedInventory(value);
+                      handlerChange("inventoryItem", value);
+                    }} />
                   <label htmlFor="Code" className="text-gray-500 text-[14px]">
                     Inventory Item
                   </label>
@@ -166,9 +198,17 @@ export default function HeadingForm({
             <div className="grid grid-cols- gap-3">
               <div className="flex flex-col gap-1 text-sm">
                 <div className="flex items-center gap-1 text-sm">
-                  <Checkbox />
+
+                  <input type="checkbox" name='salesItem' 
+                    checked={edit ? data?.salesItem : isCheckedSales}
+                    onChange={(e) => {
+                      const { checked } = e.target;
+                      const value = checked ? true : false;
+                      setIsCheckedSales(value);
+                      handlerChange("salesItem", value);
+                    }} />
                   <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                    Sale Item
+                    Sales Item
                   </label>
                 </div>
               </div>
@@ -178,7 +218,17 @@ export default function HeadingForm({
             <div className="grid grid-cols- gap-3">
               <div className="flex flex-col gap-1 text-sm">
                 <div className="flex items-center gap-1 text-sm">
-                  <Checkbox />
+                  <input
+                    type="checkbox"
+                    name="purchaseItem"
+                    checked={edit ? data?.purchaseItem : isCheckedPurchase}
+                    onChange={(e) => {
+                      const { checked } = e.target;
+                      const value = checked ? true : false;
+                      setIsCheckedPurchase(value);
+                      handlerChange("purchaseItem", value);
+                    }} />
+
                   <label htmlFor="Code" className="text-gray-500 text-[14px]">
                     Purchasing Item
                   </label>
