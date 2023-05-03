@@ -3,15 +3,20 @@ import ItemCard from '@/components/card/ItemCart';
 import React from 'react'
 
 import { AiOutlineFileSync, AiOutlineSolution, AiOutlineFileExclamation, AiOutlineFileText } from "react-icons/ai";
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 export default function LogisticMasterPage() {
+    const navigate = useNavigate();
+
+    const goTo = (route: string) => navigate('/logistic/' + route);
+
     return (
         <>
             <MainContainer title='Inventory'>
                 <div className='col-span-6 '>Master Data</div>
                 <ItemCard title='Driver' icon={<AiOutlineFileSync />} />
-                <ItemCard title='Vehicel' icon={<AiOutlineSolution />} />
+                <ItemCard title='Vehicel' onClick={() => goTo('vehicel')} icon={<AiOutlineSolution />} />
                 <ItemCard title='Route' icon={<AiOutlineFileExclamation />} />
                 <ItemCard title='Check List' icon={<AiOutlineFileExclamation />} />
                 <div className='col-span-6'>Transportation </div>

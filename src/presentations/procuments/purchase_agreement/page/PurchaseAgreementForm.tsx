@@ -28,10 +28,12 @@ class PurchaseAgreementForm extends CoreFormDocument {
             terminateDate: null,
             signingDate: null,
             endDate: null,
-            loading: true
+            loading: true,
+            
+            
         } as any;
 
-
+        console.log(this.props);
         this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
         this.handlerItemChange = this.handlerItemChange.bind(this);
         this.handlerSubmit = this.handlerSubmit.bind(this);
