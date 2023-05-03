@@ -85,6 +85,7 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
 
   const fetchSeries = async (record:any) => {
     setOpenSeries(true)
+    // console.log(record)
     setSeries({ title: record?.row?.original?.ObjectName,isLoading:true, data: [] });
     const payload:any = {
       DocumentTypeParams: {
