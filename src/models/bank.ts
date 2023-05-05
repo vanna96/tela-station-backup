@@ -5,7 +5,6 @@ export default class Bank extends Model {
   code: string;
   name: string;
 
-
   constructor(json: any) {
     super()
 

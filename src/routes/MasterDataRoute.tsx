@@ -10,6 +10,7 @@ import EmployeeDetail from '@/presentations/master/employee/page/EmployeeDetail'
 import SuppilerLists from '@/presentations/master/supplierMasterData/page/SupplierList';
 import SupplierForm from '@/presentations/master/supplierMasterData/page/SupplierForm';
 import SupplierDetails from '@/presentations/master/supplierMasterData/page/SupplierDetails';
+import BusinessPartnerForm from '@/presentations/master/supplierMasterData/page/SupplierForm';
 
 export default function MasterDataRoute() {
     return (
@@ -24,8 +25,8 @@ export default function MasterDataRoute() {
             <Route path='/supplier' >
                 <Route index element={<SuppilerLists />} />
                 <Route path=':id' element={<SupplierDetails />} />
-                <Route path='create' element={<SupplierForm />} />
-                <Route path=':id/edit' element={<SupplierForm edit={true} />} />
+                <Route path='create' element={<BusinessPartnerForm />} />
+                <Route path=':id/edit' element={<SupplierForm edit={true} type={"supplier"} />} />
             </Route>
         </Routes>
     )

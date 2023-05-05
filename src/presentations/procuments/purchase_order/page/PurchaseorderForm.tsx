@@ -27,9 +27,8 @@ class PurchaseOrder extends CoreFormDocument {
       taxDate: null,
       cancelDate: null,
     } as any;
-
-    // this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    // this.handlerAddItem = this.handlerAddItem.bind(this);
+    this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
+    this.handlerItemChange = this.handlerItemChange.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
@@ -87,35 +86,25 @@ class PurchaseOrder extends CoreFormDocument {
     const index = items.findIndex((e: any) => e?.ItemCode === code);
     items.splice(index, 1)
     this.setState({ ...this.state, items: items })
-  }
+}
 
-  handlerAddItem({ value, record, field }: any) {
-    let items = [...(this.state.items ?? [])];
-    let item = this.state.items?.find(
-      (e: any) => e?.itemCode === record?.itemCode
-    );
+handlerItemChange({ value, record, field }: any) {
+    let items = [...this.state.items ?? []];
+    let item = this.state.items?.find((e: any) => e?.itemCode === record?.itemCode);
 
-    if (field === "accountCode") {
-      const account = value as GLAccount;
-      item[field] = account.code;
-      item["accountName"] = account.name;
+    if (field === 'AccountNo') {
+        const account = value as GLAccount;
+        item[field] = account.code;
+        item['AccountName'] = account.name;
     } else {
-      item[field] = value;
+        item[field] = value;
     }
 
-    if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
-      const total = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
-      item['lineTotal'] = total;
-    }
-
-    if (field === 'purchaseVatGroup')
-      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
 
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
-
-    this.setState({ ...this.state, items: items, docTotal: Formular.findTotalBeforeDiscount(items) });
-  }
+    this.setState({ ...this.state, items: items })
+}
 
   async handlerSubmit(event: any) {
     event.preventDefault();

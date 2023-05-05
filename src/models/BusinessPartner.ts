@@ -1,5 +1,4 @@
 import { dateFormat } from "../utilies";
-import { ContactEmployee } from "./BusinessParter";
 import Model from "./Model";
 import {
   MasterDocument,
@@ -7,7 +6,6 @@ import {
   ContactEmployees,
   BPAddresses,
 } from "./interface/index";
-import moment from "moment";
 let index = 1;
 export interface BusinessPatnersProps {
   id: any;
@@ -22,7 +20,6 @@ export interface BusinessPatnersProps {
   contactPerson?: string;
   cardForeignName?: string;
   federalTaxID?: number;
-  // series?: string;
   openOrdersBalance?: number;
   openDeliveryNotesBalance?: number;
   currentAccountBalance?: number;
@@ -48,7 +45,7 @@ export interface BusinessPatnersProps {
   validFrom?: string;
   validTo?: string;
   validRemarks?: string;
-  name?: string;
+  // name?: string;
   firstName?: string;
   middleName?: string;
   lastName?: string;
@@ -114,13 +111,42 @@ export interface BusinessPatnersProps {
   instructionKey?: string;
   freeText?: string;
   defaultBankCode?: string;
-  // contactEmployees: BusinessPartnersContactEmployeesProps[];
-  // bPAddresses: BusinessPartnersBPAddresses[];
+  bPAddresses: BusinessPartnersBPAddresses[];
+  contactEmployees: BusinessPartnersContactEmployees[];
 }
 export interface BusinessPartnersBPAddresses {
   addressName?: string | undefined;
   addressName2?: string | undefined;
   addressName3?: string | undefined;
+}
+export interface BusinessPartnersContactEmployees {
+  name?: string | undefined;
+  cardCode?: number | undefined;
+  position?: string | undefined;
+  address?: string | undefined;
+  phone1?: number | undefined;
+  phone2?: number | undefined;
+  mobilePhone?: number | undefined;
+  fax?: string | undefined;
+  e_Mail?: string | undefined;
+  pager?: string | undefined;
+  remarks1?: string | undefined;
+  remarks2?: string | undefined;
+  password?: number | undefined;
+  internalCode?: number | undefined;
+  placeOfBirth?: string | undefined;
+  dateOfBirth?: string | undefined;
+  gender?: string | string;
+  profession?: string | undefined;
+  title?: string | undefined;
+  cityOfBirth?: string | undefined;
+  firstName?: string | undefined;
+  middleName?: string | undefined;
+  lastName?: string | undefined;
+  emailGroupCode?: number | undefined;
+  connectedAddressName?: string | undefined;
+  connectedAddressType?: string | undefined;
+  foreignCountry?: string | undefined;
 }
 
 export default class BusinessPatners extends Model {
@@ -137,7 +163,6 @@ export default class BusinessPatners extends Model {
   contactPerson?: string;
   cardForeignName?: string;
   federalTaxID?: number;
-  // series?: string;
   currency?: number;
   openOrdersBalance?: number;
   openDeliveryNotesBalance?: number;
@@ -147,7 +172,7 @@ export default class BusinessPatners extends Model {
   cellular?: number;
   fax?: number;
   website?: string;
-  shippingType?: number;
+  shippingType?: string;
   password?: number;
   indicator?: number;
   projectCode?: string;
@@ -164,7 +189,7 @@ export default class BusinessPatners extends Model {
   validFrom?: string;
   validTo?: string;
   validRemarks?: string;
-  name?: string;
+  // name?: string;
   firstName?: string;
   middleName?: string;
   lastName?: string;
@@ -229,8 +254,8 @@ export default class BusinessPatners extends Model {
   instructionKey?: string;
   emailAddress?: string;
   defaultBankCode?: string;
-  // bPAddresses: BusinessPartnersBPAddresses[];
-
+  bPAddresses: BusinessPartnersBPAddresses[];
+  contactEmployees: BusinessPartnersContactEmployees[];
   constructor(json: any) {
     super();
     this.index = index++;
@@ -245,7 +270,6 @@ export default class BusinessPatners extends Model {
     this.contactPerson = json["ContactPerson"];
     this.cardForeignName = json["CardForeignName"];
     this.federalTaxID = json["FederalTaxID"];
-    // this.series = json['Series'];
     this.paymentBlockDescription = json["PaymentBlockDescription"];
     this.currency = json["Currency"];
     this.emailAddress = json["EmailAddress"];
@@ -275,7 +299,7 @@ export default class BusinessPatners extends Model {
     this.validFrom = json["ValidFrom"];
     this.validTo = json["ValidTo"];
     this.validRemarks = json["ValidRemarks"];
-    this.name = json["Name"];
+    // this.name = json["Name"];
     this.firstName = json["FirstName"];
     this.middleName = json["MiddleName"];
     this.lastName = json["LastName"];
@@ -338,7 +362,12 @@ export default class BusinessPatners extends Model {
     this.downPaymentClearAct = json["DownPaymentClearAct"];
     this.planningGroup = json["PlanningGroup"];
     this.defaultBankCode = json["DefaultBankCode"];
-    // this.bPAddresses = json['BPAddresses']?.map((e: any) => new BusinessPartnersBPAddresses(e));
+    this.contactEmployees = json["ContactEmployees"]?.map(
+      (e: any) => new BusinessPartnersContactEmployees(e)
+    );
+    this.bPAddresses = json["BPAddresses"]?.map(
+      (e: any) => new BusinessPartnersBPAddresses(e)
+    );
   }
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
@@ -349,6 +378,7 @@ export default class BusinessPatners extends Model {
 
     return {
       EmployeeID: json["employeeID"],
+      FreeText: json["freeText"],
       PayTermsGrpCode: json["payTermsGrpCode"],
       CardName: json["cardName"],
       CardCode: json["cardCode"],
@@ -357,7 +387,6 @@ export default class BusinessPatners extends Model {
       ContactPerson: json["contactPerson"],
       CardForeignName: json["cardForeignName"],
       FederalTaxID: json["federalTaxID"],
-      // "Series": json['series'],
       PaymentBlockDescription: json["paymentBlockDescription"],
       Currency: json["currency"],
       EmailAddress: json["emailAddress"],
@@ -389,11 +418,10 @@ export default class BusinessPatners extends Model {
       ValidFrom: json["validFrom"],
       ValidTo: json["validTo"],
       ValidRemarks: json["validRemarks"],
-      Name: json["name"],
+      // "Name": json["name"],
       firstName: json["firstName"],
       LastName: json["lastName"],
       MiddleName: json["middleName"],
-      // "title": json['title'],
       Position: json["position"],
       Address: json["address"],
       MobilePhone: json["mobilePhone"],
@@ -451,24 +479,32 @@ export default class BusinessPatners extends Model {
       DownPaymentClearAct: json["downPaymentClearAct"],
       PlanningGroup: json["planningGroup"],
       DefaultBankCode: json["defaultBankCode"],
-      // "BPAddresses": json['bPAddresses'].map((e: any) => BusinessPartnersBPAddresses),
+      ContactEmployees: json["contactEmployees"]?.map((e: any) =>
+        BusinessPartnersContactEmployees.toCreate(e)
+      ),
+      BPAddresses: json["bPAddresses"]?.map((e: any) =>
+        BusinessPartnersBPAddresses.toCreate(e)
+      ),
     };
   }
   public static toUpdate(json: any) {
     return {
       EmployeeID: json["employeeID"],
-      DefaultBankCode: json["defaultBankCode"],
+      FreeText: json["freeText"],
       PayTermsGrpCode: json["payTermsGrpCode"],
-      CardCode: json["cardCode"],
       CardName: json["cardName"],
+      CardCode: json["cardCode"],
       CardType: json["cardType"],
       GroupCode: json["groupCode"],
       ContactPerson: json["contactPerson"],
       CardForeignName: json["cardForeignName"],
       FederalTaxID: json["federalTaxID"],
-      // "Series": json['series'],
       PaymentBlockDescription: json["paymentBlockDescription"],
       Currency: json["currency"],
+      EmailAddress: json["emailAddress"],
+      InstructionKey: json["instructionKey"],
+      LinkedBusinessPartner: json["linkedBusinessPartner"],
+      Freetext: json["freetext"],
       OpenOrdersBalance: json["openOrdersBalance"],
       OpenDeliveryNotesBalance: json["openDeliveryNotesBalance"],
       CurrentAccountBalance: json["currentAccountBalance"],
@@ -476,7 +512,6 @@ export default class BusinessPatners extends Model {
       Phone2: json["phone2"],
       Cellular: json["cellular"],
       Fax: json["fax"],
-      Freetext: json["freetext"],
       Website: json["website"],
       ShippingType: json["shippingType"],
       Password: json["password"],
@@ -484,7 +519,6 @@ export default class BusinessPatners extends Model {
       ProjectCode: json["projectCode"],
       Industry: json["industry"],
       CompanyPrivate: json["companyPrivate"],
-      InstructionKey: json["instructionKey"],
       AdditionalID: json["additionalID"],
       UnifiedFederalTaxID: json["unifiedFederalTaxID"],
       Notes: json["notes"],
@@ -496,11 +530,10 @@ export default class BusinessPatners extends Model {
       ValidFrom: json["validFrom"],
       ValidTo: json["validTo"],
       ValidRemarks: json["validRemarks"],
-      Name: json["name"],
+      // "Name": json["name"],
       firstName: json["firstName"],
       LastName: json["lastName"],
       MiddleName: json["middleName"],
-      // "Title": json['title'],
       Position: json["position"],
       Address: json["address"],
       MobilePhone: json["mobilePhone"],
@@ -539,7 +572,6 @@ export default class BusinessPatners extends Model {
       AccountNo: json["accountNo"],
       BICSwiftCode: json["bICSwiftCode"],
       DefaultBranch: json["defaultBranch"],
-      LinkedBusinessPartner: json["linkedBusinessPartner"],
       IBAN: json["iBAN"],
       MandateID: json["mandateID"],
       SignatureDate: json["signatureDate"],
@@ -558,8 +590,13 @@ export default class BusinessPatners extends Model {
       DownPaymentInterimAccount: json["downPaymentInterimAccount"],
       DownPaymentClearAct: json["downPaymentClearAct"],
       PlanningGroup: json["planningGroup"],
-      EmailAddress: json["emailAddress"],
-      // "BPAddresses": json['bPAddresses'].map((e: any) => BusinessPartnersBPAddresses),
+      DefaultBankCode: json["defaultBankCode"],
+      ContactEmployees: json["contactEmployees"]?.map((e: any) =>
+        BusinessPartnersContactEmployees.toCreate(e)
+      ),
+      BPAddresses: json["bPAddresses"]?.map((e: any) =>
+        BusinessPartnersBPAddresses.toCreate(e)
+      ),
     };
   }
   public static getCompany(companyPrivate: string | null): string {
@@ -605,23 +642,178 @@ export default class BusinessPatners extends Model {
 }
 export class BusinessPartnersBPAddresses extends Model implements BPAddresses {
   addressName?: string | undefined;
-  addressNam2?: string | undefined;
-  addressNam3?: string | undefined;
-
+  addressName2?: string | undefined;
+  addressName3?: string | undefined;
+  street?: string | undefined;
+  block?: string | undefined;
+  zipCode?: string | undefined;
+  city?: string | undefined;
+  county?: string | undefined;
+  country?: string | undefined;
+  state?: string | undefined;
+  federalTaxID?: string | undefined;
+  taxCode?: string | undefined;
+  buildingFloorRoom?: string | undefined;
+  streetNo?: string | undefined;
+  bPCode?: string | undefined;
+  globalLocationNumber?: string | undefined;
+  createDate?: string | undefined;
+  addressType?: string | undefined;
   constructor(json: any) {
     super();
     this.addressName = json["AddressName"];
     this.addressName2 = json["AddressName2"];
     this.addressName3 = json["AddressName3"];
+    this.street = json["Street"];
+    this.block = json["Block"];
+    this.zipCode = json["ZipCode"];
+    this.city = json["City"];
+    this.county = json["County"];
+    this.country = json["Country"];
+    this.state = json["State"];
+    this.federalTaxID = json["FederalTaxID"];
+    this.taxCode = json["TaxCode"];
+    this.buildingFloorRoom = json["BuildingFloorRoom"];
+    this.streetNo = json["StreetNo"];
+    this.bPCode = json["BPCode"];
+    this.globalLocationNumber = json["GlobalLocationNumber"];
+    this.createDate = json["CreateDate"];
+    this.addressType = json["AddressType"];
+
   }
   toJson(update: boolean) {
     throw new Error("Method not implemented.");
   }
-  public static toCreate(json: any, type: any) {
+  public static toCreate(json: any) {
     let line = {
       AddressName: json["addressName"],
       AddressName2: json["addressName2"],
       AddressName3: json["addressName3"],
+      Street: json["street"],
+      Block: json["block"],
+      ZipCode: json["zipCode"],
+      City: json["city"],
+      County: json["county"],
+      Country: json["country"],
+      State: json["state"],
+      FederalTaxID: json["federalTaxID"],
+      TaxCode: json["taxCode"],
+      BuildingFloorRoom: json["buildingFloorRoom"],
+      StreetNo: json["streetNo"],
+      BPCode: json["bPCode"],
+      GlobalLocationNumber: json["globalLocationNumber"],
+      CreateDate: json["createDate"],
+      
+      addressType: json["AddressType"],
+
+
+    };
+    return line;
+  }
+}
+
+export class BusinessPartnersContactEmployees
+  extends Model
+  implements ContactEmployees
+{
+  name?: string | undefined;
+  cardCode?: number | undefined;
+  position?: string | undefined;
+  address?: string | undefined;
+  phone1?: number | undefined;
+  phone2?: number | undefined;
+  mobilePhone?: number | undefined;
+  fax?: string | undefined;
+  e_Mail?: string | undefined;
+  pager?: string | undefined;
+  remarks1?: string | undefined;
+  remarks2?: string | undefined;
+  password?: number | undefined;
+  internalCode?: number | undefined;
+  placeOfBirth?: string | undefined;
+  dateOfBirth?: string | undefined;
+  gender?: string | string;
+  profession?: string | undefined;
+  title?: string | undefined;
+  cityOfBirth?: string | undefined;
+  firstName?: string | undefined;
+  middleName?: string | undefined;
+  lastName?: string | undefined;
+  emailGroupCode?: number | undefined;
+  connectedAddressName?: string | undefined;
+  connectedAddressType?: string | undefined;
+  foreignCountry?: string | undefined;
+  addressType?: string | undefined;
+  // contactEmployees?: any[] | undefined;
+
+  constructor(json: any) {
+    super();
+    this.name = json["Name"];
+    this.cardCode = json["CardCode"];
+    this.position = json["Position"];
+    this.address = json["Address"];
+    this.phone1 = json["Phone1"];
+    this.phone2 = json["Phone2"];
+    this.mobilePhone = json["MobilePhone"];
+    this.fax = json["Fax"];
+    this.e_Mail = json["E_Mail"];
+    this.pager = json["Pager"];
+    this.remarks1 = json["Remarks1"];
+    this.remarks2 = json["Remarks2"];
+    this.password = json["Password"];
+    this.internalCode = json["InternalCode"];
+    this.placeOfBirth = json["PlaceOfBirth"];
+    this.dateOfBirth = json["DateOfBirth"];
+    this.gender = json["Gender"];
+    this.profession = json["Profession"];
+    this.title = json["Title"];
+    this.cityOfBirth = json["CityOfBirth"];
+    this.firstName = json["FirstName"];
+    this.middleName = json["MiddleName"];
+    this.lastName = json["LastName"];
+    this.emailGroupCode = json["EmailGroupCode"];
+    this.connectedAddressName = json["ConnectedAddressName"];
+    this.connectedAddressType = json["ConnectedAddressType"];
+    this.foreignCountry = json["ForeignCountry"];
+    this.addressType = json["AddressType"];
+
+    // this.contactEmployees = json['ContactEmployees']
+  }
+  toJson(update: boolean) {
+    throw new Error("Method not implemented.");
+  }
+  public static toCreate(json: any) {
+    let line = {
+      Name: json["name"],
+      CardCode: json["cardCode"],
+      Position: json["position"],
+      Address: json["address"],
+      Phone1: json["phone1"],
+      Phone2: json["phone2"],
+      MobilePhone: json["mobilePhone"],
+      Fax: json["fax"],
+      E_Mail: json["e_Mail"],
+      Pager: json["pager"],
+      Remarks1: json["remarks1"],
+      Remarks2: json["remarks2"],
+      Password: json["password"],
+      InternalCode: json["internalCode"],
+      PlaceOfBirth: json["placeOfBirth"],
+      DateOfBirth: json["dateOfBirth"],
+      Gender: json["gender"],
+      Profession: json["profession"],
+      Title: json["title"],
+      CityOfBirth: json["cityOfBirth"],
+      FirstName: json["firstName"],
+      MiddleName: json["middleName"],
+      LastName: json["lastName"],
+      EmailGroupCode: json["emailGroupCode"],
+      ConnectedAddressName: json["connectedAddressName"],
+      ConnectedAddressType: json["connectedAddressType"],
+      ForeignCountry: json["foreignCountry"],
+      ContactEmployees: json["contactEmployees"],
+      AddressType: json["addressType"],
+
     };
     return line;
   }

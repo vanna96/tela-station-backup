@@ -1,22 +1,14 @@
 import FormCard from "@/components/card/FormCard";
-import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
-import BranchSelect from "@/components/selectbox/Branch";
 import BuyerSelect from "@/components/selectbox/buyer";
-import DepartmentSelect from "@/components/selectbox/Department";
 import IndustrySelect from "@/components/selectbox/Industry";
 import MUISelect from "@/components/selectbox/MUISelect";
-import ManagerSelect from "@/components/selectbox/Manager";
-import PositionSelect from "@/components/selectbox/Position";
 import ShippingType from "@/components/selectbox/ShippingType";
 import TerritorySelect from "@/components/selectbox/Territory";
-import UsersSelect from "@/components/selectbox/UserCode";
-import { ContactEmployee } from "@/models/BusinessParter";
-import { Checkbox } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
 export interface IGeneralFormProps {
-  //   handlerOpenVendor: () => void;
+  handlerOpenProject?: () => void;
   handlerChange: (key: string, value: any) => void;
   data: any;
   edit?: boolean;
@@ -26,6 +18,7 @@ export default function General({
   data,
   edit,
   handlerChange,
+  handlerOpenProject,
 }: IGeneralFormProps) {
   return (
     <>
@@ -69,10 +62,12 @@ export default function General({
               }
             />
             <MUITextField
-              label="Web Site"
-              value={data?.website}
+              label="Website"
               name="Website"
-              onChange={(e: any) => handlerChange("website", e.target.value)}
+              value={data?.website}
+              onChange={(e: any) =>
+                handlerChange("website", e.target.value)
+              }
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -100,13 +95,12 @@ export default function General({
               name="Indicator"
               onChange={(e: any) => handlerChange("indicator", e.target.value)}
             />
-            <MUITextField
-              label="Web Site"
-              value={data?.projectCode}
+           <MUITextField
+              label="Business Partner Project"
               name="ProjectCode"
-              onChange={(e: any) =>
-                handlerChange("projectCode", e.target.value)
-              }
+              value={data?.project}
+              endAdornment={true}
+              onClick={handlerOpenProject}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -122,10 +116,7 @@ export default function General({
               </div>
             </div>
             <div>
-              <label
-                htmlFor="Code"
-                className="text-gray-500 text-[14px]"
-              >
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
                 Type of Business
               </label>
 
@@ -160,6 +151,7 @@ export default function General({
             <MUITextField
               label="Contact Person"
               value={data?.contactPerson}
+              disabled
               name="ContactPerson"
               onChange={(e: any) =>
                 handlerChange("contactPerson", e.target.value)
@@ -221,7 +213,8 @@ export default function General({
                 fullWidth
                 name="Notes"
                 value={data?.notes}
-              />
+                onChange={(e) => handlerChange("notes", e.target.value)}
+                />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3 mt-2">
@@ -229,7 +222,9 @@ export default function General({
               label="GLN"
               value={data?.globalLocationNumber}
               name="GlobalLocationNumber"
-              onChange={(e: any) => handlerChange("globalLocationNumber", e.target.value)}
+              onChange={(e: any) =>
+                handlerChange("globalLocationNumber", e.target.value)
+              }
             />
           </div>
         </div>

@@ -2,10 +2,12 @@ import FormCard from "@/components/card/FormCard";
 import { TextField } from "@mui/material";
 export interface IRemarkProps {
   data: any;
+  handlerChange: (key: string, value: any) => void;
+
   edit?: boolean;
 }
 
-export default function Remark({ data, edit }: IRemarkProps) {
+export default function Remark({ data, edit, handlerChange }: IRemarkProps) {
   return (
     <>
       <FormCard title="Remark">
@@ -22,6 +24,7 @@ export default function Remark({ data, edit }: IRemarkProps) {
                 fullWidth
                 name="FreeText"
                 value={data?.freeText}
+                onChange={(e) => handlerChange("freeText", e.target.value)}
               />
             </div>
           </div>

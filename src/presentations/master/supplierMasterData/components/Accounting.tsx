@@ -1,18 +1,6 @@
 import FormCard from "@/components/card/FormCard";
 import AccountTextField from "@/components/input/AccountTextField";
 import MUITextField from "@/components/input/MUITextField";
-import GLAccountModal from "@/components/modal/GLAccountModal";
-import BankChargesAllocationCodesSelect from "@/components/selectbox/BankChargesAllocationCodes";
-import CountrySelect from "@/components/selectbox/Country";
-import HolidaySelect from "@/components/selectbox/Holidays";
-import HouseBankAccounts from "@/components/selectbox/HouseBankAccount";
-import MUISelect from "@/components/selectbox/MUISelect";
-import PaymentBlockSelect from "@/components/selectbox/PaymentBlock";
-import PaymentTerm from "@/components/selectbox/PaymentTerm";
-import PriceListSelect from "@/components/selectbox/PriceList";
-import PrioritySelect from "@/components/selectbox/Priority";
-import BankSelect from "@/components/selectbox/bank";
-import PaymentBlock from "@/models/PaymentBlock";
 import { Checkbox } from "@mui/material";
 
 export interface IAccouttingProps {
@@ -109,11 +97,10 @@ export default function Accounting({
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Vendor Code"
-              value={data?.cardCode}
-              disabled={edit}
-              name="CardCode"
+              value={data?.linkedBusinessPartner}
+              name="LinkedBusinessPartner"
               onClick={handlerOpenVendor}
-              endAdornment={!edit}
+              endAdornment={true}
             />
             <MUITextField
               label="Planning Group"

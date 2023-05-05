@@ -33,7 +33,7 @@ export default function PaymentTerms({
               </label>
               <PaymentTerm
                 name="PayTermsGrpCode"
-                value={data.payTermsGrpCode}
+                value={data?.payTermsGrpCode}
                 onChange={(e) =>
                   handlerChange("payTermsGrpCode", e.target.value)
                 }

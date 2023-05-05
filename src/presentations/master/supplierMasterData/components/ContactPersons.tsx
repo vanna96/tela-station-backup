@@ -1,212 +1,418 @@
+import React, { useCallback } from "react";
+import MaterialReactTable from "material-react-table";
+import { Button, Checkbox, TextField } from "@mui/material";
+import MUITextField from "../../../../components/input/MUITextField";
+import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineSetting } from "react-icons/ai";
 import FormCard from "@/components/card/FormCard";
-import MUIDatePicker from "@/components/input/MUIDatePicker";
-import MUITextField from "@/components/input/MUITextField";
-import CountrySelect from "@/components/selectbox/Country";
+import ContactPersonModal from "./ContactPersonModal";
+import { ContactEmployee } from '../../../../models/BusinessParter';
 import EmailGroupSelect from "@/components/selectbox/EmailGroup";
 import MUISelect from "@/components/selectbox/MUISelect";
 
-export interface IContactPersonFormProps {
-  //   handlerOpenVendor: () => void;
+export interface ContactPersonProps {
+  handlerChangeItem: (record: any) => void;
+  handlerRemoveItem: (record: string) => void;
   handlerChange: (key: string, value: any) => void;
+  open: boolean;
+  onClose: () => void;
+  onOk: (person: any) => void;
   data: any;
-  edit?: boolean;
+  handlerOpenContactPerson: () => void;
 }
 
-export default function ContactPerson({
-  data,
-  edit,
-  handlerChange,
-}: IContactPersonFormProps) {
-  return (
-    <>
-      <FormCard title="ContactPerson">
-        <div className="flex flex-col gap-2 mt-2">
-          <div className="grid grid-cols-2 gap-3">
+export default function ContactPerson(props: ContactPersonProps) {
+  const [tableKey, setTableKey] = React.useState(Date.now());
+  const [handlerOpenContactperson, setHandlerOpenContactperson] = React.useState<boolean>(false);
+  const {data,handlerChangeItem,handlerRemoveItem,handlerOpenContactPerson} = props
+  const handlerChangeInput = (event: any, row: any, field: any) => {
+    handlerChangeItem({ value: event.target.value, record: row, field });
+  };
+  const handlerRemoveRow = (row: any) => {
+    handlerRemoveItem(row.CardCode);
+  };
+
+  const itemColumns = React.useMemo(
+    () => [
+      {
+        accessorKey: "Action",
+        header: "",
+        size: 60,
+        enableResizing: false,
+        Cell: ({ cell }: any) => {
+          // return ;
+          return (
+            <Button
+              size="small"
+              color="error"
+              onClick={() => handlerRemoveRow(cell.row.original)}
+            >
+              <AiOutlineDelete />
+            </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "name",
+        header: "Contact ID", //uses the default width from defaultColumn prop
+        Cell: ({ cell }: any) => {
+          // return ;
+
+          // console.log(cell)
+
+          return (
             <MUITextField
-              label="Contact ID"
-              value={data?.name}
-              name="Name"
-              onChange={(e: any) => handlerChange("name", e.target.value)}
+              defaultValue={cell.getValue()}
+              endAdornment
+              onChange={(event) => handlerChangeInput(event,cell?.row?.original, "name")}
+             
+              
             />
+           
+          );
+        },
+      },
+
+      {
+        accessorKey: "firstName",
+        header: "First Name",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="First Name"
-              value={data?.firstName}
-              name="FirstName"
-              onChange={(e: any) => handlerChange("firstName", e.target.value)}
+              defaultValue={cell.getValue()}
+              onChange={(event) => handlerChangeInput(event,  cell?.row?.original, "firstName")}
             />
+          );
+        },
+      },
+      {
+        accessorKey: "middleName",
+        header: "Middle Name",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="Middle Name"
-              value={data?.middleName}
-              name="MiddleName"
-              onChange={(e: any) => handlerChange("middleName", e.target.value)}
+              defaultValue={cell.getValue()}
+              onChange={(event) => handlerChangeInput(event,  cell?.row?.original, "middleName")}
             />
+          );
+        },
+      },
+      {
+        accessorKey: "lastName",
+        header: "Last Name",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="Last Name"
-              value={data?.lastName}
-              name="LastName"
-              onChange={(e: any) => handlerChange("lastName", e.target.value)}
+              defaultValue={cell.getValue()}
+              onChange={(event) => handlerChangeInput(event, cell?.row?.original, "lastName")}
             />
+          );
+        },
+      },
+      {
+        accessorKey: "position",
+        header: "Position",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="Title"
-              value={data?.title}
-              name="Title"
-              onChange={(e: any) => handlerChange("title", e.target.value)}
-            />
-            <MUITextField
-              label="Position"
-              value={data?.position}
-              name="Position"
-              onChange={(e: any) => handlerChange("position", e.target.value)}
-            />
-            <MUITextField
-              label="Address"
-              value={data?.address}
-              name="Address"
-              onChange={(e: any) => handlerChange("address", e.target.value)}
-            />
-            <MUITextField
-              label="TelePhone 1"
-              value={data?.phone1}
-              name="Phone1"
-              onChange={(e: any) => handlerChange("phone1", e.target.value)}
-            />
-            <MUITextField
-              label="TelePhone 2"
-              value={data?.phone2}
-              name="Phone2"
-              onChange={(e: any) => handlerChange("phone2", e.target.value)}
-            />
-            <MUITextField
-              label="Mobile Phone"
-              value={data?.mobilePhone}
-              name="MobilePhone"
-              onChange={(e: any) =>
-                handlerChange("mobilePhone", e.target.value)
+              defaultValue={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "position")
               }
             />
+          );
+        },
+      },
+      {
+        accessorKey: "address",
+        header: "Address",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="Fax"
-              value={data?.fax}
-              name="Fax"
-              onChange={(e: any) => handlerChange("fax", e.target.value)}
+              defaultValue={cell?.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "address")
+              }
             />
+          );
+        },
+      },
+      {
+        accessorKey: "phone1",
+        header: "TelePhone 1",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="E-Mail"
-              value={data?.e_Mail}
-              name="E_Mail"
-              onChange={(e: any) => handlerChange("e_Mail", e.target.value)}
+              defaultValue={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "phone1")
+              }
             />
-          </div>
-        </div>
-        <div className="flex flex-col gap-2 mt-2">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                E-Mail Group
-              </label>
-              <EmailGroupSelect
-                name="EmailGroupCode"
-                value={data?.emailGroupCode}
-                onChange={(e) =>
-                  handlerChange("emailGroupCode", e.target.value)
-                }
-              />
-            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "phone2",
+        header: "Telephone 2",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="Pager"
-              value={data?.pager}
-              name="Pager"
-              onChange={(e: any) => handlerChange("pager", e.target.value)}
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "phone2")
+              }
             />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
+          );
+        },
+      },
+      {
+        accessorKey: "mobilePhone",
+        header: "Mobile Phone",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="Remark1"
-              value={data?.remarks1}
-              name="Remarks1"
-              onChange={(e: any) => handlerChange("remarks1", e.target.value)}
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "mobilePhone")
+              }
             />
+          );
+        },
+      },
+      {
+        accessorKey: "fax",
+        header: "Fax",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="Remark2"
-              value={data?.remarks2}
-              name="Remarks2"
-              onChange={(e: any) => handlerChange("remarks2", e.target.value)}
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "fax")
+              }
             />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
+          );
+        },
+      },
+      {
+        accessorKey: "e_Mail",
+        header: "E-Mail",
+        Cell: ({ cell }: any) => {
+          return (
             <MUITextField
-              label="Password"
-              value={data?.password}
-              name="Password"
-              onChange={(e: any) => handlerChange("password", e.target.value)}
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "e_Mail")
+              }
             />
-            <div>
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Country/Region Of Birth
-              </label>
-              <CountrySelect
-                value={data?.placeOfBirth}
-                name="PlaceOfBirth"
-                onChange={(e: any) =>
-                  handlerChange("placeOfBirth", e.target.value)
-                }
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Date Of Birth
-              </label>
-              <div className="">
-                <MUIDatePicker
-                  error={data?.message?.includes("DateOfBirth")}
-                  value={data.dateOfBirth}
-                  onChange={(e: any) => handlerChange("dateOfBirth", e)}
-                />
-              </div>
-            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "emailGroupCode",
+        header: "Email-Group",
+        Cell: ({ cell }: any) => {
+          return (
+            <EmailGroupSelect
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "emailGroupCode")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "pager",
+        header: "Pager",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "pager")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "remarks1",
+        header: "Remark 1",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "remark1")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "remarks2",
+        header: "Remark 2",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "remark2")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "password",
+        header: "Password",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "remark1")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "placeOfBirth",
+        header: "Country/Region Of Birth",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "placeOfBirth")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "dateOfBirth",
+        header: "DateOfBirth",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "remark1")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "gender",
+        header: "Gender",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "remark1")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "profession",
+        header: "Profession",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "profession")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "cityOfBirth",
+        header: "CityOfBirth",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "cityOfBirth")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "connectedAddressName",
+        header: "Connected Address",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(
+                  event,
+                  cell?.row?.original,
+                  "connectedAddressName"
+                )
+              }
+            />
+          );
+        },
+      }
+    ],
+    []
+  );
+  console.log(data.contactEmployees);
 
-            <div>
-              <label className="text-gray-500 text-[14px]">Gender</label>
-              <MUISelect
-                items={[
-                  { name: "Female", value: "F" },
-                  { name: "Male", value: "gt_Male" },
-                ]}
-                aliaslabel="name"
-                aliasvalue="value"
-                name="Gender"
-                value={data?.gender}
-                onChange={(e) => handlerChange("gender", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <MUITextField
-              label="Profession"
-              value={data?.profession}
-              name="Profession"
-              onChange={(e: any) => handlerChange("profession", e.target.value)}
-            />
-            <MUITextField
-              label="City Of Birth"
-              value={data?.cityOfBirth}
-              name="CityOfBirth"
-              onChange={(e: any) => handlerChange("cityOfBirth", e.target.value)}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <MUITextField
-              label="Connected Address"
-              value={data?.connectedAddressName}
-              name="ConnectedAddressName"
-              onChange={(e: any) => handlerChange("connectedAddressName", e.target.value)}
-            />
-            
-          </div>
+  return (
+    <FormCard title="Contact Person">
+      <div className="col-span-2 data-table">
+      
+        <div className="flex flex-col-reverse">
+          <MaterialReactTable
+            key={tableKey}
+            columns={itemColumns}
+            data={data.contactEmployees ?? []}
+            enableStickyHeader={true}
+            enableColumnActions={false}
+            enableColumnFilters={false}
+            enablePagination={false}
+            enableSorting={false}
+            enableBottomToolbar={false}
+            enableTopToolbar={true}
+            enableColumnResizing={true}
+            enableColumnFilterModes={false}
+            enableDensityToggle={false}
+            enableFilters={false}
+            enableFullScreenToggle={false}
+            enableGlobalFilter={false}
+            enableHiding={true}
+            icons={{
+              ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />,
+            }}
+            renderTopToolbarCustomActions={({ table }) => {
+              return (
+                <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
+                  <Button variant="outlined" size="small" >
+                    <span
+                      className="text-xs  capitalize font-normal"
+                      onClick={handlerOpenContactPerson}
+                    >
+                      + Define New
+                    </span>
+                  </Button>
+                </div>
+              );
+            }}
+          />
         </div>
-      </FormCard>
-    </>
+      </div>
+    </FormCard>
   );
 }
