@@ -7,6 +7,9 @@ import SaleMasterPage from '@/presentations/sale';
 import LogisticMasterPage from '../presentations/logistic/index';
 import VehicelLists from '@/presentations/logistic/vehicel';
 import VehicelForm from '@/presentations/logistic/vehicel/component/VehicelForm';
+import RouteMasterList from '@/presentations/logistic/route_master';
+import RouteMasterForm from '@/presentations/logistic/route_master/page/RouteMasterForm';
+import RouteMasterDetails from '@/presentations/logistic/route_master/page/RouteMasterDetails';
 
 export default function LogisticRoute() {
     return (
@@ -17,6 +20,13 @@ export default function LogisticRoute() {
                 <Route path=':id' element={<VehicelForm />} />
                 <Route path='create' element={<VehicelForm />} />
                 <Route path=':id/edit' element={<VehicelForm edit={true} />} />
+
+            </Route>
+            <Route path='/route-master' >
+                <Route index element={<RouteMasterList />} />
+                <Route path=':id' element={<RouteMasterDetails />} />
+                <Route path='create' element={<RouteMasterForm />} />
+                <Route path=':id/edit' element={<RouteMasterForm edit={true} />} />
 
             </Route>
 
