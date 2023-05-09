@@ -71,6 +71,14 @@ export default function GeneralForm({ data, handlerChange, edit }: IGeneralFormP
                         </div>
                     </div>
                 </div>
+                <div className='grid grid-cols-2 gap-3'>
+                    <div className='flex flex-col gap-1 text-sm'>
+                        <label htmlFor='Code' className='text-gray-500 text-[14px]'>Price Mode</label>
+                        <div className=''>
+                            <ShippingType name="ShippingType" disabled={data?.isApproved} value={data.shippingType} onChange={(e) => handlerChange('shippingType', e.target.value)} />
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className='flex flex-col gap-2'>
                 <div className='grid grid-cols-2 gap-3'>
@@ -104,7 +112,7 @@ export default function GeneralForm({ data, handlerChange, edit }: IGeneralFormP
 
                 <div className='flex flex-col gap-1 text-sm'>
                     <label htmlFor='Code' className='text-gray-500 text-[14px]'>Reminder</label>
-                    <div className='grid grid-cols-3 gap-3'>
+                    <div className='grid grid-cols-4 gap-3'>
                         <TextField
                             size='small'
                             type='number'

@@ -19,7 +19,8 @@ export default class itemRepository extends Repository<Item> {
         "InventoryUoMEntry",
         "InventoryUOM",
         "DefaultSalesUoMEntry",
-        "DefaultPurchasingUoMEntry"
+        "DefaultPurchasingUoMEntry",
+        "ItemUnitOfMeasurementCollection"
     ];
 
     private static url1 = '/Items';
@@ -37,7 +38,8 @@ export default class itemRepository extends Repository<Item> {
         "InventoryUoMEntry",
         "InventoryUOM",
         "DefaultSalesUoMEntry",
-        "DefaultPurchasingUoMEntry"
+        "DefaultPurchasingUoMEntry",
+        "ItemUnitOfMeasurementCollection"
     ];
 
     async get<Item>(query?: string | undefined): Promise<Item[]> {
@@ -49,9 +51,9 @@ export default class itemRepository extends Repository<Item> {
 
         if (!response) return [];
 
-        
+
         return response;
-    } 
+    }
 
 
     public static async getAll<Item>(query?: string | undefined): Promise<Item[]> {

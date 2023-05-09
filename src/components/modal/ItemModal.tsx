@@ -13,7 +13,6 @@ import VatGroup from '@/models/VatGroup';
 import ItemGroupRepository from '@/services/actions/itemGroupRepository';
 import UnitOfMeasurementRepository from '@/services/actions/unitOfMeasurementRepository';
 
-
 type ItemType = 'purchase' | 'sale' | 'inventory';
 
 interface ItemModalProps {
@@ -111,7 +110,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 total: 0
             })
         });
-console.log(selectItems)
+        console.log(selectItems)
         onOk(selectItems)
     }
 

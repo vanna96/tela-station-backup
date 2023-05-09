@@ -23,6 +23,7 @@ import PriceListRepository from '@/services/actions/pricelistRepository';
 import UsersRepository from '@/services/actions/usersRepository';
 import CustomsGroupRepository from '@/services/actions/customsGroupRepository';
 import ManufacturerRepository from '@/services/actions/manufacturerRepository';
+import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
@@ -53,6 +54,7 @@ export default function Login() {
     Promise.all([
       await new ItemGroupRepository().get(),
       await new UnitOfMeasurementRepository().get(),
+      await new UnitOfMeasurementGroupRepository().get(),
       await new DepartmentRepository().get(),
       await new PaymentMethodRepository().get(),
       await new PaymentTermTypeRepository().get(),

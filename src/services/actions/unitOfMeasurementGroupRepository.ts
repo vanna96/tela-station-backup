@@ -3,12 +3,12 @@ import UnitOfMeasurement from "@/models/UnitOfMeasurement";
 import Encryption from "@/utilies/encryption";
 import request from "@/utilies/request";
 
-export default class UnitOfMeasurementRepository extends Repository<UnitOfMeasurement> {
+export default class UnitOfMeasurementGroupRepository extends Repository<UnitOfMeasurement> {
 
-    url = '/UnitOfMeasurements?$select=AbsEntry,Code,Name';
+    url = '/UnitOfMeasurementGroups?$select=AbsEntry,Code,Name,BaseUoM';
 
     // specific key
-    key = 'UnitOfMeasurements';
+    key = 'UnitOfMeasurementGroups';
 
     async get<UnitOfMeasurement>(query?: string | undefined): Promise<UnitOfMeasurement[]> {
         const data = localStorage.getItem(this.key);
