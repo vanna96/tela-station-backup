@@ -73,8 +73,8 @@ export default function Login() {
   }
 
   return (
-    <div className='w-full h-full flex justify-center items-center'>
-      <div className='w-[28rem] flex flex-col gap-5 p-10 rounded-xl shadow-lg bg-white'>
+    <div className='w-full h-full flex justify-center items-center dark-theme'>
+      <div className='w-[28rem] flex flex-col gap-5 p-10 rounded-xl shadow-lg '>
         <h2 className=
           'font-bold text-2xl text-center'>LOGIN</h2>
         <div className='my-2'>

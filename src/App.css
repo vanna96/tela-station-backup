@@ -24,6 +24,21 @@ div.p-0.css-80pr5n-MuiPaper-root {
   padding-right: 0px !important;
 }
 
+div.data-grid .css-80pr5n-MuiPaper-root {
+  /* padding: 0rem 1.5rem; */
+  /* border-radius: 10px; */
+  box-shadow: none;
+  /* border: 1px solid rgb(233, 233, 233); */
+}
+
+div.data-grid > div > div:nth-child(1) {
+  display: none;
+}
+
+div.data-table > div > div:nth-child(1) > div:nth-child(3) {
+  align-items: center;
+}
+
 div.data-table > div > div > table > thead > tr {
   border-radius: 10px;
 }
@@ -107,4 +122,20 @@ input[type="number"]::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+#basic-menu > div:nth-child(3) {
+  margin-top: 10px;
+  border: 1px solid #dedededa;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  font-size: 14px !important;
+}
+#basic-menu > div:nth-child(3) > ul > li {
+  font-size: 14px;
+  /* transition: background 0.1s; */
+}
+
+#basic-menu > div:nth-child(3) > ul > li:hover {
+  background-color: #60a5fa;
+  color: white;
 }

@@ -50,7 +50,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className={`${widthClass ?? 'max-w-md'} ${heightClass ?? ''}  ${pannelClass ?? ''} ${disableShadow ? '' : 'shadow-xl'} transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle  transition-all`}>
+                            <Dialog.Panel className={`${widthClass ?? 'max-w-md'} ${heightClass ?? ''}  ${pannelClass ?? ''} ${disableShadow ? '' : 'shadow-xl'} relative transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle  transition-all`}>
                                 {!disableTitle ? <Dialog.Title
                                     as="h3"
                                     className="w-full flex justify-between items-center text-lg font-medium leading-6 text-gray-900"
@@ -64,7 +64,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                                 </div>
 
                                 {!disableFooter ? <>
-                                    <div className="mt-4 flex justify-end">
+                                    <div className="mt-4 flex justify-end absolute bottom-5 px-12 w-full">
                                         <button
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
