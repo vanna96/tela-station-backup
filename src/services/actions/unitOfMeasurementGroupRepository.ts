@@ -5,7 +5,7 @@ import request from "@/utilies/request";
 
 export default class UnitOfMeasurementGroupRepository extends Repository<UnitOfMeasurement> {
 
-    url = '/UnitOfMeasurementGroups?$select=AbsEntry,Code,Name,BaseUoM';
+    url = '/UnitOfMeasurementGroups?$select=AbsEntry,Code,Name,BaseUoM,UoMGroupDefinitionCollection';
 
     // specific key
     key = 'UnitOfMeasurementGroups';

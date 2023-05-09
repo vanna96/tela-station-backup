@@ -12,6 +12,7 @@ import VatGroupRepository from '../../services/actions/VatGroupRepository';
 import VatGroup from '@/models/VatGroup';
 import ItemGroupRepository from '@/services/actions/itemGroupRepository';
 import UnitOfMeasurementRepository from '@/services/actions/unitOfMeasurementRepository';
+import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 
 type ItemType = 'purchase' | 'sale' | 'inventory';
 
@@ -73,9 +74,12 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
     }, [data]);
 
 
-    const handlerConfirm = () => {
+    const handlerConfirm = async () => {
         const keys = Object.keys(rowSelection);
         let selectItems = keys.map((e: any) => items.find((ele: any) => ele?.ItemCode === e));
+        const uomGroups: any = await new UnitOfMeasurementGroupRepository().get();
+        const uoms = await new UnitOfMeasurementRepository().get();
+        const itemsGroups: any[] = await new ItemGroupRepository().get();
 
         selectItems = selectItems.map((e: any) => {
             let vatRate: any = 0;
@@ -94,12 +98,22 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                     break;
             }
 
+
+            const uomGroup: any = uomGroups.find((row: any) => row.AbsEntry === e?.UoMGroupEntry);
+            let uomLists: any[] = [];
+            uomGroup?.UoMGroupDefinitionCollection?.forEach((row: any) => {
+                const itemUOM = uoms.find((record: any) => record?.AbsEntry === row?.AlternateUoM);
+                if (itemUOM) uomLists.push(itemUOM);
+            })
+            const baseUOM: any = uoms.find((row: any) => row.AbsEntry === uomGroup?.BaseUoM);
+
             return ({
                 itemCode: e?.ItemCode,
                 itemName: e?.ItemName,
                 itemDescription: e?.ItemName,
                 uomEntry: e?.UoMGroupEntry,
                 itemGroup: e?.ItemsGroupCode,
+                itemGroupName: itemsGroups.find((row: any) => row?.Number === e?.ItemsGroupCode)?.GroupName,
                 saleVatGroup: e?.SalesVATGroup,
                 purchaseVatGroup: e?.PurchaseVATGroup,
                 vatGroup: e?.PurchaseVATGroup,
@@ -107,7 +121,13 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 quantity: 0,
                 unitPrice: 0,
                 discountPercent: 0,
-                total: 0
+                total: 0,
+                uomGroupAbsEntry: e?.UoMGroupEntry,
+                uomGroupCode: uomGroup?.Code,
+                uomGroupName: uomGroup?.Name,
+                uomCode: baseUOM?.Code,
+                uomName: baseUOM?.Name,
+                uomLists: uomLists,
             })
         });
         console.log(selectItems)

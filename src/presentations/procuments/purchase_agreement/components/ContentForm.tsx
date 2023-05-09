@@ -14,6 +14,7 @@ import AccountTextField from '../../../../components/input/AccountTextField';
 import ProjectionTextField from "@/components/input/ProjectionTextField";
 import ItemGroupRepository from '../../../../services/actions/itemGroupRepository';
 import UnitOfMeasurementRepository from '../../../../services/actions/unitOfMeasurementRepository';
+import UOMTextField from "@/components/input/UOMTextField";
 
 
 interface ContentFormProps {
@@ -81,14 +82,14 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={cell.getValue()} />
             },
             {
-                accessorKey: "uomEntry",
+                accessorKey: "uomGroupCode",
                 header: "UoM Group",
-                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={new UnitOfMeasurementRepository().find(cell.getValue())?.name} />
+                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={cell.getValue()} />
             },
             {
-                accessorKey: "itemGroup",
+                accessorKey: "itemGroupName",
                 header: "Item Group",
-                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={new ItemGroupRepository().find(cell.getValue())?.name} />
+                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={cell.getValue()} />
             },
             {
                 accessorKey: "quantity",
@@ -132,10 +133,10 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 },
             },
             {
-                accessorKey: "UoMCode",
+                accessorKey: "uomCode",
                 header: "UoM Code",
                 Cell: ({ cell }: any) => (
-                    <MUITextField defaultValue={cell.getValue()} />
+                    <UOMTextField value={cell.getValue()} onChange={(e) => { }} data={cell.row.original.uomLists} />
                 ),
             },
         ],

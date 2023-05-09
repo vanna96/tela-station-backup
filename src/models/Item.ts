@@ -2,7 +2,6 @@ import Model from './Model';
 
 
 export default class Item extends Model {
-
     itemCode?: string;
     itemName?: string;
     foreignName?: string;
@@ -25,18 +24,18 @@ export default class Item extends Model {
     uoMGroupName?: number | null;
     inventoryUoMEntry?: number | null;
     defaultWarehouse?: string | null;
+    ItemUnitOfMeasurementCollection?: string | null;
 
     constructor(json: any) {
         super();
-
-        this.itemCode = json['ItemCode'] ;
+        this.itemCode = json['ItemCode'];
         this.itemName = json['ItemName'];
         this.foreignName = json['ForeignName'];
         this.itemGroupCode = json['ItemsGroupCode'];
         this.saleVatGroup = json['SalesVATGroup'];
         this.barCode = json['BarCode'];
         this.purchaseItem = json['PurchaseItem'] === 'tYES';
-        this.saleItem =json['SalesItem'] === 'tYES';
+        this.saleItem = json['SalesItem'] === 'tYES';
         this.inventoryItem = json['InventoryItem'] === 'tYES';
         this.picture = json['Picture'];
         this.manufacturer = json['Manufacturer']
@@ -51,6 +50,7 @@ export default class Item extends Model {
         this.defaultWarehouse = json['DefaultWarehouse'];
         this.uoMGroupName = json['UoMGroupName'];
         this.itemsGroupName = json['ItemsGroupName'];
+        this.ItemUnitOfMeasurementCollection = json['ItemUnitOfMeasurementCollection'];
     }
 
 
@@ -58,7 +58,4 @@ export default class Item extends Model {
     toJson(update?: boolean | undefined) {
         throw new Error('Method not implemented.');
     }
-
-
-
 }
