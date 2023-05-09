@@ -222,6 +222,11 @@ export class StockDamageRequestDocumentLine extends Model implements DocumentLin
   uomCode?: string | undefined;
   warehouseCode?: string;
   fromWarehouseCode?: string;
+  distributionRule?: number;
+  distributionRule2?: number;
+  distributionRule3?: number;
+  distributionRule4?: number;
+  distributionRule5?: number;
 
 
   constructor(json: any) {
@@ -237,6 +242,11 @@ export class StockDamageRequestDocumentLine extends Model implements DocumentLin
     this.uomCode = json["UoMCode"];
     this.fromWarehouseCode = json["FromWarehouseCode"];
     this.warehouseCode = json["warehouseCode"]
+    this.distributionRule = json['DistributionRule']
+    this.distributionRule2 = json['DistributionRule2']
+    this.distributionRule3 = json['DistributionRule3']
+    this.distributionRule4 = json['DistributionRule4']
+    this.distributionRule5 = json['DistributionRule5']
 
   }
   toJson(update: boolean) {
@@ -254,6 +264,11 @@ export class StockDamageRequestDocumentLine extends Model implements DocumentLin
       // UoMEntry: json["uomEntry"],
       FromWarehouseCode: json["fromWarehouseCode"],
       WarehouseCode: json["warehouseCode"],
+      DistributionRule: json['distributionRule'],
+      DistributionRule2: json['distributionRule2'],
+      DistributionRule3: json['distributionRule3'],
+      DistributionRule4: json['distributionRule4'],
+      DistributionRule5: json['distributionRule5'],
     };
 
     return line;
@@ -265,6 +280,11 @@ export class StockDamageRequestDocumentLine extends Model implements DocumentLin
       ItemCode: json["itemCode"],
       ItemDescription: json["itemName"],
       UnitPrice: json["unitPrice"],
+      DistributionRule: json['distributionRule'],
+      DistributionRule2: json['distributionRule2'],
+      DistributionRule3: json['distributionRule3'],
+      DistributionRule4: json['distributionRule4'],
+      DistributionRule5: json['distributionRule5'],
       // DocEntry: json["uomGroupEntry"],
       // UoMCode: json["uomCode"],
       // UoMEntry: json["uomEntry"],

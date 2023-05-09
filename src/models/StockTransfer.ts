@@ -163,8 +163,8 @@ export default class StockTransfer extends Model implements MasterDocument {
       StockTransferLines: json["items"]?.map((e: any) =>
         StockTransferDocumentLine.toCreate(e, json["docType"])
       ),
-      FromWarehouse: json['fromWarehouse'],
-      ToWarehouse: json['toWarehouse'],
+      FromWarehouse: "01",
+      ToWarehouse: "02",
       ShipToCode: json['shipToDefault'],
       ContactPerson: json['contactPersonCode'],
       SalesPersonCode: json['salePersonCode'],
@@ -189,8 +189,8 @@ export default class StockTransfer extends Model implements MasterDocument {
       StockTransferLines: json["items"]?.map((e: any) =>
         StockTransferDocumentLine.toCreate(e, json["docType"])
       ),
-      FromWarehouse: json['fromWarehouse'],
-      ToWarehouse: json['toWarehouse'],
+      // FromWarehouse: json['fromWarehouse'],
+      // ToWarehouse: json['toWarehouse'],
       ShipToCode: json['shipToDefault'],
       ContactPerson: json['contactPerson'],
       SalesPersonCode: json['salesPersonCode'],
@@ -212,7 +212,11 @@ export class StockTransferDocumentLine extends Model implements DocumentLine {
   uomCode?: string | undefined;
   warehouseCode?: string;
   fromWarehouseCode?: string;
-
+  distributionRule?: number;
+  distributionRule2?: number;
+  distributionRule3?: number;
+  distributionRule4?: number;
+  distributionRule5?: number;
 
   constructor(json: any) {
     super();
@@ -227,6 +231,11 @@ export class StockTransferDocumentLine extends Model implements DocumentLine {
     this.uomCode = json["UoMCode"];
     this.fromWarehouseCode = json["FromWarehouseCode"];
     this.warehouseCode = json["WarehouseCode"]
+    this.distributionRule = json['DistributionRule']
+    this.distributionRule2 = json['DistributionRule2']
+    this.distributionRule3 = json['DistributionRule3']
+    this.distributionRule4 = json['DistributionRule4']
+    this.distributionRule5 = json['DistributionRule5']
 
   }
   toJson(update: boolean) {
@@ -244,6 +253,11 @@ export class StockTransferDocumentLine extends Model implements DocumentLine {
       // UoMEntry: json["uomEntry"],
       FromWarehouseCode: json["fromWarehouseCode"],
       WarehouseCode: json["warehouseCode"],
+      DistributionRule: json['distributionRule'],
+      DistributionRule2: json['distributionRule2'],
+      DistributionRule3: json['distributionRule3'],
+      DistributionRule4: json['distributionRule4'],
+      DistributionRule5: json['distributionRule5'],
     };
 
 

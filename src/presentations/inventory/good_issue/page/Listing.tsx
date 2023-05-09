@@ -16,7 +16,6 @@ export default function GoodIssueListing() {
     queryKey: ["good-issue"],
     queryFn: () => new GoodIssueRepository().get(),
   });
-  console.log(data);
   const columns = React.useMemo(
     () => [
      
@@ -56,16 +55,7 @@ export default function GoodIssueListing() {
         header: "Status",
         Cell: ({ cell }) => <>{(cell.getValue())?.split("bost_")}</>,
       },
-      {
-        accessorKey: "docTotalSys",
-        header: "Total",
-        Cell: ({ cell }) => <>{'$ ' + moment(cell.getValue())}</>,
-      },
-      {
-        accessorKey: "comments",
-        header: "Remarks",
-        Cell: ({ cell }) => <>{(cell.getValue())}</>,
-      },
+     
       {
         accessorKey: "id",
         enableFilterMatchHighlighting: false,

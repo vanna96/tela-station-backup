@@ -34,8 +34,8 @@ export interface InternalTransferProps {
   items: InternalTransferDocumentLineProps[];
   StockTransferLines: InternalTransferDocumentLineProps[];
   contactPersonList?: ContactEmployee[];
-  ShippingType? : BPAddress[]
-  shippingList ?: BPAddress[];
+  ShippingType?: BPAddress[]
+  shippingList?: BPAddress[];
   series?: BPAddress[];
 
 
@@ -75,7 +75,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
   address?: string;
   documentStatus?: string;
   serie: string;
-  shippingType?: BPAddress[] ;
+  shippingType?: BPAddress[];
   items: InternalTransferDocumentLine[];
   documentowner?: string;
   StockTransferLines?: InternalTransferDocumentLine[];
@@ -88,9 +88,9 @@ export default class InternalTransfer extends Model implements MasterDocument {
   dueDate?: string;
   series?: BPAddress[];
   contactPersonList?: ContactEmployee[];
-  ShippingType ?: BPAddress[];
-  shipToCode ?: string | undefined;
-  priceList ?: string | undefined ;
+  ShippingType?: BPAddress[];
+  shipToCode?: string | undefined;
+  priceList?: string | undefined;
   distributionRule?: string | undefined;
   distributionRule2?: string | undefined;
   priceLists?: string | undefined;
@@ -140,7 +140,7 @@ export default class InternalTransfer extends Model implements MasterDocument {
     this.salesPersonCode = json["SalesPersonCode"]
     this.distributionRule = json['DistributionRule']
     this.distributionRule2 = json['DistributionRule2']
-    this.shippingType =  json['shippingList']
+    this.shippingType = json['shippingList']
     this.shipToCode = json['ShipToCode']
 
   }
@@ -221,7 +221,11 @@ export class InternalTransferDocumentLine extends Model implements DocumentLine 
   uomCode?: string | undefined;
   warehouseCode?: string;
   fromWarehouseCode?: string;
-
+  distributionRule?: number;
+  distributionRule2?: number;
+  distributionRule3?: number;
+  distributionRule4?: number;
+  distributionRule5?: number;
 
   constructor(json: any) {
     super();
@@ -236,6 +240,11 @@ export class InternalTransferDocumentLine extends Model implements DocumentLine 
     this.uomCode = json["UoMCode"];
     this.fromWarehouseCode = json["FromWarehouseCode"];
     this.warehouseCode = json["warehouseCode"]
+    this.distributionRule = json['DistributionRule']
+    this.distributionRule2 = json['DistributionRule2']
+    this.distributionRule3 = json['DistributionRule3']
+    this.distributionRule4 = json['DistributionRule4']
+    this.distributionRule5 = json['DistributionRule5']
 
   }
   toJson(update: boolean) {
@@ -253,6 +262,11 @@ export class InternalTransferDocumentLine extends Model implements DocumentLine 
       UoMEntry: json["uomEntry"],
       FromWarehouseCode: json["fromWarehouseCode"],
       WarehouseCode: json["warehouseCode"],
+      DistributionRule: json['distributionRule'],
+      DistributionRule2: json['distributionRule2'],
+      DistributionRule3: json['distributionRule3'],
+      DistributionRule4: json['distributionRule4'],
+      DistributionRule5: json['distributionRule5'],
     };
 
     return line;
@@ -269,6 +283,11 @@ export class InternalTransferDocumentLine extends Model implements DocumentLine 
       // UoMEntry: json["uomEntry"],
       FromWarehouseCode: json["fromWarehouseCode"],
       WarehouseCode: json["warehouseCode"],
+      DistributionRule: json['distributionRule'],
+      DistributionRule2: json['distributionRule2'],
+      DistributionRule3: json['distributionRule3'],
+      DistributionRule4: json['distributionRule4'],
+      DistributionRule5: json['distributionRule5'],
     };
 
     return line;

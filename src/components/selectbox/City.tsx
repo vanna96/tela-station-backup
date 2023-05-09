@@ -18,6 +18,7 @@ interface CityProps<T = unknown> {
   onChange?: SelectInputProps<T>['onChange'],
   disabled?: boolean,
   country?: string
+  key?: string
 }
 
 
@@ -32,8 +33,6 @@ function CitySelect(props: CityProps) {
     aliaslabel={"Name"}
     aliasvalue="Code"
     loading={isLoading}
-
   />
 }
-
 export default CitySelect;

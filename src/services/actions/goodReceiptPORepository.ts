@@ -20,7 +20,6 @@ export default class GoodReceiptPORepository extends Repository<GoodReceiptPO> {
       .catch((e) => {
         throw new Error(e);
       });
-    console.log(response)
     return response;
   }
 

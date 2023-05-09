@@ -213,14 +213,19 @@ function Content(props: any) {
       Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
     {
-      accessorKey: "department",
-      header: "	Department",
-      Cell: ({ cell }: any) => discountFormat(cell.getValue()),
-    },
-    {
-      accessorKey: "lineofbusiness",
+      accessorKey: "distributionRule",
       header: "Line of Business",
       Cell: ({ cell }: any) => cell.getValue(),
+    },
+    {
+      accessorKey: "distributionRule2",
+      header: "Product Line",
+      Cell: ({ cell }: any) => cell.getValue(),
+    },
+    {
+      accessorKey: "distributionRule3",
+      header: "	Department",
+      Cell: ({ cell }: any) => (cell.getValue()),
     },
 
   ], [data]);
@@ -257,7 +262,7 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Pick and Pack Remark</span>
         <span className="w-8/12 font-medium text-sm">
-          : {data?.PickAndPackRemarks}
+        : {data?.pickAndPackRemarks ?? "N/A"}
         </span>
       </div>
       <div className='flex gap-2'>

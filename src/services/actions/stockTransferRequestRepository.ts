@@ -21,7 +21,6 @@ export default class StockTransferRequestRepository extends Repository<StockTran
       .catch((e) => {
         throw new Error(e);
       });
-    console.log(response)
     return response;
   }
 

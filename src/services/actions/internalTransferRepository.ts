@@ -22,7 +22,6 @@ export default class InternalTransferRepository extends Repository<InternalTrans
       .catch((e) => {
         throw new Error(e);
       });
-    console.log(response)
     return response;
   }
 
@@ -48,7 +47,7 @@ export default class InternalTransferRepository extends Repository<InternalTrans
     // internalTransfer.phone = businessPartner.phone;
     // internalTransfer.contactPersonList = businessPartner.contactEmployee ?? [];
     // internalTransfer.shippingType = businessPartner.bpAddress ?? []
-    console.log(businessPartner.bpAddress)
+    // console.log(businessPartner.bpAddress)
 
     return internalTransfer;
   }
