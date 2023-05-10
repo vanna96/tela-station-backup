@@ -41,7 +41,7 @@ export default class Vehicel extends Model {
   u_VEHVOLUME?: string;
   constructor(json: any) {
     super();
-    this.id = json['U_VEHCODE'];
+    this.id = json['id__'];
     this.u_VEHCODE = json['U_VEHCODE'];
     this.u_VEHDRIVER = json['U_VEHDRIVER'];
     this.u_VEHNAME = json['U_VEHNAME'];

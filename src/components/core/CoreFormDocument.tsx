@@ -89,6 +89,9 @@ export interface CoreFormDocumentState {
     docDiscountPrice: number | any,
     docTaxTotal: number | any,
     rounded: boolean,
+    compartement: any[],
+
+
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -125,6 +128,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             currency: null,
             renewal: false,
             items: [],
+            compartement:[],
             series: [],
             serie: '',
             docNum: null,
@@ -148,7 +152,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             docTotalBeforeDiscount: 0,
             docDiscountPercent: 0,
             docDiscountPrice: 0,
-            rounded: false
+            rounded: false,
+
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -483,6 +488,15 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
         this.setState({ ...this.state, items, docTotalBeforeDiscount, docTaxTotal, docTotal })
     }
+    protected handlerChangePartment({ value, record, field }: any) {
+        let compartement = [...this.state.compartement ?? []];
+        let item = this.state.compartement?.find((e: any) => e?.u_VEHCOMPNO === record?.u_VEHCOMPNO);
+        item[field] = value;
+       
+
+      
+        this.setState({ ...this.state, compartement })
+    }
 
     protected handlerDeleteItem(code: string) {
         let items = [...this.state.items ?? []];
@@ -490,4 +504,5 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         items.splice(index, 1)
         this.setState({ ...this.state, items: items })
     }
+
 }

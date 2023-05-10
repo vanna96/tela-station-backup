@@ -38,6 +38,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
 
   const handlerChangeInput = (event: any, row: any, field: any) => {
     handlerChangeItem({ value: event.target.value, record: row, field })
+    console.log(handlerChangeItem({ value: event.target.value, record: row, field }));
+    
   }
 
   const handlerRemoveRow = (row: any) => {
