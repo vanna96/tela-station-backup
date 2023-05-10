@@ -53,10 +53,17 @@ console.log(compartement);
 
 
   const handlerDeleteItem = (id: string) => {
-    setCompartement((e:any) => {
-      const newRecord = e.filter((record: any) => record.id !== id);
-      return newRecord;
+    setCompartement((e: any) => {
+      // Check if there's more than 1 record
+      if (e.length > 1) {
+        const newRecord = e.filter((record: any) => record.id !== id);
+        return newRecord;
+      } else {
+        // If there's only 1 record, return the current state without deleting the item
+        return e;
+      }
     });
+
   };
 
   const [pagination, setPagination] = React.useState({
