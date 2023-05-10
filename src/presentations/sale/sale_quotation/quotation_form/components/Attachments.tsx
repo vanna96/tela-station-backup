@@ -1,10 +1,10 @@
-import { Box, Modal } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { Box, CircularProgress, Modal } from "@mui/material";
+import { useContext, useState } from "react";
 import { AttachmentContext } from "../context/AttachmentFormContext";
 import { DragDropFile } from "./DragDropMenu";
 
 export default function Attachments() {
-  const { selectedFiles, setSelectedFiles }: any =
+  const { selectedFiles, setSelectedFiles, loading }: any =
     useContext(AttachmentContext);
   const [image, setImage] = useState("");
   const [openModal, setOpen] = useState(false);
@@ -141,25 +141,31 @@ export default function Attachments() {
                 })
               ) : (
                 <tr>
-                  <td colSpan="4 text-center">
+                  <td colSpan={4}>
                     <div className="text-center mt-5">
-                      <div className="flex justify-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-6 h-6 text-center text-blue-400"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
-                          />
-                        </svg>
-                      </div>
-                      <p>No Data</p>
+                      {loading ? (
+                        <CircularProgress size={20} />
+                      ) : (
+                        <>
+                          <div className="flex justify-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6 text-center text-blue-400"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
+                              />
+                            </svg>
+                          </div>
+                          <p>No Data</p>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>

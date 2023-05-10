@@ -23,7 +23,7 @@ export default function General() {
       contactPerson: "",
       CardCode: customer?.CardCode,
       CardName: customer?.CardName,
-      Currency: customer?.Currency,
+      Currency: customer?.DefaultCurrency,
       ContactEmployees: customer?.ContactEmployees,
       PayTermsGrpCode: customer?.PayTermsGrpCode,
       PeymentMethodCode: customer?.PeymentMethodCode,
@@ -43,6 +43,9 @@ export default function General() {
       },
     ];
   }
+
+  console.log(formGeneral);
+  
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { numberWithCommas } from "@/helper/helper";
 import { MenuItem, Select } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { ContactContext } from "../context/ContentFormContext";
 import { GeneralContact } from "../context/GeneralFormContext";
 import { ModalContentItemService } from "./ModalContentItemService";
@@ -21,6 +21,9 @@ export const ContentItemTable = ({
   const { formGeneral }: any = useContext(GeneralContact);
   const [open, setOpen] = useState(false);
   const [editData, setEditData] = useState(null);
+  const qtyRef: any = useRef([]);
+  const disRef: any = useRef([]);
+  const unitPriceRef: any = useRef([]);
   const items = formContent?.items;
 
   const handleClose = () => setOpen(false);
@@ -37,22 +40,30 @@ export const ContentItemTable = ({
       items: items?.filter((e: any) => e.ItemCode !== ItemCode),
     });
 
-  const handleUpdateRow = (row: any, field: any) => {
+  const handleUpdateRow = (idx: number, row: any, field: any) => {
+    let qty = qtyRef.current[idx].value || 0;
+    let discount = disRef.current[idx].value || 0;
+    let unitPrice = unitPriceRef.current[idx].value || 0;
+
     const newState = items?.map((obj: any) => {
       if (obj.ItemCode !== row.ItemCode) return obj;
 
       // check stock if update qty
-      if (field.qty && parseFloat(field.qty) > parseFloat(obj.QuantityOnStock))
-        field = { qty: obj.QuantityOnStock || 0 };
+      if (qty && parseFloat(qty) > parseFloat(obj.QuantityOnStock)) {
+        qty = obj.QuantityOnStock || 0;
+        field = { qty };
+      }
 
       // check discount
-      if (field.discount && parseFloat(field.discount) > 100)
-        field = { discount: 100 };
+      if (discount && parseFloat(discount) > 100) {
+        discount = 100;
+        field = { discount };
+      }
 
       // total
-      let total = obj.qty * obj.unitPrice;
-      if (obj.discount > 0) {
-        total = total - (total * obj.discount) / 100;
+      let total = qty * unitPrice;
+      if (discount > 0) {
+        total = total - (total * discount) / 100;
       }
 
       // tax code
@@ -174,11 +185,12 @@ export const ContentItemTable = ({
                 </td>
                 <td className="px-2">
                   {inputFormControl({
-                    className: "2xl:w-[100px]",
+                    className: "2xl:w-[100px] qty",
                     value: res.qty,
                     type: "number",
+                    ref: (el: any) => (qtyRef.current[index] = el),
                     onChange: (e: any) =>
-                      handleUpdateRow(res, { qty: e.target.value }),
+                      handleUpdateRow(index, res, { qty: e.target.value }),
                   })}
                 </td>
                 <td className="px-2">
@@ -186,8 +198,9 @@ export const ContentItemTable = ({
                     className: "2xl:w-[100px]",
                     value: res.discount,
                     type: "number",
+                    ref: (el: any) => (disRef.current[index] = el),
                     onChange: (e: any) =>
-                      handleUpdateRow(res, { discount: e.target.value }),
+                      handleUpdateRow(index, res, { discount: e.target.value }),
                   })}
                 </td>
                 <td className="px-2">
@@ -195,16 +208,19 @@ export const ContentItemTable = ({
                     className: "2xl:w-[100px]",
                     value: res.unitPrice,
                     type: "number",
-                    onChange: (e: any) =>
-                      handleUpdateRow(res, { unitPrice: e.target.value }),
+                    ref: (el: any) => (unitPriceRef.current[index] = el),
+                    onChange: (e: any) => {
+                      handleUpdateRow(index, res, {
+                        unitPrice: e.target.value,
+                      });
+                    },
                   })}
                 </td>
                 <td className="px-2">
                   <Select
-                    label=""
                     className="form-control h-[25px] w-full 2xl:w-[200px]"
                     onChange={(e) =>
-                      handleUpdateRow(res, { taxCode: e.target.value })
+                      handleUpdateRow(index, res, { taxCode: e.target.value })
                     }
                     value={res.taxCode}
                     sx={{ border: "0px solid black", padding: 0 }}
@@ -221,7 +237,7 @@ export const ContentItemTable = ({
                     className: "2xl:w-[100px]",
                     value: numberWithCommas(res?.total || 0),
                     onChange: (e: any) =>
-                      handleUpdateRow(res, { total: e.target.value }),
+                      handleUpdateRow(index, res, { total: e.target.value }),
                   })}
                 </td>
                 <td className="px-2">
@@ -229,7 +245,7 @@ export const ContentItemTable = ({
                     className: "2xl:w-[100px]",
                     value: res.uomCode,
                     onChange: (e: any) =>
-                      handleUpdateRow(res, { uomCode: e.target.value }),
+                      handleUpdateRow(index, res, { uomCode: e.target.value }),
                   })}
                 </td>
               </tr>
@@ -291,6 +307,7 @@ type inputFormControlProps = {
   type?: string;
   value?: any;
   onChange?: (e?: any) => void;
+  ref?: any;
 };
 
 const inputFormControl = ({
@@ -299,12 +316,14 @@ const inputFormControl = ({
   type = "text",
   value = "",
   onChange = () => console.log(),
+  ref,
 }: inputFormControlProps) => (
   <input
     name={name}
     type={type}
     value={value}
     onChange={onChange}
+    ref={ref}
     className={`form-control h-[25px] ${className}`}
   />
 );

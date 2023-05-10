@@ -23,7 +23,7 @@ type ContentsTabProps = {
 
 export const ContentsTab = ({ data, SalesPerson }: ContentsTabProps) => {
   const TotalBeforeDiscount = (data?.VatSum || 0) * 10;
-  
+
   return (
     <>
       <div>
@@ -51,12 +51,12 @@ export const ContentsTab = ({ data, SalesPerson }: ContentsTabProps) => {
 
           <tbody>
             {data?.DocumentLines?.map((e: any, index: number) => {
-              const total = e?.UnitPrice * e?.Quantity;
+              const total = e?.UnitPrice * (e?.Quantity || 1);
               return (
                 <tr key={shortid.generate()} className="text-sm border">
                   <td className="p-2">{index + 1}</td>
                   <td className="p-2">{e?.ItemCode}</td>
-                  <td className="p-2">{e?.Quantity}</td>
+                  <td className="p-2">{e?.Quantity || 1}</td>
                   <td className="p-2">{`${e.Currency} ${numberWithCommas(
                     e?.UnitPrice.toFixed(2)
                   )}`}</td>

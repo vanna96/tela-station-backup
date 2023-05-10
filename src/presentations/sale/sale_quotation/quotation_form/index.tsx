@@ -40,7 +40,7 @@ export default function SaleQuotationForm(props: any) {
 
   // edit
   const { data: Edit, isLoading } = useQuery(
-    ["sales_quotation_tes", id],
+    ["sales_quotation_edit", id],
     async () => {
       const response: any = await request("GET", `/Quotations(${id || 0})`)
         .then((res: any) => res?.data)
@@ -52,6 +52,8 @@ export default function SaleQuotationForm(props: any) {
     },
     {
       enabled: id ? true : false,
+      cacheTime: 0,
+      staleTime: 0,
     }
   );
 
@@ -71,7 +73,7 @@ export default function SaleQuotationForm(props: any) {
       <QueryCacheProvider>
         <GeneralProvider Edit={Edit}>
           <ContactProvider Contact={Edit}>
-            <AttachmentProvider Edit={Edit} >
+            <AttachmentProvider Edit={Edit}>
               <LogisticProvider Edit={Edit}>
                 <AccountingProvider Edit={Edit}>
                   <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
@@ -98,7 +100,7 @@ export default function SaleQuotationForm(props: any) {
                             <Accounting Edit={Edit} />
                           </TabPanel>
                           <TabPanel value="Attachments">
-                            <Attachments/>
+                            <Attachments />
                           </TabPanel>
                         </TabContext>
                       </div>

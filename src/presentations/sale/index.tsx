@@ -1,13 +1,30 @@
 import MainContainer from "@/components/MainContainer";
 import ItemCard from "@/components/card/ItemCart";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineFileAdd, AiOutlineFileProtect } from "react-icons/ai";
+import { request } from "http";
+import SalesQuotationRepository from "@/services/actions/SalesQuotationRepository";
+import SalesOrderRepository from "@/services/actions/SalesOrderRepository";
 
 const SaleMasterPage = () => {
   const navigate = useNavigate();
-
+  const [count, setCount]: any = useState();
   const goTo = (route: string) => navigate("/sale/" + route);
+
+  const getCount = async () => {
+    const quotation = await new SalesQuotationRepository().getCount({});
+    const order = await new SalesOrderRepository().getCount({});
+    setCount({
+      ...count,
+      quotation,
+      order,
+    });
+  };
+
+  useEffect(() => {
+    getCount()
+  }, []);
 
   return (
     <>
@@ -16,8 +33,14 @@ const SaleMasterPage = () => {
           title="Sales Quotation"
           icon={<AiOutlineFileProtect />}
           onClick={() => goTo("sales-quotation")}
+          count={count?.quotation || 0}
         />
-        <ItemCard title="Sales Order" icon={<AiOutlineFileAdd />} />
+        <ItemCard
+          title="Sales Order"
+          icon={<AiOutlineFileAdd />}
+          onClick={() => goTo("sales-order")}
+          count={count?.order || 0}
+        />
       </MainContainer>
     </>
   );

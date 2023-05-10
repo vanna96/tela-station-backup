@@ -34,8 +34,9 @@ export const TotalPayment = ({ Edit }: TotalPaymentProps) => {
   const [saving, setSaving] = useState(false);
 
   const items = formContent?.items;
-  let totalDiscount = formContent?.totalDiscount || 0;
+  let totalDiscount = formContent?.totalDiscount || formAccounting?.totalDiscount || 0;
   let totalDiscountValue = formContent?.totalDiscountValue || 0;
+  
   const totalBeforeDiscount = items?.reduce(
     (accumulator: any, object: any) => accumulator + object.total,
     0
@@ -84,7 +85,8 @@ export const TotalPayment = ({ Edit }: TotalPaymentProps) => {
         ItemCode: item.ItemCode || null,
         ItemDescription: item.ItemName || item.Name || null,
         Quantity: item.qty || null,
-        Price: item.total,
+        // Price: item.total,
+        UnitPrice: item.unitPrice || item.total,
         DiscountPercent: item.discount,
         VatGroup: item.SalesVATGroup || item.taxCode || null,
         UoMCode: item.uomCode || null,
@@ -94,8 +96,12 @@ export const TotalPayment = ({ Edit }: TotalPaymentProps) => {
 
     if (saving) return;
 
-    if (!DocumentLines)
-      toast.error("Document lines(Item/Service) required!", { duration: 3000 });
+    if (!DocumentLines) {
+      toast.error("Document lines(Item/Service) required!", {
+        duration: 3000,
+      });
+      return setSaving(false);
+    }
 
     // attachment
     let AttachmentEntry = null;
@@ -119,7 +125,7 @@ export const TotalPayment = ({ Edit }: TotalPaymentProps) => {
       const response: any = await request("POST", "/Attachments2", data);
       AttachmentEntry = response?.data?.AbsoluteEntry;
     }
-    
+
     const payload = {
       // general
       DocNum: formGeneral?.series_value,
@@ -154,6 +160,7 @@ export const TotalPayment = ({ Edit }: TotalPaymentProps) => {
       ShipFrom: formLogistic?.shipTo,
       Address: formLogistic?.payToValue,
       Address2: formLogistic?.shipToValue,
+      TransportationCode: formLogistic?.shippingType ? "tYES" : "tNO",
 
       // accounting
       Indicator: formAccounting?.indicator || null,
@@ -174,35 +181,30 @@ export const TotalPayment = ({ Edit }: TotalPaymentProps) => {
       AttachmentEntry,
     };
 
-    Edit
-      ? request("PATCH", `/Quotations(${id})`, payload)
-          .then((res: any) => {
-            toast.success("Quotation updated successfully!", {
-              duration: 3000,
-            });
-            route("/sale/sales-quotation");
-          })
-          .catch((err: any) => {})
-          .finally(() => {
-            toast.success("Quotation updated successfully!", {
-              duration: 3000,
-            });
-            setSaving(false);
-            // route("/sale/sales-quotation");
-          })
-      : request("POST", "/Quotations", payload)
-          .then((res: any) => {
+    const res: any = Edit
+      ? await request("PATCH", `/Quotations(${id})`, payload).then(() => {
+          toast.success("Quotation updated successfully!", {
+            duration: 3000,
+          });
+          return { status: 200 };
+        })
+      : await request("POST", "/Quotations", payload)
+          .then(() => {
             toast.success("Quotation created successfully!", {
               duration: 3000,
             });
-            route("/sale/sales-quotation");
+            return { status: 200 };
           })
-          .catch((err: any) => {
+          .catch((err: any) =>
             toast.error(err?.message, {
               duration: 6000,
-            });
-            setSaving(false);
-          });
+            })
+          );
+
+    setTimeout(() => {
+      setSaving(false);
+      if (res?.status) return route("/sale/sales-quotation");
+    }, 2000);
   };
 
   return (
