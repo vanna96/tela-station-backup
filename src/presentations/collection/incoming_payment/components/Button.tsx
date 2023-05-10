@@ -11,7 +11,7 @@ const EditButton = (props: DetailButtonProp) => {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-6 cursor-pointer h-6 text-blue-400"
+        className="w-6 cursor-pointer h-6 text-black"
         onClick={props.handleShowDetail}
       >
         <path

@@ -36,6 +36,7 @@ export default class SalesQuotation extends Model {
   PaymentMethod: string;
   CentralBankIndicator: string;
   CashDiscountDateOffset: string;
+  NumAtCard: string;
 
   constructor(json: any) {
     super();
@@ -75,6 +76,7 @@ export default class SalesQuotation extends Model {
     this.FederalTaxID = json["FederalTaxID"];
     this.ImportFileNum = json["ImportFileNum"];
     this.AttachmentEntry = json["AttachmentEntry"];
+    this.NumAtCard = json["NumAtCard"];
   }
 
   toJson(update: boolean) {

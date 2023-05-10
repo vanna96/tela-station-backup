@@ -30,7 +30,28 @@ export const ContentServiceTable = () => {
   const handleUpdateRow = (row: any, field: any) => {
     const newState = items?.map((obj: any) => {
       if (obj.Code !== row.Code) return obj;
-      return { ...obj, ...field };
+      if (field?.total !== undefined) {
+        const rate =
+          TaxCode?.find((e: any) => e.Code === obj.taxCode)?.VatGroups_Lines[0][
+            "Rate"
+          ] || 0;
+        field = {
+          ...field,
+          rate: (rate / 100) * parseFloat(field?.total),
+        };
+        return { ...obj, ...field };
+      }
+
+      if (field.taxCode !== undefined) {
+        const rate =
+          TaxCode?.find((e: any) => e.Code === field.taxCode)
+            ?.VatGroups_Lines[0]["Rate"] || 0;
+        field = {
+          rate: (rate / 100) * parseFloat(obj?.total),
+          taxCode: field.taxCode,
+        };
+        return { ...obj, ...field };
+      }
     });
 
     setFormContent({ ...formContent, items: newState });

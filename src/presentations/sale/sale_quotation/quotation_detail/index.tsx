@@ -142,7 +142,7 @@ export default function SaleQuotationDetail() {
         />
         <LabelText
           label="Customer Ref. Number"
-          text={data?.VATRegNum ? data?.VATRegNum : "N/A"}
+          text={data?.NumAtCard ? data?.NumAtCard : "N/A"}
         />
         <LabelText
           label="Currency"

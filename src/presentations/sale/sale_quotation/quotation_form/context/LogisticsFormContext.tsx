@@ -12,17 +12,8 @@ export const LogisticProvider = ({ children, Edit }: GeneralProps) => {
       ...setFormLogistic,
       shipTo: Edit?.ShipToCode || bussinessPartner?.ShipToDefault,
       shipToValue: Edit?.Address2 || bussinessPartner?.MailAddress,
-      // bussinessPartner?.BPAddresses?.filter(
-      //   (ship: any) => ship.AddressType === "bo_ShipTo"
-      // ).find((e: any) => e.AddressName === bussinessPartner?.ShipToDefault)
-      //   ?.Street,
       payTo: Edit?.PayToCode || bussinessPartner?.BilltoDefault,
       payToValue: Edit?.Address || bussinessPartner?.Address,
-      // " " ||
-      // bussinessPartner?.BPAddresses?.filter(
-      //   (ship: any) => ship.AddressType === "bo_BillTo"
-      // ).find((e: any) => e.AddressName === bussinessPartner?.BilltoDefault)
-      //   ?.Street,
       pickAndPackRemark: Edit?.PickRemark,
     });
   }, [bussinessPartner]);

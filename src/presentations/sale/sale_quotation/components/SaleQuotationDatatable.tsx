@@ -8,7 +8,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { useQuery } from "react-query";
 import { axiosInstance } from "@/utilies/request";
-import { DetailButton } from "./Button";
+import { DetailButton, EditButton } from "../../../collection/incoming_payment/components/Button";
 import { useNavigate } from "react-router-dom";
 import SalesQuotation from "@/models/SalesQuotation";
 
@@ -138,6 +138,9 @@ export const SaleQuotationDatatTable = () => {
             <div className="flex space-x-2 justify-center">
               <DetailButton
                 handleShowDetail={() => route(`/sale/sales-quotation/${id}`)}
+              />
+              <EditButton
+                handleShowDetail={() => route(`/sale/sales-quotation/${id}/edit`)}
               />
             </div>
           );

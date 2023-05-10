@@ -31,7 +31,7 @@ export const GeneralProvider = ({ children, Edit }: GeneralProps) => {
   const { data: customers } = useQuery({
     queryKey: "quotation_customer",
     queryFn: async () => {
-      const select = `$select=CardCode,CardName,CurrentAccountBalance,Currency,PriceListNum,DiscountGroups,ContactEmployees,BPAddresses,PeymentMethodCode,ShippingType,BPPaymentMethods,FederalTaxID,PayTermsGrpCode`;
+      const select = `$select=CardCode,CardName,CurrentAccountBalance,DefaultCurrency,Currency,PriceListNum,DiscountGroups,ContactEmployees,BPAddresses,PeymentMethodCode,ShippingType,BPPaymentMethods,FederalTaxID,PayTermsGrpCode`;
       const filter = `$filter=CardType ne 'cSupplier'`;
       const res = await request("GET", `BusinessPartners/?${filter}&${select}`)
         .then((res: any) => res?.data)

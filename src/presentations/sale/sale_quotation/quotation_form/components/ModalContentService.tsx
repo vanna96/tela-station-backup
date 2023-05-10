@@ -46,7 +46,7 @@ export const ModalContentService = ({
       .map((res: any) => {
         return {
           ...res,
-          taxCode: "S1",
+          taxCode: "",
           total: "",
           blanketAgreement: "",
           description: "",

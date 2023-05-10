@@ -66,6 +66,7 @@ export const AccountingProvider = ({ children, Edit }: GeneralProps) => {
       createQRCodeFrom: Edit?.CreateQRCodeFrom,
       orderNumber: Edit?.ImportFileNum,
       bussinessPartnerProject: Edit?.Project,
+      totalDiscount: Edit?.GeneralDiscount || groupNumber?.GeneralDiscount || 0,
     });
   }, [formGeneral]);
 

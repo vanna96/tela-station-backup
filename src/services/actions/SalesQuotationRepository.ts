@@ -1,6 +1,6 @@
 import Repository from "../../astractions/repository";
 import SalesQuotation from "../../models/SalesQuotation";
-import request from "../../utilies/request";
+import request, { axiosInstance } from "../../utilies/request";
 
 export default class SalesQuotationRepository extends Repository<SalesQuotation> {
   url: string = "/Quotations";
@@ -43,5 +43,15 @@ export default class SalesQuotationRepository extends Repository<SalesQuotation>
       });
 
     return response;
+  }
+
+  async getCount(query?: any): Promise<number> {
+    const { params } = query;
+    return await axiosInstance
+      .get(`${this.url}/$count`, { params })
+      .then((res: any) => res?.data)
+      .catch((e) => {
+        throw new Error(e);
+      });
   }
 }

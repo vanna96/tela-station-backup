@@ -8,7 +8,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { useQuery } from "react-query";
 import { axiosInstance } from "@/utilies/request";
-import { DetailButton } from "./Button";
+import { DetailButton } from "../../../collection/incoming_payment/components/Button";
 import { useNavigate } from "react-router-dom";
 import SalesQuotation from "@/models/SalesQuotation";
 

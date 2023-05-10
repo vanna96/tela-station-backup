@@ -1,6 +1,5 @@
 import request, { url, axiosInstance } from "@/utilies/request";
 import { createContext, useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import shortid from "shortid";
 
 type GeneralProps = { children: any; Edit?: any };
@@ -8,12 +7,14 @@ type GeneralProps = { children: any; Edit?: any };
 export const AttachmentContext = createContext({});
 export const AttachmentProvider = ({ children, Edit }: GeneralProps) => {
   const [selectedFiles, setSelectedFiles]: any = useState([]);
+  const [loading, setLoading] = useState(false);
   const getData = async () => {
+    setLoading(true);
     const attachment: any = await request(
       "GET",
       `/Attachments2(${Edit?.AttachmentEntry})`
     );
-      
+
     const files = attachment?.data?.Attachments2_Lines?.map(async (e: any) => {
       const req = await fetchSAPFile(
         `/Attachments2(${Edit?.AttachmentEntry})/$value?filename='${e?.FileName}.${e?.FileExtension}'`
@@ -35,6 +36,7 @@ export const AttachmentProvider = ({ children, Edit }: GeneralProps) => {
     });
     const attFiles = await Promise.all(files);
     setSelectedFiles(attFiles);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -42,7 +44,9 @@ export const AttachmentProvider = ({ children, Edit }: GeneralProps) => {
   }, [Edit?.AttachmentEntry]);
 
   return (
-    <AttachmentContext.Provider value={{ selectedFiles, setSelectedFiles }}>
+    <AttachmentContext.Provider
+      value={{ selectedFiles, setSelectedFiles, loading }}
+    >
       {children}
     </AttachmentContext.Provider>
   );
