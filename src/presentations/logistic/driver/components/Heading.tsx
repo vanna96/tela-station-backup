@@ -1,5 +1,6 @@
 import FormCard from "@/components/card/FormCard";
 import DistributionRuleTextField from "@/components/input/DimensionTextField";
+import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import BranchSelect from "@/components/selectbox/Branch";
 import DepartmentSelect from "@/components/selectbox/Department";
@@ -130,13 +131,22 @@ export default function Heading({
               name="License"
               onChange={(e) => handlerChange("u_DRIVERLICN", e.target.value)}
             />
-           
-            <MUITextField
+
+            {/* <MUITextField
               label="License Expired"
               value={data?.u_DRIVERLICEXD}
               name="LicenseExpired"
               onChange={(e) => handlerChange("u_DRIVERLICEXD", e.target.value)}
-            />
+            /> */}
+
+            <div className="flex flex-col gap-1 text-sm">
+              <label htmlFor="Code" className="text-gray-500 text-[14px]">
+              License Expired
+              </label>
+              <div className="">
+                <MUIDatePicker error={data?.message?.includes('u_DRIVERLICEXD')} value={data.u_DRIVERLICEXD} onChange={(e: any) => handlerChange('u_DRIVERLICEXD', e)} />
+              </div>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -240,7 +250,7 @@ export default function Heading({
               onChange={(e) => handlerChange("linkedVendor", e.target.value)}
             />
           </div>
-          
+
         </div>
       </FormCard>
     </>

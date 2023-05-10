@@ -219,7 +219,7 @@ class EmployeeDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">License Expired</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.u_DRIVERLICEXD || "N/A"}
+                    : {dateFormat(this.state.u_DRIVERLICEXD) || "N/A"}
                   </span>
                 </div>
                
