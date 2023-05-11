@@ -77,8 +77,6 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
     handlerItemChange({ value, record, field }: any) {
-
-
         let items = [...this.state.Items ?? []];
         let item = this.state.Items?.find((e: any) => e?.ItemCode === record?.ItemCode);
         const index = items.findIndex((e: any) => e?.ItemCode === record.ItemCode);

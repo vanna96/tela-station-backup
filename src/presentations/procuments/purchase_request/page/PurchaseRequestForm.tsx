@@ -8,7 +8,6 @@ import { FormEventHandler } from "react";
 import AttachmentForm from "../components/AttachmentForm";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
 import PurchaseRequestRepository from "@/services/actions/purchaseRequestRepository";
-import { ToastOptions } from "react-toastify";
 import GLAccount from "../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import Formular from "@/utilies/formular";
@@ -72,7 +71,7 @@ class PurchaseRequestForm extends CoreFormDocument {
     DocumentSerieRepository.getDocumentSeries(
       PurchaseRequestRepository.documentSerie
     ).then((res: any) => {
-      this.setState({ ...this.state, series: res, isLoadingSerie: false });
+      this.setState({ ...this.state, SerieLists: res, isLoadingSerie: false });
     });
 
     if (!this.props.edit) {
@@ -81,8 +80,8 @@ class PurchaseRequestForm extends CoreFormDocument {
       ).then((res: any) => {
         this.setState({
           ...this.state,
-          serie: res?.Series,
-          docNum: res?.NextNumber,
+          Series: res?.Series,
+          DocNum: res?.NextNumber,
           isLoadingSerie: false,
         });
       });
@@ -90,15 +89,15 @@ class PurchaseRequestForm extends CoreFormDocument {
   }
 
   handlerRemoveItem(code: string) {
-    let items = [...(this.state.items ?? [])];
+    let items = [...(this.state.Items ?? [])];
     const index = items.findIndex((e: any) => e?.itemCode === code);
     items.splice(index, 1);
-    this.setState({ ...this.state, items: items });
+    this.setState({ ...this.state, Items: items });
   }
 
   handlerAddItem({ value, record, field }: any) {
-    let items = [...(this.state.items ?? [])];
-    let item = this.state.items?.find(
+    let items = [...(this.state.Items ?? [])];
+    let item = this.state.Items?.find(
       (e: any) => e?.itemCode === record?.itemCode
     );
 

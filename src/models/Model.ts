@@ -19,5 +19,4 @@ export abstract class MasterDocumentModel {
 
 export abstract class LineDocumentModel {
     abstract toJson(type: string, update?: boolean): any;
-
 }

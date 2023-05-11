@@ -4,15 +4,15 @@ import PurchaseRequest from '../../models/PurchaseRequest';
 import PurchaseAgreement from '../../models/PurchaseAgreement';
 
 export default class PurchaseRequestRepository extends Repository<PurchaseRequest> {
-    
+
     url: string = '/PurchaseRequests';
-    
+
     public static documentSerie = {
         Document: "1470000113"
     }
-    
+
     async get<T>(query?: string): Promise<T[]> {
-        const response: any = await request('GET', this.url).then((res: any) => {
+        const response: any = await request('GET', this.url + query).then((res: any) => {
             const data = res?.data?.value?.map((e: any) => new PurchaseRequest(e));
             return data;
         }).catch((e) => {
@@ -25,9 +25,9 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
     async find<T>(id: any): Promise<any> {
         const purchasRequest = await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseRequest(res.data))
             .catch((e: Error) => {
-            throw new Error(e.message)
+                throw new Error(e.message)
             })
-        
+
         // const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.cardCode!);
 
         // purchaseAgreement.email = businessPartner.email;
@@ -37,19 +37,27 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
         return PurchaseRequest;
     }
 
+    async documentTotal<T>(query?: string): Promise<number> {
+        const response: any = await request('GET', this.url + '/$count' + query).then(async (res: any) => {
+            return res.data;
+        }).catch((e: Error) => {
+            throw new Error(e.message);
+        });
+
+        return response;
+    }
 
 
-   
     async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 
-        if(isUpdate) return await request('PATCH', this.url + "("+id+")", PurchaseRequest.toUpdate(payload));
+        if (isUpdate) return await request('PATCH', this.url + "(" + id + ")", PurchaseRequest.toUpdate(payload));
 
         return await request('POST', this.url, PurchaseRequest.toCreate(payload));
     }
 
 
     async patch(id: any, payload: any): Promise<any> {
-         return await request('PATCH', this.url, PurchaseRequest.toUpdate(payload));
+        return await request('PATCH', this.url, PurchaseRequest.toUpdate(payload));
     }
 
 

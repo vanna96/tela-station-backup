@@ -1,12 +1,10 @@
 import React from 'react'
-import MUITextField from '../input/MUITextField';
 import { Button } from '@mui/material';
 import { HiRefresh } from 'react-icons/hi';
 import { BiFilterAlt } from 'react-icons/bi';
 import DataTableColumnVisibility from './DataTableColumnVisibility';
 import { AiOutlineSetting } from 'react-icons/ai';
 import MaterialReactTable from 'material-react-table';
-import ColumnVisiblilty from './ColumnVisibility';
 import ColumnSearch from './ColumnSearch';
 import { BsSortDown } from 'react-icons/bs';
 import MenuCompoment from "@/components/data_table/MenuComponent";
@@ -44,6 +42,7 @@ export default function DataTable(props: DataTableProps) {
     }
 
 
+
     return (
         <div className="rounded-lg shadow-sm border bg-white p-4 flex flex-col gap-3">
             <div className="flex justify-between">
@@ -54,7 +53,7 @@ export default function DataTable(props: DataTableProps) {
                         title={<div className="flex gap-2">
                             <span className="text-lg"><BiFilterAlt /></span> <span className="text-[13px] capitalize">Filter</span>
                         </div>}
-                        items={props.columns}
+                        items={props.columns?.filter((e) => e?.accessorKey !== 'DocEntry')}
                         onClick={handlerSearch}
                     />
                 </div>

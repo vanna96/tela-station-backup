@@ -24,7 +24,6 @@ export default function DataTableColumnFilter(props: DataTableColumnFilterProps)
         setAnchorEl(event.currentTarget);
     };
 
-
     const handleClose = () => {
         setAnchorEl(null);
     };
