@@ -15,7 +15,7 @@ export default function PurchaseAgreementLists() {
     const columns = React.useMemo(
         () => [
             {
-                accessorKey: "docNum",
+                accessorKey: "DocNum",
                 header: "Doc Num", //uses the default width from defaultColumn prop
                 enableClickToCopy: true,
                 enableFilterMatchHighlighting: true,
@@ -24,26 +24,20 @@ export default function PurchaseAgreementLists() {
                 type: 'number',
             },
             {
-                accessorKey: "cardCode",
+                accessorKey: "CardCode",
                 header: "Vendor Code",
                 enableClickToCopy: true,
                 visible: true,
                 type: 'string',
             },
             {
-                accessorKey: "cardName",
+                accessorKey: "CardName",
                 header: "Vender Name",
                 visible: true,
                 type: 'string',
             },
             {
-                accessorKey: "currency",
-                header: "Currency",
-                visible: false,
-                type: 'string',
-            },
-            {
-                accessorKey: "startDate",
+                accessorKey: "StartDate",
                 header: "Start Date",
                 type: 'date',
                 visible: true,
@@ -57,7 +51,7 @@ export default function PurchaseAgreementLists() {
                 },
             },
             {
-                accessorKey: "endDate",
+                accessorKey: "EndDate",
                 header: "End Date",
                 type: 'date',
                 visible: true,
@@ -70,7 +64,7 @@ export default function PurchaseAgreementLists() {
             },
 
             {
-                accessorKey: "signingDate",
+                accessorKey: "SigningDate",
                 header: "Signing Date",
                 type: 'date',
                 visible: false,
@@ -83,7 +77,7 @@ export default function PurchaseAgreementLists() {
             },
 
             {
-                accessorKey: "terminationDate",
+                accessorKey: "TerminationDate",
                 header: "Termination Date",
                 type: 'date',
                 visible: false,
@@ -95,7 +89,7 @@ export default function PurchaseAgreementLists() {
             },
 
             {
-                accessorKey: "id",
+                accessorKey: "DocEntry",
                 enableFilterMatchHighlighting: false,
                 enableColumnFilterModes: false,
                 enableColumnActions: false,
@@ -108,11 +102,13 @@ export default function PurchaseAgreementLists() {
                 Cell: (cell: any) => (
                     <div className="flex gap-4">
                         <button onClick={() => {
-                            route('/procument/purchase-agreement/' + cell.row.original.id, { state: cell.row.original })
+                            route('/procument/purchase-agreement/' + cell.row.original.DocEntry, { state: cell.row.original, replace: true })
                         }}>
                             <VisibilityIcon fontSize="small" className="text-gray-600 " />
                         </button>
-                        <button title="back">
+                        <button title="back"
+                            onClick={() => route('/procument/purchase-agreement/' + cell.row.original.DocEntry + '/edit', { state: cell.row.original, replace: true })}
+                        >
                             <EditIcon fontSize="small" className="text-blue-400" />
                         </button>
                     </div>
@@ -169,8 +165,9 @@ export default function PurchaseAgreementLists() {
     }
 
 
-    const handlerSearch = (value: any) => {
-        setFilter(value);
+    const handlerSearch = (value: string) => {
+        const qurey = value.replace('CardCode', 'BPCode').replace('CardName', 'BPName');
+        setFilter(qurey);
         setPagination({
             pageIndex: 0,
             pageSize: 10,
@@ -181,7 +178,6 @@ export default function PurchaseAgreementLists() {
             refetch();
         }, 500)
     }
-
 
     return (
         <>

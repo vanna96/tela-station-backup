@@ -14,8 +14,8 @@ interface UOMTextField {
 const UOMTextField: FC<UOMTextField> = ({ value, onChange, data }: UOMTextField) => {
     const [open, setOpen] = React.useState<boolean>(false)
 
-    const handlerConfirm = (project: Project) => {
-        onChange({ target: { value: project.code } })
+    const handlerConfirm = (value: any) => {
+        onChange({ target: { value: value } })
     }
 
     const onClose = () => setOpen(false);

@@ -4,6 +4,7 @@ import MUITextField from '@/components/input/MUITextField';
 import MUISelect from '@/components/selectbox/MUISelect';
 import { ContactEmployee } from '@/models/BusinessParter';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom';
 
 export interface IHeadingFormProps {
     handlerOpenVendor: () => void,
@@ -15,13 +16,15 @@ export interface IHeadingFormProps {
 
 export default function HeadingForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject, edit }: IHeadingFormProps) {
 
+
+
     return (
         <>
             <FormCard title='Information'>
                 <div className="flex flex-col gap-2">
                     <div className="grid grid-cols-2 gap-3">
-                        <MUITextField required label="Vendor Code" value={data?.cardCode} disabled={edit} name="BPCode" onClick={handlerOpenVendor} endAdornment={!edit} />
-                        <MUITextField required label="Vendor Name" value={data?.cardName} disabled={edit} name="BPName" />
+                        <MUITextField required label="Vendor Code" value={data?.CardCode} disabled={edit} name="BPCode" onClick={handlerOpenVendor} endAdornment={!edit} />
+                        <MUITextField required label="Vendor Name" value={data?.CardName} disabled={edit} name="BPName" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -29,9 +32,9 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                             <label htmlFor="Code" className="text-gray-500 text-[14px]">Contact Person</label>
                             <div className="">
                                 <MUISelect
-                                    items={data?.contactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
-                                    onChange={(e) => handlerChange('contactPersonCode', e.target.value)}
-                                    value={data?.contactPersonCode}
+                                    items={data?.ContactPersonList?.map((e: ContactEmployee) => ({ id: e.id, name: e.name }))}
+                                    onChange={(e) => handlerChange('ContactPersonCode', e.target.value)}
+                                    value={data?.ContactPersonCode}
                                     aliasvalue="id"
                                     aliaslabel="name"
                                     name="ContactPersonCode"
@@ -40,7 +43,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                         </div>
 
                         <div className="flex flex-col gap-1 text-sm">
-                            <MUITextField label="Vender Ref.No" name="" />
+                            <MUITextField label="Vendor Ref.No" name="" onBlur={(e) => handlerChange('NumAtCart', e.target.value)} />
                         </div>
                     </div>
 
@@ -53,7 +56,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 <MUITextField
                                     size="small"
                                     name="BPCurrency"
-                                    value={data.currency}
+                                    defaultValue={data.Currency}
                                     disabled
                                 // disabled
                                 />
@@ -69,17 +72,17 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                         </label>
                         <div className="grid grid-cols-2 gap-3 ">
                             <MUISelect
-                                items={data.series ?? []}
+                                items={data.SerieLists ?? []}
                                 aliasvalue="Series"
                                 aliaslabel="Name"
                                 name="Series"
                                 loading={data?.isLoadingSerie}
-                                value={data?.serie}
+                                value={data?.Series}
                                 disabled={edit}
-                                onChange={(e: any) => handlerChange('serie', e.target.value)}
+                                onChange={(e: any) => handlerChange('Series', e.target.value)}
                             />
                             <div className='-mt-1'>
-                                <MUITextField size="small" name="DocNum" value={data?.docNum} disabled={edit} placeholder='Document No' />
+                                <MUITextField size="small" name="DocNum" value={data?.DocNum} disabled={edit} placeholder='Document No' />
                             </div>
                         </div>
                     </div>
@@ -97,7 +100,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                     name="AgreementMethod"
                                     disabled={edit}
                                     value={data.agreementMethod}
-                                    onChange={(e) => handlerChange('agreementMethod', e.target.value)}
+                                    onChange={(e) => handlerChange('AgreementMethod', e.target.value)}
                                 />
                             </div>
                         </div>
@@ -110,7 +113,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 Start Date
                             </label>
                             <div className="">
-                                <MUIDatePicker disabled={data?.isApproved} error={data?.message?.includes('StartDate')} value={data.startDate} onChange={(e: any) => handlerChange('startDate', e)} />
+                                <MUIDatePicker disabled={data?.isApproved} error={data?.message?.includes('StartDate')} value={data.StartDate} onChange={(e: any) => handlerChange('StartDate', e)} />
                             </div>
                         </div>
 
@@ -119,7 +122,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 End Date
                             </label>
                             <div className="">
-                                <MUIDatePicker disabled={data?.isApproved} value={data.endDate} onChange={(e: any) => handlerChange('endDate', e)} />
+                                <MUIDatePicker disabled={data?.isApproved} value={data.EndDate ?? null} onChange={(e: any) => handlerChange('EndDate', e)} />
                             </div>
                         </div>
                     </div>
@@ -127,17 +130,17 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 {/* <div className='col-span-2'></div> */}
                 <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-1 text-sm">
-                        <MUITextField label="Tel. No" value={data.phone} disabled={edit} />
+                        <MUITextField label="Tel. No" value={data.Phone} disabled={edit} />
                     </div>
 
                     <div className="flex flex-col gap-1 text-sm">
-                        <MUITextField label="Email" value={data.email} disabled={edit} />
+                        <MUITextField label="Email" value={data.Email} disabled={edit} />
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1 text-sm">
-                            <MUITextField label="Project" name="Project" disabled={data?.isApproved} value={data.project} endAdornment={true} onClick={handlerOpenProject} />
+                            <MUITextField label="Project" name="Project" disabled={data?.isApproved} value={data.Project} endAdornment={true} onClick={handlerOpenProject} />
                         </div>
 
                         <div className="flex flex-col gap-1 text-sm">
@@ -145,7 +148,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 Terminate Date
                             </label>
                             <div className="">
-                                <MUIDatePicker value={data?.terminateDate} disabled={edit && !data?.isApproved} onChange={(e: any) => handlerChange('terminateDate', e)} name="TerminateDate" />
+                                <MUIDatePicker value={data?.TerminateDate ?? null} disabled={edit && !data?.isApproved} onChange={(e: any) => handlerChange('TerminateDate', e)} name="TerminateDate" />
                             </div>
                         </div>
                     </div>
@@ -154,7 +157,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                             Signing Date
                         </label>
                         <div className="">
-                            <MUIDatePicker value={data?.signingDate} disabled={edit} onChange={(e: any) => handlerChange('signingDate', e)} name="SigningDate" />
+                            <MUIDatePicker value={data?.SigningDate} disabled={edit} onChange={(e: any) => handlerChange('SigningDate', e)} name="SigningDate" />
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 text-sm">
@@ -162,14 +165,16 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                             Description
                         </label>
                         <div className="">
-                            <TextField
+                            {/* <TextField
                                 size="small"
                                 multiline
                                 rows={4}
                                 fullWidth
+                                // defaultValue={data?.Description}
+                                onBlur={(e) => handlerChange('Description', e.target.value)}
                                 name="Description"
-                                className="w-full "
-                            />
+                                className="w-full"
+                            /> */}
                         </div>
                     </div>
                 </div>

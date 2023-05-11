@@ -41,4 +41,6 @@ export default class UnitOfMeasurementGroupRepository extends Repository<UnitOfM
     delete(id: any): Promise<UnitOfMeasurement> {
         throw new Error("Method not implemented.");
     }
+
+
 }

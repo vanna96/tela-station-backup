@@ -21,11 +21,16 @@ const UoMListModal: FC<UoMListModalProps> = ({ open, onClose, onOk, data }) => {
     pageSize: 8,
   });
 
+  const uomGroups = useQuery({ queryKey: 'uomGroup', queryFn: () => new UnitOfMeasurementGroupRepository().get(), staleTime: Infinity })
+  const uoms = useQuery({ queryKey: 'uom', queryFn: () => new UnitOfMeasurementRepository().get(), staleTime: Infinity })
+
 
   const handlerConfirm = () => {
   }
 
   const [rowSelection, setRowSelection] = React.useState({});
+
+
   const columns = React.useMemo(
     () => [
       {
@@ -40,6 +45,16 @@ const UoMListModal: FC<UoMListModalProps> = ({ open, onClose, onOk, data }) => {
     []
   );
 
+  const items = React.useMemo(() => {
+    const temps: any = uomGroups.data?.find((e: any) => e.Code === data);
+    const uomLists = temps?.UoMGroupDefinitionCollection.map((e: any) => {
+      const uom: any = uoms.data?.find((record: any) => record?.AbsEntry === e?.AlternateUoM);
+      return { ...e, Code: uom?.Code, Name: uom?.Name };
+    });
+
+    return uomLists;
+  }, [uomGroups.data, data])
+
   return (
     <Modal
       open={open}
@@ -52,7 +67,7 @@ const UoMListModal: FC<UoMListModalProps> = ({ open, onClose, onOk, data }) => {
       <div className="data-table" >
         <MaterialReactTable
           columns={columns}
-          data={data ?? []}
+          data={items ?? []}
           enableStickyHeader={true}
           enableStickyFooter={true}
           enablePagination={true}
@@ -74,7 +89,7 @@ const UoMListModal: FC<UoMListModalProps> = ({ open, onClose, onOk, data }) => {
           }}
           muiTableBodyRowProps={({ row }) => ({
             onClick: () => {
-              // onOk(new UomList(row.original));
+              onOk(row.original);
               onClose();
             },
             sx: { cursor: 'pointer' },

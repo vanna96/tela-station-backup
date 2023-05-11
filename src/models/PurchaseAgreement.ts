@@ -1,213 +1,122 @@
-import { dateFormat } from '../utilies';
-import Model from './Model';
-import { MasterDocument, DocumentLine } from './interface/index';
-import moment from 'moment';
-import { IContactPersonList } from '../astractions/index';
+import { LineDocumentModel, MasterDocumentModel } from './Model';
 import { ContactEmployee } from './BusinessParter';
-import ShippingTypeRepository from '../services/actions/shippingTypeRepository';
-import PaymentTermTypeRepository from '../services/actions/paymentTermTypeRepository';
-import OwnerRepository from '../services/actions/ownerRepository';
 import { getValueDocumentStatus } from '@/constants';
 
-export interface PurchaseAgreementProps {
-    id: any;
-    docNum: any;
-    cardCode?: string;
-    cardName?: string;
-    constactPersonCode?: number;
-    startDate?: string;
-    endDate?: string;
-    terminateDate?: string;
-    description?: string;
-    agreementType?: string;
-    status?: string;
-    owner?: string;
-    renewal?: boolean;
-    remindUnit?: string;
-    remindTime?: string;
-    remark?: string;
-    attachmentEntry?: number;
-    settlementProbability?: number;
-    agreementMethod?: string;
-    paymentTerm?: string;
-    priceList?: number;
-    signingDate?: string;
-    serie: string;
-    paymentMethod?: string;
-    shippingType?: string | undefined;
-    documentLine: PurchaseAgreementDocumentLineProps[];
-}
 
-export interface PurchaseAgreementDocumentLineProps {
-    itemNo?: string | undefined;
-    itemDescription?: string | undefined;
-    itemGroup?: string | undefined;
-    quantity?: number | undefined;
-    unitPrice?: number | undefined;
-    currency?: string | undefined;
-    cumulativeQuantity?: number | undefined;
-    cumulativeAmount?: number | undefined;
-    plannedAmount?: number;
-    lineDiscount?: number;
-    uomEntry?: number | undefined;
-    uomCode?: string | undefined;
-    shippingType?: string | undefined;
-    project?: string | undefined;
-    taxCode?: string | undefined;
-    taxRate?: number | undefined;
-}
-
-
-export default class PurchaseAgreement extends Model implements MasterDocument {
-    id: any;
-    docNum: any;
-    cardCode?: string;
-    cardName?: string;
-    contactPersonCode?: number;
-    startDate?: string;
-    endDate?: string;
-    terminateDate?: string;
-    description?: string;
-    agreementType?: string;
-    status?: string;
-    owner?: string;
-    renewal?: boolean;
-    remindUnit?: string;
-    remindTime?: string;
-    remark?: string;
-    attachmentEntry?: number;
-    settlementProbability?: number;
-    agreementMethod?: string;
-    paymentTermType?: string;
-    priceList?: number;
-    signingDate?: string;
-    serie: string;
-    paymentMethod?: string;
-    shippingType?: string | undefined;
-    items: PurchaseAgreementDocumentLine[];
-    email?: string | undefined | null;
-    phone?: string | undefined | null;
-    project?: string | undefined | null;
-    contactPersonList?: ContactEmployee[];
-    isEditable?: boolean;
+export default class PurchaseAgreement extends MasterDocumentModel {
+    DocEntry: any;
+    Series: string;
+    DocNum: any;
+    CardCode?: string;
+    CardName?: string;
+    ContactPersonCode?: number;
+    StartDate?: string;
+    EndDate?: string;
+    TerminateDate?: string;
+    Description?: string;
+    AgreementType?: string;
+    Status?: string;
+    Owner?: string;
+    Renewal?: boolean;
+    RemindUnit?: string;
+    RemindTime?: string;
+    Remark?: string;
+    AttachmentEntry?: number;
+    SettlementProbability?: number;
+    AgreementMethod?: string;
+    PaymentTermType?: string;
+    PriceList?: number;
+    SigningDate?: string;
+    Email?: string | undefined | null;
+    Phone?: string | undefined | null;
+    Project?: string | undefined | null;
+    ContactPersonList?: ContactEmployee[];
+    IsEditable?: boolean;
+    Items: PurchaseAgreementDocumentLine[];
 
     constructor(json: any) {
         super();
-        
-        this.id= json['AgreementNo'];
-        this.docNum= json['DocNum'];
-        this.cardCode= json['BPCode'];
-        this.cardName= json['BPName'];
-        this.contactPersonCode= json['ContactPersonCode'];
-        this.startDate= json['StartDate'];
-        this.endDate= json['EndDate'];
-        this.terminateDate= json['TerminateDate'];
-        this.description= json['Description'];
-        this.agreementType= json['AgreementType']?.replace('at',"")?.charAt(0);
-        this.status= getValueDocumentStatus(json['Status']);
-        this.owner= json['Owner'];
-        this.renewal= json['Renewal'] === 'tYES';
-        this.remindUnit= json['RemindUnit']?.replace('reu_',"")?.charAt(0);
-        this.remindTime= json['RemindTime'];
-        this.remark= json['Remarks'];
-        this.attachmentEntry= json['AttachmentEntry'];
-        this.settlementProbability= json['SettlementProbability'];
-        this.agreementMethod= json['AgreementMethod']?.replace('am',"")?.charAt(0);;
-        this.paymentTermType= json['PaymentTerms'];
-        this.priceList= json['PriceList'];
-        this.signingDate= json['SigningDate'];
-        this.serie= json['Series'];
-        this.paymentMethod= json['PaymentMethod'];
-        this.shippingType = json['ShippingType'];
-        this.email = json['Email'];
-        this.phone = json['Phone'];
-        this.contactPersonList = json['contactPersonList'];
-        this.project = json['Project'];
-        this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
-        this.items= json['BlanketAgreements_ItemsLines']?.map((e:any) => new PurchaseAgreementDocumentLine(e));
+        this.DocEntry = json['AgreementNo'];
+        this.Series = json['Series'];
+        this.DocNum = json['DocNum'];
+        this.CardCode = json['CardCode'] ?? json['BPCode'];
+        this.CardName = json['CardName'] ?? json['BPName'];
+        this.ContactPersonCode = json['ContactPersonCode'];
+        this.StartDate = json['StartDate'];
+        this.EndDate = json['EndDate'];
+        this.TerminateDate = json['TerminateDate'];
+        this.Description = json['Description'];
+        this.AgreementType = json['AgreementType']?.replace('at', "")?.charAt(0);
+        this.Status = getValueDocumentStatus(json['Status']);
+        this.Owner = json['Owner'];
+        this.Renewal = json['Renewal'] === 'tYES';
+        this.RemindUnit = json['RemindUnit']?.replace('reu_', "")?.charAt(0);
+        this.RemindTime = json['RemindTime'];
+        this.Remark = json['Remarks'];
+        this.AttachmentEntry = json['AttachmentEntry'];
+        this.SettlementProbability = json['SettlementProbability'];
+        this.AgreementMethod = json['AgreementMethod']?.replace('am', "")?.charAt(0);;
+        this.PaymentTermType = json['PaymentTerms'];
+        this.PriceList = json['PriceList'];
+        this.SigningDate = json['SigningDate'];
+        this.PaymentMethod = json['PaymentMethod'];
+        this.Email = json['Email'];
+        this.Phone = json['Phone'];
+        this.ContactPersonList = json['contactPersonList'];
+        this.Project = json['Project'];
+        this.IsEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
+        this.Items = (json['BlanketAgreements_ItemsLines'] ?? json['Items'])?.map((e: any) => new PurchaseAgreementDocumentLine(e));
     }
 
-    toJson(update: boolean) {
-        throw new Error('Method not implemented.');
+    setItem(items: any[]) {
+        this.Items = items;
     }
 
-
-    public static toCreate(json: any) {
+    toJson(update = false) {
         return {
-            "BPCode": json['cardCode'],
-            "BPName": json['cardName'],
-            "ContactPersonCode": json['contactPersonCode'],
-            "StartDate": json['startDate'],
-            "EndDate": json['endDate'],
-            "TerminateDate": json['terminateDate'],
-            "Description": json['description'],
-            "AgreementType": json['agreementType'],
-            "Status": json['status'],
-            "Owner": json['owner'],
-            "IgnorePricesInAgreement": json['inorePricesInAgreement'] ? 'Y' : 'N',
-            "Renewal": json['renewal'] ? 'Y' : 'N',
-            "RemindUnit": json['remindUnit'],
-            "RemindTime": json['remindTime'],
-            "Remarks": json['remarks'],
-            "AttachmentEntry": json['attachmentEntry'],
-            "SettlementProbability": json['settlementProbability'],
-            "AgreementMethod": json['agreementMethod'],
-            "PaymentTerms":  json['paymentTermType'],
-            "SigningDate": json['signingDate'],
-            "Series": json['serie'],
-            "PaymentMethod": json['paymentMethod'],
-            "ShippingType": json['shippingType'],
-            "NumAtCard": json['numAtCard'],
-            "Project": json['project'],
-            "BPCurrency": json['currency'],
-            "BlanketAgreements_ItemsLines": json['items'].map((e:any) => PurchaseAgreementDocumentLine.toCreate(e, json['agreementMethod']))
+            "BPCode": this.CardCode,
+            "BPName": this.CardName,
+            "ContactPersonCode": this.ContactPersonCode,
+            "StartDate": this.StartDate,
+            "EndDate": this.EndDate,
+            "TerminateDate": this.TerminateDate,
+            "Description": this.Description,
+            "AgreementType": this.AgreementType,
+            "Status": this.Status,
+            "Owner": this.Owner === '' ? null : this.Owner,
+            "IgnorePricesInAgreement": true ? 'Y' : 'N',
+            "Renewal": this.Renewal ? 'Y' : 'N',
+            "RemindUnit": this.RemindUnit,
+            "RemindTime": this.RemindTime,
+            "Remarks": this.Remark,
+            "AttachmentEntry": this.AttachmentEntry === 0 ? null : this.AttachmentEntry,
+            "SettlementProbability": this.SettlementProbability,
+            "AgreementMethod": this.AgreementMethod,
+            "PaymentTerms": this.PaymentTerm,
+            "SigningDate": this.SigningDate,
+            "Series": this.Series,
+            "PaymentMethod": this.PaymentMethod,
+            "ShippingType": this.ShippingType,
+            // "NumAtCard": this.,
+            // "Project": json['project'],
+            // "BPCurrency": this.Cur,
+            "BlanketAgreements_ItemsLines": this.Items.map((e) => e.toJson(this.AgreementMethod))
         };
     }
 
 
-    public static toUpdate(json: any) {
-        return {
-            "ContactPersonCode": json['contactPersonCode'],
-            "StartDate": json['startDate'],
-            "EndDate": json['endDate'],
-            "TerminateDate": json['terminateDate'],
-            "Description": json['description'],
-            "AgreementType": json['agreementType'],
-            "Status": json['status'],
-            "Owner": json['owner'],
-            "IgnorePricesInAgreement": json['inorePricesInAgreement'] ? 'Y' : 'N',
-            "Renewal": json['renewal'] ? 'Y' : 'N',
-            "RemindUnit": json['remindUnit'],
-            "RemindTime": json['remindTime'],
-            "Remarks": json['remarks'],
-            "AttachmentEntry": json['attachmentEntry'],
-            "SettlementProbability": json['settlementProbability'],
-            "AgreementMethod": json['agreementMethod'],
-            "PaymentTerms":  json['paymentTermType'],
-            "SigningDate": json['signingDate'],
-            "PaymentMethod": json['paymentMethod'],
-            "ShippingType": json['shippingType'],
-            "NumAtCard": json['numAtCard'],
-            "Project": json['project'],
-            "BPCurrency": json['currency'],
-            "BlanketAgreements_ItemsLines": json['items'].map((e:any) => PurchaseAgreementDocumentLine.toCreate(e, json['agreementMethod']))
-        };
-    }
-    
-
-
-    public static getRemindUnit(remindUnit : string | null): string {
+    public static getRemindUnit(remindUnit: string | null): string {
         switch (remindUnit) {
             case 'D':
                 return 'Days'
             case 'W':
                 return 'Weeks'
             case 'M':
-               return 'Months'
+                return 'Months'
             default:
                 return '';
         }
-    } 
+    }
 
     public static getType(status: string | null): string {
         switch (status) {
@@ -216,66 +125,77 @@ export default class PurchaseAgreement extends Model implements MasterDocument {
             default:
                 return 'Items Method';
         }
-    } 
+    }
 }
 
-export class PurchaseAgreementDocumentLine extends Model implements DocumentLine {
-    itemCode?: string | undefined;
-    itemName?: string | undefined;
-    itemGroup?: string | undefined;
-    quantity?: number | undefined;
-    unitPrice?: number | undefined;
-    currency?: string | undefined;
-    cumulativeQuantity?: number | undefined;
-    cumulativeAmount?: number | undefined;
-    plannedAmount?: number;
-    lineDiscount?: number;
-    uomEntry?: number | undefined;
-    uomCode?: string | undefined;
-    shippingType?: string | undefined;
-    project?: string | undefined;
-    taxCode?: string | undefined;
-    taxRate?: number | undefined;
+export class PurchaseAgreementDocumentLine extends LineDocumentModel {
+    ItemCode?: string | undefined;
+    ItemName?: string | undefined;
+    ItemGroup?: string | undefined;
+    Quantity?: number | undefined;
+    UnitPrice?: number | undefined;
+    Currency?: string | undefined;
+    CumulativeQuantity?: number | undefined;
+    CumulativeAmount?: number | undefined;
+    PlannedAmount?: number;
+    LineDiscount?: number;
+    UomEntry?: number | undefined;
+    UomCode?: string | undefined;
+    ShippingType?: string | undefined;
+    Project?: string | undefined;
+    TaxCode?: string | undefined;
+    TaxRate?: number | undefined;
+    ItemDescription?: string | undefined;
+    ItemGroupName?: string | undefined;
+    CumilativeQuantity?: number | undefined;
+    CumilativeAmount?: number | undefined;
+    UomGroupEntry?: number | undefined;
+    UomGroupName?: number | undefined;
+    VatGroup?: string | undefined;
+    AccountName?: string | undefined;
+    UnitsOfMeasurement: number | undefined;
 
     constructor(json: any) {
         super();
-        this.itemCode = json['ItemNo'];
-        this.itemName = json['ItemDescription'];
-        this.itemGroup = json['ItemGroup'];
-        this.quantity = json['PlannedQuantity'];
-        this.unitPrice = json['UnitPrice'];
-        this.currency = json['PriceCurrency'];
-        this.cumulativeQuantity = json['CumulativeQuantity'];
-        this.cumulativeAmount = json['CumulativeAmountFC'];
-        this.plannedAmount = json['PlannedAmountFC'];
-        this.lineDiscount =json['LineDiscount'];
-        this.uomEntry = json['UoMEntry'];
-        this.uomCode = json['UoMCode'];
-        this.shippingType = json['ShippingType'];
-        this.project = json['Project'];
-        this.taxCode = json['TaxCode'];
-        this.taxRate = json['TAXRate'];
+        this.ItemCode = json['ItemNo'] ?? json['ItemCode'];
+        this.ItemName = json['ItemDescription'];
+        this.ItemGroup = json['ItemGroup'];
+        this.Quantity = json['PlannedQuantity'] ?? json['Quantity'];
+        this.UnitPrice = json['UnitPrice'];
+        this.Currency = json['PriceCurrency'];
+        this.CumulativeQuantity = json['CumulativeQuantity'];
+        this.CumulativeAmount = json['CumulativeAmountFC'];
+        this.PlannedAmount = json['PlannedAmountFC'];
+        this.LineDiscount = json['LineDiscount'];
+        this.UomEntry = json['UoMEntry'];
+        this.UomCode = json['UoMCode'];
+        this.ShippingType = json['ShippingType'];
+        this.Project = json['Project'];
+        this.TaxCode = json['TaxCode'] ?? json['VatGroup'];
+        this.TaxRate = json['TAXRate'];
+        this.UnitsOfMeasurement = json['UnitsOfMeasurement']
     }
 
-
-    toJson(update: boolean) {
-        throw new Error('Method not implemented.');
+    setUOMGroup(uomGroup: any): void {
+        this.UomGroupEntry = uomGroup.AbsEntry;
+        this.UomGroupName = uomGroup?.Code;
     }
 
+    setItemGroup(itemGroup: any): void {
+        //   this.itemGroup = itemGroup.
+    }
 
-    public static toCreate(json: any, type: string) {
-        
+    toJson(type = 'I', update = false) {
         let body = {
-            "ItemNo": json["itemCode"],
-            "ItemDescription": json['itemName'],
-            "ItemGroup": json["itemsGroupCode"],
-            "PlannedQuantity": json['quantity'],
-            "UnitPrice": json['unitPrice'],
-            "UoMEntry": json['uoMGroupEntry'],
-            "UoMCode": null,
-            "UnitsOfMeasurement": 1.0,
-            "FreeText": json['freeText'] ?? null,
-            "InventoryUoM": json['inventoryUOM'],
+            "ItemNo": this.ItemCode,
+            "ItemDescription": this.ItemName,
+            "ItemGroup": this.ItemGroup,
+            "PlannedQuantity": this.Quantity,
+            "UnitPrice": this.UnitPrice,
+            "UoMEntry": this.UomEntry,
+            "UoMCode": this.UomCode,
+            // "UnitsOfMeasurement": 0,
+            // "FreeText": this ?? null,
             "CumulativeQuantity": null,
             "CumulativeAmountLC": null,
             "CumulativeAmountFC": 0.0,
@@ -287,10 +207,10 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
             "UndeliveredCumulativeQuantity": null,
             "UndeliveredCumulativeAmountLC": null,
             "UndeliveredCumulativeAmountFC": 0.0,
-            "ShippingType": json['shippingType'],
+            "ShippingType": this.ShippingType,
             "Project": null,
-            "TaxCode": null,
-            "TAXRate": null,
+            "TaxCode": this.TaxCode,
+            // "TAXRate": null,
             "PlannedVATAmountLC": null,
             "PlannedVATAmountFC": null,
             "CumulativeVATAmountLC": null,
@@ -303,9 +223,8 @@ export class PurchaseAgreementDocumentLine extends Model implements DocumentLine
             delete body.ItemGroup;
             delete body.UnitPrice;
             delete body.UoMEntry;
-            delete body.InventoryUoM;
         }
-        
+
         return body;
     }
 }
