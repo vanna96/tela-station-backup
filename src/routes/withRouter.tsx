@@ -1,5 +1,8 @@
+import { DocumentLine } from '@/models/interface';
+import itemRepository from '@/services/actions/itemRepostory';
+import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import { ComponentType } from 'react';
-import { MutationFunction, useMutation, useQueryClient } from 'react-query';
+import { MutationFunction, useMutation, useQuery, useQueryClient } from 'react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export interface WithRouterProps<T = ReturnType<typeof useParams>> {
@@ -19,6 +22,9 @@ export interface WithRouterProps<T = ReturnType<typeof useParams>> {
 }
 
 export const withRouter = <P extends object>(Component: ComponentType<P>) => {
+    const uomGroupRepo = new UnitOfMeasurementGroupRepository();
+
+
     return (props: Omit<P, keyof WithRouterProps>) => {
         const location = useLocation();
         const match = { params: useParams() };
@@ -38,8 +44,27 @@ export const withRouter = <P extends object>(Component: ComponentType<P>) => {
 
         };
 
+        const items: any = useQuery({
+            queryKey: ["items"],
+            queryFn: () => new itemRepository().get(),
+            staleTime: Infinity,
+        });
+
+
         const query = {
-            query: queryClient,
+            getItems: async (itemLines: DocumentLine[]): Promise<DocumentLine[]> => {
+                // const uomGroups: any[] = await uomGroupRepo.get();
+                // const lines = itemLines.map((row) => {
+                //     const item = items.data.find((e: any) => e.ItemCode === row.itemCode);
+                //     const uomGroup = uomGroups.find((e: any) => e.AbsEntry === item.UoMGroupEntry);
+                //     console.log(uomGroup);
+                //     row.setUOMGroup(uomGroup);
+                //     return row;
+                // });
+
+                // return lines;
+                return [];
+            },
             mutation: (key: string, cb: any) => {
                 return useMutation(cb, {
                     onSuccess: (data: any) => {

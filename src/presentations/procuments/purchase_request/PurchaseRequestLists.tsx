@@ -1,6 +1,6 @@
 import React from "react";
 import MaterialReactTable from "material-react-table";
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import moment from "moment/moment";
@@ -8,15 +8,15 @@ import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
 import PurchaseRequestRepository from "@/services/actions/purchaseRequestRepository";
+import DataTable from "@/components/data_table/DataTable";
 
 export default function PurchaseRequestLists() {
   const route = useNavigate();
 
-  const { data, isLoading }: any = useQuery({
-    queryKey: ["pr"],
-    queryFn: () => new PurchaseRequestRepository().get(),
-  });
-  console.log(data);
+  // const { data, isLoading }: any = useQuery({
+  //   queryKey: ["pr"],
+  //   queryFn: () => new PurchaseRequestRepository().get(),
+  // });
   const columns = React.useMemo(
     () => [
       {
@@ -25,25 +25,35 @@ export default function PurchaseRequestLists() {
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
+        type: 'number',
+        visible: true,
       },
       {
         accessorKey: "requester",
         header: "Requester",
         enableClickToCopy: true,
+        type: 'string',
+        visible: true,
       },
       {
         accessorKey: "requesterName",
         header: "Requester Name",
+        type: 'string',
+        visible: true,
         // size: 200, //increase the width of this column
       },
       {
         accessorKey: "requesterEmail",
         header: "Requester Email",
+        type: 'string',
+        visible: true,
         // size: 200, //increase the width of this column
       },
       {
         accessorKey: "taxDate",
         header: "Document Date",
+        type: 'date',
+        visible: true,
         Cell: ({ cell }: any) => (
           <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>
         ),
@@ -51,15 +61,19 @@ export default function PurchaseRequestLists() {
       {
         accessorKey: "docDueDate",
         header: "Valid Date",
-        Cell: ({ cell }) => <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>,
+        type: 'date',
+        visible: true,
+        Cell: ({ cell }: any) => <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>,
       },
       {
         accessorKey: "docTotalSys",
         header: "Total",
+        type: 'date',
+        visible: true,
         Cell: ({ cell }) => <>{'$ ' + moment(cell.getValue())}</>,
       },
       {
-        accessorKey: "id",
+        accessorKey: "DocEntry",
         enableFilterMatchHighlighting: false,
         enableColumnFilterModes: false,
         enableColumnActions: false,
@@ -87,10 +101,66 @@ export default function PurchaseRequestLists() {
     []
   );
 
+  const [filter, setFilter] = React.useState('');
+  const [sortBy, setSortBy] = React.useState('');
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const purchaseCount = useQuery({
+    queryKey: ['pr-count'], queryFn: () => new PurchaseRequestRepository().documentTotal(`?$select=DocNum${filter}`),
+    staleTime: Infinity,
+  });
+
+  const { data, isLoading, error, isError, refetch, isFetching }: any = useQuery({
+    queryKey: ['pr', `${(pagination.pageIndex) * 10}_${filter !== '' ? 'f' : ''}`], queryFn: () => {
+      return new PurchaseRequestRepository().get(`?$top=${pagination.pageSize}&$skip=${(pagination.pageIndex) * pagination.pageSize}${filter}${sortBy !== '' ? '&$orderby=' + sortBy : ''}`);
+    },
+    staleTime: Infinity,
+    retry: 1,
+  });
+
+
+  const handlerRefresh = React.useCallback(() => {
+    setFilter('');
+    setSortBy('');
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+    setTimeout(() => {
+      purchaseCount.refetch();
+      refetch();
+    }, 500);
+  }, []);
+
+  const handlerSortby = (value: any) => {
+    setSortBy(value);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      refetch();
+    }, 500)
+  }
+
+
+  const handlerSearch = (value: string) => {
+    setFilter(value);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      purchaseCount.refetch();
+      refetch();
+    }, 500)
+  }
+
 
   return (
     <>
@@ -109,7 +179,19 @@ export default function PurchaseRequestLists() {
           </Button>
         </div>
 
-        <div className="grow data-table">
+        <DataTable
+          columns={columns}
+          data={data}
+          handlerRefresh={handlerRefresh}
+          handlerSearch={handlerSearch}
+          handlerSortby={handlerSortby}
+          count={purchaseCount.data ?? 0}
+          loading={isLoading || isFetching}
+          pagination={pagination}
+          paginationChange={setPagination}
+        />
+
+        {/* <div className="grow data-table">
           <MaterialReactTable
             columns={columns}
             data={data ?? []}
@@ -135,12 +217,11 @@ export default function PurchaseRequestLists() {
                   <h3 className="font-bold text-base xl:text-sm">
                     Purchase Agreement
                   </h3>
-                  {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
                 </div>
               );
             }}
           />
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -3,12 +3,12 @@ import UnitOfMeasurement from "@/models/UnitOfMeasurement";
 import Encryption from "@/utilies/encryption";
 import request from "@/utilies/request";
 
-export default class UnitOfMeasurementRepository extends Repository<UnitOfMeasurement> {
+export default class UnitOfMeasurementGroupRepository extends Repository<UnitOfMeasurement> {
 
-    url = '/UnitOfMeasurements?$select=AbsEntry,Code,Name';
+    url = '/UnitOfMeasurementGroups?$select=AbsEntry,Code,Name,BaseUoM,UoMGroupDefinitionCollection';
 
     // specific key
-    key = 'UnitOfMeasurements';
+    key = 'UnitOfMeasurementGroups';
 
     async get<UnitOfMeasurement>(query?: string | undefined): Promise<UnitOfMeasurement[]> {
         const data = localStorage.getItem(this.key);
@@ -41,4 +41,6 @@ export default class UnitOfMeasurementRepository extends Repository<UnitOfMeasur
     delete(id: any): Promise<UnitOfMeasurement> {
         throw new Error("Method not implemented.");
     }
+
+
 }

@@ -4,6 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --text-color: #1a1a1a;
+    --fill-color: #ffffff;
+    --fill-color-indicator: #be4141;
+  }
+
+  .dark-theme {
+    --text-color: #ffffff;
+    --fill-color: #161616;
+    --fill-color-indicator: #be4141;
+  }
+}
+
 html,
 body,
 #root {

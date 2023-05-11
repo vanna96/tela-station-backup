@@ -12,7 +12,7 @@ import VatGroupRepository from '../../services/actions/VatGroupRepository';
 import VatGroup from '@/models/VatGroup';
 import ItemGroupRepository from '@/services/actions/itemGroupRepository';
 import UnitOfMeasurementRepository from '@/services/actions/unitOfMeasurementRepository';
-
+import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 
 type ItemType = 'purchase' | 'sale' | 'inventory';
 
@@ -26,7 +26,6 @@ interface ItemModalProps {
 
 const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
 
-
     const { data, isLoading }: any = useQuery({
         queryKey: ["items"],
         queryFn: () => new itemRepository().get(),
@@ -37,9 +36,11 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
         pageIndex: 0,
         pageSize: 8,
     });
-
-
     const [rowSelection, setRowSelection] = React.useState({});
+
+    React.useEffect(() => {
+        setTimeout(() => setRowSelection({}), 500)
+    }, [open])
 
     const columns = React.useMemo(
         () => [
@@ -74,9 +75,11 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
     }, [data]);
 
 
-    const handlerConfirm = () => {
+    const handlerConfirm = async () => {
         const keys = Object.keys(rowSelection);
         let selectItems = keys.map((e: any) => items.find((ele: any) => ele?.ItemCode === e));
+        const uomGroups: any = await new UnitOfMeasurementGroupRepository().get();
+        const uoms = await new UnitOfMeasurementRepository().get();
 
         selectItems = selectItems.map((e: any) => {
             let vatRate: any = 0;
@@ -95,23 +98,40 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                     break;
             }
 
+
+            const uomGroup: any = uomGroups.find((row: any) => row.AbsEntry === e?.UoMGroupEntry);
+            let uomLists: any[] = [];
+            uomGroup?.UoMGroupDefinitionCollection?.forEach((row: any) => {
+                const itemUOM = uoms.find((record: any) => record?.AbsEntry === row?.AlternateUoM);
+                if (itemUOM) {
+                    uomLists.push(itemUOM)
+                };
+            })
+            const baseUOM: any = uoms.find((row: any) => row.AbsEntry === uomGroup?.BaseUoM);
+
             return ({
-                itemCode: e?.ItemCode,
-                itemName: e?.ItemName,
-                itemDescription: e?.ItemName,
-                uomEntry: e?.UoMGroupEntry,
-                itemGroup: e?.ItemsGroupCode,
-                saleVatGroup: e?.SalesVATGroup,
-                purchaseVatGroup: e?.PurchaseVATGroup,
-                vatGroup: e?.PurchaseVATGroup,
-                vatRate: vatRate,
-                quantity: 0,
-                unitPrice: 0,
-                discountPercent: 0,
-                total: 0
+                ItemCode: e?.ItemCode,
+                ItemName: e?.ItemName,
+                ItemDescription: e?.ItemName,
+                UomEntry: e?.UoMGroupEntry,
+                ItemGroup: e?.ItemsGroupCode,
+                SaleVatGroup: e?.SalesVATGroup,
+                PurchaseVatGroup: e?.PurchaseVATGroup,
+                VatGroup: e?.PurchaseVATGroup,
+                VatRate: vatRate,
+                Quantity: 0,
+                UnitPrice: 0,
+                DiscountPercent: 0,
+                Total: 0,
+                UomGroupAbsEntry: e?.UoMGroupEntry,
+                UomGroupCode: uomGroup?.Code,
+                UomAbsEntry: baseUOM?.AbsEntry,
+                UomCode: baseUOM?.Code,
+                UomName: baseUOM?.Name,
+                UomLists: uomLists,
+                UnitsOfMeasurement: uomGroup?.UoMGroupDefinitionCollection.find((e: any) => e?.AlternateUoM === uomGroup?.BaseUoM)?.BaseQuantity,
             })
         });
-console.log(selectItems)
         onOk(selectItems)
     }
 
@@ -121,6 +141,7 @@ console.log(selectItems)
             open={open}
             onClose={onClose}
             widthClass='w-[70%]'
+            heightClass='h-[85vh]'
             title='Items'
             disableTitle={true}
             onOk={handlerConfirm}

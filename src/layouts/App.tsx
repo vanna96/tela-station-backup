@@ -10,9 +10,9 @@ export default function App() {
     if (!cookies.sessionId) return <Navigate to={"/login"} />
 
     return (
-        <div className='h-full w-full flex '>
+        <div className='h-full w-full flex gap-0 '>
             <SideBar />
-            <div className='grow  rounded-lg shadow  overflow-auto'>
+            <div className='grow ml-2 rounded-lg  overflow-auto'>
                 <Outlet />
             </div>
         </div>

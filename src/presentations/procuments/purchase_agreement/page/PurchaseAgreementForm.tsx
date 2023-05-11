@@ -29,18 +29,16 @@ class PurchaseAgreementForm extends CoreFormDocument {
             signingDate: null,
             endDate: null,
             loading: true,
-            
-            
+
+
         } as any;
 
-        console.log(this.props);
         this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
         this.handlerItemChange = this.handlerItemChange.bind(this);
         this.handlerSubmit = this.handlerSubmit.bind(this);
     }
 
     componentDidMount(): void {
-
         if (!this.props?.edit) {
             setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
         }
@@ -48,9 +46,10 @@ class PurchaseAgreementForm extends CoreFormDocument {
         if (this.props.edit) {
             if (this.props.location.state) {
                 const routeState = this.props.location.state;
-
                 setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A' || routeState?.status === 'T', loading: false, }), 500)
             } else {
+                // const dd = this.props.query.queryProvider.getQueryData('items');
+
                 new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
                     this.setState({ ...res, loading: false, isApproved: res?.status === 'A' || res?.status === 'T', });
                 }).catch((e: Error) => {
@@ -60,26 +59,27 @@ class PurchaseAgreementForm extends CoreFormDocument {
         }
 
         DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie).then((res: any) => {
-            this.setState({ ...this.state, series: res, isLoadingSerie: false })
+            this.setState({ ...this.state, SerieLists: res, isLoadingSerie: false })
         });
 
         if (!this.props.edit) {
             DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie).then((res: any) => {
-                this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber })
+                this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber })
             });
         }
     }
 
     handlerRemoveItem(code: string) {
-        let items = [...this.state.items ?? []];
+        let items = [...this.state.Items ?? []];
         const index = items.findIndex((e: any) => e?.ItemCode === code);
         items.splice(index, 1)
-        this.setState({ ...this.state, items: items })
+        this.setState({ ...this.state, Items: items })
     }
 
     handlerItemChange({ value, record, field }: any) {
-        let items = [...this.state.items ?? []];
-        let item = this.state.items?.find((e: any) => e?.itemCode === record?.itemCode);
+        let items = [...this.state.Items ?? []];
+        let item = this.state.Items?.find((e: any) => e?.ItemCode === record?.ItemCode);
+        const index = items.findIndex((e: any) => e?.ItemCode === record.ItemCode);
 
         if (field === 'AccountNo') {
             const account = value as GLAccount;
@@ -89,29 +89,43 @@ class PurchaseAgreementForm extends CoreFormDocument {
             item[field] = value;
         }
 
+        switch (field) {
+            case 'AccountNo':
+                const account = value as GLAccount;
+                item[field] = account.code;
+                item['AccountName'] = account.name;
+                break;
+            case 'UomCode':
+                item[field] = value?.Code;
+                item['UoMAbsEntry'] = value.AlternateUoM;
+                item['UnitsOfMeasurement'] = value.BaseQuantity;
+                break;
+            default:
+                item[field] = value;
+        }
 
-        const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-        if (index > 0) items[index] = item;
-        this.setState({ ...this.state, items: items })
+
+        if (index >= 0) {
+            items[index] = item;
+            console.log(item)
+            this.setState({ ...this.state, Items: items })
+        }
     }
 
 
     async handlerSubmit(event: any) {
         event.preventDefault();
-
         this.setState({ ...this.state, isSubmitting: true });
         const { id } = this.props?.match?.params
-
-        await new PurchaseAgreementRepository().post(this.state, this.props?.edit, id).then((res: any) => {
+        const payloads = new PurchaseAgreement(this.state).toJson(this.props?.edit);
+        await new PurchaseAgreementRepository().post(payloads, this.props?.edit, id).then((res: any) => {
             const purchaseAgreement = new PurchaseAgreement(res?.data)
-
-            this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.id), purchaseAgreement);
+            this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.DocEntry), purchaseAgreement);
             this.dialog.current?.success("Create Successfully.");
         }).catch((e: any) => {
             if (e instanceof UpdateDataSuccess) {
-                this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.documentStatus === 'A' });
+                this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.DocumentStatus === 'A' });
                 this.dialog.current?.success(e.message);
-                // const query = this.props.query.query as QueryClient;
                 return;
             }
             this.dialog.current?.error(e.message);

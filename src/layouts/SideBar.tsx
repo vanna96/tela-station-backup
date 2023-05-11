@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { FiGrid, FiShoppingBag } from "react-icons/fi";
 import { GiFactory } from "react-icons/gi";
-import { MdOutlineDirectionsTransitFilled } from "react-icons/md";
+import { MdOutlineDirectionsTransitFilled, MdOutlineLightMode } from "react-icons/md";
 import { HiOutlineDocumentPlus } from "react-icons/hi2";
 import { VscSignOut } from "react-icons/vsc";
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { BsClipboardData } from "react-icons/bs";
+import { AiOutlineSetting } from 'react-icons/ai';
 
 
 export default function SideBar() {
@@ -23,10 +23,11 @@ export default function SideBar() {
 
     return (
         <aside className={`${collapse ? 'min-w-[18rem] 2xl:min-w-[14rem] xl:min-w-[13rem] p-2 px-4 xl:px-2' : 'w-[4rem] px-2'} bg-white shadow transition-min-width duration-300 flex flex-col gap-16  text-[#a8a6a6] py-8 relative z-20`}>
-            <h1 className='text-2xl 2xl:text-xl xl:text-lg font-bold uppercase text-center text-stone-800 whitespace-nowrap overflow-hidden '>Tela App</h1>
-            <div role='button' onClick={() => setCollapse(!collapse)} className={`p-[0.7rem] border rounded-full absolute  bg-white shadow  z-50`}><IoChevronForwardSharp className={`${collapse ? '' : 'rotate-180'} duration-300 `} /></div>
+            <h1 className='text-2xl 2xl:text-xl xl:text-lg font-bold uppercase text-center text-stone-800 whitespace-nowrap overflow-hidden '>SAP</h1>
 
-            <div className='grow flex flex-col gap-2 whitespace-nowrap overflow-hidden text-base 2xl:text-sm xl:text-[13px]'>
+            <div role='button' onClick={() => setCollapse(!collapse)} className={`p-[0.6rem] border rounded-full absolute bg-white shadow z-50 -right-[18px]`}><IoChevronForwardSharp className={`${collapse ? '' : 'rotate-180'} duration-300 `} /></div>
+
+            <div className='grow flex flex-col gap-2 whitespace-nowrap overflow-hidden text-base 2xl:text-sm xl:text-[12px]'>
                 <NavButton onClick={() => goTo('/system-initialize')} route="system-initialize" collapse={collapse} icon={<FiGrid />} title="System Initialize" />
                 <NavButton onClick={() => goTo('/master-data')} route="master-data" collapse={collapse} icon={<BsClipboardData />} title="Master Data" />
                 <NavButton onClick={() => goTo('/procument')} route="procument" collapse={collapse} icon={<HiOutlineDocumentPlus />} title="Procument" />
@@ -35,6 +36,8 @@ export default function SideBar() {
                 <NavButton onClick={() => goTo('/logistic')} route="logistic" collapse={collapse} icon={<MdOutlineDirectionsTransitFilled />} title="Logistic" />
             </div>
             <div className='mb-6 text-stone-900 font-bold overflow-hidden xl:text-[13px]'>
+                <NavButton onClick={() => { }} route="setting" collapse={collapse} icon={<MdOutlineLightMode />} title="Dark" />
+                <NavButton onClick={() => { }} route="setting" collapse={collapse} icon={<AiOutlineSetting />} title="Setting" />
                 <NavButton onClick={logout} route="logistic" collapse={collapse} icon={<VscSignOut />} title="Logout" />
             </div>
         </aside>
@@ -46,6 +49,7 @@ type NavButtonProps = {
     collapse: boolean,
     title: string,
     route: string,
+    disable?: boolean,
     icon: React.ReactElement,
     onClick: () => void
 }
@@ -62,7 +66,7 @@ export function NavButton(props: NavButtonProps) {
             <span className={`${location.pathname?.split('/')[1] === props.route ? 'text-white' : ''} text-xl font-extrabold`}>
                 {props.icon}
             </span>
-            {props.collapse ? <span className={location.pathname?.split('/')[1] === props.route ? 'text-white' : ''} >{props.title}</span> : null}
+            {props.collapse ? <span className={location.pathname?.split('/')[1] === props.route ? 'text-white' : 'font-normal'} >{props.title}</span> : null}
         </div>
     )
 }

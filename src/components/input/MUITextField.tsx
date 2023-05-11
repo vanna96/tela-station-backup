@@ -42,11 +42,11 @@ const MUITextField: FC<MUITextFieldProps> = (
                         fullWidth
                         className={`w-full text-field pr-0 ${disabled ? 'bg-gray-100' : ''} ${className ?? ''}`}
                         name={name}
-                        value={value ?? ''}
+                        value={value}
                         onChange={onChange}
                         onBlur={onBlur}
                         disabled={disabled}
-                        defaultValue={defaultValue}
+                        defaultValue={defaultValue ?? ''}
                         type={type}
                         placeholder={placeholder}
                         required={required}

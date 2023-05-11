@@ -14,6 +14,9 @@ import AccountTextField from '../../../../components/input/AccountTextField';
 import ProjectionTextField from "@/components/input/ProjectionTextField";
 import ItemGroupRepository from '../../../../services/actions/itemGroupRepository';
 import UnitOfMeasurementRepository from '../../../../services/actions/unitOfMeasurementRepository';
+import UOMTextField from "@/components/input/UOMTextField";
+import UnitOfMeasurementGroupRepository from "@/services/actions/unitOfMeasurementGroupRepository";
+import { getUOMGroupByCode } from "@/helpers";
 
 
 interface ContentFormProps {
@@ -26,6 +29,9 @@ interface ContentFormProps {
 
 export default function ContentForm({ data, handlerChangeItem, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
     const [tableKey, setTableKey] = React.useState(Date.now())
+
+    const itemGroupRepo = new ItemGroupRepository();
+    const uomGroupRepo = new UnitOfMeasurementGroupRepository();
 
     const handlerChangeInput = (event: any, row: any, field: any) => {
         if (data?.isApproved) return;
@@ -46,6 +52,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "Action",
                 header: "",
                 size: 40,
+                pin: true,
                 enableResizing: false,
                 Cell: ({ cell }: any) => {
                     return (
@@ -62,7 +69,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 },
             },
             {
-                accessorKey: "itemCode",
+                accessorKey: "ItemCode",
                 header: "Item No", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
                     // return ;
@@ -70,43 +77,40 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                         value={cell.getValue()}
                         disabled={data?.isApproved}
                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
-                        onClick={() => { }}
+                        endAdornment
+                        onClick={handlerAddItem}
                     />;
                 },
             },
 
             {
-                accessorKey: "itemName",
+                accessorKey: "ItemName",
                 header: "Description",
                 Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={cell.getValue()} />
             },
+
             {
-                accessorKey: "uomEntry",
-                header: "UoM Group",
-                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={new UnitOfMeasurementRepository().find(cell.getValue())?.name} />
-            },
-            {
-                accessorKey: "itemGroup",
+                accessorKey: "ItemGroup",
                 header: "Item Group",
-                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={new ItemGroupRepository().find(cell.getValue())?.name} />
+                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={itemGroupRepo.find(cell.getValue())?.GroupName} />
             },
             {
-                accessorKey: "quantity",
+                accessorKey: "Quantity",
                 header: "Quantity",
                 Cell: ({ cell }: any) => {
 
                     return <MUITextField
-                        value={cell.getValue()}
+                        defaultValue={cell.getValue()}
                         type="number"
                         name="Quantity"
                         error={(cell.getValue() as number) <= 0}
                         disabled={data?.isApproved}
-                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'quantity')}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
                     />;
                 },
             },
             {
-                accessorKey: "unitPrice",
+                accessorKey: "UnitPrice",
                 header: "Unit Price",
                 Cell: ({ cell }: any) => {
                     return <MUITextField
@@ -115,27 +119,46 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                         name="UnitPrice"
                         disabled={data?.isApproved}
                         error={(cell.getValue() as number) <= 0}
-                        value={cell.getValue()}
-                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'unitPrice')}
+                        defaultValue={cell.getValue()}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
                     />;
                 },
             },
             {
-                accessorKey: "total",
+                accessorKey: "Total",
                 header: "Total",
                 Cell: ({ cell }: any) => {
                     return <MUITextField
                         startAdornment={'%'}
                         disabled={data?.isApproved}
-                        value={Formular.findToTal(cell.row.original.quantity, cell.row.original.unitPrice)}
+                        value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
                     />;
                 },
             },
             {
-                accessorKey: "UoMCode",
+                accessorKey: "UomGroupCode",
+                header: "UoM Group",
+                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+            },
+            {
+                accessorKey: "UomCode",
                 header: "UoM Code",
                 Cell: ({ cell }: any) => (
-                    <MUITextField defaultValue={cell.getValue()} />
+                    <UOMTextField
+                        key={cell.getValue()}
+                        value={cell.getValue()}
+                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UomCode')}
+                        data={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+                ),
+            },
+            {
+                accessorKey: "UnitsOfMeasurement",
+                header: "Item Per Units",
+                Cell: ({ cell }: any) => (
+                    <MUITextField
+                        type="number"
+                        value={cell.getValue()}
+                    />
                 ),
             },
         ],
@@ -211,7 +234,11 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
         []
     );
 
-    const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
+    const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, });
+
+    const blankItem = {
+        ItemCode: ''
+    };
 
     return (
         <FormCard title="Content" >
@@ -220,14 +247,13 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     key={tableKey}
                     // columns={itemColumns}
                     columns={data?.agreementMethod === 'M' ? serviceColumns : itemColumns}
-                    data={data?.items ?? []}
+                    data={[...data?.Items, blankItem] ?? []}
                     enableStickyHeader={true}
                     enableColumnActions={false}
                     enableColumnFilters={false}
                     enablePagination={false}
                     enableSorting={false}
-                    enableBottomToolbar={false}
-                    enableTopToolbar={true}
+                    enableTopToolbar={false}
                     enableColumnResizing={true}
                     enableColumnFilterModes={false}
                     enableDensityToggle={false}
@@ -236,9 +262,11 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     enableGlobalFilter={false}
                     enableHiding={true}
                     onColumnVisibilityChange={setColVisibility}
+                    enableStickyFooter
                     initialState={{
                         density: "compact",
-                        columnVisibility: colVisibility
+                        columnVisibility: colVisibility,
+                        // columnPinning: { left: ['Action', 'ItemCode'] }
                     }}
                     state={{
                         columnVisibility: colVisibility
@@ -246,18 +274,18 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     icons={{
                         ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />
                     }}
-                    renderTopToolbarCustomActions={({ table }) => {
-                        return <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                            {!data?.isApproved ?
-                                <>
-                                    <Button variant="outlined" size="small"
-                                        onClick={handlerAddItem}
-                                    ><span className="text-xs  capitalize font-normal">+ Add New</span></Button>
-                                </>
-                                : null}
+                // renderTopToolbarCustomActions={({ table }) => {
+                //     return <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
+                //         {!data?.isApproved ?
+                //             <>
+                //                 <Button variant="outlined" size="small"
+                //                     onClick={handlerAddItem}
+                //                 ><span className="text-xs  capitalize font-normal">+ Add New</span></Button>
+                //             </>
+                //             : null}
 
-                        </div>
-                    }}
+                //     </div>
+                // }}
                 />
             </div>
         </FormCard>
