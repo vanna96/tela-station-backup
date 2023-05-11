@@ -20,6 +20,8 @@ const UOMTextField: FC<UOMTextField> = ({ value, onChange, data }: UOMTextField)
 
     const onClose = () => setOpen(false);
 
+    console.log(data)
+
     return <>
         <UoMListModal open={open} onClose={onClose} onOk={handlerConfirm} data={data} />
         <MUITextField endAdornment value={value} onClick={() => setOpen(true)} />

@@ -43,7 +43,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                         </div>
 
                         <div className="flex flex-col gap-1 text-sm">
-                            <MUITextField label="Vendor Ref.No" name="" onBlur={(e) => handlerChange('NumAtCart', e.target.value)} />
+                            <MUITextField label="Vendor Ref.No" defaultValue={data?.NumAtCard} name="" onBlur={(e) => handlerChange('NumAtCard', e.target.value)} />
                         </div>
                     </div>
 

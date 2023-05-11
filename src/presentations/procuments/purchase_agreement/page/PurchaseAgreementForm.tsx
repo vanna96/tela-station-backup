@@ -77,8 +77,11 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
     handlerItemChange({ value, record, field }: any) {
+
+
         let items = [...this.state.Items ?? []];
-        let item = this.state.Items?.find((e: any) => e?.itemCode === record?.itemCode);
+        let item = this.state.Items?.find((e: any) => e?.ItemCode === record?.ItemCode);
+        const index = items.findIndex((e: any) => e?.ItemCode === record.ItemCode);
 
         if (field === 'AccountNo') {
             const account = value as GLAccount;
@@ -94,7 +97,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
                 item[field] = account.code;
                 item['AccountName'] = account.name;
                 break;
-            case 'UoMCode':
+            case 'UomCode':
                 item[field] = value?.Code;
                 item['UoMAbsEntry'] = value.AlternateUoM;
                 item['UnitsOfMeasurement'] = value.BaseQuantity;
@@ -104,9 +107,11 @@ class PurchaseAgreementForm extends CoreFormDocument {
         }
 
 
-        const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-        if (index > 0) items[index] = item;
-        this.setState({ ...this.state, Items: items })
+        if (index >= 0) {
+            items[index] = item;
+            console.log(item)
+            this.setState({ ...this.state, Items: items })
+        }
     }
 
 
@@ -114,9 +119,9 @@ class PurchaseAgreementForm extends CoreFormDocument {
         event.preventDefault();
         this.setState({ ...this.state, isSubmitting: true });
         const { id } = this.props?.match?.params
-        await new PurchaseAgreementRepository().post(new PurchaseAgreement(this.state).toJson(this.props?.edit), this.props?.edit, id).then((res: any) => {
+        const payloads = new PurchaseAgreement(this.state).toJson(this.props?.edit);
+        await new PurchaseAgreementRepository().post(payloads, this.props?.edit, id).then((res: any) => {
             const purchaseAgreement = new PurchaseAgreement(res?.data)
-
             this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.DocEntry), purchaseAgreement);
             this.dialog.current?.success("Create Successfully.");
         }).catch((e: any) => {

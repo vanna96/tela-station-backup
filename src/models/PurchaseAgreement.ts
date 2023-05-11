@@ -9,6 +9,7 @@ export default class PurchaseAgreement extends MasterDocumentModel {
     DocNum: any;
     CardCode?: string;
     CardName?: string;
+    NumAtCard?: string;
     ContactPersonCode?: number;
     StartDate?: string;
     EndDate?: string;
@@ -41,6 +42,7 @@ export default class PurchaseAgreement extends MasterDocumentModel {
         this.DocNum = json['DocNum'];
         this.CardCode = json['CardCode'] ?? json['BPCode'];
         this.CardName = json['CardName'] ?? json['BPName'];
+        this.NumAtCard = json['NumAtCard'];
         this.ContactPersonCode = json['ContactPersonCode'];
         this.StartDate = json['StartDate'];
         this.EndDate = json['EndDate'];
@@ -97,10 +99,11 @@ export default class PurchaseAgreement extends MasterDocumentModel {
             "Series": this.Series,
             "PaymentMethod": this.PaymentMethod,
             "ShippingType": this.ShippingType,
+            "NumAtCard": this.NumAtCard,
             // "NumAtCard": this.,
             // "Project": json['project'],
             // "BPCurrency": this.Cur,
-            "BlanketAgreements_ItemsLines": this.Items.map((e) => e.toJson(this.AgreementMethod))
+            "BlanketAgreements_ItemsLines": this.Items.map((e) => e.toJson(this.AgreementMethod, update))
         };
     }
 
@@ -209,7 +212,7 @@ export class PurchaseAgreementDocumentLine extends LineDocumentModel {
             "UndeliveredCumulativeAmountFC": 0.0,
             "ShippingType": this.ShippingType,
             "Project": null,
-            "TaxCode": this.TaxCode,
+            "TaxCode": update ? null : this.TaxCode,
             // "TAXRate": null,
             "PlannedVATAmountLC": null,
             "PlannedVATAmountFC": null,

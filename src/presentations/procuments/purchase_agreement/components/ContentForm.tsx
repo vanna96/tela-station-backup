@@ -100,12 +100,12 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => {
 
                     return <MUITextField
-                        value={cell.getValue()}
+                        defaultValue={cell.getValue()}
                         type="number"
                         name="Quantity"
                         error={(cell.getValue() as number) <= 0}
                         disabled={data?.isApproved}
-                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
                     />;
                 },
             },
@@ -119,8 +119,8 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                         name="UnitPrice"
                         disabled={data?.isApproved}
                         error={(cell.getValue() as number) <= 0}
-                        value={cell.getValue()}
-                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
+                        defaultValue={cell.getValue()}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
                     />;
                 },
             },
@@ -145,9 +145,10 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 header: "UoM Code",
                 Cell: ({ cell }: any) => (
                     <UOMTextField
+                        key={cell.getValue()}
                         value={cell.getValue()}
-                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UoMCode')}
-                        data={cell.row.original.UomGroupCode} />
+                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UomCode')}
+                        data={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
                 ),
             },
             {
