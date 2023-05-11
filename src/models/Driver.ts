@@ -141,6 +141,8 @@ export default class Employees extends Model {
     u_Driver?: string;
     u_DRIVERLICN?: string;
     u_DRIVERLICEXD?: string;
+    u_DRIVERLICEXD2?: string;
+    
 
     constructor(json: any) {
         super();
@@ -212,6 +214,7 @@ export default class Employees extends Model {
         this.u_Driver = json['U_Driver']
         this.u_DRIVERLICN = json['U_DRIVERLICN']
         this.u_DRIVERLICEXD = json['U_DRIVERLICEXD']
+        this.u_DRIVERLICEXD2 = dateFormat(json['U_DRIVERLICEXD'])
 
 
     }

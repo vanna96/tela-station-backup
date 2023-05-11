@@ -37,7 +37,7 @@ export default function DriverList() {
                 header: "Licence No.",
             },
             {
-                accessorKey: "u_DRIVERLICEXD",
+                accessorKey: "u_DRIVERLICEXD2",
                 header: "Licence Exp. Date",
             },
             {

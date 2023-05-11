@@ -7,7 +7,7 @@ import EmployeeRepository from "@/services/actions/employeeRepository";
 import Employees from "@/models/Employee";
 import DocumentHeaderComponent from "@/components/DocumenHeaderComponent";
 import { dateFormat } from "../../../../utilies/index";
-import BuyerRepository from "../../../../services/actions/buyerRepository";
+import BuyerRepository from "@/services/actions/BuyerRepository";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import DepartmentRepository from "@/services/actions/departmentRepository";
 import BranchRepository from "@/services/actions/branchRepository";
@@ -219,7 +219,7 @@ class EmployeeDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">License Expired</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.u_DRIVERLICEXD || "N/A"}
+                    : {dateFormat(this.state.u_DRIVERLICEXD) || "N/A"}
                   </span>
                 </div>
                
