@@ -5,6 +5,7 @@ import EmailGroupRepository from "@/services/actions/emailGroupReporitory";
 interface EmailGroupProps<T = unknown> {
   name?: string,
   value?: any,
+  defaultValue?: any,
   onChange?: SelectInputProps<T>['onChange'],
   disabled?: boolean,
 }

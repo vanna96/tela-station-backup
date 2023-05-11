@@ -27,6 +27,7 @@ import ProjectModal from "../modal/ProjectModal";
 import Project from "@/models/Project";
 import BusinessPatners from "@/models/BusinessPartner";
 import AddressModal from "@/presentations/master/supplierMasterData/components/AddressesModal";
+import shortid from "shortid";
 const contextClass: any = {
   success: "bg-blue-600",
   error: "bg-red-600",
@@ -87,7 +88,6 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
       project: null,
       isOpenProject: false,
       series: [],
-      // ContactEmployees: [],
       serie: "",
       contactEmployees: [],
       bPAddresses: [],
@@ -108,6 +108,7 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
     this.handlerDeleteItem = this.handlerDeleteItem.bind(this);
     this.handlerChangeItemss = this.handlerChangeItemss.bind(this);
     this.handlerDeleteItems = this.handlerDeleteItems.bind(this);
+
 
   }
 
@@ -279,22 +280,20 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
     this.setState({ ...this.state, isOpenContactPerson: true });
   }
   protected handlerConfirmContactPerson(person: any) {
-    // console.log(this.state.contactEmployees);
     this.setState({
       ...this.state,
       isOpenContactPerson: false,
-      contactEmployees: [...this.state.contactEmployees, person],
+      contactEmployees: [...this.state.contactEmployees, {...person, id: shortid.generate()}],
     });
   }
   protected handlerOpenAddress() {
     this.setState({ ...this.state, isOpenAddress: true });
   }
   protected handlerConfirmAddress(address: any) {
-    // console.log(this.state.bPAddresses);
     this.setState({
       ...this.state,
       isOpenAddress: false,
-      bPAddresses: [...this.state.bPAddresses, address],
+      bPAddresses: [...this.state.bPAddresses, {...address, id: shortid.generate()}],
     });
   }
   private handlerCloseAddress() {
@@ -355,29 +354,6 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
       cb();
     }
   }
-
-  // protected handlerChangeWarehouse({ value, record, field }: any) {
-  //   let warehouse = [...(this.state.warehouse ?? [])];
-  //   let item = this.state.warehouse?.find(
-  //     (e: any) => e?.warehouseCode === record?.warehouseCode
-  //   );
-  //   item[field] = value;
-  //   const index = warehouse.findIndex(
-  //     (e: any) => e?.WarehouseCode === record.warehouseCode
-  //   );
-  //   if (index > 0) warehouse[index] = item;
-
-  //   this.setState({ ...this.state, warehouse });
-  // }
-
-  // protected handlerDeleteWarehouse(code: string) {
-  //   let warehouse = [...(this.state.warehouse ?? [])];
-  //   const index = warehouse.findIndex((e: any) => e?.WarehouseCode === code);
-  //   warehouse.splice(index, 1);
-  //   this.setState({ ...this.state, warehouse: warehouse });
-  // }
-
-  // handler vendor
   protected handlerConfirmVendor(record: BusinessPartner) {
     this.setState({
       ...this.state,
@@ -415,13 +391,9 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
 
   protected handlerChangeItemss({ value, record, field }: any) {
     let bPAddresses = [...(this.state.bPAddresses ?? [])];
-    let bPAddress = this.state.bPAddresses?.find(
-      (e: any) => e?.cardCode === record?.cardCode
-    );
+    let bPAddress = this.state.bPAddresses?.find((e: any) => e?.cardCode === record?.cardCode);
     bPAddress[field] = value;
-    const index = bPAddresses.findIndex(
-      (e: any) => e?.CardCode === record.cardCode
-    );
+    const index = bPAddresses.findIndex((e: any) => e?.CardCode === record.cardCode);
     if (index > 0) bPAddresses[index] = bPAddress;
     this.setState({ ...this.state, bPAddresses });
   }

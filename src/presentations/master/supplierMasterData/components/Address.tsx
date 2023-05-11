@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import MaterialReactTable from "material-react-table";
 import { Button, Checkbox, TextField } from "@mui/material";
 import MUITextField from "../../../../components/input/MUITextField";
@@ -6,11 +6,14 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineSetting } from "react-icons/ai";
 import FormCard from "@/components/card/FormCard";
 import MUISelect from "@/components/selectbox/MUISelect";
+import shortid from "shortid";
+import AddressModal from "./AddressesModal";
 
 export interface AddressProps {
   handlerChangeItems: (record: any) => void;
   handlerRemoveItems: (record: string) => void;
   handlerChange: (key: string, value: any) => void;
+  handlerUpdate: (value: any) => void;
   open: boolean;
   onClose: () => void;
   onOk: (address: any) => void;
@@ -20,13 +23,44 @@ export interface AddressProps {
 
 export default function Address(props: AddressProps) {
   const [tableKey, setTableKey] = React.useState(Date.now());
-  const { data, handlerChangeItems, handlerRemoveItems, handlerOpenAddress, handlerChange } = props;
+  const {
+    data,
+    handlerChangeItems,
+    handlerRemoveItems,
+    handlerOpenAddress,
+    handlerChange,
+    handlerUpdate,
+  } = props;
   const handlerChangeInput = (event: any, row: any, field: any) => {
     handlerChangeItems({ value: event.target.value, record: row, field });
   };
+
   const handlerRemoveRow = (row: any) => {
     handlerRemoveItems(row.CardCode);
   };
+  const [items, setItems] = useState<any>([]);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [itemRow, setItemRow] = useState<any>({});
+
+  const updateRow = (cell: any) => {
+    setOpenEditModal(true);
+    const dd = cell.row.original;
+    setItemRow(dd);
+    console.log(dd);
+    console.log(itemRow);
+  };
+  console.log(itemRow);
+
+  function setItemState(data: any) {
+    let temp = data.map((e: any) => e);
+    setItems(temp);
+  }
+
+  function updateItem(value: any) {
+    console.log(value);
+    handlerUpdate(value);
+    setOpenEditModal(false);
+  }
 
   const itemColumns = React.useMemo(
     () => [
@@ -51,16 +85,13 @@ export default function Address(props: AddressProps) {
       {
         accessorKey: "addressName",
         header: "Address ID", //uses the default width from defaultColumn prop
-        Cell: ({ cell }: any) => {
+        Cell: ({cell}: any) => {
           // return ;
           return (
-            <MUITextField
-              defaultValue={cell.getValue()}
-              endAdornment
-              onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "addressName")
-              }
-            />
+            <MUITextField endAdornment onClick={() => updateRow(cell)} value={cell.getValue()}
+            onChange={(event) =>
+              handlerChangeInput(event, cell?.row?.original, "addressName")
+            }/>
           );
         },
       },
@@ -71,7 +102,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "addressName2")
               }
@@ -81,11 +112,11 @@ export default function Address(props: AddressProps) {
       },
       {
         accessorKey: "addressName3",
-        header: "Address Name 2",
+        header: "Address Name 3",
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "addressName3")
               }
@@ -99,7 +130,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "street")
               }
@@ -113,7 +144,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "block")
               }
@@ -127,7 +158,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell?.getValue()}
+              value={cell?.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "city")
               }
@@ -141,7 +172,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "zipCode")
               }
@@ -155,7 +186,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "county")
               }
@@ -169,7 +200,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "state")
               }
@@ -183,7 +214,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "country")
               }
@@ -197,7 +228,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "streetNo")
               }
@@ -211,7 +242,7 @@ export default function Address(props: AddressProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(
                   event,
@@ -224,28 +255,28 @@ export default function Address(props: AddressProps) {
         },
       },
     ],
-    []
+    [data.bPAddresses]
   );
   console.log(data.bPAddresses);
 
+ 
   return (
     <FormCard title="Address">
       <div className="col-span-2 data-table">
-      <div className="my-4 w-[20%]">
+        <div className="my-4 w-[20%]">
           <label className="text-gray-500 text-[14px]">Ship To/Pay To</label>
           <div className="">
             <MUISelect
-             items={[
-              { name: "Ship To", value: "bo_ShipTo" },
-              { name: "Bill To", value: "bo_BillTo" },
-            ]}
+              items={[
+                { name: "Ship To", value: "bo_ShipTo" },
+                { name: "Bill To", value: "bo_BillTo" },
+              ]}
               aliaslabel="name"
               aliasvalue="value"
               name="AddressType"
               value={data?.addressType}
               onChange={(e) => handlerChange("addressType", e.target.value)}
             />
-           
           </div>
         </div>
         <div className="flex flex-col-reverse">
@@ -284,6 +315,16 @@ export default function Address(props: AddressProps) {
                 </div>
               );
             }}
+          />
+          <AddressModal
+            open={openEditModal}
+            data={itemRow}
+            onClose={() => {
+              setOpenEditModal(false);
+              setItemRow(null);
+            }}
+            onOk={updateItem}
+            type={"shipTO"}
           />
         </div>
       </div>

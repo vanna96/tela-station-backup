@@ -20,8 +20,10 @@ class BusinessPartners extends CoreBusineesPartnerDocument {
     this.state = {
       ...this.state,
     } as any;
+    console.log(this.state);
 
     this.handlerSubmit = this.handlerSubmit.bind(this);
+    
   }
 
   componentDidMount(): void {
@@ -124,6 +126,17 @@ class BusinessPartners extends CoreBusineesPartnerDocument {
           />
           <ContactPerson
             handlerRemoveItem={this.handlerDeleteItem}
+            handlerUpdate={(value) => {
+              const contacts = [...this.state.contactEmployees];
+              const index = contacts.findIndex((e) => e.id === value.id);
+              contacts[index] = value;
+
+              this.setState({
+                ...this.state,
+                isOpenContactPerson: false,
+                contactEmployees: contacts,
+              });
+            }}
             handlerChangeItem={this.handlerChangeItems}
             handlerChange={(key, value) => this.handlerChange(key, value)}
             handlerOpenContactPerson={() => {
@@ -135,6 +148,17 @@ class BusinessPartners extends CoreBusineesPartnerDocument {
             onOk={function (person: any): void {}}
           />
           <Address
+            handlerUpdate={(value) => {
+              const contacts = [...this.state.bPAddresses];
+              const index = contacts.findIndex((e) => e.id === value.id);
+              contacts[index] = value;
+
+              this.setState({
+                ...this.state,
+                isOpenContactPerson: false,
+                bPAddresses: contacts,
+              });
+            }}
             handlerRemoveItems={this.handlerDeleteItems}
             handlerChangeItems={this.handlerChangeItemss}
             handlerChange={(key, value) => this.handlerChange(key, value)}

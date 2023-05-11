@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import MaterialReactTable from "material-react-table";
 import { Button, Checkbox, TextField } from "@mui/material";
 import MUITextField from "../../../../components/input/MUITextField";
@@ -6,14 +6,14 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineSetting } from "react-icons/ai";
 import FormCard from "@/components/card/FormCard";
 import ContactPersonModal from "./ContactPersonModal";
-import { ContactEmployee } from '../../../../models/BusinessParter';
 import EmailGroupSelect from "@/components/selectbox/EmailGroup";
-import MUISelect from "@/components/selectbox/MUISelect";
+import shortid from "shortid";
 
 export interface ContactPersonProps {
   handlerChangeItem: (record: any) => void;
   handlerRemoveItem: (record: string) => void;
   handlerChange: (key: string, value: any) => void;
+  handlerUpdate: (value: any) => void;
   open: boolean;
   onClose: () => void;
   onOk: (person: any) => void;
@@ -23,14 +23,48 @@ export interface ContactPersonProps {
 
 export default function ContactPerson(props: ContactPersonProps) {
   const [tableKey, setTableKey] = React.useState(Date.now());
-  const [handlerOpenContactperson, setHandlerOpenContactperson] = React.useState<boolean>(false);
-  const {data,handlerChangeItem,handlerRemoveItem,handlerOpenContactPerson} = props
+  const [handlerOpenContactperson, setHandlerOpenContactperson] =
+    React.useState<boolean>(false);
+  // const [row, setRow] = React.useState<any>({});
+
+  const {
+    onOk,
+    onClose,
+    // open,
+    data,
+    handlerChangeItem,
+    handlerRemoveItem,
+    handlerOpenContactPerson,
+    handlerUpdate,
+  } = props;
   const handlerChangeInput = (event: any, row: any, field: any) => {
     handlerChangeItem({ value: event.target.value, record: row, field });
   };
   const handlerRemoveRow = (row: any) => {
     handlerRemoveItem(row.CardCode);
   };
+  const [items, setItems] = useState<any>([]);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [itemRow, setItemRow] = useState<any>({});
+  const updateRow = (cell: any) => {
+    setOpenEditModal(true);
+    const dd = cell.row.original;
+    setItemRow(dd);
+    console.log(dd);
+    console.log(itemRow);
+  };
+  console.log(itemRow);
+
+  function setItemState(data: any) {
+    let temp = data.map((e: any) => e);
+    setItems(temp);
+  }
+
+  function updateItem(value: any) {
+    console.log(value);
+    handlerUpdate(value);
+    setOpenEditModal(false);
+  }
 
   const itemColumns = React.useMemo(
     () => [
@@ -55,20 +89,16 @@ export default function ContactPerson(props: ContactPersonProps) {
       {
         accessorKey: "name",
         header: "Contact ID", //uses the default width from defaultColumn prop
-        Cell: ({ cell }: any) => {
-          // return ;
-
-          // console.log(cell)
-
+        Cell: ({cell}: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
               endAdornment
-              onChange={(event) => handlerChangeInput(event,cell?.row?.original, "name")}
-             
-              
+              onClick={() => updateRow(cell)}
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "name")
+              }
             />
-           
           );
         },
       },
@@ -79,8 +109,10 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
-              onChange={(event) => handlerChangeInput(event,  cell?.row?.original, "firstName")}
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "firstName")
+              }
             />
           );
         },
@@ -91,8 +123,10 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
-              onChange={(event) => handlerChangeInput(event,  cell?.row?.original, "middleName")}
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "middleName")
+              }
             />
           );
         },
@@ -103,8 +137,24 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
-              onChange={(event) => handlerChangeInput(event, cell?.row?.original, "lastName")}
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "lastName")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "title",
+        header: "title",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "title")
+              }
             />
           );
         },
@@ -115,7 +165,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "position")
               }
@@ -129,7 +179,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell?.getValue()}
+              value={cell?.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "address")
               }
@@ -143,7 +193,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "phone1")
               }
@@ -157,7 +207,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "phone2")
               }
@@ -171,7 +221,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "mobilePhone")
               }
@@ -185,7 +235,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "fax")
               }
@@ -199,7 +249,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "e_Mail")
               }
@@ -227,7 +277,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "pager")
               }
@@ -241,7 +291,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "remark1")
               }
@@ -255,7 +305,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "remark2")
               }
@@ -269,7 +319,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "remark1")
               }
@@ -283,7 +333,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "placeOfBirth")
               }
@@ -297,7 +347,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "remark1")
               }
@@ -311,7 +361,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "remark1")
               }
@@ -325,7 +375,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "profession")
               }
@@ -339,7 +389,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "cityOfBirth")
               }
@@ -353,7 +403,7 @@ export default function ContactPerson(props: ContactPersonProps) {
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              defaultValue={cell.getValue()}
+              value={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(
                   event,
@@ -364,16 +414,16 @@ export default function ContactPerson(props: ContactPersonProps) {
             />
           );
         },
-      }
+      },
     ],
-    []
+    [data.contactEmployees]
   );
+
   console.log(data.contactEmployees);
 
   return (
     <FormCard title="Contact Person">
       <div className="col-span-2 data-table">
-      
         <div className="flex flex-col-reverse">
           <MaterialReactTable
             key={tableKey}
@@ -399,7 +449,7 @@ export default function ContactPerson(props: ContactPersonProps) {
             renderTopToolbarCustomActions={({ table }) => {
               return (
                 <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                  <Button variant="outlined" size="small" >
+                  <Button variant="outlined" size="small">
                     <span
                       className="text-xs  capitalize font-normal"
                       onClick={handlerOpenContactPerson}
@@ -410,6 +460,16 @@ export default function ContactPerson(props: ContactPersonProps) {
                 </div>
               );
             }}
+          />
+
+          <ContactPersonModal
+            open={openEditModal}
+            data={itemRow}
+            onClose={() => {
+              setOpenEditModal(false);
+              setItemRow(null);
+            }}
+            onOk={updateItem}
           />
         </div>
       </div>

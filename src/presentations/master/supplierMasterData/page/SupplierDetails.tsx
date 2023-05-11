@@ -456,7 +456,7 @@ function ContactPerson(props: any) {
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
         columns={itemColumn}
-        data={data.contactEmployees ?? []}
+        data={data?.contactEmployees ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
         enableDensityToggle={false}

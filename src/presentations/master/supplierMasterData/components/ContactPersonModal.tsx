@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import MUITextField from "@/components/input/MUITextField";
 import BussinessPartnersRepository from "@/services/actions/bussinessPartnerRepositorys";
@@ -8,39 +8,44 @@ import CountrySelect from "@/components/selectbox/Country";
 import EmailGroupSelect from "@/components/selectbox/EmailGroup";
 import { Button } from "@mui/material";
 import Modal from "@/components/modal/Modal";
-interface contactPersonModalProps {
+
+
+interface ContactPersonModalProps {
   open: boolean;
   onClose: () => void;
   onOk: (contactperson: any [] ) => void,
+  data?: any,
 }
 
-const ContactPersonModal: FC<contactPersonModalProps> = ({
+const ContactPersonModal: FC<ContactPersonModalProps> = ({
   open,
   onClose,
-  onOk
-}:any) => {
+  onOk,
+  data,
+}:ContactPersonModalProps) => {
 
   const [contactPerson, setContactPerson] = useState<any>({})
 
-  const { data, isLoading }: any = useQuery({
-    queryKey: ["contactperson"],
-    queryFn: () => new BussinessPartnersRepository().get(),
-    staleTime: Infinity,
-  });
 
   const handlerConfirm = () => {
     onOk(contactPerson);
-    console.log(contactPerson);
+   
     
   };
 
   const handlerChange = (key:any, value:any) => {
       let contact = contactPerson;
-      contact[key] = value;
+      contact[key] = value;handlerConfirm
       setContactPerson(contact);
       console.log(contact);
       
   }
+
+  useEffect(() => {
+    if (data !== null) {
+      setContactPerson(data ?? {});
+    }
+  }, [data]);
 
 
   return (
@@ -56,73 +61,73 @@ const ContactPersonModal: FC<contactPersonModalProps> = ({
       <div className="grid grid-cols-2 gap-3">
         <MUITextField
           label="Contact ID"
-          value={data?.name}
+          defaultValue={data?.name}
           name="Name"
           onChange={(e: any) => handlerChange("name", e.target.value)}
         />
         <MUITextField
           label="First Name"
-          value={data?.firstName}
+          defaultValue={data?.firstName}
           name="FirstName"
           onChange={(e: any) => handlerChange("firstName", e.target.value)}
         />
         <MUITextField
           label="Middle Name"
-          value={data?.middleName}
+          defaultValue={data?.middleName}
           name="MiddleName"
           onChange={(e: any) => handlerChange("middleName", e.target.value)}
         />
         <MUITextField
           label="Last Name"
-          value={data?.lastName}
+          defaultValue={data?.lastName}
           name="LastName"
           onChange={(e: any) => handlerChange("lastName", e.target.value)}
         />
         <MUITextField
           label="Title"
-          value={data?.title}
+          defaultValue={data?.title}
           name="Title"
           onChange={(e: any) => handlerChange("title", e.target.value)}
         />
         <MUITextField
           label="Position"
-          value={data?.position}
+          defaultValue={data?.position}
           name="Position"
           onChange={(e: any) => handlerChange("position", e.target.value)}
         />
         <MUITextField
           label="Address"
-          value={data?.address}
+          defaultValue={data?.address}
           name="Address"
           onChange={(e: any) => handlerChange("address", e.target.value)}
         />
         <MUITextField
           label="TelePhone 1"
-          value={data?.phone1}
+          defaultValue={data?.phone1}
           name="Phone1"
           onChange={(e: any) => handlerChange("phone1", e.target.value)}
         />
         <MUITextField
           label="TelePhone 2"
-          value={data?.phone2}
+          defaultValue={data?.phone2}
           name="Phone2"
           onChange={(e: any) => handlerChange("phone2", e.target.value)}
         />
         <MUITextField
           label="Mobile Phone"
-          value={data?.mobilePhone}
+          defaultValue={data?.mobilePhone}
           name="MobilePhone"
           onChange={(e: any) => handlerChange("mobilePhone", e.target.value)}
         />
         <MUITextField
           label="Fax"
-          value={data?.fax}
+          defaultValue={data?.fax}
           name="Fax"
           onChange={(e: any) => handlerChange("fax", e.target.value)}
         />
         <MUITextField
           label="E-Mail"
-          value={data?.e_Mail}
+          defaultValue={data?.e_Mail}
           name="E_Mail"
           onChange={(e: any) => handlerChange("e_Mail", e.target.value)}
         />
@@ -132,31 +137,31 @@ const ContactPersonModal: FC<contactPersonModalProps> = ({
           </label>
           <EmailGroupSelect
             name="EmailGroupCode"
-            value={data?.emailGroupCode}
+            defaultValue={data?.emailGroupCode}
             onChange={(e) => handlerChange("emailGroupCode", e.target.value)}
           />
         </div>
         <MUITextField
           label="Pager"
-          value={data?.pager}
+          defaultValue={data?.pager}
           name="Pager"
           onChange={(e: any) => handlerChange("pager", e.target.value)}
         />
         <MUITextField
           label="Remark1"
-          value={data?.remarks1}
+          defaultValue={data?.remarks1}
           name="Remarks1"
           onChange={(e: any) => handlerChange("remarks1", e.target.value)}
         />
         <MUITextField
           label="Remark2"
-          value={data?.remarks2}
+          defaultValue={data?.remarks2}
           name="Remarks2"
           onChange={(e: any) => handlerChange("remarks2", e.target.value)}
         />
         <MUITextField
           label="Password"
-          value={data?.password}
+          defaultValue={data?.password}
           name="Password"
           onChange={(e: any) => handlerChange("password", e.target.value)}
         />
@@ -165,7 +170,7 @@ const ContactPersonModal: FC<contactPersonModalProps> = ({
             Country/Region Of Birth
           </label>
           <CountrySelect
-            value={data?.placeOfBirth}
+            defaultValue={data?.placeOfBirth}
             name="PlaceOfBirth"
             onChange={(e: any) => handlerChange("placeOfBirth", e.target.value)}
           />
@@ -192,25 +197,25 @@ const ContactPersonModal: FC<contactPersonModalProps> = ({
             aliaslabel="name"
             aliasvalue="value"
             name="Gender"
-            value={data?.gender}
+            defaultValue={data?.gender}
             onChange={(e) => handlerChange("gender", e.target.value)}
           />
         </div>
         <MUITextField
           label="Profession"
-          value={data?.profession}
+          defaultValue={data?.profession}
           name="Profession"
           onChange={(e: any) => handlerChange("profession", e.target.value)}
         />
         <MUITextField
           label="City Of Birth"
-          value={data?.cityOfBirth}
+          defaultValue={data?.cityOfBirth}
           name="CityOfBirth"
           onChange={(e: any) => handlerChange("cityOfBirth", e.target.value)}
         />
         <MUITextField
           label="Connected Address"
-          value={data?.connectedAddressName}
+          defaultValue={data?.connectedAddressName}
           name="ConnectedAddressName"
           onChange={(e: any) =>
             handlerChange("connectedAddressName", e.target.value)
