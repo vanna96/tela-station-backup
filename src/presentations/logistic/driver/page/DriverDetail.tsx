@@ -7,7 +7,7 @@ import EmployeeRepository from "@/services/actions/employeeRepository";
 import Employees from "@/models/Employee";
 import DocumentHeaderComponent from "@/components/DocumenHeaderComponent";
 import { dateFormat } from "../../../../utilies/index";
-import BuyerRepository from "../../../../services/actions/buyerRepository";
+import BuyerRepository from "@/services/actions/BuyerRepository";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import DepartmentRepository from "@/services/actions/departmentRepository";
 import BranchRepository from "@/services/actions/branchRepository";

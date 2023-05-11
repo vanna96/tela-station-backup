@@ -13,6 +13,7 @@ import RouteMasterDetails from '@/presentations/logistic/route_master/page/Route
 import DriverList from '@/presentations/logistic/driver/page/DriverList';
 import DriverDetail from '@/presentations/logistic/driver/page/DriverDetail';
 import DriverForm from '@/presentations/logistic/driver/page/DriverForm';
+import TransportationOrderPage from '@/presentations/logistic/transportation/TransportationOrderPage';
 
 export default function LogisticRoute() {
     return (
@@ -37,6 +38,13 @@ export default function LogisticRoute() {
                 <Route path=':id' element={<RouteMasterDetails />} />
                 <Route path='create' element={<RouteMasterForm />} />
                 <Route path=':id/edit' element={<RouteMasterForm edit={true} />} />
+
+            </Route>
+            <Route path='/transportation-order' >
+                <Route index element={<TransportationOrderPage/>} />
+                {/* <Route path=':id' element={<TransportationOrderDetail />} /> */}
+                {/* <Route path='create' element={<TransportationOrderForm />} /> */}
+                {/* <Route path=':id/edit' element={<TransportationOrderForm edit={true} />} /> */}
 
             </Route>
 

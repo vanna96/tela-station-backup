@@ -21,7 +21,7 @@ export default function LogisticMasterPage() {
                 <ItemCard title='Check List' icon={<AiOutlineFileExclamation />} />
                 <div className='col-span-6'>Transportation </div>
                 <ItemCard title='Open Delivery' icon={<AiOutlineFileText />} />
-                <ItemCard title='Transportation Order' icon={<AiOutlineFileText />} />
+                <ItemCard title='Transportation Order' onClick={() => goTo('transportation-order')} icon={<AiOutlineFileText />} />
                 <ItemCard title='Transportation Order Open' icon={<AiOutlineFileText />} />
                 <ItemCard title='Transportation Order Close' icon={<AiOutlineFileText />} />
                 <ItemCard title='Available Vehicle' icon={<AiOutlineFileText />} />
