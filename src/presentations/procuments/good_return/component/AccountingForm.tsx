@@ -32,7 +32,7 @@ export default function Accounting({
             label="Journal Remark"
             value={("Good Return - " ?? data?.cardCode) || "N/A"}
             name="JournalMemo"
-            onChange={(e) => handlerChange("journalMemo", e.target.value)}
+            onChange={(e) => handlerChange("JournalMemo", e.target.value)}
           />
         </div>
         {data?.documentStatus === "bost_Open" ? (
@@ -44,7 +44,7 @@ export default function Accounting({
                 </label>
                 <PaymentTerm
                   onChange={(e) =>
-                    handlerChange("paymentGroupCode", e.target.value)
+                    handlerChange("PaymentGroupCode", e.target.value)
                   }
                   value={data?.paymentGroupCode}
                   name="PaymentGroupCode"
@@ -58,9 +58,9 @@ export default function Accounting({
                   <PaymentMethod
                     type="outgoing"
                     name="PaymentMethod"
-                    value={data.paymentMethod}
+                    value={data.PaymentMethod}
                     onChange={(e) =>
-                      handlerChange("paymentMethod", e.target.value)
+                      handlerChange("PaymentMethod", e.target.value)
                     }
                   />
                 </div>
@@ -70,18 +70,18 @@ export default function Accounting({
               <MUITextField
               label="Central Bank Indicator"
                 onChange={(e) =>
-                  handlerChange("centralBankIndicator", e.target.value)
+                  handlerChange("CentralBankIndicator", e.target.value)
                 }
-                value={data?.centralBankIndicator}
-                name="centralBankIndicator"
+                value={data?.CentralBankIndicator}
+                name="CentralBankIndicator"
               />
 
               <MUITextField
                 label="Installments"
                 name="numberOfInstallments"
-                value={data?.numberOfInstallments}
+                value={data?.NumberOfInstallments}
                 onChange={(e) =>
-                  handlerChange("numberOfInstallments", e.target.value)
+                  handlerChange("NumberOfInstallments", e.target.value)
                 }
               />
             </div>
@@ -91,7 +91,7 @@ export default function Accounting({
                   htmlFor="AgreementMethod"
                   className="text-gray-500 text-[14px]"
                 >
-                  Manually Rcalculate Due Date
+                  Manually Recalculate Due Date
                 </label>
 
                 <MUISelect
@@ -103,21 +103,21 @@ export default function Accounting({
                   aliaslabel="name"
                   aliasvalue="pdt_None"
                   name="StartFrom"
-                  value={data.startFrom}
-                  onChange={(e) => handlerChange("startFrom", e.target.value)}
+                  value={data.StartFrom}
+                  onChange={(e) => handlerChange("StartFrom", e.target.value)}
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <MUITextField
                   label="Month +"
-                  onChange={(e) => handlerChange("extraMonth", e.target.value)}
+                  onChange={(e) => handlerChange("ExtraMonth", e.target.value)}
                   value={data.extraMonth}
                   name="ExtraMonth"
                 />
                 <MUITextField
                   label="Days"
-                  onChange={(e) => handlerChange("extraDays", e.target.value)}
-                  value={data.extraDays}
+                  onChange={(e) => handlerChange("ExtraDays", e.target.value)}
+                  value={data.ExtraDays}
                   name="ExtraDays"
                 />
               </div>
@@ -126,9 +126,9 @@ export default function Accounting({
               <MUITextField
                 label="Cash Discount Date Offset"
                 onChange={(e) =>
-                  handlerChange("cashDiscountDateOffset", e.target.value)
+                  handlerChange("CashDiscountDateOffset", e.target.value)
                 }
-                value={data.cashDiscountDateOffset}
+                value={data.CashDiscountDateOffset}
                 name="CashDiscountDateOffset"
               />
             </div>
@@ -143,9 +143,9 @@ export default function Accounting({
                 <PaymentTerm
                   disabled={edit}
                   onChange={(e) =>
-                    handlerChange("paymentGroupCode", e.target.value)
+                    handlerChange("PaymentGroupCode", e.target.value)
                   }
-                  value={data?.paymentGroupCode}
+                  value={data?.PaymentGroupCode}
                   name="PaymentGroupCode"
                 />
               </div>
@@ -158,9 +158,9 @@ export default function Accounting({
                     disabled={edit}
                     type="outgoing"
                     name="PaymentMethod"
-                    value={data.paymentMethod}
+                    value={data.PaymentMethod}
                     onChange={(e) =>
-                      handlerChange("paymentMethod", e.target.value)
+                      handlerChange("PaymentMethod", e.target.value)
                     }
                   />
                 </div>
@@ -173,9 +173,9 @@ export default function Accounting({
                 </label>
                 <MUITextField
                   onChange={(e) =>
-                    handlerChange("centralBankIndicator", e.target.value)
+                    handlerChange("CentralBankIndicator", e.target.value)
                   }
-                  value={data?.centralBankIndicator}
+                  value={data?.CentralBankIndicator}
                   name="CentralBankIndicator"
                 />
               </div>
@@ -185,9 +185,9 @@ export default function Accounting({
                 </label>
                 <div className="">
                   <MUITextField
-                    value={data.numberOfInstallments}
+                    value={data.NumberOfInstallments}
                     onChange={(e) =>
-                      handlerChange("numberOfInstallments", e.target.value)
+                      handlerChange("NumberOfInstallments", e.target.value)
                     }
                   />
                 </div>
@@ -199,7 +199,7 @@ export default function Accounting({
                   htmlFor="AgreementMethod"
                   className="text-gray-500 text-[14px]"
                 >
-                  Manually Rcalculate Due Date
+                  Manually Rcealculate Due Date
                 </label>
 
                 <MUISelect
@@ -210,11 +210,11 @@ export default function Accounting({
                   ]}
                   aliaslabel="name"
                   aliasvalue="value"
-                  name="AgreementMethod"
+                  name="StartFrom"
                   disabled={edit}
-                  value={data.agreementMethod}
+                  value={data.StartFrom}
                   onChange={(e) =>
-                    handlerChange("agreementMethod", e.target.value)
+                    handlerChange("StartFrom", e.target.value)
                   }
                 />
               </div>
@@ -222,15 +222,15 @@ export default function Accounting({
                 <MUITextField
                   disabled={edit}
                   label="Month +"
-                  onChange={(e) => handlerChange("extraMonth", e.target.value)}
+                  onChange={(e) => handlerChange("ExtraMonth", e.target.value)}
                   value={data.extraMonth}
                   name="ExtraMonth"
                 />
                 <MUITextField
                   disabled={edit}
                   label="Days"
-                  onChange={(e) => handlerChange("extraDays", e.target.value)}
-                  value={data.extraDays}
+                  onChange={(e) => handlerChange("ExtraDays", e.target.value)}
+                  value={data.ExtraDays}
                   name="ExtraDays"
                 />
               </div>
@@ -238,8 +238,8 @@ export default function Accounting({
             <div className="grid grid-cols-1 gap-3">
               <MUITextField
                 disabled={edit}
-                label="Cash Discount Date Offsetys"
-                value={""}
+                label="Cash Discount Date Offset"
+                value={data?.CashDiscountDateOffSet}
                 name="CashDiscountDateOffset"
               />
             </div>
@@ -251,9 +251,9 @@ export default function Accounting({
           <div>
             <MUITextField
               label="Project"
-              onChange={(e) => handlerChange("project", e.target.value)}
+              onChange={(e) => handlerChange("Project", e.target.value)}
               name="Project"
-              value={data.project}
+              value={data.Project}
               endAdornment={true}
               onClick={handlerOpenProject}
             />
@@ -270,9 +270,9 @@ export default function Accounting({
                 fullWidth
                 name="CreateQRCodeFrom"
                 className="w-full "
-                value={data?.createQRCodeFrom}
+                value={data?.CreateQRCodeFrom}
                 onChange={(e) =>
-                  handlerChange("createQRCodeFrom", e.target.value)
+                  handlerChange("CreateQRCodeFrom", e.target.value)
                 }
               />
             </div>
@@ -285,9 +285,9 @@ export default function Accounting({
             </label>
             <div className="">
               <MUIDatePicker
-                value={data.cancelDate}
+                value={data.CancelDate}
                 name="CancelDate"
-                onChange={(e: any) => handlerChange("cancelDate", e)}
+                onChange={(e: any) => handlerChange("CancelDate", e)}
               />
             </div>
           </div>
@@ -296,25 +296,25 @@ export default function Accounting({
               Indicator
             </label>
             <IndicatorSelect
-              onChange={(e) => handlerChange("indicator", e.target.value)}
-              value={data?.indicator}
+              onChange={(e) => handlerChange("Indicator", e.target.value)}
+              value={data?.Indicator}
               name="Indicator"
             />
           </div>
           <div>
             <MUITextField
               label="Federal Tax ID"
-              value={data.federalTaxID}
+              value={data.FederalTaxID}
               name="FederalTaxID"
-              onChange={(e) => handlerChange("federalTaxID", e.target.value)}
+              onChange={(e) => handlerChange("FederalTaxID", e.target.value)}
             />
           </div>
           <div>
             <MUITextField
               label="Order Number:"
-              value={data?.importFileNum}
+              value={data?.ImportFileNum}
               name="ImportFileNum"
-              onChange={(e) => handlerChange("importFileNum", e.target.value)}
+              onChange={(e) => handlerChange("ImportFileNum", e.target.value)}
             />
           </div>
         </div>
