@@ -109,6 +109,9 @@ export interface BusinessPatnersProps {
   instructionKey?: string;
   freeText?: string;
   defaultBankCode?: string;
+  vatLiable?: string;
+  eORINumber?: string;
+  vatGroup?: string;
   bPAddresses: BusinessPartnersBPAddresses[];
   contactEmployees: BusinessPartnersContactEmployees[];
 }
@@ -252,6 +255,9 @@ export default class BusinessPatners extends Model implements ContactEmployees{
   instructionKey?: string;
   emailAddress?: string;
   defaultBankCode?: string;
+  vatLiable?: string;
+  eORINumber?: string;
+  vatGroup?: string;
   bPAddresses: BusinessPartnersBPAddresses[];
   contactEmployees: BusinessPartnersContactEmployees[];
 
@@ -361,6 +367,10 @@ export default class BusinessPatners extends Model implements ContactEmployees{
     this.downPaymentClearAct = json["DownPaymentClearAct"];
     this.planningGroup = json["PlanningGroup"];
     this.defaultBankCode = json["DefaultBankCode"];
+    this.vatLiable = json["VatLiable"];
+    this.eORINumber = json["EORINumber"];
+    this.vatGroup = json["VatGroup"];
+
     this.contactEmployees = json["ContactEmployees"]?.map(
       (e: any) => new BusinessPartnersContactEmployees(e)
     );
@@ -479,6 +489,10 @@ export default class BusinessPatners extends Model implements ContactEmployees{
       "DownPaymentClearAct": json["downPaymentClearAct"],
       "PlanningGroup": json["planningGroup"],
       "DefaultBankCode": json["defaultBankCode"],
+      "VatLiable": json["vatLiable"],
+      "EORINumber": json["eORINumber"],
+      "VatGroup": json["vatGroup"],
+
       "ContactEmployees": json["contactEmployees"]?.map((e: any) =>
         BusinessPartnersContactEmployees.toCreate(e)
       ),
@@ -591,6 +605,9 @@ export default class BusinessPatners extends Model implements ContactEmployees{
       "DownPaymentClearAct": json["downPaymentClearAct"],
       "PlanningGroup": json["planningGroup"],
       "DefaultBankCode": json["defaultBankCode"],
+      "VatLiable": json["vatLiable"],
+      "EORINumber": json["eORINumber"],
+      "VatGroup": json["vatGroup"],
       "ContactEmployees": json["contactEmployees"]?.map((e: any) =>
         BusinessPartnersContactEmployees.toCreate(e)
       ),

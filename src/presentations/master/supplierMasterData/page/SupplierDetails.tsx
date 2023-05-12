@@ -813,6 +813,7 @@ function Accounting(props: any) {
     <>
       <div className="grow w-full grid grid-cols-2 gap-2 text-sm py-2">
         <div className="flex flex-col gap-2">
+          <span className=" font-bold">General</span>
           <div className="flex gap-2">
             <span className="w-5/12 text-gray-500">Consolidating Business</span>
             <span className="w-7/12 font-medium">
@@ -851,6 +852,27 @@ function Accounting(props: any) {
             <span className="w-5/12 text-gray-500">Planning Group</span>
             <span className="w-7/12 font-medium">
               : {data?.planningGroup ?? "N/A"}
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className=" font-bold">Tax</span>
+          <div className="flex gap-2">
+            <span className="w-5/12 text-gray-500">Tax Status</span>
+            <span className="w-7/12 font-medium">
+              : {data?.vatLiable ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-5/12 text-gray-500">Tax Group</span>
+            <span className="w-7/12 font-medium">
+              : {data?.vatGroup ?? "N/A"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-5/12 text-gray-500">EORI Number</span>
+            <span className="w-7/12 font-medium">
+              : {data?.eORINumber ?? "N/A"}
             </span>
           </div>
         </div>

@@ -102,14 +102,13 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
     };
 
     this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this);
-    this.handlerConfirmContactPerson = this.handlerConfirmContactPerson.bind(this);
+    this.handlerConfirmContactPerson =
+      this.handlerConfirmContactPerson.bind(this);
     this.handlerConfirmAddress = this.handlerConfirmAddress.bind(this);
     this.handlerChangeItems = this.handlerChangeItems.bind(this);
     this.handlerDeleteItem = this.handlerDeleteItem.bind(this);
     this.handlerChangeItemss = this.handlerChangeItemss.bind(this);
     this.handlerDeleteItems = this.handlerDeleteItems.bind(this);
-
-
   }
 
   abstract FormRender(): JSX.Element;
@@ -125,7 +124,8 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
         <AddressModal
           open={this.state.isOpenAddress}
           onOk={this.handlerConfirmAddress}
-          onClose={() => this.handlerCloseAddress()} type={"shipTO"}
+          onClose={() => this.handlerCloseAddress()}
+          type={"shipTO"}
         />
         <VendorModal
           open={this.state.isOpenVendor}
@@ -133,11 +133,11 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
           onClose={() => this.handlerCloseVendor()}
           type={this.state.vendorType}
         />
-        {/* <ProjectModal
+        <ProjectModal
           open={this.state.isOpenProject}
           onClose={() => this.handlerCloseProject()}
           onOk={(project) => this.handlerConfirmProject(project)}
-        /> */}
+        />
 
         <ToastContainer
           toastClassName={({ type }: any) =>
@@ -283,7 +283,10 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
     this.setState({
       ...this.state,
       isOpenContactPerson: false,
-      contactEmployees: [...this.state.contactEmployees, {...person, id: shortid.generate()}],
+      contactEmployees: [
+        ...this.state.contactEmployees,
+        { ...person, id: shortid.generate() },
+      ],
     });
   }
   protected handlerOpenAddress() {
@@ -293,7 +296,10 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
     this.setState({
       ...this.state,
       isOpenAddress: false,
-      bPAddresses: [...this.state.bPAddresses, {...address, id: shortid.generate()}],
+      bPAddresses: [
+        ...this.state.bPAddresses,
+        { ...address, id: shortid.generate() },
+      ],
     });
   }
   private handlerCloseAddress() {
@@ -305,6 +311,8 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
 
   protected handlerOpenProject() {
     this.setState({ ...this.state, isOpenProject: true });
+    console.log(this.state);
+    
   }
   private handlerCloseProject() {
     // this.setState({ ...this.state, isOpenProject: false })
@@ -391,9 +399,13 @@ export default abstract class CoreBussinessPartnerDocument extends React.Compone
 
   protected handlerChangeItemss({ value, record, field }: any) {
     let bPAddresses = [...(this.state.bPAddresses ?? [])];
-    let bPAddress = this.state.bPAddresses?.find((e: any) => e?.cardCode === record?.cardCode);
+    let bPAddress = this.state.bPAddresses?.find(
+      (e: any) => e?.cardCode === record?.cardCode
+    );
     bPAddress[field] = value;
-    const index = bPAddresses.findIndex((e: any) => e?.CardCode === record.cardCode);
+    const index = bPAddresses.findIndex(
+      (e: any) => e?.CardCode === record.cardCode
+    );
     if (index > 0) bPAddresses[index] = bPAddress;
     this.setState({ ...this.state, bPAddresses });
   }

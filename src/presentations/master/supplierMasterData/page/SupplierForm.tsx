@@ -182,11 +182,12 @@ class BusinessPartners extends CoreBusineesPartnerDocument {
             handlerChange={(key, value) => this.handlerChange(key, value)}
             data={this.state}
             handlerOpenAccount={() => this.handlerOpenAccount()}
-            handlerOpenVendor={() => {
-              this.handlerOpenVendor("customer");
-            }}
+         
             handlerOpenVendor2={() => {
               this.handlerOpenVendor("supplier");
+            }}
+            handlerOpenVendor={() => {
+              this.handlerOpenVendor("customer");
             }}
           />
           <Remark

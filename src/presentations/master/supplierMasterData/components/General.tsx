@@ -98,7 +98,7 @@ export default function General({
            <MUITextField
               label="Business Partner Project"
               name="ProjectCode"
-              value={data?.project}
+              value={data?.projectCode}
               endAdornment={true}
               onClick={handlerOpenProject}
             />
