@@ -7,15 +7,30 @@ import { IContactPersonList } from '../../astractions/index';
 import PurchaseQouatation from '@/models/PurchaseQoutation';
 import Warehouses from '@/models/Warehouses';
 import Vehicel from '@/models/Vehicel';
+import OpenDelivery from '@/models/OpenDelivery';
 
-export default class VehicelRepository extends Repository<Vehicel> {
 
-  url: string = 'view.svc/Biz_VehicleB1SLQuery';
-  urlPost: string = 'script/test/VEH00'
+
+export default class OpenDeliveryRepository extends Repository<OpenDelivery> {
+  query: any[] = [
+    "DocEntry",
+    "DocNum",
+    "CardCode",
+    "CardName",
+    "DocType",
+    "DocDate",
+    "DocDueDate",
+    "TaxDate",
+    "DocTotal",
+    "U_TRANSTATUS",
+  ];
+  queryFilter: any =
+    "&$filter=(U_TRANSTATUS eq 'OPEN' or U_TRANSTATUS eq 'CLOSED')";
+  url: string = '/DeliveryNotes';
 
   async get<T>(query?: string): Promise<T[]> {
-    const response: any = await request('GET', this.url).then((res: any) => {
-      const data = res?.data?.value?.map((e: any) => new Vehicel(e));
+    const response: any = await request('GET', `${this.url}?$top=10&$select=${this.query.join(",")}${this.queryFilter }`).then((res: any) => {
+      const data = res?.data?.value?.map((e: any) => new OpenDelivery(e));
       return data;
     }).catch((e: Error) => {
       throw new Error(e.message);
@@ -35,14 +50,14 @@ export default class VehicelRepository extends Repository<Vehicel> {
 
   async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 
-    if (isUpdate) return await request('PATCH', this.urlPost + "('" + id + "')", Vehicel.toUpdate(payload));
+    if (isUpdate) return await request('PATCH', this.url + "('" + id + "')", Vehicel.toUpdate(payload));
 
-    return await request('POST', this.urlPost, Vehicel.toCreate(payload));
+    return await request('POST', this.url, Vehicel.toCreate(payload));
   }
 
 
   async patch(id: any, payload: any): Promise<any> {
-    return await request('PATCH', this.urlPost, Vehicel.toUpdate(payload));
+    return await request('PATCH', this.url, Vehicel.toUpdate(payload));
   }
 
 

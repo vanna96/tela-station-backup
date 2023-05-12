@@ -33,7 +33,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
             
         } as any;
 
-        console.log(this.props);
+        console.log(this.state);
         this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
         this.handlerItemChange = this.handlerItemChange.bind(this);
         this.handlerSubmit = this.handlerSubmit.bind(this);

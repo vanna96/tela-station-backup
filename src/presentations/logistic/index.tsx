@@ -10,7 +10,6 @@ export default function LogisticMasterPage() {
     const navigate = useNavigate();
 
     const goTo = (route: string) => navigate('/logistic/' + route);
-
     return (
         <>
             <MainContainer title='Inventory'>
@@ -20,9 +19,9 @@ export default function LogisticMasterPage() {
                 <ItemCard title='Route' icon={<AiOutlineFileExclamation />} />
                 <ItemCard title='Check List' icon={<AiOutlineFileExclamation />} />
                 <div className='col-span-6'>Transportation </div>
-                <ItemCard title='Open Delivery' icon={<AiOutlineFileText />} />
+                <ItemCard title='Open Delivery' onClick={() => goTo('open-delivery')} icon={<AiOutlineFileText />} />
                 <ItemCard title='Transportation Order' icon={<AiOutlineFileText />} />
-                <ItemCard title='Transportation Order Open' icon={<AiOutlineFileText />} />
+                <ItemCard title='Transportation Order Open' onClick={() => goTo('open-transportation')} icon={<AiOutlineFileText />} />
                 <ItemCard title='Transportation Order Close' icon={<AiOutlineFileText />} />
                 <ItemCard title='Available Vehicle' icon={<AiOutlineFileText />} />
                 <div className='col-span-6'> </div>

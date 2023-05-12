@@ -78,7 +78,7 @@ export default function General({ data, handlerChange, edit }: ILogisticFormProp
           </div>
           <MUITextField label="Length ( cm )" value={data?.u_VEHLENGTH} onChange={(e) => handlerChange('u_VEHLENGTH', e.target.value)} name="U_VEHLENGTH" />
           <MUITextField label="Width ( cm )" value={data?.u_VEHWIDTH} onChange={(e) => handlerChange('u_VEHWIDTH', e.target.value)} name="U_VEHWIDTH" />
-          <MUITextField label="Height ( cm )" value={data?.u_VEHWIDTH} onChange={(e) => handlerChange('u_VEHWIDTH', e.target.value)} name="U_VEHWIDTH" />
+          <MUITextField label="Height ( cm )" value={data?.u_VEHHEIGHT} onChange={(e) => handlerChange('u_VEHHEIGHT', e.target.value)} name="U_VEHHEIGHT" />
 
         </div>
 

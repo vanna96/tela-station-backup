@@ -8,6 +8,8 @@ import LogisticMasterPage from '../presentations/logistic/index';
 import VehicelLists from '@/presentations/logistic/vehicel';
 import VehicelForm from '@/presentations/logistic/vehicel/page/VehicelForm';
 import VehicelDetail from '@/presentations/logistic/vehicel/page/VehicelDetail';
+import OpendeliveryLists from '@/presentations/logistic/openDelivery';
+import OpenTransportationLists from '@/presentations/logistic/openTransportaion';
 
 export default function LogisticRoute() {
     return (
@@ -20,7 +22,12 @@ export default function LogisticRoute() {
                 <Route path=':id/edit' element={<VehicelForm edit={true} />} />
 
             </Route>
-
+            <Route path='/open-delivery' >
+                <Route index element={<OpendeliveryLists />} />
+            </Route>
+            <Route path='/open-transportation' >
+                <Route index element={<OpenTransportationLists />} />
+            </Route>
         </Routes>
     )
 }

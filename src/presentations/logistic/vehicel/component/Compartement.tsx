@@ -14,58 +14,60 @@ export interface ICompartementFormProps {
   handlerChangeItem: (record: any) => void;
 }
 
+
 export default function Compartement({ data, edit, handlerChangeItem }: ICompartementFormProps) {
-  const [compartement, setCompartement] = useState<any>([{ ...data }])
+  const [compartement, setCompartement] = useState<any>({ ...data })
 
-console.log(compartement);
 
-  const handleChange = (id: string, name: string, value: any) => {
-    setCompartement((e:any) => {
-      const index = e.findIndex((record: any) => record.id === id);
-      const updatedRecord = {
-        ...e[index],
-        [name]: value
-      };
-      const updatedCompartement = [
-        ...e.slice(0, index),
-        updatedRecord,
-        ...e.slice(index + 1)
-      ];
-      console.log(updatedCompartement);
-      
-      return updatedCompartement;
-
-    });
-  };
-
+  const handlerChangeInput = (event: any, row: any, field: any) => {
+    handlerChangeItem({ value: event.target.value, record: row, field })
+  }
   const add = () => {
-    const data = {
-      id:shortid.generate(),
+    const newItem = {
+      id: shortid.generate(),
       u_VEHCOMPNO: null,
       u_VEHCOMPVO: null,
       u_VEHCOMPHA: null
-    }
-        setCompartement([...compartement, data]);    
+    };
 
-  console.log(compartement);
-  
+    // Create a new array with the existing items and the new item
+    const newItems = [...compartement.items, newItem];
+
+    // Create a new object with the updated items array
+    const updatedCompartement = {
+      // ...compartement,
+      items: newItems
+    };
+
+    // Update the state with the new compartement object
+    setCompartement(updatedCompartement);
+
+    console.log(updatedCompartement);
   };
+  const handleDeleteItem = (itemId: string) => {
 
+    setCompartement((prevState: any) => {
+      // Find the index of the item to be deleted
 
-  const handlerDeleteItem = (id: string) => {
-    setCompartement((e: any) => {
-      // Check if there's more than 1 record
-      if (e.length > 1) {
-        const newRecord = e.filter((record: any) => record.id !== id);
-        return newRecord;
-      } else {
-        // If there's only 1 record, return the current state without deleting the item
-        return e;
+      const itemIndex = prevState.items.findIndex((item: any) => item.id === itemId);
+
+      if (itemIndex === -1 || prevState.items.length === 1) {
+        // If the item is not found, return the current state
+        return prevState;
       }
+
+      // Create a new state object with the item removed
+      const newState = {
+        ...prevState,
+        items: [
+          ...prevState.items.slice(0, itemIndex),
+          ...prevState.items.slice(itemIndex + 1)
+        ]
+      };
+
+      return newState;
     });
-
   };
-
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
@@ -83,7 +85,7 @@ console.log(compartement);
               <button
                 type="button"
                 className="border border-gray-200 p-1 rounded-sm"
-                onClick={() => handlerDeleteItem(cell?.row?.original?.id)}
+                onClick={() => handleDeleteItem(cell?.row?.original?.id)}
               >
                 <AiOutlineDelete />
               </button>
@@ -97,28 +99,26 @@ console.log(compartement);
         Cell: ({ cell }: any) => {
           // return ;
           return <MUITextField
-            value={cell.getValue()}
-            // type='number'
+            defaultValue={cell.getValue()}
             name="U_VEHCOMPNO"
-            onChange={(event) => {
-              const value = event.target.value;
-              handleChange(cell.row.original.id, "u_VEHCOMPNO", value);
-            }}
+            type='number'
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'u_VEHCOMPNO')}
           />;
         },
       },
-
       {
         accessorKey: "u_VEHCOMPVO",
         header: "Volumn",
-        Cell: ({ cell }: any) => <MUITextField
-          value={cell.getValue()}
-          name="U_VEHCOMPVO"
-          onChange={(event) => {
-            const value = event.target.value;
-            handleChange(cell.row.original.id, "u_VEHCOMPVO", value);
-          }}
-        />
+        Cell: ({ cell }: any) => {
+
+          return <MUITextField
+            defaultValue={cell.getValue()}
+            name="U_VEHCOMPVO"
+            type='number'
+
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'u_VEHCOMPVO')}
+          />;
+        },
       },
       {
         accessorKey: "u_VEHCOMPHA",
@@ -126,13 +126,10 @@ console.log(compartement);
         Cell: ({ cell }: any) => {
 
           return <MUITextField
-            value={cell.getValue()}
-            // type="number"
+            defaultValue={cell.getValue()}
             name="U_VEHCOMPHA"
-            onChange={(event) => {
-              const value = event.target.value;
-              handleChange(cell.row.original.id, "u_VEHCOMPHA", value);
-            }}
+            type='number'
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'u_VEHCOMPHA')}
           />;
         },
       },
@@ -142,6 +139,7 @@ console.log(compartement);
   );
 
 
+  console.log(compartement);
 
 
   return (
@@ -149,7 +147,7 @@ console.log(compartement);
       <div className="col-span-2 data-table">
         <MaterialReactTable
           columns={columns}
-          data={compartement ?? []}
+          data={compartement.items ?? []}
           enableHiding={true}
           initialState={{ density: "compact" }}
           enableDensityToggle={false}
@@ -169,7 +167,7 @@ console.log(compartement);
               {!data?.isApproved ?
                 <>
                   <Button variant="outlined" size="small"
-                    onClick={()=>add()}
+                    onClick={add}
                   ><span className="text-xs  capitalize font-normal">+ Add New</span></Button>
                 </>
                 : null}

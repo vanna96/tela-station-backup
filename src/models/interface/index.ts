@@ -31,4 +31,7 @@ export interface DocumentLine {
     vatGroup?: string;
     accountName?: string;
     accountCode?: number;
+    u_VEHCOMPNO?: number;
+    u_VEHCOMPVO?: number;
+    u_VEHCOMPHA?: number;
 }

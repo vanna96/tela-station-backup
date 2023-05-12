@@ -23,13 +23,17 @@ class VehicelForm extends CoreFormDocument {
     this.state = {
       ...this.state,
       loading: true,
-      id:shortid.generate(),
-      u_VEHCOMPNO: null,
-      u_VEHCOMPVO: null,
-      u_VEHCOMPHA: null
+      items: [{
+        id: shortid.generate(),
+        u_VEHCOMPNO: null,
+        u_VEHCOMPVO: null,
+        u_VEHCOMPHA: null
+      }]
+
 
     } as any;
     this.handlerSubmit = this.handlerSubmit.bind(this);
+    this.handlerChangeCompartement = this.handlerChangeCompartement.bind(this)
     // this.handlerChangePartment = this.handlerChangePartment.bind(this);
 
   }
@@ -80,9 +84,20 @@ class VehicelForm extends CoreFormDocument {
     });
   }
 
-
+  protected handlerChangeCompartement({ value, record, field }: any) {
+    let items = [...(this.state.items ?? [])];
+    let item = this.state.items?.find(
+      (e: any) => e?.id === record?.id
+    );
+    item[field] = value;
+    const index = items.findIndex(
+      (e: any) => e?.Id === record.id
+    );
+    if (index > 0) items[index] = item;
+    this.setState({ ...this.state, items });
+  }
   FormRender = () => {
-    
+
     return <>
       <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
         {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
@@ -94,7 +109,7 @@ class VehicelForm extends CoreFormDocument {
           />
 
           <Compartement
-            handlerChangeItem={this.handlerChangeItems}
+            handlerChangeItem={this.handlerChangeCompartement}
 
             data={this.state}
             edit={this.props.edit}
