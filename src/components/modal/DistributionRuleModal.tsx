@@ -104,7 +104,3 @@ const DistributionRuleModal: FC<DistributionRuleModalProps> = ({ open, onClose, 
 }
 
 export default DistributionRuleModal;
-
-
-
-

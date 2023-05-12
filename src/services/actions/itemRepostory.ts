@@ -19,7 +19,8 @@ export default class itemRepository extends Repository<Item> {
         "InventoryUoMEntry",
         "InventoryUOM",
         "DefaultSalesUoMEntry",
-        "DefaultPurchasingUoMEntry"
+        "DefaultPurchasingUoMEntry",
+        "ItemUnitOfMeasurementCollection"
     ];
 
     private static url1 = '/Items';
@@ -37,7 +38,8 @@ export default class itemRepository extends Repository<Item> {
         "InventoryUoMEntry",
         "InventoryUOM",
         "DefaultSalesUoMEntry",
-        "DefaultPurchasingUoMEntry"
+        "DefaultPurchasingUoMEntry",
+        "ItemUnitOfMeasurementCollection"
     ];
 
     async get<Item>(query?: string | undefined): Promise<Item[]> {
@@ -49,9 +51,9 @@ export default class itemRepository extends Repository<Item> {
 
         if (!response) return [];
 
-        
+
         return response;
-    } 
+    }
 
 
     public static async getAll<Item>(query?: string | undefined): Promise<Item[]> {
@@ -65,8 +67,13 @@ export default class itemRepository extends Repository<Item> {
         return response.data?.map((e: any) => new Item(e));
     }
 
-    find<T>(query?: string | undefined): Promise<T> {
-        throw new Error("Method not implemented.");
+    async find<Item>(id?: any, query?: string | undefined): Promise<any> {
+        const response = await request('GET', `${this.url}(${id})`)
+            .then((res: any) => res?.data)
+            .catch((e: Error) => {
+                throw new Error(e.message);
+            });
+        return new Item(response);
     }
 
 
@@ -83,5 +90,4 @@ export default class itemRepository extends Repository<Item> {
     delete(id: any): Promise<Item> {
         throw new Error("Method not implemented.");
     }
-
 }

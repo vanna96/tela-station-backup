@@ -1,15 +1,11 @@
 import ItemModal from '@/components/modal/ItemModal';
 import React from 'react'
-import { FaArrowLeft } from "react-icons/fa";
 import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
 import VendorModal from '../modal/VendorModal';
-import GLAccountModal from '../modal/GLAccountModal';
 import ProjectModal from '../modal/ProjectModal';
 import BusinessPartner from '../../models/BusinessParter';
-import { useNavigate, useParams } from 'react-router-dom';
 import BackButton from '../button/BackButton';
 import Project from '@/models/Project';
-import Item from '@/models/Item';
 import { Backdrop, CircularProgress } from '@mui/material';
 import Modal from '../modal/Modal';
 import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify';
@@ -24,6 +20,7 @@ import RequesterModal from '../modal/RequesterModal';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import GLAccount from '@/models/GLAccount';
 import Formular from '@/utilies/formular';
+import DocumentHeaderComponent from '../DocumenHeaderComponent';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -43,32 +40,36 @@ export interface CoreFormDocumentState {
     isOpenAccount: boolean,
     isOpenProject: boolean,
     isLoadingSerie: boolean,
-    renewal: boolean,
-    cardCode?: any,
-    cardName?: any,
-    contactPersonCode?: number | undefined | null,
-    phone?: string | undefined | null,
-    email?: string | undefined | null,
-    owner?: string | undefined | null,
-    buyer?: string | undefined | null,
-    shippingType?: number | undefined | null,
-    paymentTermType?: string | undefined | null,
-    paymentMethod?: string | undefined | null,
-    currency?: string | undefined | null,
-    vendorRef?: string | undefined | null,
-    documentStatus?: string | undefined | null,
-    remark?: string | undefined | null,
-    description?: string | undefined | null,
-    documentServiceItemType?: string | undefined | null,
-    attachmentEntry?: null,
-    project?: string | undefined | null,
-    contactPersonList?: any[],
-    items?: any[],
-    services?: any[],
-    attachments?: any[],
-    series: any[],
-    serie: any,
-    docNum: any,
+    Renewal: boolean,
+    CardCode?: any,
+    CardName?: any,
+    ContactPersonCode?: number | undefined | null,
+    Phone?: string | undefined | null,
+    Email?: string | undefined | null,
+    Owner?: string | undefined | null,
+    Buyer?: string | undefined | null,
+    // shippingType?: number | any | null,
+    PaymentTermType?: string | undefined | null,
+    PaymentMethod?: string | undefined | null,
+    Currency?: string | undefined | null,
+    PriceLists?: string | undefined | null,
+    SalePersonCode?: string | undefined | null,
+    ShipToDefault?: string | undefined | null,
+    VendorRef?: string | undefined | null,
+    DocumentStatus?: string | undefined | null,
+    Remark?: string | undefined | null,
+    Description?: string | undefined | null,
+    DocumentServiceItemType?: string | undefined | null,
+    AttachmentEntry?: number | null,
+    Project?: string | undefined | null,
+    ContactPersonList?: any[],
+    ShippingType?: string,
+    Items?: any[],
+    Services?: any[],
+    Attachments?: any[],
+    SerieLists: any[],
+    Series: any,
+    DocNum: any,
     isSubmitting: boolean,
     title: string,
     message: string,
@@ -80,18 +81,15 @@ export interface CoreFormDocumentState {
     isApproved: boolean,
     isOpenRequester: boolean,
     isOpenRequesterEmployee: boolean,
-    department: any,
-    branch: any,
-    reqType: number,
-    docTotalBeforeDiscount: number,
-    docTotal: number,
-    docDiscountPercent: number | any,
-    docDiscountPrice: number | any,
-    docTaxTotal: number | any,
-    rounded: boolean,
-    compartement: any[],
-
-
+    Department: any,
+    Branch: any,
+    ReqType: number,
+    DocTotalBeforeDiscount: number,
+    DocTotal: number,
+    DocDiscountPercent: number | any,
+    DocDiscountPrice: number | any,
+    DocTaxTotal: number | any,
+    Rounded: boolean,
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -103,35 +101,37 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
         this.state = {
             collapse: true,
-            cardCode: null,
-            cardName: null,
-            contactPersonCode: undefined,
-            contactPersonList: [],
-            phone: null,
-            email: null,
-            owner: null,
-            buyer: null,
-            vendorRef: null,
-            documentStatus: 'Open',
-            remark: null,
-            description: null,
-            documentServiceItemType: 'I',
-            attachmentEntry: null,
-            project: null,
+            CardCode: '',
+            CardName: '',
+            ContactPersonCode: undefined,
+            ContactPersonList: [],
+            ShippingType: '',
+            Phone: '',
+            Email: '',
+            Owner: '',
+            Buyer: '',
+            VendorRef: '',
+            DocumentStatus: 'Open',
+            Remark: '',
+            Description: '',
+            DocumentServiceItemType: 'I',
+            AttachmentEntry: 0,
+            Project: '',
             isOpenItem: false,
             isOpenVendor: false,
             isOpenAccount: false,
             isOpenProject: false,
-            shippingType: undefined,
-            paymentMethod: null,
-            paymentTermType: null,
-            currency: null,
-            renewal: false,
-            items: [],
-            compartement: [],
-            series: [],
-            serie: '',
-            docNum: null,
+            PaymentMethod: '',
+            PaymentTermType: '',
+            Currency: '',
+            PriceLists: '',
+            SalePersonCode: '',
+            ShipToDefault: '',
+            Renewal: false,
+            Items: [],
+            SerieLists: [],
+            Series: '',
+            DocNum: '',
             isLoadingSerie: true,
             isSubmitting: false,
             message: '',
@@ -144,16 +144,15 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             isApproved: false,
             isOpenRequester: false,
             isOpenRequesterEmployee: false,
-            department: null,
-            branch: null,
-            reqType: 12,
-            docTaxTotal: 0,
-            docTotal: 0,
-            docTotalBeforeDiscount: 0,
-            docDiscountPercent: 0,
-            docDiscountPrice: 0,
-            rounded: false,
-
+            Department: '',
+            Branch: '',
+            ReqType: 12,
+            DocTaxTotal: 0,
+            DocTotal: 0,
+            DocTotalBeforeDiscount: 0,
+            DocDiscountPercent: 0,
+            DocDiscountPrice: 0,
+            Rounded: false
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -170,7 +169,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     abstract FormRender(): JSX.Element;
 
     render() {
-
         return (
             <>
                 <ItemModal open={this.state.isOpenItem} onClose={() => this.handlerCloseItem()} type='purchase' onOk={this.handlerConfirmItem} />
@@ -191,15 +189,16 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 </Modal>
 
                 <FormMessageModal ref={this.dialog} />
-
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={this.state.isSubmitting}
                 >
                     <CircularProgress color="inherit" />
                 </Backdrop>
-                <div className='bg-gray-100 flex flex-col  w-full h-full p-4 relative'>
-                    <div className=" rounded-lg px-6 py-4 flex items-center justify-between sticky top-3 gap-3  border-b bg-white shadow-sm xl:text-sm font-bold z-20">
+
+                <div className=' flex flex-col  w-full h-full p-4 relative'>
+                    <DocumentHeaderComponent data={this.state} />
+                    {/* <div className=" rounded-lg px-6 py-4 flex items-center justify-between sticky top-3 gap-3  border-b bg-white shadow-sm xl:text-sm font-bold z-20">
                         <div className="flex gap-3 items-center">
                             <BackButton />
                             <div>Purchase Agreement</div>
@@ -218,9 +217,9 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                             onClick={() => this.handlerCollapse()}
                             className={`hover:border absolute left-[45%] -bottom-4 p-[8px] bg-white hover:bg-gray-200 border shadow rounded-full text-xl text-gray-600 transition-all transform duration-200 delay-100 ${this.state.collapse ? 'rotate-0' : 'rotate-180'}`}> <HiOutlineChevronDown />
                         </div>
-                    </div>
+                    </div> */}
 
-                    <div className={`w-full p-3 flex justify-between gap-3 stick ${this.state.collapse ? '' : 'hidden'} transition-transform  delay-100 duration-200  my-3 rounded-lg xl:text-sm font-bold bg-white shadow-sm border z-10`}>
+                    {/* <div className={`w-full p-3 flex justify-between gap-3 stick ${this.state.collapse ? '' : 'hidden'} transition-transform  delay-100 duration-200  my-3 rounded-lg xl:text-sm font-bold bg-white shadow-sm border z-10`}>
                         <div></div>
                         <div className="flex items-center">
                             <div role='button' className={`p-2 px-4 flex flex-col ${false ? 'border-b-[3px] border-blue-500' : ''}`}
@@ -230,9 +229,9 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                             <div role='button' className={`p-2 px-4 flex flex-col ${false ? 'border-b-[3px] border-blue-500' : ''}`}>Content</div>
                             <div role='button' className={`p-2 px-4 flex flex-col ${false ? 'border-b-[3px] border-blue-500' : ''}`}>Attachment</div>
                         </div>
-                    </div>
+                    </div> */}
 
-                    <div className={`grow flex flex-col gap-4 w-full ${this.state.collapse ? '' : 'mt-4'}`}>
+                    <div className={`grow mt-4 flex flex-col gap-4 w-full ${this.state.collapse ? '' : 'mt-4'}`}>
                         <this.FormRender />
                         <div className='mt-4'></div>
                     </div>
@@ -253,10 +252,11 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     }
 
     protected handlerConfirmItem(data: any[]) {
-        let oldItems = [...this.state.items ?? []];
+        let oldItems = [...this.state.Items ?? []];
 
-
-        this.setState({ ...this.state, isOpenItem: false, items: [...oldItems, ...data] })
+        // Filter out items that already exist in the state
+        const newItems = data.filter((newItem) => !oldItems.find((e) => e?.ItemCode === newItem.ItemCode));
+        this.setState({ ...this.state, isOpenItem: false, Items: [...oldItems, ...newItems] });
     }
 
     private handlerCloseItem() {
@@ -267,18 +267,21 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     protected handlerConfirmVendor(record: BusinessPartner) {
         this.setState({
             ...this.state,
-            cardCode: record.cardCode,
-            cardName: record.cardName,
-            contactPersonCode: record.contactEmployee!.length > 0 ? record.contactEmployee![0].id : undefined,
-            contactPersonList: record.contactEmployee ?? [],
-            email: record.email,
-            phone: record.phone,
-            shippingType: record.shippingType,
-            paymentTermType: record.paymentTermTypeCode,
-            paymentMethod: record.paymentMethod,
+            CardCode: record.cardCode,
+            CardName: record.cardName,
+            ContactPersonCode: record.contactEmployee!.length > 0 ? record.contactEmployee![0].id : undefined,
+            ContactPersonList: record.contactEmployee ?? [],
+            ShippingType: '',
+            Email: record.email,
+            Phone: record.phone,
+            PaymentTermType: record.paymentTermTypeCode,
+            PaymentMethod: record.paymentMethod,
             isOpenProject: false,
             isOpenVendor: false,
-            currency: record.currency,
+            Currency: record.currency,
+            PriceLists: record.priceLists,
+            SalePersonCode: record.salePersonCode,
+            ShipToDefault: record.shipToDefault
         });
     }
 
@@ -311,7 +314,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     protected handlerConfirmProject(record: Project) {
         this.setState({
             ...this.state,
-            project: record.code,
+            Project: record.code,
             isOpenProject: false,
         });
     }
@@ -336,39 +339,38 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let temps: any = { ...this.state };
         temps[key] = value;
 
-        if (key === 'agreementMethod' || key === 'docType') {
+        if (key === 'AgreementMethod' || key === 'DocType') {
             temps['items'] = [{}];
         }
 
-        if (key === 'serie') {
-            const document = this.state.series.find((e: any) => e.Series === value);
-            console.log(document?.NextNumber)
-            temps['docNum'] = document?.NextNumber;
+        if (key === 'Serie') {
+            const document = this.state.SerieLists.find((e: any) => e.Series === value);
+            temps['DocNum'] = document?.NextNumber;
         }
 
-        if (key === 'reqType') {
-            temps['department'] = null;
-            temps['branch'] = null;
-            temps['cardCode'] = null
-            temps['cardName'] = null
+        if (key === 'ReqType') {
+            temps['Department'] = null;
+            temps['Branch'] = null;
+            temps['CardCode'] = null
+            temps['CardName'] = null
         }
 
         // discount
-        let docDiscountPercent = this.state.docDiscountPercent;
-        let docTotalBeforeDiscount = this.state.docTotalBeforeDiscount;
-        if (key === 'docDiscountPercent') {
+        let DocDiscountPercent = this.state.DocDiscountPercent;
+        let DocTotalBeforeDiscount = this.state.DocTotalBeforeDiscount;
+        if (key === 'DocDiscountPercent') {
             let discount = parseFloat(value);
-            temps['docDiscountPrice'] = discount >= 100 ? 0 : (docTotalBeforeDiscount * value) / 100;
-            temps['docDiscountPercent'] = discount > 100 ? 100 : value;
+            temps['DocDiscountPrice'] = discount >= 100 ? 0 : (DocTotalBeforeDiscount * value) / 100;
+            temps['DocDiscountPercent'] = discount > 100 ? 100 : value;
             //
             temps = this.findTotalVatRate(temps);
         }
 
-        if (key === 'docDiscountPrice') {
-            const total = parseFloat(value) > docTotalBeforeDiscount;
-            docDiscountPercent = total ? 100 : ((value / docTotalBeforeDiscount) * 100);
-            temps['docDiscountPercent'] = (docDiscountPercent >= 10 ? docDiscountPercent : docDiscountPercent / 10);
-            temps['docDiscountPrice'] = total ? 0 : value;
+        if (key === 'DocDiscountPrice') {
+            const total = parseFloat(value) > DocTotalBeforeDiscount;
+            DocDiscountPercent = total ? 100 : ((value / DocTotalBeforeDiscount) * 100);
+            temps['DocDiscountPercent'] = (DocDiscountPercent >= 10 ? DocDiscountPercent : DocDiscountPercent / 10);
+            temps['DocDiscountPrice'] = total ? 0 : value;
             temps = this.findTotalVatRate(temps);
         }
 
@@ -377,10 +379,10 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
     findTotalVatRate(temps: any) {
         let totalVatRate = temps.items?.reduce((prev: any, current: any) => prev + (current?.vatRate ?? 0), 0);
-        const total = temps['docTotalBeforeDiscount'] - temps['docDiscountPrice'];
-        totalVatRate = ((temps['docDiscountPrice'] === 0 ? temps.docTotalBeforeDiscount : temps['docDiscountPrice']) * totalVatRate) / 100;
-        temps['docTaxTotal'] = temps['docDiscountPrice'] === 0 || total === 0 ? 0 : totalVatRate;
-        temps['docTotal'] = total + temps['docTaxTotal'];
+        const total = temps['DocTotalBeforeDiscount'] - temps['DocDiscountPrice'];
+        totalVatRate = ((temps['DocDiscountPrice'] === 0 ? temps.docTotalBeforeDiscount : temps['DocDiscountPrice']) * totalVatRate) / 100;
+        temps['DocTaxTotal'] = totalVatRate;
+        temps['DocTotal'] = total + temps['DocTaxTotal'];
         return temps;
     }
 
@@ -424,11 +426,11 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.setState({
             ...this.state,
             isOpenRequesterEmployee: false,
-            cardCode: record.id,
-            cardName: record.name,
-            branch: record.branch,
-            department: record.department,
-            email: record.email,
+            CardCode: record.id,
+            CardName: record.name,
+            Branch: record.branch,
+            Department: record.department,
+            Email: record.email,
         });
     }
 
@@ -441,18 +443,18 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.setState({
             ...this.state,
             isOpenRequester: false,
-            cardCode: record.code,
-            cardName: record.name,
-            branch: record.branch,
-            department: record.department,
-            email: record.email,
+            CardCode: record.code,
+            CardName: record.name,
+            Branch: record.branch,
+            Department: record.department,
+            Email: record.email,
         });
     }
 
 
     protected handlerChangeItems({ value, record, field }: any) {
-        let items = [...this.state.items ?? []];
-        let item = this.state.items?.find((e: any) => e?.itemCode === record?.itemCode);
+        let items = [...this.state.Items ?? []];
+        let item = this.state.Items?.find((e: any) => e?.itemCode === record?.itemCode);
         item[field] = value;
         const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
         if (index > 0) items[index] = item;
@@ -467,16 +469,16 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         }
 
         // total
-        let docTotalBeforeDiscount = this.state.docTotalBeforeDiscount;
-        let docTaxTotal = this.state.docTaxTotal;
-        let docTotal = this.state.docTotal;
+        let DocTotalBeforeDiscount = this.state.DocTotalBeforeDiscount;
+        let DocTaxTotal = this.state.DocTaxTotal;
+        let DocTotal = this.state.DocTotal;
 
-        if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent' || field?.includes('Vat')) {
-            docTotalBeforeDiscount = items.reduce((prev, current) => prev + current.lineTotal, 0);
-            let total = docTotalBeforeDiscount - this.state.docDiscountPrice;
-            docTaxTotal = items.reduce((prev, cur) => prev + (cur?.vatRate ?? 0), 0);
-            docTaxTotal = total <= 0 ? 0 : (total * docTaxTotal / 100);
-            docTotal = total <= 0 || total === docTotalBeforeDiscount ? 0 : total + docTaxTotal;
+        if (field === 'Quantity' || field === 'UnitPrice' || field === 'DiscountPercent' || field?.includes('Vat')) {
+            DocTotalBeforeDiscount = items.reduce((prev, current) => prev + current.lineTotal, 0);
+            let total = DocTotalBeforeDiscount - this.state.DocDiscountPrice;
+            DocTaxTotal = items.reduce((prev, cur) => prev + (cur?.vatRate ?? 0), 0);
+            DocTaxTotal = (total * DocTaxTotal / 100);
+            DocTotal = total + DocTaxTotal;
         }
 
         if (field === 'accountCode') {
@@ -488,13 +490,13 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         }
 
 
-        this.setState({ ...this.state, items, docTotalBeforeDiscount, docTaxTotal, docTotal })
+        this.setState({ ...this.state, Items: items, DocTotalBeforeDiscount, DocTaxTotal, DocTotal })
     }
     protected handlerDeleteItem(code: string) {
-        let items = [...this.state.items ?? []];
+        let items = [...this.state.Items ?? []];
         const index = items.findIndex((e: any) => e?.ItemCode === code);
         items.splice(index, 1)
-        this.setState({ ...this.state, items: items })
+        this.setState({ ...this.state, Items: items })
     }
 
     protected handlerChangeItem({ value, record, field }: any) {

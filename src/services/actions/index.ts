@@ -58,6 +58,14 @@ export default class InitializeData {
         return response.data.value;
     }
 
+    public static async warehouse(): Promise<any> {
+        const response: any = await request('GET', '/Warehouses?$select=WarehouseCode,WarehouseName');
+
+        if (!response?.data) return [];
+
+        return response.data.value;
+    }
+
     public static async owner(): Promise<Owner[]> {
         const response: any = await request('GET', '/EmployeesInfo?$filter=ApplicationUserID ne null&$select=EmployeeID,FirstName,LastName');
 

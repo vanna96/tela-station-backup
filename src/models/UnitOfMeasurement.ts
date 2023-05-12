@@ -14,6 +14,7 @@ export default class UnitOfMeasurement extends Model {
         this.id = json['Id'];
         this.code = json['Code'];
         this.name = json['Name'];
+        this.baseUoM = json['BaseUoM']
         this.collections= json['UoMGroupDefinitionCollection'];
     }
     

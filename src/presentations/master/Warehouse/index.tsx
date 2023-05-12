@@ -7,7 +7,6 @@ import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
-import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
 import WarehouseRepository from "@/services/actions/WarehouseRepository";
 
 export default function WarehoseLists() {

@@ -1,6 +1,6 @@
 import { withRouter } from '@/routes/withRouter';
-import React, { Component, useEffect } from 'react'
-import PurchaseAgreement from '../../../../models/PurchaseAgreement';
+import React, { Component } from 'react'
+import PurchaseAgreement, { PurchaseAgreementDocumentLine } from '../../../../models/PurchaseAgreement';
 import Taps from '@/components/button/Taps';
 import MaterialReactTable from 'material-react-table';
 import { useMemo } from 'react';
@@ -17,10 +17,12 @@ import BusinessPartner from '../../../../models/BusinessParter';
 import OwnerRepository from '@/services/actions/ownerRepository';
 import PaymentTermTypeRepository from '../../../../services/actions/paymentTermTypeRepository';
 import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
+import ItemGroupRepository from '@/services/actions/itemGroupRepository';
+import { getUOMGroupByCode } from '@/helpers';
+import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 
 
 class PurchaseAgreementDetail extends Component<any, any> {
-
     constructor(props: any) {
         super(props);
         this.state = {
@@ -41,15 +43,27 @@ class PurchaseAgreementDetail extends Component<any, any> {
         const { id } = this.props.match.params;
         const data = this.props.location.state as PurchaseAgreement;
 
+        // new PurchaseAgreementRepository().find(id).then(async (res: any) => {
+        //     const lines = await this.props.query.getItems(res.items);
+        //     console.log(lines);
+
+        //     this.setState({ ...res, loading: false });
+        // }).catch((e: Error) => {
+        //     this.setState({ isError: true, message: e.message });
+        // })
+
         if (data) {
             setTimeout(() => {
                 let purchaseAgreement = data;
                 purchaseAgreement as PurchaseAgreement;
-                if (purchaseAgreement.contactPersonCode) {
-                    new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.cardCode!).then((res: BusinessPartner) => {
-                        purchaseAgreement.email = res.email;
-                        purchaseAgreement.phone = res.phone;
-                        purchaseAgreement.contactPersonList = res.contactEmployee ?? [];
+
+                const lines = this.props.query.getItems();
+
+                if (purchaseAgreement.ContactPersonCode) {
+                    new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.CardCode!).then((res: BusinessPartner) => {
+                        purchaseAgreement.Email = res.email;
+                        purchaseAgreement.Phone = res.phone;
+                        purchaseAgreement.ContactPersonList = res.contactEmployee ?? [];
                         this.setState({ ...purchaseAgreement, loading: false })
                     })
                 } else {
@@ -57,7 +71,10 @@ class PurchaseAgreementDetail extends Component<any, any> {
                 }
             }, 500)
         } else {
-            new PurchaseAgreementRepository().find(id).then((res: any) => {
+            new PurchaseAgreementRepository().find(id).then(async (res: any) => {
+                const lines = await this.props.query.getItems(res.items);
+                console.log(lines);
+
                 this.setState({ ...res, loading: false });
             }).catch((e: Error) => {
                 this.setState({ isError: true, message: e.message });
@@ -84,23 +101,23 @@ class PurchaseAgreementDetail extends Component<any, any> {
                             <div className='flex flex-col gap-1'>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>BP Code</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.cardCode}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.CardCode}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>BP Name</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.cardName}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.CardName}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Contact Person Code</span>
-                                    <span className='w-8/12 font-medium'>: {this.state?.contactPersonList?.find((e: ContactEmployee) => e.id === this.state.contactPersonCode)?.name}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state?.ContactPersonList?.find((e: ContactEmployee) => e.id === this.state.contactPersonCode)?.name}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Email</span>
-                                    <span className='w-8/12 font-medium'>: {this.state?.email}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state?.Email}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Phone</span>
-                                    <span className='w-8/12 font-medium'>: {this.state?.phone}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state?.Phone}</span>
                                 </div>
 
 
@@ -108,19 +125,19 @@ class PurchaseAgreementDetail extends Component<any, any> {
                             <div className='flex flex-col gap-1'>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500 '>Document Numbering</span>
-                                    <span className='w-8/12 font-medium'>: {this.state.docNum}</span>
+                                    <span className='w-8/12 font-medium'>: {this.state.DocNum}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Agreement Type</span>
-                                    <span className='w-8/12 font-medium'>: {PurchaseAgreement.getType(this.state.agreementMethod)}</span>
+                                    <span className='w-8/12 font-medium'>: {PurchaseAgreement.getType(this.state.AgreementMethod)}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Start Date</span>
-                                    <span className='w-8/12 font-medium'>: {dateFormat(this.state.startDate)}</span>
+                                    <span className='w-8/12 font-medium'>: {dateFormat(this.state.StartDate)}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>End Date</span>
-                                    <span className='w-8/12 font-medium'>: {dateFormat(this.state.endDate)}</span>
+                                    <span className='w-8/12 font-medium'>: {dateFormat(this.state.EndDate)}</span>
                                 </div>
 
 
@@ -132,7 +149,7 @@ class PurchaseAgreementDetail extends Component<any, any> {
                             >
                                 <General data={this.state} />
                                 <Content data={this.state} />
-                                <PreviewAttachment attachmentEntry={this.state.attachmentEntry} />
+                                <PreviewAttachment attachmentEntry={this.state.AttachmentEntry} />
                             </Taps>
                         </div>
                     </>)
@@ -146,58 +163,74 @@ class PurchaseAgreementDetail extends Component<any, any> {
 
 export default withRouter(PurchaseAgreementDetail);
 
-
-
 function General(props: any) {
     const { data }: any = props;
 
 
     return <div className='grow w-full grid grid-cols-2 sm:grid-cols-1 gap-2 text-[12px] py-2'>
         <div className='flex flex-col gap-2'>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Agreement Type</span> <span className='col-span-2 font-medium'>: {PurchaseAgreement.getType(data.agreementType)}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data.paymentTermType)?.PaymentTermsGroupName}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Method</span> <span className='col-span-2 font-medium'>: {data.paymentMethod ?? 'N/A'}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shipping Type</span> <span className='col-span-2 font-medium'>: {new ShippingTypeRepository().find(data.shippingType)?.Name}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Settlement Probability %</span> <span className='col-span-2 font-medium'>: {data.settlementProbability}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Remark</span> <span className='col-span-2 font-medium'>: {data.remark ?? 'N/A'}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Agreement Type</span> <span className='col-span-2 font-medium'>: {PurchaseAgreement.getType(data.AgreementType)}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data.PaymentTermType)?.PaymentTermsGroupName}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Method</span> <span className='col-span-2 font-medium'>: {data.PaymentMethod ?? 'N/A'}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shipping Type</span> <span className='col-span-2 font-medium'>: {new ShippingTypeRepository().find(data.ShippingType)?.Name}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Settlement Probability %</span> <span className='col-span-2 font-medium'>: {data.SettlementProbability}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Remark</span> <span className='col-span-2 font-medium'>: {data.Remark ?? 'N/A'}</span></div>
         </div>
         <div className='flex flex-col gap-2'>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {DocumentStatus.getFullNameStatus(data?.status)}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Owner</span> <span className='col-span-2 font-medium'>: {new OwnerRepository().find(data.owner)?.name}</span></div>
-            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Reminder</span> <span className='col-span-2 font-medium'>: {data.remindTime} {PurchaseAgreement.getRemindUnit(data.remindUnit)}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Status</span> <span className='col-span-2 font-medium'>: {DocumentStatus.getFullNameStatus(data?.Status)}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Owner</span> <span className='col-span-2 font-medium'>: {new OwnerRepository().find(data.Owner)?.name}</span></div>
+            <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Reminder</span> <span className='col-span-2 font-medium'>: {data.remindTime} {PurchaseAgreement.getRemindUnit(data.RemindUnit)}</span></div>
         </div>
     </div>
 }
 
 function Content(props: any) {
     const { data } = props;
+    const itemGroupRepo = new ItemGroupRepository();
+
+
     const itemColumn = useMemo(() => [
         {
-            accessorKey: "itemCode",
+            accessorKey: "ItemCode",
             header: "Item NO.", //uses the default width from defaultColumn prop
             enableClickToCopy: true,
             enableFilterMatchHighlighting: true,
             size: 88,
         },
         {
-            accessorKey: "itemName",
+            accessorKey: "ItemName",
             header: "Item Description",
             enableClickToCopy: true,
         },
         {
-            accessorKey: "itemGroup",
+            accessorKey: "ItemGroup",
             header: "Item Group",
-            Cell: ({ cell }: any) => cell.getValue(),
+            Cell: ({ cell }: any) => itemGroupRepo.find(cell.getValue())?.GroupName,
         },
         {
-            accessorKey: "quantity",
+            accessorKey: "Quantity",
             header: "Quantity",
             Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
         },
         {
-            accessorKey: "unitPrice",
+            accessorKey: "UnitPrice",
             header: "Unit Price",
             Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        },
+        {
+            accessorKey: "UoMGroup",
+            header: "UoM Group",
+            Cell: ({ cell }: any) => getUOMGroupByCode(cell.row.original.ItemCode)?.Code,
+        },
+        {
+            accessorKey: "UomCode",
+            header: "UoM Group",
+            Cell: ({ cell }: any) => cell.getValue(),
+        },
+        {
+            accessorKey: "UnitsOfMeasurement",
+            header: "Item Per Units",
+            Cell: ({ cell }: any) => cell.getValue(),
         },
     ], [data]);
 
@@ -232,8 +265,8 @@ function Content(props: any) {
 
     return <div className="data-table  border-none p-0 mt-3">
         <MaterialReactTable
-            columns={data?.agreementMethod === 'I' ? itemColumn : serviceColumns}
-            data={data?.items ?? []}
+            columns={data?.AgreementMethod === 'I' ? itemColumn : serviceColumns}
+            data={data?.Items ?? []}
             enableHiding={true}
             initialState={{ density: "compact" }}
             enableDensityToggle={false}

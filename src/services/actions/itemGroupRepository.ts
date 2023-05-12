@@ -25,11 +25,14 @@ export default class ItemGroupRepository extends Repository<ItemGroup> {
     }
 
 
+ 
     find<ItemGroup>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
-        const itemGroups: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-        return new ItemGroup(itemGroups.find((e: any) => e?.Number == code) ?? {});
+        if (!data) return {};
+        const itemsGroup: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
+        return itemsGroup.find((e: any) => e?.Number == code);
     }
+
 
     post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<ItemGroup> {
         throw new Error("Method not implemented.");

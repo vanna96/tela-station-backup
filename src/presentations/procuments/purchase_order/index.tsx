@@ -26,19 +26,14 @@ export default function PurchaseOrderLists() {
                 size: 88,
             },
             {
-                accessorKey: "docType",
-                header: "Document Type",
-                enableClickToCopy: true,
-            },
-            {
                 accessorKey: "cardCode",
                 header: "Vendor Code",
                 // size: 200, //increase the width of this column
             },
             {
-                accessorKey: "journalMemo",
-                header: "JournalMemo",
-                enableClickToCopy: true,
+                accessorKey: "cardName",
+                header: "Card Name",
+                // size: 200, //increase the width of this column
             },
             {
                 accessorKey: "docDate",
