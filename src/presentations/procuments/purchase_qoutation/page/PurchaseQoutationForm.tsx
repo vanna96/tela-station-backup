@@ -20,6 +20,7 @@ import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import { UpdateDataSuccess } from '@/utilies/ClientError';
 import PurchaseQouatation from '@/models/PurchaseQoutation';
 import Formular from '@/utilies/formular';
+import { CircularProgress } from '@mui/material';
 
 class PurchaseQoutationForm extends CoreFormDocument {
 
@@ -132,7 +133,8 @@ class PurchaseQoutationForm extends CoreFormDocument {
   FormRender = () => {
 
     return <>
-      <form onSubmit={this.handlerSubmit} className='flex flex-col gap-4'>
+      <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
+        {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div>:<>
         <HeadingForm
           data={this.state}
           edit={this.props?.edit}
@@ -176,7 +178,8 @@ class PurchaseQoutationForm extends CoreFormDocument {
               </LoadingButton>
             </div>
           </div>
-        </div>
+          </div>
+        </>}
       </form>
     </>
   }

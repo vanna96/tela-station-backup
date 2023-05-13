@@ -15,6 +15,7 @@ import Accounting from '../component/Accounting';
 import Content from '../component/Content';
 import PurchaseDownPaymentRepository from '@/services/actions/DownPaymentRequestRepository';
 import PurchaseDownPayment from '@/models/DownPaymentRequest';
+import { CircularProgress } from '@mui/material';
 
 class PurchaseDownPaymentForm extends CoreFormDocument {
 
@@ -125,7 +126,8 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
   FormRender = () => {
 
     return <>
-      <form onSubmit={this.handlerSubmit} className='flex flex-col gap-4'>
+      <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
+        {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
         <HeadingForm
           data={this.state}
           edit={this.props?.edit}
@@ -168,7 +170,8 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
               </LoadingButton>
             </div>
           </div>
-        </div>
+          </div>
+        </>}
       </form>
     </>
   }
