@@ -18,7 +18,7 @@ export interface IAccountingFormProps {
   edit: boolean;
 }
 
-export default function Accounting({
+export default function AccountingForm({
   data,
   handlerChange,
   handlerOpenProject,
@@ -30,7 +30,7 @@ export default function Accounting({
         <div>
           <MUITextField
             label="Journal Remark"
-            value={("Good Return - " ?? data?.cardCode) || "N/A"}
+            value={("Good Return - " ?? data?.CardCode) || "N/A"}
             name="JournalMemo"
             onChange={(e) => handlerChange("JournalMemo", e.target.value)}
           />
@@ -46,7 +46,7 @@ export default function Accounting({
                   onChange={(e) =>
                     handlerChange("PaymentGroupCode", e.target.value)
                   }
-                  value={data?.paymentGroupCode}
+                  value={data?.PaymentGroupCode}
                   name="PaymentGroupCode"
                 />
               </div>
@@ -199,7 +199,7 @@ export default function Accounting({
                   htmlFor="AgreementMethod"
                   className="text-gray-500 text-[14px]"
                 >
-                  Manually Rcealculate Due Date
+                  Manually Recalculate Due Date
                 </label>
 
                 <MUISelect
@@ -223,7 +223,7 @@ export default function Accounting({
                   disabled={edit}
                   label="Month +"
                   onChange={(e) => handlerChange("ExtraMonth", e.target.value)}
-                  value={data.extraMonth}
+                  value={data.ExtraMonth}
                   name="ExtraMonth"
                 />
                 <MUITextField
@@ -266,7 +266,7 @@ export default function Accounting({
               <TextField
                 size="small"
                 multiline
-                rows={4}
+                rows={2}
                 fullWidth
                 name="CreateQRCodeFrom"
                 className="w-full "

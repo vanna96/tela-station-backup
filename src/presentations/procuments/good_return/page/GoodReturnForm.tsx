@@ -10,8 +10,8 @@ import { UpdateDataSuccess } from '../../../../utilies/ClientError';
 import GoodReturn from '../../../../models/GoodReturn';
 import { QueryClient, useMutation } from 'react-query';
 import HeadingForm from '../component/HeadingForm';
-import AccounttingForm from '../../purchase_order/components/Accountting';
-import LogisticsForm from '../../purchase_order/components/Logistic';
+import AccountingForm from '../component/AccountingForm';
+import LogisticsForm from '../component/LogisticsForm';
 import AttachmentForm from '@/components/attachment';
 
 
@@ -21,12 +21,18 @@ class GoodReturnForm extends CoreFormDocument {
     super(props)
     this.state = {
       ...this.state,
-      DocType: 'I',
-      DocumentStatus: 'bost_Open',
-      DocDate: null,
-      DocDueDate: null,
-      TaxDate: null,
       loading: true,
+
+      DocType: 'dDocument_Items',
+      DocumentStatus: 'bost_Open',
+      DocDate: new Date().toISOString(),
+      DocDueDate: new Date().toISOString(),
+      TaxDate: new Date().toISOString(),
+      TransportationCode : 1,
+      PaymentTerms: -1,
+      PaymentMethod:	"Outgoing BT 02",
+      SalesPersonCode	: -1,
+      StartFrom	: "Y"
 
 
     } as any;
@@ -162,7 +168,7 @@ class GoodReturnForm extends CoreFormDocument {
           handlerChange={(key, value) => this.handlerChange(key, value)}
           edit={this.props?.edit}
         />
-        <AccounttingForm
+        <AccountingForm
           edit={this.props.edit}
           data={this.state}
           handlerChange={(key, value) => this.handlerChange(key, value)}
@@ -190,35 +196,3 @@ class GoodReturnForm extends CoreFormDocument {
 }
 
 export default withRouter(GoodReturnForm)
-
-// <HeadingForm */}
-//           data={this.state}
-//           edit={this.props?.edit}
-//           handlerOpenVendor={() => {
-//             this.handlerOpenVendor('supplier');
-//           }}
-//           handlerChange={(key, value) => this.handlerChange(key, value)}
-//           handlerOpenProject={() => this.handlerOpenProject()}
-//         />
-
-//         <ContentForm
-//           edit={this.props?.edit}
-//           data={this.state}
-//           handlerAddItem={() => this.handlerOpenItem()}
-//           handlerRemoveItem={this.handlerRemoveItem}
-//           handlerChangeItem={this.handlerChangeItems}
-//           handlerChange={(key, value) => this.handlerChange(key, value)}
-//         />
-//         <LogisticsForm
-//           data={this.state}
-//           handlerChange={(key, value) => this.handlerChange(key, value)}
-//           edit={this.props.edit}
-//         />
-//         <AccounttingForm
-//           edit={this.props.edit}
-//           data={this.state}
-//           handlerChange={(key, value) => this.handlerChange(key, value)}
-//           handlerOpenProject={() => this.handlerOpenProject()}
-
-//         />
-//         <AttachmentForm />

@@ -6,7 +6,7 @@ import Currency from './Currency';
 
 export default class GoodReturn extends MasterDocumentModel {
   DocEntry: any;
-  Series: string;
+  // Series: string;
   DocNum: any;
   CardCode?: string;
   CardName?: string;
@@ -70,9 +70,11 @@ export default class GoodReturn extends MasterDocumentModel {
     this.TaxDate = json['TaxDate'];
     this.CancelDate = json['CancelDate'];
     this.Description = json['Description'];
-    this.DocType = json['DocType']?.replace('dDocument_', "")?.charAt(0);
+    // this.DocType = json['DocType']?.replace('dDocument_', "")?.charAt(0);
+    this.DocType = json['DocType']
     this.DocumentType = json['DocumentType']?.replace('dDocument_', "");
-    this.DocumentStatus = getValueDocumentStatusProcument(json['DocumentStatus']);
+    // this.DocumentStatus = getValueDocumentStatusProcument(json['DocumentStatus']);
+    this.DocumentStatus = (json['DocumentStatus']);
     this.DocumentsOwner = json['DocumentsOwner'];
     // this.Renewal = json['Renewal'] === 'tYES';
     this.Remark = json['Remarks'];
@@ -94,6 +96,7 @@ export default class GoodReturn extends MasterDocumentModel {
     this.ImportFileNum = json['ImportFileNum']
     this.ContactPersonList = json['contactPersonList'];
 
+    this.CreateQRCodeFrom = json['CreateQRCodeFrom']
     this.Comments = json['Comments'];
     this.DocumentsOwner = json['DocumentsOwner']
     this.SalesPersonCode = json['SalesPersonCode']
@@ -141,6 +144,9 @@ export default class GoodReturn extends MasterDocumentModel {
       "Indicator" : this.Indicator,
       "FederalTaxID" : this.FederalTaxID,
       "ImportFileNum" : this.ImportFileNum,
+      "CreateQRCodeFrom" : this.CreateQRCodeFrom,
+      "CancelDate" : this.CancelDate
+
     };
   }
 
@@ -162,7 +168,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
   ItemName?: string | undefined;
   ItemGroup?: string | undefined;
   Quantity?: number | undefined;
-  UnitPrice?: number | undefined;
+  Price?: number | undefined;
   Currency?: string | undefined;
   LineDiscount?: number;
   UomEntry?: number | undefined;
@@ -183,6 +189,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
   AccountCode?: string | undefined;
   LineTotal?: string | undefined;
   BlanketAgreementNumber?: string | undefined;
+  DiscountPercent?: number | undefined;
 
   constructor(json: any) {
     super();
@@ -190,7 +197,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
     this.ItemName = json['ItemDescription'];
     this.ItemGroup = json['ItemGroup'];
     this.Quantity = json['Quantity'];
-    this.UnitPrice = json['UnitPrice'];
+    this.Price = json['Price'];
     this.Currency = json['PriceCurrency'];
     this.LineDiscount = json['LineDiscount'];
     this.UomEntry = json['UoMEntry'];
@@ -207,6 +214,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
     this.VatGroup = json['VatGroup'];
     this.LineTotal = json['LineTotal'];
     this.BlanketAgreementNumber = json['BlanketAgreementNumber'];
+    this.DiscountPercent = json['DiscountPercent'];
   }
 
   setUOMGroup(uomGroup: any): void {
@@ -224,30 +232,33 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
       "ItemDescription": this.ItemName,
       "ItemGroup": this.ItemGroup,
       "Quantity": this.Quantity,
-      "UnitPrice": this.UnitPrice,
+      "Price": this.Price,
       "UoMEntry": this.UomEntry,
       "UoMCode": this.UomCode,
       // "UnitsOfMeasurement": 0,
       // "FreeText": this ?? null,
-      "LineDiscount": 0.0,
+      "LineDiscount": this.LineDiscount,
       "ShippingType": this.ShippingType,
-      "Project": null,
+      // "Project": this.Project,
       "TaxCode": update ? null : this.TaxCode,
       // "TAXRate": null,
-      "ShipDate": null,
-      "RequiredDate": null,
-      "AccountCode": null,
+      "ShipDate": this.ShipDate,
+      "RequiredDate": this.RequiredDate,
+      "AccountCode": this.AccountCode,
       "AccountName": null,
-      "VatGroup": null,
-      "LineTotal": null,
-      "BlanketAgreementNumber": null
+      "VatGroup": this.VatGroup,
+      "LineTotal": this.LineTotal,
+      "Total": null,
+      "BlanketAgreementNumber": this.BlanketAgreementNumber,
+      "DiscountPercent": this.DiscountPercent
+
     };
 
     if (type === 'S') {
       delete body.ItemCode;
       delete body.ItemDescription;
       delete body.ItemGroup;
-      delete body.UnitPrice;
+      delete body.Price;
       delete body.UoMEntry;
     }
 

@@ -108,47 +108,57 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         header: "Item Group",
         Cell: ({ cell }: any) => <MUITextField  value={itemGroupRepo.find(cell.getValue())?.GroupName} />
       },
+    
       {
         accessorKey: "Quantity",
         header: "Quantity",
         Cell: ({ cell }: any) => {
-
           return <MUITextField
-            defaultValue={cell.getValue()}
             type="number"
             name="Quantity"
-            error={(cell.getValue() as number) <= 0}
-            
+            // error={(cell.getValue() as number) <= 0}
+            defaultValue={cell.getValue()}
             onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
           />;
         },
       },
       {
-        accessorKey: "UnitPrice",
+        accessorKey: "Price",
         header: "Unit Price",
         Cell: ({ cell }: any) => {
           return <MUITextField
             startAdornment={'USD'}
             type="number"
-            name="UnitPrice"
-            
+            name="Price"
             error={(cell.getValue() as number) <= 0}
             defaultValue={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Price')}
           />;
         },
       },
-      {
-        accessorKey: "Total",
-        header: "Total",
-        Cell: ({ cell }: any) => {
-          return <MUITextField
-            startAdornment={'%'}
-            
-            value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
-          />;
-        },
-      },
+      // {
+      //   accessorKey: "DiscountPercent",
+      //   header: "Discount %",
+      //   Cell: ({ cell }: any) => {
+      //     return <MUITextField
+      //       startAdornment={'%'}
+      //       type="number"
+      //       name="DiscountPercent"
+      //       defaultValue={cell.getValue()}
+      //       onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'DiscountPercent')}
+      //     />;
+      //   },
+      // },
+      // {
+      //   accessorKey: "LineTotal",
+      //   header: "Total",
+      //   Cell: ({ cell }: any) => {
+      //     return <MUITextField
+      //       startAdornment={'USD'}
+      //       value={Formular.findLineTotal(cell.row.original.Quantity, cell.row.original.UnitPrice,  cell.row.original.DiscountPercent)}
+      //     />;
+      //   },
+      // },
       {
         accessorKey: "UomGroupCode",
         header: "UoM Group",
@@ -357,15 +367,15 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
               <div className="">
                 <MUISelect
                   items={[
-                    { name: "Item", value: "I" },
-                    { name: "Service", value: "S" },
+                    { name: "Item", value: "dDocument_Items" },
+                    { name: "Service", value: "dDocument_Service" },
                   ]}
                   aliaslabel="name"
                   aliasvalue="value"
-                  name="DocumentType"
+                  name="DocType"
                   disabled={edit}
-                  value={data.DocumentType}
-                  onChange={(e) => handlerChange("DocumentType", e.target.value)}
+                  value={data.DocType}
+                  onChange={(e) => handlerChange("DocType", e.target.value)}
                 />
               </div>
             </div>
@@ -374,7 +384,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.DocumentType === 'S' ? serviceColumns : itemColumns}
+          columns={data?.DocType === 'dDocument_Service' ? serviceColumns : itemColumns}
           data={[...data?.Items, blankItem] ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
@@ -412,8 +422,8 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
               Buyer
             </label>
             <BuyerSelect
-              onChange={(e) => handlerChange("salesPersonCode", e.target.value)}
-              value={data?.salesPersonCode}
+              onChange={(e) => handlerChange("SalesPersonCode", e.target.value)}
+              value={data?.SalesPersonCode}
               name="SalesPersonCode"
             />
           </div>
@@ -422,8 +432,8 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
               Owner
             </label>
             <Owner
-              onChange={(e) => handlerChange("documentsOwner", e.target.value)}
-              value={data?.documentsOwner}
+              onChange={(e) => handlerChange("DocumentsOwner", e.target.value)}
+              value={data?.DocumentsOwner}
               name="DocumentsOwner"
             />
           </div>
@@ -437,24 +447,24 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
               <TextField
                 size="small"
                 multiline
-                rows={4}
+                rows={2}
                 fullWidth
                 name="Comments"
                 className="w-full "
-                value={data?.comments}
-                onChange={(e) => handlerChange("comments", e.target.value)}
+                value={data?.Comments}
+                onChange={(e) => handlerChange("Comments", e.target.value)}
               />
             ) : (
               <TextField
                 size="small"
                 multiline
-                rows={4}
+                rows={2}
                 disabled={edit}
                 fullWidth
                 name="Comments"
                 className="w-full "
-                value={data?.comments}
-                onChange={(e) => handlerChange("comments", e.target.value)}
+                value={data?.Comments}
+                onChange={(e) => handlerChange("Comments", e.target.value)}
               />
             )}
           </div>
@@ -465,7 +475,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           <div className="w-[100%] gap-3">
             <MUITextField
               label="Total Before Discount:"
-              value={currencyFormat(data?.docTotalBeforeDiscount)}
+              value={currencyFormat(data?.DocTotalBeforeDiscount)}
             />
           </div>
           <div className="flex justify-between gap-5">
@@ -473,19 +483,19 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
               <MUITextField
                 label="Discount:"
                 startAdornment={"%"}
-                value={data?.docDiscountPercent}
+                value={data?.DocDiscountPercent}
                 onChange={(e) =>
-                  handlerChange("docDiscountPercent", e.target.value)
+                  handlerChange("DocDiscountPercent", e.target.value)
                 }
               />
             </div>
             <div className="w-[48%] gap-3 mt-5">
               <MUITextField
                 label=""
-                startAdornment={data?.currency ?? "AUD"}
-                value={data?.docDiscountPrice}
+                startAdornment={data?.Currency ?? "AUD"}
+                value={data?.DocDiscountPrice}
                 onChange={(e) =>
-                  handlerChange("docDiscountPrice", e.target.value)
+                  handlerChange("DocDiscountPrice", e.target.value)
                 }
               />
             </div>
@@ -499,14 +509,14 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
             <div className="w-[48%] gap-3">
               <MUITextField
                 label="Tax:"
-                value={currencyFormat(data?.docTaxTotal)}
+                value={currencyFormat(data?.DocTaxTotal)}
               />
             </div>
 
             <div className="w-[48%] gap-3">
               <MUITextField
                 label="Total Payment Due::"
-                value={currencyFormat(data?.docTotal)}
+                value={currencyFormat(data?.DocTotal)}
               />
             </div>
           </div>
@@ -516,7 +526,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           <div className="w-[100%] gap-3">
             <MUITextField
               label="Total Before Discount:"
-              value={currencyFormat(data?.docTotalBeforeDiscount)}
+              value={currencyFormat(data?.DocTotalBeforeDiscount)}
             />
           </div>
           <div className="flex justify-between gap-5">
@@ -525,9 +535,9 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
                 label="Discount:"
                 disabled={edit}
                 startAdornment={"%"}
-                value={data?.docDiscountPercent}
+                value={data?.DocDiscountPercent}
                 onChange={(e) =>
-                  handlerChange("docDiscountPercent", e.target.value)
+                  handlerChange("DocDiscountPercent", e.target.value)
                 }
               />
             </div>
@@ -536,9 +546,9 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
                 label=""
                 disabled={edit}
                 startAdornment={data?.currency ?? "AUD"}
-                value={data?.docDiscountPrice}
+                value={data?.DocDiscountPrice}
                 onChange={(e) =>
-                  handlerChange("docDiscountPrice", e.target.value)
+                  handlerChange("DocDiscountPrice", e.target.value)
                 }
               />
             </div>
@@ -553,14 +563,14 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
               <MUITextField
                 disabled={edit}
                 label="Tax:"
-                value={currencyFormat(data?.docTaxTotal)}
+                value={currencyFormat(data?.DocTaxTotal)}
               />
             </div>
             <div className="w-[48%] gap-3">
               <MUITextField
                 disabled={edit}
                 label="Total Payment Due::"
-                value={currencyFormat(data?.docTotal)}
+                value={currencyFormat(data?.DocTotal)}
               />
             </div>
           </div>
@@ -569,14 +579,14 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
               <MUITextField
                 disabled={edit}
                 label="Applied Amount:"
-                value={currencyFormat(data?.docTaxTotalL)}
+                value={currencyFormat(data?.DocTaxTotalL)}
               />
             </div>
             <div className="w-[48%] gap-3">
               <MUITextField
                 disabled={edit}
                 label="Balance Due:"
-                value={currencyFormat(data?.docTotall)}
+                value={currencyFormat(data?.DocTotal)}
               />
             </div>
           </div>

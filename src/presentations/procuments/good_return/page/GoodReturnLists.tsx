@@ -37,12 +37,12 @@ export default function GoodReturnLists() {
         visible: true,
         type: 'string',
       },
-      {
-        accessorKey: "DocumentType",
-        header: "Document Type",
-        visible: true,
-        type: 'string',
-      },
+      // {
+      //   accessorKey: "DocumentType",
+      //   header: "Document Type",
+      //   visible: true,
+      //   type: 'string',
+      // },
       {
         accessorKey: "DocDate",
         header: "Posting Date ",

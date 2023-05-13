@@ -28,53 +28,53 @@ import Formular from '@/utilies/formular';
 
 class GoodReturnDetail extends Component<any, any> {
   constructor(props: any) {
-      super(props);
-      this.state = {
-          loading: true,
-          isError: false,
-          message: '',
-      }
+    super(props);
+    this.state = {
+      loading: true,
+      isError: false,
+      message: '',
+    }
 
-      this.initData = this.initData.bind(this);
+    this.initData = this.initData.bind(this);
   }
 
 
   componentDidMount(): void {
-      this.initData()
+    this.initData()
   }
 
   initData() {
-      const { id } = this.props.match.params;
-      const data = this.props.location.state as GoodReturn;
-console.log(data)
-      if (data) {
-          setTimeout(() => {
-              let procData = data;
-              procData as GoodReturn;
+    const { id } = this.props.match.params;
+    const data = this.props.location.state as GoodReturn;
+    console.log(data)
+    if (data) {
+      setTimeout(() => {
+        let procData = data;
+        procData as GoodReturn;
 
-              const lines = this.props.query.getItems();
+        const lines = this.props.query.getItems();
 
-              if (procData?.ContactPersonCode) {
-                  new BusinessPartnerRepository().findContactEmployee(procData.CardCode!).then((res: BusinessPartner) => {
-                      // procData.Email = res.email;
-                      // procData.Phone = res.phone;
-                      procData.ContactPersonList = res.contactEmployee ?? [];
-                      this.setState({ ...procData, loading: false })
-                  })
-              } else {
-                  this.setState({ ...procData, loading: false })
-              }
-          }, 500)
-      } else {
-          new GoodReturnRepository().find(id).then(async (res: any) => {
-              const lines = await this.props.query.getItems(res.items);
-              console.log(lines);
-
-              this.setState({ ...res, loading: false });
-          }).catch((e: Error) => {
-              this.setState({ isError: true, message: e.message });
+        if (procData?.ContactPersonCode) {
+          new BusinessPartnerRepository().findContactEmployee(procData.CardCode!).then((res: BusinessPartner) => {
+            // procData.Email = res.email;
+            // procData.Phone = res.phone;
+            procData.ContactPersonList = res.contactEmployee ?? [];
+            this.setState({ ...procData, loading: false })
           })
-      }
+        } else {
+          this.setState({ ...procData, loading: false })
+        }
+      }, 500)
+    } else {
+      new GoodReturnRepository().find(id).then(async (res: any) => {
+        const lines = await this.props.query.getItems(res.items);
+        console.log(lines);
+
+        this.setState({ ...res, loading: false });
+      }).catch((e: Error) => {
+        this.setState({ isError: true, message: e.message });
+      })
+    }
   }
 
   render() {
@@ -138,7 +138,7 @@ console.log(data)
                   <span className='w-4/12 text-gray-500'>Document Date</span>
                   <span className='w-8/12 font-medium'>: {dateFormat(this.state.TaxDate) || "N/A"}</span>
                 </div>
-                
+
 
               </div>
             </div>
@@ -172,119 +172,134 @@ function Content(props: any) {
 
 
   const itemColumn = useMemo(() => [
-      {
-          accessorKey: "ItemCode",
-          header: "Item NO.", //uses the default width from defaultColumn prop
-          enableClickToCopy: true,
-          enableFilterMatchHighlighting: true,
-          size: 88,
-      },
-      {
-          accessorKey: "ItemName",
-          header: "Item Description",
-          enableClickToCopy: true,
-      },
-      {
-          accessorKey: "ItemGroup",
-          header: "Item Group",
-          Cell: ({ cell }: any) => itemGroupRepo.find(cell.getValue())?.GroupName,
-      },
-      {
-          accessorKey: "Quantity",
-          header: "Quantity",
-          Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
-      },
-      {
-          accessorKey: "UnitPrice",
-          header: "Unit Price",
-          Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
-      },
-      {
-          accessorKey: "UoMGroup",
-          header: "UoM Group",
-          Cell: ({ cell }: any) => getUOMGroupByCode(cell.row.original.ItemCode)?.Code,
-      },
-      {
-          accessorKey: "UomCode",
-          header: "UoM Group",
-          Cell: ({ cell }: any) => cell.getValue(),
-      },
-      {
-          accessorKey: "UnitsOfMeasurement",
-          header: "Item Per Units",
-          Cell: ({ cell }: any) => cell.getValue(),
-      },
+    {
+      accessorKey: "ItemCode",
+      header: "Item NO.", //uses the default width from defaultColumn prop
+      enableClickToCopy: true,
+      enableFilterMatchHighlighting: true,
+      size: 88,
+    },
+    {
+      accessorKey: "ItemName",
+      header: "Item Description",
+      enableClickToCopy: true,
+    },
+    // {
+    //     accessorKey: "ItemGroup",
+    //     header: "Item Group",
+    //     Cell: ({ cell }: any) => itemGroupRepo.find(cell.getValue())?.GroupName,
+    // },
+    {
+      accessorKey: "Quantity",
+      header: "Quantity",
+      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+    },
+    {
+      accessorKey: "Price",
+      header: "Unit Price",
+      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+    },
+    {
+      accessorKey: "DiscountPercent",
+      header: "Discount %",
+      Cell: ({ cell }: any) => (cell.getValue()),
+    },
+     {
+      accessorKey: "VatGroup",
+      header: "Tax Code",
+      Cell: ({ cell }: any) => (cell.getValue()),
+    },
+    {
+      accessorKey: "LineTotal",
+      header: "Total (LC)",
+      Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
+    },
+    {
+      accessorKey: "UoMGroup",
+      header: "UoM Group",
+      Cell: ({ cell }: any) => getUOMGroupByCode(cell.row.original.ItemCode)?.Code,
+    },
+    {
+      accessorKey: "UomCode",
+      header: "UoM Group",
+      Cell: ({ cell }: any) => cell.getValue(),
+    },
+    {
+      accessorKey: "UnitsOfMeasurement",
+      header: "Item Per Units",
+      Cell: ({ cell }: any) => cell.getValue(),
+    },
   ], [data]);
 
   const serviceColumns = React.useMemo(
-      () => [
-        
-          {
-            accessorKey: "ItemName",
-            header: "	Descrition",
-            Cell: ({ cell }: any) => cell.getValue(),
-        
-          },
-          {
-            accessorKey: "ShipDate",
-            header: "Quoted date",
-            Cell: ({ cell }: any) => dateFormat(cell.getValue()),
-          },
-          {
-            accessorKey: "RequiredDate",
-            header: "Required Date",
-            Cell: ({ cell }: any) => dateFormat(cell.getValue()),
-          },
-          {
-            accessorKey: "AccountCode",
-            header: "G/L Account",
-            Cell: ({ cell }: any) => cell.getValue(),
-          },
-          {
-            accessorKey: "AccountName",
-            header: "G/L Account Name",
-            Cell: ({ cell }: any) => cell.getValue(),
-          },
-          {
-            accessorKey: "VatGroup",
-            header: "Tax Code",
-            Cell: ({ cell }: any) => cell.getValue(),
-          },
-          {
-            accessorKey: "LineTotal",
-            header: "Total (LC)",
-            Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
-          },
-          {
-            accessorKey: "BlanketAgreementNumber",
-            header: "BlanketAgreementNumber",
-            Cell: ({ cell }: any) => cell.getValue(),
-          },
-      ],
-      [data]
+    () => [
+
+      {
+        accessorKey: "ItemName",
+        header: "	Descrition",
+        Cell: ({ cell }: any) => cell.getValue(),
+
+      },
+      {
+        accessorKey: "ShipDate",
+        header: "Quoted date",
+        Cell: ({ cell }: any) => dateFormat(cell.getValue()),
+      },
+      {
+        accessorKey: "RequiredDate",
+        header: "Required Date",
+        Cell: ({ cell }: any) => dateFormat(cell.getValue()),
+      },
+      {
+        accessorKey: "AccountCode",
+        header: "G/L Account",
+        Cell: ({ cell }: any) => cell.getValue(),
+      },
+      {
+        accessorKey: "AccountName",
+        header: "G/L Account Name",
+        Cell: ({ cell }: any) => cell.getValue(),
+      },
+      {
+        accessorKey: "VatGroup",
+        header: "Tax Code",
+        Cell: ({ cell }: any) => cell.getValue(),
+      },
+      {
+        accessorKey: "LineTotal",
+        header: "Total (LC)",
+        Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
+      },
+      {
+        accessorKey: "BlanketAgreementNumber",
+        header: "BlanketAgreementNumber",
+        Cell: ({ cell }: any) => cell.getValue(),
+      },
+    ],
+    [data]
   );
   return <div className="data-table  border-none p-0 mt-3">
     <MaterialReactTable
-            columns={data?.DocType === 'I' ? itemColumn : serviceColumns}
-            data={data?.Items ?? []}
-            enableHiding={true}
-            initialState={{ density: "compact" }}
-            enableDensityToggle={false}
-            enableColumnResizing
-            enableStickyHeader={true}
-            enableStickyFooter={true}
-            enableTableHead={true}
-            enableTopToolbar={false}
-            enableColumnActions={false}
-            enableGlobalFilter={false}
-            enableFilters={false}
-            enableFullScreenToggle={false}
-            enablePagination={false}
-            getRowId={(row: any) => row.DocEntry}
-            state={{
-                // isLoading: true,
-            }}
-        />
+      columns={data?.DocType === 'dDocument_Items' ? itemColumn : serviceColumns}
+      data={data?.Items ?? []}
+      enableHiding={true}
+      initialState={{ density: "compact" }}
+      enableDensityToggle={false}
+      enableColumnResizing
+      enableStickyHeader={true}
+      enableStickyFooter={true}
+      enableTableHead={true}
+      enableTopToolbar={false}
+      enableColumnActions={false}
+      enableGlobalFilter={false}
+      enableFilters={false}
+      enableFullScreenToggle={false}
+      enablePagination={false}
+      getRowId={(row: any) => row.DocEntry}
+      state={{
+        // isLoading: true,
+      }}
+    />
     <div className='flex flex-col gap-3'>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Buyer</span>
@@ -295,7 +310,7 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Owner</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new OwnerRepository().find(data?.DocumentsOwner)?.name || "N/A"}
+          : {new OwnerRepository().find(data?.DocumentsOwner)?.name ?? "N/A"}
 
         </span>
       </div>
@@ -349,7 +364,7 @@ function Account(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cash Discount Date Offset</span> <span className='col-span-2 font-medium'>: {data?.CashDiscountDateOffset || "N/A"}</span></div>
     </div>
     <div className='flex flex-col gap-2'>
-    <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Business partner Project</span> <span className='col-span-2 font-medium'>: {data?.Project || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Business partner Project</span> <span className='col-span-2 font-medium'>: {data?.Project || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Create QR Code From</span> <span className='col-span-2 font-medium'>: {data?.CreateQRCodeFrom || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cancellation Date</span> <span className='col-span-2 font-medium'>: {dateFormat(data?.CancelDate || "N/A")}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Indicator</span> <span className='col-span-2 font-medium'>: {data?.Indicator || "N/A"}</span></div>
