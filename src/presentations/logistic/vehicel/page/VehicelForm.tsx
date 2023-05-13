@@ -85,8 +85,8 @@ class VehicelForm extends CoreFormDocument {
   }
 
   protected handlerChangeCompartement({ value, record, field }: any) {
-    let items = [...(this.state.items ?? [])];
-    let item = this.state.items?.find(
+    let items = [...this.state.Items ?? []];
+    let item = this.state.Items?.find(
       (e: any) => e?.id === record?.id
     );
     item[field] = value;
@@ -94,7 +94,7 @@ class VehicelForm extends CoreFormDocument {
       (e: any) => e?.Id === record.id
     );
     if (index > 0) items[index] = item;
-    this.setState({ ...this.state, items });
+    this.setState({ ...this.state, Items: items });
   }
   FormRender = () => {
 

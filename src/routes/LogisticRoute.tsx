@@ -6,13 +6,14 @@ import { Route, Routes } from 'react-router-dom';
 import SaleMasterPage from '@/presentations/sale';
 import LogisticMasterPage from '../presentations/logistic/index';
 import VehicelLists from '@/presentations/logistic/vehicel';
-import VehicelForm from '@/presentations/logistic/vehicel/component/VehicelForm';
 import RouteMasterList from '@/presentations/logistic/route_master';
 import RouteMasterForm from '@/presentations/logistic/route_master/page/RouteMasterForm';
 import RouteMasterDetails from '@/presentations/logistic/route_master/page/RouteMasterDetails';
 import DriverList from '@/presentations/logistic/driver/page/DriverList';
 import DriverDetail from '@/presentations/logistic/driver/page/DriverDetail';
 import DriverForm from '@/presentations/logistic/driver/page/DriverForm';
+import VehicelDetail from '@/presentations/logistic/vehicel/page/VehicelDetail';
+import VehicelForm from '@/presentations/logistic/vehicel/page/VehicelForm';
 
 export default function LogisticRoute() {
     return (

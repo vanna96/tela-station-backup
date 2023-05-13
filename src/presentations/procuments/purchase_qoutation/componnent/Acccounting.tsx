@@ -25,9 +25,9 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
     <FormCard title='ACCOUNTING'>
       <div className='flex flex-col gap-3 mt-2'>
         <div>
-          <MUITextField label="Journal Remark" value={("Purchase Qoutation" ?? data?.journalMemo) || "N/A"}
+          <MUITextField label="Journal Remark" value={("Purchase Qoutation" ?? data?.JournalMemo) || "N/A"}
             name="JournalMemo"
-            onChange={(e) => handlerChange('journalMemo', e.target.value)}
+            onChange={(e) => handlerChange('JournalMemo', e.target.value)}
           />
         </div>
         {data?.documentStatus === "bost_Open" ? 
@@ -38,15 +38,15 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
                   Payment Term
                 </label>
                 <PaymentTerm
-                  onChange={(e) => handlerChange('paymentGroupCode', e.target.value)}
-                  value={data?.paymentGroupCode }
+                  onChange={(e) => handlerChange('PaymentGroupCode', e.target.value)}
+                  value={data?.PaymentGroupCode }
                   name="PaymentGroupCode"
                 />
               </div>
               <div>
                 <label htmlFor='Code' className='text-gray-500 text-[14px]'>Payment Method </label>
                 <div className=''>
-                  <PaymentMethod type='outgoing' name="PaymentMethod" value={data.paymentMethod } onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
+                  <PaymentMethod type='outgoing' name="PaymentMethod" value={data.PaymentMethod } onChange={(e) => handlerChange('PaymentMethod', e.target.value)} />
                 </div>
               </div>
             </div>
@@ -65,14 +65,14 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
                   aliaslabel='name'
                   aliasvalue='value'
                   name="AgreementMethod"
-                  value={data.agreementMethod }
-                  onChange={(e) => handlerChange('agreementMethod', e.target.value)}
+                  value={data.AgreementMethod }
+                  onChange={(e) => handlerChange('AgreementMethod', e.target.value)}
                 />
 
               </div>
               <div className='grid grid-cols-2 gap-3'>
-                <MUITextField label="Month +" onChange={(e) => handlerChange('extraMonth', e.target.value)} value={data.extraMonth } name="ExtraMonth" />
-                <MUITextField label="Days" onChange={(e) => handlerChange('extraDays', e.target.value)} value={data.extraDays } name="ExtraDays" />
+                <MUITextField label="Month +" onChange={(e) => handlerChange('ExtraMonth', e.target.value)} value={data.ExtraMonth } name="ExtraMonth" />
+                <MUITextField label="Days" onChange={(e) => handlerChange('ExtraDays', e.target.value)} value={data.ExtraDays } name="ExtraDays" />
 
               </div>
             </div>
@@ -89,15 +89,15 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
             </label>
                 <PaymentTerm
                   disabled={edit}
-              onChange={(e) => handlerChange('paymentGroupCode', e.target.value)}
-              value={data?.paymentGroupCode }
+              onChange={(e) => handlerChange('PaymentGroupCode', e.target.value)}
+              value={data?.PaymentGroupCode }
               name="PaymentGroupCode"
             />
           </div>
           <div>
             <label htmlFor='Code' className='text-gray-500 text-[14px]'>Payment Method </label>
             <div className=''>
-                  <PaymentMethod disabled={edit} type='outgoing' name="PaymentMethod" value={data.paymentMethod } onChange={(e) => handlerChange('paymentMethod', e.target.value)} />
+                  <PaymentMethod disabled={edit} type='outgoing' name="PaymentMethod" value={data.PaymentMethod } onChange={(e) => handlerChange('PaymentMethod', e.target.value)} />
             </div>
           </div>
         </div>
@@ -123,8 +123,8 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
 
           </div>
           <div className='grid grid-cols-2 gap-3'>
-                <MUITextField disabled={edit} label="Month +" onChange={(e) => handlerChange('extraMonth', e.target.value)} value={data.extraMonth }  name="ExtraMonth" />
-                <MUITextField disabled={edit} label="Days" onChange={(e) => handlerChange('extraDays', e.target.value)} value={data.extraDays } name="ExtraDays" />
+                <MUITextField disabled={edit} label="Month +" onChange={(e) => handlerChange('ExtraMonth', e.target.value)} value={data.ExtraMonth }  name="ExtraMonth" />
+                <MUITextField disabled={edit} label="Days" onChange={(e) => handlerChange('ExtraDays', e.target.value)} value={data.ExtraDays } name="ExtraDays" />
 
           </div>
         </div>
@@ -140,7 +140,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
       <div className='flex flex-col gap-3 mt-2'>
         <div className='grid grid-cols-1'>
           <div>
-            <MUITextField  label="Project" onChange={(e) => handlerChange('project', e.target.value)} name="Project" value={data.project } endAdornment={true} onClick={handlerOpenProject} />
+            <MUITextField  label="Project" onChange={(e) => handlerChange('Project', e.target.value)} name="Project" value={data.Project } endAdornment={true} onClick={handlerOpenProject} />
           </div>
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
@@ -155,8 +155,8 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
                 fullWidth
                 name="CreateQRCodeFrom"
                 className="w-full "
-                value={data?.createQRCodeFrom }
-                onChange={(e) => handlerChange('createQRCodeFrom', e.target.value)}
+                value={data?.CreateQRCodeFrom }
+                onChange={(e) => handlerChange('CreateQRCodeFrom', e.target.value)}
               />
             </div>
           </div>
@@ -167,26 +167,26 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
               Cancellation Date
             </label>
             <div className="">
-              <MUIDatePicker value={data.cancelDate} name="CancelDate" onChange={(e: any) => handlerChange('cancelDate', e)} />
+              <MUIDatePicker value={data.CancelDate} name="CancelDate" onChange={(e: any) => handlerChange('CancelDate', e)} />
             </div>
           </div>
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Indicator</label>
             <IndicatorSelect
-              onChange={(e) => handlerChange('indicator', e.target.value)}
-              value={data?.indicator}
+              onChange={(e) => handlerChange('Indicator', e.target.value)}
+              value={data?.Indicator}
               name="Indicator"
             />
           </div>
           <div>
-            <MUITextField label="Federal Tax ID" value={data.federalTaxID}
+            <MUITextField label="Federal Tax ID" value={data.FederalTaxID}
               name="FederalTaxID"
-              onChange={(e) => handlerChange('federalTaxID', e.target.value)}
+              onChange={(e) => handlerChange('FederalTaxID', e.target.value)}
             />
           </div>
           <div>
-            <MUITextField label="Order Number:" value={data?.importFileNum} name="ImportFileNum"
-              onChange={(e) => handlerChange('importFileNum', e.target.value)}
+            <MUITextField label="Order Number:" value={data?.ImportFileNum} name="ImportFileNum"
+              onChange={(e) => handlerChange('ImportFileNum', e.target.value)}
             />
           </div>
         </div>

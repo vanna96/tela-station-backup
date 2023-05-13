@@ -162,7 +162,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.handlerConfirmRequester = this.handlerConfirmRequester.bind(this);
         this.handlerChangeItems = this.handlerChangeItems.bind(this);
         this.handlerDeleteItem = this.handlerDeleteItem.bind(this);
-        this.handlerChangeItem = this.handlerChangeItem.bind(this);
 
     }
     
@@ -497,18 +496,5 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         const index = items.findIndex((e: any) => e?.ItemCode === code);
         items.splice(index, 1)
         this.setState({ ...this.state, Items: items })
-    }
-
-    protected handlerChangeItem({ value, record, field }: any) {
-        let compartement = [...(this.state.compartement ?? [])];
-        let compartments = this.state.compartement?.find(
-            (e: any) => e?.u_VEHCOMPNO === record?.u_VEHCOMPNO
-        );
-        compartments[field][record] = value;
-        const index = compartement.findIndex(
-            (e: any) => e?.u_VEHCOMPNO === record.u_VEHCOMPNO
-        );
-        if (index > 0) compartement[index] = compartments;
-        this.setState({ ...this.state, compartement });
     }
 }

@@ -23,7 +23,7 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
           <div className="">
             <TextField
               size="small"
-              defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
+              defaultValue={data?.Address2 ?? "Level 1 - 168 Walker Street''"}
               multiline
               rows={4}
               fullWidth
@@ -46,7 +46,7 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
               fullWidth
               name="Description"
               className="w-full "
-              defaultValue={data?.address}
+              defaultValue={data?.Address}
             />
           </div>
         </div>
@@ -58,8 +58,8 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
               Shipping Type
             </label>
             <ShippingType
-              onChange={(e) => handlerChange('transportationCode', e.target.value)}
-              value={data?.transportationCode}
+              onChange={(e) => handlerChange('TransportationCode', e.target.value)}
+              value={data?.TransportationCode}
               name="TransportationCode"
             />
           </div>

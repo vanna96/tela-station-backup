@@ -16,9 +16,18 @@ export default class PurchaseDownPaymentRepository extends Repository<PurchaseDo
   }
 
   async get<T>(query?: string): Promise<T[]> {
-    const response: any = await request('GET', this.url).then((res: any) => {
+    const response: any = await request('GET', this.url + query).then(async (res: any) => {
       const data = res?.data?.value?.map((e: any) => new PurchaseDownPayment(e));
       return data;
+    }).catch((e: Error) => {
+      throw new Error(e.message);
+    });
+
+    return response;
+  }
+  async documentTotal<T>(query?: string): Promise<number> {
+    const response: any = await request('GET', this.url + '/$count' + query).then(async (res: any) => {
+      return res.data;
     }).catch((e: Error) => {
       throw new Error(e.message);
     });
@@ -32,25 +41,25 @@ export default class PurchaseDownPaymentRepository extends Repository<PurchaseDo
         throw new Error(e.message)
       })
 
-    const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseDownPayment.cardCode!);
+    const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseDownPayment.CardCode!);
 
     // purchaseQoutation.email = businessPartner.email;
     // purchaseQoutation.phone = businessPartner.phone;
-    purchaseDownPayment.contactPersonList = businessPartner.contactEmployee ?? [];
+    purchaseDownPayment.ContactPersonList = businessPartner.contactEmployee ?? [];
 
     return purchaseDownPayment;
   }
 
   async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 
-    if (isUpdate) return await request('PATCH', this.url + "(" + id + ")", PurchaseDownPayment.toUpdate(payload));
+    if (isUpdate) return await request('PATCH', this.url + "(" + id + ")",new PurchaseDownPayment(payload).toJson());
 
-    return await request('POST', this.url, PurchaseDownPayment.toCreate(payload));
+    return await request('POST', this.url,new PurchaseDownPayment(payload).toJson());
   }
 
 
   async patch(id: any, payload: any): Promise<any> {
-    return await request('PATCH', this.url, PurchaseDownPayment.toUpdate(payload));
+    return await request('PATCH', this.url,new PurchaseDownPayment(payload).toJson());
   }
 
 

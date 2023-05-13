@@ -129,6 +129,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 UomCode: baseUOM?.Code,
                 UomName: baseUOM?.Name,
                 UomLists: uomLists,
+                DocCurrency: e?.DocCurrency,
                 UnitsOfMeasurement: uomGroup?.UoMGroupDefinitionCollection.find((e: any) => e?.AlternateUoM === uomGroup?.BaseUoM)?.BaseQuantity,
             })
         });

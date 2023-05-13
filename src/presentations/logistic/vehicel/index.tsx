@@ -6,9 +6,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
-import { UseQueryResult, useQuery } from "react-query";
-import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
 import VehicelRepository from "@/services/actions/VehicelRepository";
+import { useQuery } from "react-query";
 
 export default function VehicelLists() {
   const route = useNavigate();

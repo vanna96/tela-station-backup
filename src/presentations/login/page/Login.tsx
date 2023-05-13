@@ -40,7 +40,7 @@ export default function Login() {
       const auth = new AuthLogin('SBODemoAU', 'manager', 'manager');
       const response: any = await request('POST', '/Login', auth.toJson());
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
-      await fetchAllDate()
+      // await fetchAllDate()
       navigate("/");
     } catch (e: any) {
       setMessage(e?.message)
@@ -50,29 +50,29 @@ export default function Login() {
   }
 
 
-  async function fetchAllDate(): Promise<void> {
-    Promise.all([
-      await new ItemGroupRepository().get(),
-      await new UnitOfMeasurementRepository().get(),
-      await new UnitOfMeasurementGroupRepository().get(),
-      await new DepartmentRepository().get(),
-      await new PaymentMethodRepository().get(),
-      await new PaymentTermTypeRepository().get(),
-      await new OwnerRepository().get(),
-      await new ShippingTypeRepository().get(),
-      await new SalePersonRepository().get(),
-      await new GLAccountRepository().get(),
-      await new VatGroupRepository().get(),
-      await new BranchRepository().get(),
-      await new WarehouseRepository().get(),
-      await new DistributionRuleRepository().get(),
-      await new PriceListRepository().get(),
-      await new UsersRepository().get(),
-      await new DistributionRuleRepository().get,
-      await new CustomsGroupRepository().get(),
-      await new ManufacturerRepository().get()
-    ]);
-  }
+  // async function fetchAllDate(): Promise<void> {
+  //   Promise.all([
+  //     await new ItemGroupRepository().get(),
+  //     await new UnitOfMeasurementRepository().get(),
+  //     await new UnitOfMeasurementGroupRepository().get(),
+  //     await new DepartmentRepository().get(),
+  //     await new PaymentMethodRepository().get(),
+  //     await new PaymentTermTypeRepository().get(),
+  //     await new OwnerRepository().get(),
+  //     await new ShippingTypeRepository().get(),
+  //     await new SalePersonRepository().get(),
+  //     await new GLAccountRepository().get(),
+  //     await new VatGroupRepository().get(),
+  //     await new BranchRepository().get(),
+  //     await new WarehouseRepository().get(),
+  //     await new DistributionRuleRepository().get(),
+  //     await new PriceListRepository().get(),
+  //     await new UsersRepository().get(),
+  //     await new DistributionRuleRepository().get,
+  //     await new CustomsGroupRepository().get(),
+  //     await new ManufacturerRepository().get()
+  //   ]);
+  // }
 
   return (
     <div className='w-full h-full flex justify-center items-center dark-theme'>

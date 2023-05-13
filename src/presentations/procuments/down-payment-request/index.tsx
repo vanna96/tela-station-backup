@@ -9,35 +9,35 @@ import { useNavigate } from "react-router-dom";
 import { useQueryHook } from '../../../utilies/useQueryHook';
 import { UseQueryResult, useQuery } from "react-query";
 import PurchaseDownPaymentRepository from "@/services/actions/DownPaymentRequestRepository";
+import DataTable from "@/components/data_table/DataTable";
 
 
 
 export default function PurchaseDownPaymentList() {
   const route = useNavigate();
 
-  const { data, isLoading }: any = useQuery({ queryKey: ['pq'], queryFn: () => new PurchaseDownPaymentRepository().get() })
 
   const columns = React.useMemo(
     () => [
       {
-        accessorKey: "docNum",
+        accessorKey: "DocNum",
         header: "Doc Num", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
       },
       {
-        accessorKey: "cardCode",
+        accessorKey: "CardCode",
         header: "Vendor Code",
         enableClickToCopy: true,
       },
       {
-        accessorKey: "cardName",
+        accessorKey: "CardName",
         header: "Vendor Name",
         // size: 200, //increase the width of this column
       },
       {
-        accessorKey: "docDate",
+        accessorKey: "DocDate",
         header: "Posting Date",
         Cell: ({ cell }: any) => (
           <>
@@ -46,7 +46,7 @@ export default function PurchaseDownPaymentList() {
         ),
       },
       {
-        accessorKey: "docDueDate",
+        accessorKey: "DocDueDate",
         header: "Delivery Date",
         Cell: ({ cell }) => (
           <>
@@ -56,21 +56,26 @@ export default function PurchaseDownPaymentList() {
 
       },
       {
-        accessorKey: "id",
+        accessorKey: "DocEntry",
         enableFilterMatchHighlighting: false,
         enableColumnFilterModes: false,
         enableColumnActions: false,
         enableColumnFilters: false,
         enableColumnOrdering: false,
+        enableSorting: false,
+        minSize: 100, //min size enforced during resizing
+        maxSize: 100, //max size enforced during resizing
         header: "Action", //uses the default width from defaultColumn prop
         Cell: (cell: any) => (
           <div className="flex gap-4">
             <button onClick={() => {
-              route('/procument/purchase-down-payment/' + cell.row.original.id, { state: cell.row.original })
+              route('/procument/purchase-down-payment/' + cell.row.original.DocEntry, { state: cell.row.original, replace: true })
             }}>
               <VisibilityIcon fontSize="small" className="text-gray-600 " />
             </button>
-            <button>
+            <button title="back"
+              onClick={() => route('/procument/purchase-down-payment/' + cell.row.original.DocEntry + '/edit', { state: cell.row.original, replace: true })}
+            >
               <EditIcon fontSize="small" className="text-blue-400" />
             </button>
           </div>
@@ -84,8 +89,61 @@ export default function PurchaseDownPaymentList() {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [filter, setFilter] = React.useState('');
+  const [sortBy, setSortBy] = React.useState('');
+
+  const purchaseCount = useQuery({
+    queryKey: ['pq-count'], queryFn: () => new PurchaseDownPaymentRepository().documentTotal(`?$select=DocNum${filter}`),
+    staleTime: Infinity,
+  });
+  const { data, isLoading, error, isError, refetch, isFetching }: any = useQuery({
+    queryKey: ['pq', `${(pagination.pageIndex) * 10}_${filter !== '' ? 'f' : ''}`], queryFn: () => {
+      return new PurchaseDownPaymentRepository().get(`?$top=${pagination.pageSize}&$skip=${(pagination.pageIndex) * pagination.pageSize}${filter}${sortBy !== '' ? '&$orderby=' + sortBy : ''}`);
+    },
+    staleTime: Infinity,
+    retry: 1,
+  });
 
 
+  const handlerRefresh = React.useCallback(() => {
+    setFilter('');
+    setSortBy('');
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+    setTimeout(() => {
+      purchaseCount.refetch();
+      refetch();
+    }, 500);
+  }, []);
+
+  const handlerSortby = (value: any) => {
+    setSortBy(value);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      refetch();
+    }, 500)
+  }
+
+
+  const handlerSearch = (value: string) => {
+    const qurey = value.replace('CardCode', 'BPCode').replace('CardName', 'BPName');
+    setFilter(qurey);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      purchaseCount.refetch();
+      refetch();
+    }, 500)
+  }
 
   return (
     <>
@@ -101,31 +159,16 @@ export default function PurchaseDownPaymentList() {
 
 
         <div className="grow data-table">
-          <MaterialReactTable
+          <DataTable
             columns={columns}
-            data={data ?? []}
-            enableHiding={true}
-            initialState={{ density: "compact" }}
-            enableDensityToggle={false}
-            enableColumnResizing
-            enableStickyHeader={true}
-            enableStickyFooter={true}
-            enablePagination={true}
-            muiTablePaginationProps={{
-              rowsPerPageOptions: [5, 10, 15],
-            }}
-            getRowId={(row: any) => row.DocEntry}
-            onPaginationChange={setPagination}
-            state={{
-              isLoading,
-              pagination
-            }}
-            renderTopToolbarCustomActions={({ table }) => {
-              return <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                <h3 className="font-bold text-base xl:text-sm">Purchase DownPayment</h3>
-                {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
-              </div>
-            }}
+            data={data}
+            handlerRefresh={handlerRefresh}
+            handlerSearch={handlerSearch}
+            handlerSortby={handlerSortby}
+            count={purchaseCount.data ?? 0}
+            loading={isLoading || isFetching}
+            pagination={pagination}
+            paginationChange={setPagination}
           />
         </div>
       </div>

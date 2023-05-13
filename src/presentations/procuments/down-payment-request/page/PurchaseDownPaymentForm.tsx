@@ -22,11 +22,11 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     super(props)
     this.state = {
       ...this.state,
-      docType: 'I',
+      DocType: 'I',
       loading: true,
-      docDate: new Date().toISOString(),
-      docDueDate: new Date().toISOString(),
-      taxDate: new Date().toISOString(),
+      DocDate: new Date().toISOString(),
+      DocDueDate: new Date().toISOString(),
+      TaxDate: new Date().toISOString(),
     } as any;
 
 
@@ -54,25 +54,25 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     }
 
     DocumentSerieRepository.getDocumentSeries(PurchaseDownPaymentRepository?.documentSerie).then((res: any) => {
-      this.setState({ ...this.state, series: res, })
+      this.setState({ ...this.state, SerieLists: res, })
     });
 
     DocumentSerieRepository.getDefaultDocumentSerie(PurchaseDownPaymentRepository.documentSerie).then((res: any) => {
-      this.setState({ ...this.state, serie: res?.Series, docNum: res?.NextNumber, isLoadingSerie: false })
+      this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber, isLoadingSerie: false })
     });
   }
 
   handlerRemoveItem(code: string) {
-    let items = [...this.state.items ?? []];
+    let items = [...this.state.Items ?? []];
     const index = items.findIndex((e: any) => e?.ItemCode === code);
     items.splice(index, 1)
-    this.setState({ ...this.state, items: items })
+    this.setState({ ...this.state, Items: items })
   }
 
   handlerAddItem({ value, record, field }: any) {
-    let items = [...(this.state.items ?? [])];
-    let item = this.state.items?.find(
-      (e: any) => e?.itemCode === record?.itemCode
+    let items = [...(this.state.Items ?? [])];
+    let item = this.state.Items?.find(
+      (e: any) => e?.ItemCode === record?.ItemCode
     );
 
     if (field === "accountCode") {
@@ -94,7 +94,7 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
 
-    this.setState({ ...this.state, items: items, docTotal: Formular.findTotalBeforeDiscount(items) });
+    this.setState({ ...this.state, Items: items, DocTotal: Formular.findTotalBeforeDiscount(items) });
   }
   async handlerSubmit(event: any) {
     event.preventDefault();
@@ -105,11 +105,11 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     await new PurchaseDownPaymentRepository().post(this.state, this.props?.edit, id).then((res: any) => {
       const purchaseDownPayment = new PurchaseDownPayment(res?.data)
 
-      this.props.history.replace(this.props.location.pathname?.replace('create', purchaseDownPayment.id), purchaseDownPayment);
+      this.props.history.replace(this.props.location.pathname?.replace('create', purchaseDownPayment.Id), purchaseDownPayment);
       this.dialog.current?.success("Create Successfully.");
     }).catch((e: any) => {
       if (e instanceof UpdateDataSuccess) {
-        this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.documentStatus === 'A' });
+        this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.DocumentStatus === 'A' });
         this.dialog.current?.success(e.message);
         // const query = this.props.query.query as QueryClient;
         return;
