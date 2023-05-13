@@ -46,6 +46,11 @@ export default class PurchaseOrderRepository extends Repository<PurchaseOrder> {
 
     async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 
+        // if (payload['DocumentStatus'].includes('bost_Close') || payload['DocumentStatus'] === 'O') {
+        //     throw new Error('This Document can not be update');
+        // }
+
+
         if (isUpdate) return await request('PATCH', this.url + "(" + id + ")", payload);
 
         return await request('POST', this.url, payload);

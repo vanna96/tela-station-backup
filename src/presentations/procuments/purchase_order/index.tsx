@@ -36,6 +36,29 @@ export default function PurchaseOrderLists() {
                 header: "Vendor Name",
                 type: 'string',
                 visible: true,
+
+            },
+            {
+                accessorKey: "DocumentStatus",
+                header: "Status",
+                type: 'string',
+                visible: true,
+                Cell: ({ cell }: any) => (
+                    <>
+                        {cell.getValue()?.replace('bost_', '')}
+                    </>
+                ),
+            },
+            {
+                accessorKey: "DocType",
+                header: "Document Type",
+                type: 'string',
+                visible: false,
+                Cell: ({ cell }: any) => (
+                    <>
+                        {cell.getValue()?.replace('bost_', '')}
+                    </>
+                ),
             },
             {
                 accessorKey: "DocDate",

@@ -125,11 +125,13 @@ export default function DataTableColumnFilter(props: DataTableColumnFilterProps)
                                     />
                                 </div>
                                 <div className='w-5/12 flex gap-2'>
-                                    {e?.type === 'date' ? <div className='mt-1'><MUIDatePicker value={e?.value ?? null} onChange={(event) => handlerChange(e, 'value', event)} /></div> : <MUITextField
+                                    {/* {e?.type === 'date' ? <div className='mt-1'><MUIDatePicker value={e?.value ?? null} onChange={(event) => handlerChange(e, 'value', event)} /></div> : <MUITextField
                                         defaultValue={e?.value}
                                         onBlur={(event) => handlerChange(e, 'value', event)}
                                         type={e?.type}
-                                    />}
+                                    />} */}
+
+                                    <FilterValue column={e?.column} type={e?.type} value={e?.value} onChange={(event: any) => handlerChange(e, 'value', event)} />
 
                                     <IconButton
                                         onClick={() => handerRemove(e?.column)}
@@ -158,4 +160,38 @@ export default function DataTableColumnFilter(props: DataTableColumnFilterProps)
             </div>
         </div>
     );
+}
+
+
+
+const FilterValue = (props: any) => {
+    if (props.column === 'DocumentStatus')
+        return <MUISelect
+            items={[{ value: 'bost_Close', label: 'Close' }, { value: 'bost_Open', label: 'Open' }]}
+            value={props?.value}
+            aliaslabel='label'
+            aliasvalue='value'
+            className='mt-1'
+            onChange={props.onChange}
+        />
+
+    if (props.column === 'DocType')
+        return <MUISelect
+            items={[{ value: 'dDocument_Items', label: 'Item' }, { value: 'dDocument_Service', label: 'Service' }]}
+            value={props?.value}
+            aliaslabel='label'
+            aliasvalue='value'
+            className='mt-1'
+            onChange={props.onChange}
+        />
+
+    if (props?.type === 'date')
+        return <div className='mt-1'><MUIDatePicker value={props?.value ?? null} onChange={props.onChange} /></div>;
+
+
+    return <MUITextField
+        defaultValue={props?.value}
+        onBlur={props.onChange}
+        type={props?.type}
+    />;
 }

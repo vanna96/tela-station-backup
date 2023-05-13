@@ -135,6 +135,7 @@ export default function HeadingForm({
                 <MUIDatePicker
                   error={data?.message?.includes("DocDate")}
                   value={data.DocDate}
+                  disabled={edit}
                   onChange={(e: any) => handlerChange("docDate", e)}
                 />
               </div>

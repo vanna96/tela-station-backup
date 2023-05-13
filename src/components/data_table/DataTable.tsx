@@ -10,7 +10,6 @@ import { BsSortDown } from 'react-icons/bs';
 import MenuCompoment from "@/components/data_table/MenuComponent";
 import DataTableColumnFilter from './DataTableColumnFilter';
 
-
 interface DataTableProps {
     columns: any[],
     data: any[],

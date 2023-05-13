@@ -91,7 +91,6 @@ class PurchaseOrderForm extends CoreFormDocument {
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params
     const payloads = new PurchaseOrder(this.state).toJson(this.props.edit);
-    console.log(payloads)
     await new PurchaseOrderRepository().post(payloads, this.props?.edit, id).then((res: any) => {
       const purchaseOrder = new PurchaseOrder(res?.data)
       this.props.history.replace(this.props.location.pathname?.replace('create', purchaseOrder.DocEntry), purchaseOrder);

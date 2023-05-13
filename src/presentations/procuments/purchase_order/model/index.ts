@@ -49,13 +49,15 @@ export default class PurchaseOrder extends MasterDocumentModel {
 
     constructor(json: any) {
         super();
+
+        const docType = json['DocType']?.includes('Items') || json['DocType'] === 'I' ? 'I' : 'S';
         this.Series = json['Series'];
         this.DocEntry = json['DocEntry'];
         this.DocumentStatus = json['DocumentStatus'];
         this.FederalTaxID = json['FederalTaxID']
         this.ExtraMonth = json['ExtraMonth'];
         this.ExtraDays = json['ExtraDays'];
-        this.DocType = json['DocType'];
+        this.DocType = docType;
         this.DocNum = json['DocNum'];
         this.VatSum = json['VatSum'];
         this.JournalMemo = json['JournalMemo']
@@ -93,7 +95,7 @@ export default class PurchaseOrder extends MasterDocumentModel {
 
     toJson(update = false) {
         return {
-            "Series": this.Series,
+            "Series": update ? null : this.Series,
             "DocumentStatus": this.DocumentStatus,
             "ImportFileNum": this.ImportFileNum,
             "FederalTaxID": this.FederalTaxID,
@@ -202,10 +204,13 @@ export class PurchaseOrderLine extends LineDocumentModel {
             "DiscountPercent": this.DiscountPercent,
         };
 
+
         if (type === 'S') {
             delete line.ItemCode;
             // delete line.UnitPrice;
         }
+
+
         return line;
     }
 }
