@@ -507,6 +507,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         const index = items.findIndex((e: any) => e?.ItemCode === record.ItemCode);
         switch (field) {
             case 'AccountNo':
+            case 'AccountCode':
                 items[index][field] = value.code;
                 items[index]['AccountName'] = value.name;
                 break;

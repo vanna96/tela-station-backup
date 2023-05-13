@@ -13,21 +13,21 @@ export default class Formular {
 
 
 
-  public static findTotalBeforeDiscount(items: any[]): number{
-    const total = items?.reduce((prev: number, currentItem: any) =>  prev + currentItem?.lineTotal , 0);
+  public static findTotalBeforeDiscount(items: any[]): number {
+    const total = items?.reduce((prev: number, currentItem: any) => prev + currentItem?.lineTotal, 0);
 
     if (isNaN(total)) return 0;
 
     return parseFloat(total);
   }
-  
+
 
   public static findLineTotal(qty: string, price: string, discount: string) {
-    const total = parseFloat(price) * parseFloat(qty) - (parseFloat(price) * parseFloat(qty) * (parseFloat(discount)/100))
+    const total = parseFloat(price ?? 0) * parseFloat(qty ?? 0) - (parseFloat(price ?? 0) * parseFloat(qty ?? 0) * (parseFloat(discount ?? 0) / 100))
     if (isNaN(total)) {
       return 0;
     }
-  
+
     return total;
   }
   // public static TotalDiscountPercent = totalVal * (discountPercent / 100);
@@ -62,12 +62,12 @@ export default class Formular {
     let totalTax = this.findTotalBeforeDiscount(items) - totalDiscount;
     const taxRates = items.reduce((prev, cur) => prev + (cur?.vatRate ?? 0), 0);
 
-    totalTax = totalTax - (totalTax - ((totalTax * taxRates) / 100)); 
+    totalTax = totalTax - (totalTax - ((totalTax * taxRates) / 100));
 
     if (isNaN(totalTax)) {
       return 0;
     }
-  
+
     return totalTax;
   }
 
@@ -78,9 +78,9 @@ export default class Formular {
     const total = this.calculateTotalTax(items) + this.findTotalBeforeDiscount(items);
 
     if (isNaN(total)) return 0;
-  
+
     return total - totalDiscount;
   }
 
-  
+
 }

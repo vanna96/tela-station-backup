@@ -1,31 +1,24 @@
 import CoreFormDocument from "@/components/core/CoreFormDocument";
-// import GeneralForm from '../../purchase_agreement/components/GeneralForm';
 import HeadingForm from "../components/Heading";
 import ContentForm from "../components/Content";
-import AttachmentForm from "../components/Attachment";
 import { withRouter } from "@/routes/withRouter";
 import { LoadingButton } from "@mui/lab";
-import { FormEventHandler } from "react";
-import { CoreFormDocumentState } from "../../../../components/core/CoreFormDocument";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
-import { ToastOptions } from "react-toastify";
-import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
 import LogisticForm from "../components/Logistic";
 import AccounttingForm from "../components/Accountting";
-import GLAccount from "@/models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import PurchaseOrders from "../../../../models/PurchaseOrder";
-import VatGroupRepository from "@/services/actions/VatGroupRepository";
-import Formular from '../../../../utilies/formular';
-class PurchaseOrder extends CoreFormDocument {
+import PurchaseOrderRepository from "../repository";
+import PurchaseOrder from "../model";
+
+
+class PurchaseOrderForm extends CoreFormDocument {
   constructor(props: any) {
     super(props);
     this.state = {
       ...this.state,
-      docType: "I",
-      docDueDate: null,
-      taxDate: null,
-      cancelDate: null,
+      DocType: "I",
+      DocDueDate: null,
     } as any;
 
     // this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
@@ -34,7 +27,7 @@ class PurchaseOrder extends CoreFormDocument {
   }
 
   componentDidMount(): void {
-    this.setState({ ...this.state, vendorType : 'customer'})
+    this.setState({ ...this.state, vendorType: 'customer' })
 
     if (!this.props?.edit) {
       setTimeout(() => this.setState({ ...this.state, loading: false }), 500);
@@ -43,6 +36,7 @@ class PurchaseOrder extends CoreFormDocument {
     if (this.props.edit) {
       if (this.props.location.state) {
         const routeState = this.props.location.state;
+        console.log(routeState)
         setTimeout(
           () =>
             this.setState({
@@ -67,7 +61,7 @@ class PurchaseOrder extends CoreFormDocument {
     DocumentSerieRepository.getDocumentSeries(
       PurchaseOrderRepository.documentSerie
     ).then((res: any) => {
-      this.setState({ ...this.state, series: res, isLoadingSerie: false });
+      this.setState({ ...this.state, SerieLists: res, isLoadingSerie: false });
     });
 
     if (!this.props.edit) {
@@ -76,8 +70,8 @@ class PurchaseOrder extends CoreFormDocument {
       ).then((res: any) => {
         this.setState({
           ...this.state,
-          serie: res?.Series,
-          docNum: res?.NextNumber,
+          Series: res?.Series,
+          DocNum: res?.NextNumber,
           isLoadingSerie: false,
         });
       });
@@ -85,38 +79,10 @@ class PurchaseOrder extends CoreFormDocument {
   }
 
   handlerRemoveItem(code: string) {
-    let items = [...this.state.items ?? []];
+    let items = [...this.state.Items ?? []];
     const index = items.findIndex((e: any) => e?.ItemCode === code);
     items.splice(index, 1)
-    this.setState({ ...this.state, items: items })
-  }
-
-  handlerAddItem({ value, record, field }: any) {
-    let items = [...(this.state.items ?? [])];
-    let item = this.state.items?.find(
-      (e: any) => e?.itemCode === record?.itemCode
-    );
-
-    if (field === "accountCode") {
-      const account = value as GLAccount;
-      item[field] = account.code;
-      item["accountName"] = account.name;
-    } else {
-      item[field] = value;
-    }
-
-    if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
-      const total = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
-      item['lineTotal'] = total;
-    }
-
-    if (field === 'purchaseVatGroup')
-      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
-
-    const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-    if (index > 0) items[index] = item;
-
-    this.setState({ ...this.state, items: items, docTotal: Formular.findTotalBeforeDiscount(items) });
+    this.setState({ ...this.state, Items: items })
   }
 
   async handlerSubmit(event: any) {
@@ -124,15 +90,15 @@ class PurchaseOrder extends CoreFormDocument {
 
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params
-
-    await new PurchaseOrderRepository().post(this.state, this.props?.edit, id).then((res: any) => {
-      const purchaseOrder = new PurchaseOrders(res?.data)
-
-      this.props.history.replace(this.props.location.pathname?.replace('create', purchaseOrder.id), purchaseOrder);
+    const payloads = new PurchaseOrder(this.state).toJson(this.props.edit);
+    console.log(payloads)
+    await new PurchaseOrderRepository().post(payloads, this.props?.edit, id).then((res: any) => {
+      const purchaseOrder = new PurchaseOrder(res?.data)
+      this.props.history.replace(this.props.location.pathname?.replace('create', purchaseOrder.DocEntry), purchaseOrder);
       this.dialog.current?.success("Create Successfully.");
     }).catch((e: any) => {
       if (e instanceof UpdateDataSuccess) {
-        this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.documentStatus === 'A' });
+        this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.DocumentStatus === 'A' });
         this.dialog.current?.success(e.message);
         // const query = this.props.query.query as QueryClient;
         return;
@@ -150,9 +116,7 @@ class PurchaseOrder extends CoreFormDocument {
           <HeadingForm
             data={this.state}
             edit={this.props?.edit}
-            handlerOpenVendor={() => {
-              this.handlerOpenVendor("supplier");
-            }}
+            handlerOpenVendor={() => this.handlerOpenVendor("supplier")}
             handlerChange={(key, value) => this.handlerChange(key, value)}
           />
           <ContentForm
@@ -162,7 +126,6 @@ class PurchaseOrder extends CoreFormDocument {
             handlerRemoveItem={this.handlerDeleteItem}
             handlerChangeItem={this.handlerChangeItems}
             handlerChange={(key, value) => this.handlerChange(key, value)}
-            // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
           />
           <LogisticForm
             data={this.state}
@@ -209,4 +172,4 @@ class PurchaseOrder extends CoreFormDocument {
   };
 }
 
-export default withRouter(PurchaseOrder);
+export default withRouter(PurchaseOrderForm);

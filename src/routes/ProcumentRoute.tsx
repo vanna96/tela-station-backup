@@ -18,7 +18,7 @@ import PurchaseQoutationForm from '@/presentations/procuments/purchase_qoutation
 import PurchaseQoutationDetail from '@/presentations/procuments/purchase_qoutation/page/PurchaseQoutationDetail';
 import PurchaseOrderLists from '@/presentations/procuments/purchase_order';
 import PurchaseOrderDetail from '@/presentations/procuments/purchase_order/page/PurchaseOrderDetail';
-import PurchaseorderForm from '@/presentations/procuments/purchase_order/page/PurchaseorderForm';
+import PurchaseorderForm from '@/presentations/procuments/purchase_order/page/PurchaseOrderForm';
 import PurchaseDownPaymentList from '@/presentations/procuments/down-payment-request';
 import PurchaseDownPaymentDetail from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentDetail';
 import PurchaseDownForm from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentForm';

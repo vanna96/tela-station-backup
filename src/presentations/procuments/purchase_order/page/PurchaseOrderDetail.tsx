@@ -1,24 +1,22 @@
 import { withRouter } from "@/routes/withRouter";
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import Taps from "@/components/button/Taps";
-import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useMemo } from "react";
-import { currencyFormat, fileToBase64 } from "@/utilies";
-import { AttachmentLine } from "../../../../models/Attachment";
+import { currencyFormat } from "@/utilies";
 import Modal from "@/components/modal/Modal";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import { CircularProgress } from "@mui/material";
-import BackButton from "@/components/button/BackButton";
 import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
-import PurchaseOrder from "@/models/PurchaseOrder";
 import OwnerRepository from "@/services/actions/ownerRepository";
 import PaymentTermTypeRepository from "@/services/actions/paymentTermTypeRepository";
 import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
 import DocumentHeaderComponent from "@/components/DocumenHeaderComponent";
 import BusinessPartner, { ContactEmployee } from "@/models/BusinessParter";
 import { dateFormat } from "../../../../utilies/index";
-import BuyerRepository from "../../../../services/actions/buyerRepository";
 import BusinessPartnerRepository from "@/services/actions/bussinessPartnerRepository";
+import PurchaseOrder from "../model";
+import MaterialReactTable from "material-react-table";
+import BuyerRepository from "@/services/actions/BuyerRepository";
 
 class PurchaseOrderDetail extends Component<any, any> {
   constructor(props: any) {
@@ -45,11 +43,11 @@ class PurchaseOrderDetail extends Component<any, any> {
       setTimeout(() => {
         let PurchaseOrder = data;
         PurchaseOrder as PurchaseOrder;
-        if (PurchaseOrder.contactPersonCode) {
+        if (PurchaseOrder.ContactPersonCode) {
           new BusinessPartnerRepository()
-            .findContactEmployee(PurchaseOrder.cardCode!)
+            .findContactEmployee(PurchaseOrder.CardCode!)
             .then((res: BusinessPartner) => {
-              PurchaseOrder.contactPersonList = res.contactEmployee ?? [];
+              PurchaseOrder.ContactPersonList = res.contactEmployee ?? [];
               this.setState({ ...PurchaseOrder, loading: false });
             });
         } else {
@@ -76,8 +74,8 @@ class PurchaseOrderDetail extends Component<any, any> {
         <Modal
           open={this.state.isError}
           title="Oop"
-          onClose={() => {}}
-          onOk={() => console.log(this.props.history.goBack())}
+          onClose={() => { }}
+          onOk={() => this.props.history.goBack()}
         >
           <span>{this.state?.message}</span>
         </Modal>
@@ -93,29 +91,29 @@ class PurchaseOrderDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Document Number</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.docNum}
+                    : {this.state.DocNum}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Vendor</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.cardCode}
+                    : {this.state.CardCode}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Name</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.cardName}
+                    : {this.state.CardName}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Contact Person</span>
-                  <span className="w-8/12 font-medium">
+                  <span className="w-8/12 font-medium ">
                     :
                     {
-                      this.state?.contactPersonList?.find(
+                      this.state?.ContactPersonList?.find(
                         (e: ContactEmployee) =>
-                          e.id === this.state.contactPersonCode
+                          e.id === this.state.ContactPersonCode
                       )?.name
                     }
                   </span>
@@ -124,13 +122,13 @@ class PurchaseOrderDetail extends Component<any, any> {
                   <span className="w-4/12 text-gray-500">Vendor Ref .No</span>
                   <span className="w-8/12 font-medium">
                     {" "}
-                    : {this.state.numAtCard}
+                    : {this.state.NumAtCard}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500 ">Local Currency</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.docCurrency}
+                    : {this.state.DocCurrency}
                   </span>
                 </div>
               </div>
@@ -138,25 +136,25 @@ class PurchaseOrderDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Status</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.documentStatus?.replace("bost_", "")}
+                    : {this.state.DocumentStatus?.replace("bost_", "")}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Posting Date</span>
                   <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.docDate)}
+                    : {dateFormat(this.state.DocDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Delivery Date</span>
                   <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.docDueDate)}
+                    : {dateFormat(this.state.DocDueDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Document Date</span>
                   <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.taxDate)}
+                    : {dateFormat(this.state.TaxDate)}
                   </span>
                 </div>
               </div>
@@ -170,7 +168,7 @@ class PurchaseOrderDetail extends Component<any, any> {
                 <Account data={this.state} />
 
                 <PreviewAttachment
-                  attachmentEntry={this.state.attachmentEntry}
+                  attachmentEntry={this.state.AttachmentEntry}
                 />
               </Taps>
             </div>
@@ -189,40 +187,40 @@ function Content(props: any) {
   const itemColumn = useMemo(
     () => [
       {
-        accessorKey: "itemCode",
+        accessorKey: "ItemCode",
         header: "Item NO.", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 95,
       },
       {
-        accessorKey: "quantity",
+        accessorKey: "Quantity",
         header: "  Required Qty.",
         enableClickToCopy: true,
         size: 150,
       },
       {
-        accessorKey: "unitPrice",
+        accessorKey: "UnitPrice",
         header: "Info Price",
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "discountPercent",
+        accessorKey: "DiscountPercent",
         header: "  Discount %",
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "VatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "lineTotal",
+        accessorKey: "LineTotal",
         header: "Total (LC)",
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "uomCode",
+        accessorKey: "UomCode",
         header: "UoM Code",
         Cell: ({ cell }: any) => cell.getValue(),
       },
@@ -233,32 +231,32 @@ function Content(props: any) {
   const serviceColumns = React.useMemo(
     () => [
       {
-        accessorKey: "itemDescription",
+        accessorKey: "ItemName",
         header: "Descrition",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "accountCode",
+        accessorKey: "AccountCode",
         header: "G/L Account",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "accountNameD",
+        accessorKey: "AccountNameD",
         header: "G/L Account Name",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "VatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "lineTotal",
+        accessorKey: "LineTotal",
         header: "Total (LC)",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "blanketAgreementNumber",
+        accessorKey: "BlanketAgreementNumber",
         header: "BlanketAgreementNumber",
         Cell: ({ cell }: any) => cell.getValue(),
       },
@@ -269,8 +267,8 @@ function Content(props: any) {
   return (
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
-        columns={data?.docType === "I" ? itemColumn : serviceColumns}
-        data={data?.items ?? []}
+        columns={data?.DocType === "I" ? itemColumn : serviceColumns}
+        data={data?.Items ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
         enableDensityToggle={false}
@@ -295,13 +293,13 @@ function Content(props: any) {
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Buyer</span>
           <span className="w-8/12 font-medium text-sm">
-            : {new BuyerRepository().find(data.salesPersonCode)?.name ?? "N/A"}
+            : {new BuyerRepository().find(data.SalesPersonCode)?.name ?? "N/A"}
           </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Owner</span>
           <span className="w-8/12 font-medium text-sm">
-            : {new OwnerRepository().find(data.documentsOwner)?.name}
+            : {new OwnerRepository().find(data.DocumentsOwner)?.name}
           </span>
         </div>
         <div className="flex gap-2">
@@ -309,31 +307,31 @@ function Content(props: any) {
             Total Before Discount
           </span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.lineTotal}
+            : {data?.LineTotal}
           </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Freight</span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.freight || "N/A"}
+            : {data?.Freight || "N/A"}
           </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Tax</span>
-          <span className="w-8/12 font-medium text-sm">: {data?.vatSum}</span>
+          <span className="w-8/12 font-medium text-sm">: {data?.VatSum}</span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">
             Total Payment Due
           </span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.docTotalSys}
+            : {data?.FocTotalSys}
           </span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Remark</span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.comments ?? "N/A"}
+            : {data?.Comments ?? "N/A"}
           </span>
         </div>
       </div>
@@ -349,7 +347,7 @@ function Account(props: any) {
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Jounral Remark</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.journalMemo?.replace("at", "") ?? "N/A"}
+            : {data.JournalMemo?.replace("at", "") ?? "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
@@ -358,7 +356,7 @@ function Account(props: any) {
             :{" "}
             {
               new PaymentTermTypeRepository().find(
-                data.paymentGroupCode ?? "N/A"
+                data.PaymentGroupCode ?? "N/A"
               )?.PaymentTermsGroupName
             }
           </span>
@@ -366,7 +364,7 @@ function Account(props: any) {
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Payment Methods</span>
           <span className="col-span-2 font-medium">
-            : {data.paymentMethod ?? "N/A"}
+            : {data.PaymentMethod ?? "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
@@ -378,13 +376,13 @@ function Account(props: any) {
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Cash Discount Date Offset</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.cashDiscountDateOffset ?? "N/A"}
+            : {data.CashDiscountDateOffset ?? "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Bussiness partner Projec</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.project ?? "N/A"}
+            : {data.Project ?? "N/A"}
           </span>
         </div>
       </div>
@@ -392,31 +390,31 @@ function Account(props: any) {
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Create QR Code From</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.createQRCodeFrom || "N/A"}
+            : {data.CreateQRCodeFrom || "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Cancellation Date</span>{" "}
           <span className="col-span-2 font-medium">
-            : {dateFormat(data.cancelDate)}
+            : {dateFormat(data.CancelDate)}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Indicator</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.indicator ?? "N/A"}
+            : {data.Indicator ?? "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Federal Tax ID</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.federalTaxID ?? "N/A"}
+            : {data.FederalTaxID ?? "N/A"}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Order Number</span>{" "}
           <span className="col-span-2 font-medium">
-            : {data.importFileNum ?? "N/A"}
+            : {data.ImportFileNum ?? "N/A"}
           </span>
         </div>
       </div>
@@ -432,16 +430,16 @@ function Logistic(props: any) {
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500 ">Ship To</span>{" "}
-          <span className="col-span-2 font-medium">: {data.address2}</span>
+          <span className="col-span-2 font-medium">: {data.Address2}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Pay To</span>{" "}
-          <span className="col-span-2 font-medium">: {data.address}</span>
+          <span className="col-span-2 font-medium">: {data.Address}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <span className="text-gray-500">Shiping Type</span>{" "}
           <span className="col-span-2 font-medium">
-            : {new ShippingTypeRepository().find(data.transportationCode)?.Name}
+            : {new ShippingTypeRepository().find(data.TransportationCode)?.Name}
           </span>
         </div>
       </div>

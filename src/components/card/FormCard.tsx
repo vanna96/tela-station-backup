@@ -17,8 +17,6 @@ export default class FormCard extends React.Component<FormCardProps> {
         collapse: true
     }
 
-
-
     public render() {
         return (
             <div className={`flex flex-col gap-4 bg-white rounded-lg p-4 shadow ${this.state.collapse ? 'pb-6' : ''}`}>

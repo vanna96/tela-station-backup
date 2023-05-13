@@ -19,29 +19,31 @@ export default function GeneralForm({
 }: ILogisticFormProps) {
   return (
     <FormCard title="Logistic">
-      <div className="mt-2">
+      <div className="col-span-2">
+        <div className="w-[20rem]">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
-            Ship To
+            Shipping Type
           </label>
-          <div className="">
-            <TextField
-              size="small"
-              multiline
-              rows={4}
-              fullWidth
-              name="Address2"
-              defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
-            />
-          </div>
-        <div className="mt-2 w-[50%]">
+          <ShippingType
+            name="TransportationCode"
+            value={data?.TransportationCode}
+            onChange={(e) => handlerChange("TransportationCode", e.target.value)}
+          /></div>
+      </div>
+      <div className="mt-2">
         <label htmlFor="Code" className="text-gray-500 text-[14px]">
-          Shipping Type
+          Ship To
         </label>
-        <ShippingType
-          name="TransportationCode"
-          value={data?.transportationCode}
-          onChange={(e) => handlerChange("transportationCode", e.target.value)}
-        />
+        <div className="">
+          <TextField
+            size="small"
+            multiline
+            rows={4}
+            fullWidth
+            name="Address2"
+            onBlur={(e) => handlerChange("Address2", e.target.value)}
+            defaultValue={data?.Address2 ?? "Level 1 - 168 Walker Street''"}
+          />
         </div>
       </div>
       <div>
