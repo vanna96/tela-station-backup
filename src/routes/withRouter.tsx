@@ -2,6 +2,7 @@ import { DocumentLine } from '@/models/interface';
 import itemRepository from '@/services/actions/itemRepostory';
 import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import { ComponentType } from 'react';
+import { useCookies } from 'react-cookie';
 import { MutationFunction, useMutation, useQuery, useQueryClient } from 'react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -22,14 +23,13 @@ export interface WithRouterProps<T = ReturnType<typeof useParams>> {
 }
 
 export const withRouter = <P extends object>(Component: ComponentType<P>) => {
-    const uomGroupRepo = new UnitOfMeasurementGroupRepository();
-
-
     return (props: Omit<P, keyof WithRouterProps>) => {
         const location = useLocation();
         const match = { params: useParams() };
         const navigate = useNavigate();
         const queryClient = useQueryClient();
+
+        const [cookies] = useCookies(['user']);
 
         const history = {
             back: () => navigate(-1),
@@ -50,21 +50,8 @@ export const withRouter = <P extends object>(Component: ComponentType<P>) => {
             staleTime: Infinity,
         });
 
-
         const query = {
-            getItems: async (itemLines: DocumentLine[]): Promise<DocumentLine[]> => {
-                // const uomGroups: any[] = await uomGroupRepo.get();
-                // const lines = itemLines.map((row) => {
-                //     const item = items.data.find((e: any) => e.ItemCode === row.itemCode);
-                //     const uomGroup = uomGroups.find((e: any) => e.AbsEntry === item.UoMGroupEntry);
-                //     console.log(uomGroup);
-                //     row.setUOMGroup(uomGroup);
-                //     return row;
-                // });
-
-                // return lines;
-                return [];
-            },
+            get: (key: string) => queryClient.getQueryData(key),
             mutation: (key: string, cb: any) => {
                 return useMutation(cb, {
                     onSuccess: (data: any) => {
@@ -87,6 +74,7 @@ export const withRouter = <P extends object>(Component: ComponentType<P>) => {
                 match={match}
                 navigate={navigate}
                 query={query}
+                user={cookies.user}
                 {...props as P}
             />
         );

@@ -1,14 +1,12 @@
 import ItemModal from '@/components/modal/ItemModal';
 import React from 'react'
-import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
 import VendorModal from '../modal/VendorModal';
 import ProjectModal from '../modal/ProjectModal';
 import BusinessPartner from '../../models/BusinessParter';
-import BackButton from '../button/BackButton';
 import Project from '@/models/Project';
 import { Backdrop, CircularProgress } from '@mui/material';
 import Modal from '../modal/Modal';
-import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify';
+import { ToastContainer, TypeOptions, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DistributionRuleModal from '../modal/DistributionRuleModal';
 import { VendorModalType } from '../modal/VendorModal';
@@ -21,6 +19,7 @@ import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import GLAccount from '@/models/GLAccount';
 import Formular from '@/utilies/formular';
 import DocumentHeaderComponent from '../DocumenHeaderComponent';
+import shortid from 'shortid';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -90,6 +89,7 @@ export interface CoreFormDocumentState {
     DocDiscountPrice: number | any,
     DocTaxTotal: number | any,
     Rounded: boolean,
+    DocType: string,
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -152,7 +152,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             DocTotalBeforeDiscount: 0,
             DocDiscountPercent: 0,
             DocDiscountPrice: 0,
-            Rounded: false
+            Rounded: false,
+            DocType: 'I',
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -337,40 +338,77 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let temps: any = { ...this.state };
         temps[key] = value;
 
-        if (key === 'AgreementMethod' || key === 'DocType') {
-            temps['items'] = [{}];
-        }
-
-        if (key === 'Serie') {
-            const document = this.state.SerieLists.find((e: any) => e.Series === value);
-            temps['DocNum'] = document?.NextNumber;
-        }
-
-        if (key === 'ReqType') {
-            temps['Department'] = null;
-            temps['Branch'] = null;
-            temps['CardCode'] = null
-            temps['CardName'] = null
-        }
-
         // discount
         let DocDiscountPercent = this.state.DocDiscountPercent;
         let DocTotalBeforeDiscount = this.state.DocTotalBeforeDiscount;
-        if (key === 'DocDiscountPercent') {
-            let discount = parseFloat(value);
-            temps['DocDiscountPrice'] = discount >= 100 ? 0 : (DocTotalBeforeDiscount * value) / 100;
-            temps['DocDiscountPercent'] = discount > 100 ? 100 : value;
-            //
-            temps = this.findTotalVatRate(temps);
+        switch (key) {
+            case 'AgreementMethod':
+                temps['items'] = [{}];
+                break;
+            case 'DocType':
+                temps['Items'] = [];
+                break;
+            case 'Series':
+                const document = this.state.SerieLists.find((e: any) => e.Series === value);
+                temps['DocNum'] = document?.NextNumber;
+                break;
+            case 'ReqType':
+                temps['Department'] = null;
+                temps['Branch'] = null;
+                temps['CardCode'] = null;
+                temps['CardName'] = null;
+                break;
+            case 'DocDiscountPercent':
+                let discount = parseFloat(value);
+                temps['DocDiscountPrice'] = discount >= 100 ? 0 : (DocTotalBeforeDiscount * value) / 100;
+                temps['DocDiscountPercent'] = discount > 100 ? 100 : value;
+                temps = this.findTotalVatRate(temps);
+                break;
+            case 'DocDiscountPrice':
+                const total = parseFloat(value) > DocTotalBeforeDiscount;
+                DocDiscountPercent = total ? 100 : ((value / DocTotalBeforeDiscount) * 100);
+                temps['DocDiscountPercent'] = (DocDiscountPercent >= 10 ? DocDiscountPercent : DocDiscountPercent / 10);
+                temps['DocDiscountPrice'] = total ? 0 : value;
+                temps = this.findTotalVatRate(temps);
+                break;
+            default:
+                break;
         }
 
-        if (key === 'DocDiscountPrice') {
-            const total = parseFloat(value) > DocTotalBeforeDiscount;
-            DocDiscountPercent = total ? 100 : ((value / DocTotalBeforeDiscount) * 100);
-            temps['DocDiscountPercent'] = (DocDiscountPercent >= 10 ? DocDiscountPercent : DocDiscountPercent / 10);
-            temps['DocDiscountPrice'] = total ? 0 : value;
-            temps = this.findTotalVatRate(temps);
-        }
+        // if (key === 'AgreementMethod' || key === 'DocType') {
+        //     temps['items'] = [{}];
+        // }
+
+        // if (key === 'Series') {
+        //     const document = this.state.SerieLists.find((e: any) => e.Series === value);
+        //     temps['DocNum'] = document?.NextNumber;
+        // }
+
+        // if (key === 'ReqType') {
+        //     temps['Department'] = null;
+        //     temps['Branch'] = null;
+        //     temps['CardCode'] = null
+        //     temps['CardName'] = null
+        // }
+
+        // discount
+        // let DocDiscountPercent = this.state.DocDiscountPercent;
+        // let DocTotalBeforeDiscount = this.state.DocTotalBeforeDiscount;
+        // if (key === 'DocDiscountPercent') {
+        //     let discount = parseFloat(value);
+        //     temps['DocDiscountPrice'] = discount >= 100 ? 0 : (DocTotalBeforeDiscount * value) / 100;
+        //     temps['DocDiscountPercent'] = discount > 100 ? 100 : value;
+        //     //
+        //     temps = this.findTotalVatRate(temps);
+        // }
+
+        // if (key === 'DocDiscountPrice') {
+        //     const total = parseFloat(value) > DocTotalBeforeDiscount;
+        //     DocDiscountPercent = total ? 100 : ((value / DocTotalBeforeDiscount) * 100);
+        //     temps['DocDiscountPercent'] = (DocDiscountPercent >= 10 ? DocDiscountPercent : DocDiscountPercent / 10);
+        //     temps['DocDiscountPrice'] = total ? 0 : value;
+        //     temps = this.findTotalVatRate(temps);
+        // }
 
         this.setState(temps)
     }
@@ -451,41 +489,60 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
 
     protected handlerChangeItems({ value, record, field }: any) {
-        let items = [...this.state.Items ?? []];
-        let item = this.state.Items?.find((e: any) => e?.itemCode === record?.itemCode);
-        item[field] = value;
-        const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-        if (index > 0) items[index] = item;
-
-        if (field === 'purchaseVatGroup')
-            item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+        let items: any[] = [...this.state.Items ?? []];
+        let item: any = {};
 
 
-        if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
-            item['lineTotal'] = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
-
+        if (this.state.DocType === 'S' && !record?.ItemCode) {
+            item['ItemCode'] = shortid.generate();
+            item[field] = value;
+            items.push(item);
+            this.setState({ ...this.state, Items: items });
+            return;
         }
 
-        // total
+        let existingItem = items?.find((e: any) => e?.ItemCode === record?.ItemCode);
+        if (!existingItem) return;
+
+        const index = items.findIndex((e: any) => e?.ItemCode === record.ItemCode);
+        switch (field) {
+            case 'AccountNo':
+                items[index][field] = value.code;
+                items[index]['AccountName'] = value.name;
+                break;
+            case 'VatGroup':
+                items[index][field] = value.code;
+                items[index]['VatRate'] = value.vatRate;
+                break;
+            case 'UomCode':
+                items[index][field] = value?.Code;
+                items[index]['UoMAbsEntry'] = value?.AlternateUoM;
+                items[index]['UnitsOfMeasurement'] = value?.BaseQuantity;
+                break;
+            case 'LineTotal':
+                items[index][field] = value;
+                items[index]['Quantity'] = items[index]['Quantity'] ?? 1;
+                items[index]['UnitPrice'] = items[index][field] / items[index]['Quantity'];
+                items[index]['DiscountPercent'] = items[index]['DiscountPercent'] ?? 0;
+                break;
+            default:
+                items[index][field] = value;
+        }
+
         let DocTotalBeforeDiscount = this.state.DocTotalBeforeDiscount;
         let DocTaxTotal = this.state.DocTaxTotal;
         let DocTotal = this.state.DocTotal;
 
-        if (field === 'Quantity' || field === 'UnitPrice' || field === 'DiscountPercent' || field?.includes('Vat')) {
-            DocTotalBeforeDiscount = items.reduce((prev, current) => prev + current.lineTotal, 0);
+        if (field === 'Quantity' || field === 'UnitPrice' || field === 'DiscountPercent' || field?.includes('Vat') || field === 'LineTotal') {
+            items[index]['LineTotal'] = Formular.findLineTotal(items[index]['Quantity'], items[index]['UnitPrice'], items[index]['DiscountPercent']);
+            // 
+            DocTotalBeforeDiscount = items.reduce((prev, current) => prev + parseFloat(current.LineTotal), 0);
             let total = DocTotalBeforeDiscount - this.state.DocDiscountPrice;
-            DocTaxTotal = items.reduce((prev, cur) => prev + (cur?.vatRate ?? 0), 0);
+            DocTaxTotal = items.reduce((prev, cur) => prev + (cur?.VatRate ?? 0), 0);
             DocTaxTotal = (total * DocTaxTotal / 100);
             DocTotal = total + DocTaxTotal;
         }
 
-        if (field === 'accountCode') {
-            const account = value as GLAccount;
-            item['accountCode'] = account.code;
-            item['accountName'] = account.name;
-        } else {
-            item[field] = value;
-        }
 
 
         this.setState({ ...this.state, Items: items, DocTotalBeforeDiscount, DocTaxTotal, DocTotal })

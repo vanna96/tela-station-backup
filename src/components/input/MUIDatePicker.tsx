@@ -13,17 +13,30 @@ interface MUIDatePickerProps {
   name?: string | undefined,
   onChange: (value: string) => void,
   disabled?: boolean,
+  addOnDay?: number;
 }
 
 const MUIDatePicker: React.FC<MUIDatePickerProps> = (props: MUIDatePickerProps) => {
-  const { error, value, name, onChange, disabled } = props;
+  const { error, value, name, onChange, disabled, addOnDay } = props;
+
+
+  const dateVal = React.useMemo(() => {
+    if (value === null) return null;
+
+    if (addOnDay) {
+      const today = dayjs();
+      return today.add(addOnDay, 'day');
+    }
+
+    return value;
+  }, [value, addOnDay])
 
   return (
     <div className={`date-picker ${error ? 'date-picker-error' : ''}`}>
       <LocalizationProvider dateAdapter={AdapterDayjs} >
         <DesktopDatePicker
           inputFormat="DD-MM-YYYY"
-          value={value}
+          value={dateVal}
           disabled={disabled}
           className={disabled ? 'bg-gray-100' : ''}
           onChange={(e: any, inputVal: any) => {

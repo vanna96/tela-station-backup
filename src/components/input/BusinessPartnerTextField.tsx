@@ -8,7 +8,7 @@ import BusinessPartner from '../../models/BusinessParter';
 interface BusinessPartnerTextField {
     value: any,
     onChange: (businessPartner: any) => void
-    name: any,
+    name?: any,
     type: VendorModalType
 }
 

@@ -24,9 +24,10 @@ import UsersRepository from '@/services/actions/usersRepository';
 import CustomsGroupRepository from '@/services/actions/customsGroupRepository';
 import ManufacturerRepository from '@/services/actions/manufacturerRepository';
 import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
+import GetCurrentUserRepository from '../repository/getCurrencyUserRepository';
 
 export default function Login() {
-  const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
+  const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'user']);
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const navigate = useNavigate();
@@ -40,6 +41,8 @@ export default function Login() {
       const auth = new AuthLogin('SBODemoAU', 'manager', 'manager');
       const response: any = await request('POST', '/Login', auth.toJson());
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
+      const user = await GetCurrentUserRepository.post();
+      setCookie("user", user, { maxAge: 2000 });
       await fetchAllDate()
       navigate("/");
     } catch (e: any) {

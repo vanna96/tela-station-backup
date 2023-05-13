@@ -12,16 +12,11 @@ import DataTable from "@/components/data_table/DataTable";
 
 export default function PurchaseRequestLists() {
   const route = useNavigate();
-
-  // const { data, isLoading }: any = useQuery({
-  //   queryKey: ["pr"],
-  //   queryFn: () => new PurchaseRequestRepository().get(),
-  // });
   const columns = React.useMemo(
     () => [
       {
-        accessorKey: "docNum",
-        header: "Doc Num", //uses the default width from defaultColumn prop
+        accessorKey: "DocNum",
+        header: "Document Number", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
@@ -29,28 +24,28 @@ export default function PurchaseRequestLists() {
         visible: true,
       },
       {
-        accessorKey: "requester",
+        accessorKey: "CardCode",
         header: "Requester",
         enableClickToCopy: true,
         type: 'string',
         visible: true,
       },
       {
-        accessorKey: "requesterName",
+        accessorKey: "CardName",
         header: "Requester Name",
         type: 'string',
         visible: true,
         // size: 200, //increase the width of this column
       },
       {
-        accessorKey: "requesterEmail",
-        header: "Requester Email",
+        accessorKey: "RequesterEmail",
+        header: "Email",
         type: 'string',
         visible: true,
         // size: 200, //increase the width of this column
       },
       {
-        accessorKey: "taxDate",
+        accessorKey: "TaxDate",
         header: "Document Date",
         type: 'date',
         visible: true,
@@ -59,21 +54,21 @@ export default function PurchaseRequestLists() {
         ),
       },
       {
-        accessorKey: "docDueDate",
+        accessorKey: "DocDueDate",
         header: "Valid Date",
         type: 'date',
         visible: true,
         Cell: ({ cell }: any) => <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>,
       },
       {
-        accessorKey: "docTotalSys",
+        accessorKey: "DocTotalSys",
         header: "Total",
         type: 'date',
         visible: true,
         Cell: ({ cell }) => <>{'$ ' + moment(cell.getValue())}</>,
       },
       {
-        accessorKey: "DocEntry",
+        accessorKey: "Action",
         enableFilterMatchHighlighting: false,
         enableColumnFilterModes: false,
         enableColumnActions: false,
@@ -84,7 +79,7 @@ export default function PurchaseRequestLists() {
           <div className="flex gap-4">
             <button
               onClick={() => {
-                route("/procument/purchase-request/" + cell.row.original.id, {
+                route("/procument/purchase-request/" + cell.row.original.DocEntry, {
                   state: cell.row.original,
                 });
               }}
