@@ -334,14 +334,14 @@ function Content(props: any) {
         <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
         <span className='w-8/12 font-medium text-sm'>:{data?.DocTotalSys} </span>
       </div>
-      <div className='flex gap-2'>
+      {/* <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Applied Amount</span>
         <span className='w-8/12 font-medium text-sm'>:{data?.AppliedAmount} </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Balance Due</span>
         <span className='w-8/12 font-medium text-sm'>:{data?.BalanceDue} </span>
-      </div>
+      </div> */}
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Remark</span>
         <span className='w-8/12 font-medium text-sm'>: {data?.Comments || "N/A"}</span>
