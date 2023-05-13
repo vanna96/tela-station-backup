@@ -53,7 +53,8 @@ export default class GoodReturn extends MasterDocumentModel {
   DocType?: string;
   DocumentType?: string;
   Comments?: string;
-
+  DocTotalSys?: number | undefined;
+  VatSum?: number | undefined;
 
   constructor(json: any) {
     super();
@@ -95,6 +96,8 @@ export default class GoodReturn extends MasterDocumentModel {
     this.FederalTaxID = json['FederalTaxID']
     this.ImportFileNum = json['ImportFileNum']
     this.ContactPersonList = json['contactPersonList'];
+    this.DocTotalSys = json['DocTotalSys']
+    this.VatSum = json['VatSum']
 
     this.CreateQRCodeFrom = json['CreateQRCodeFrom']
     this.Comments = json['Comments'];
@@ -145,7 +148,9 @@ export default class GoodReturn extends MasterDocumentModel {
       "FederalTaxID" : this.FederalTaxID,
       "ImportFileNum" : this.ImportFileNum,
       "CreateQRCodeFrom" : this.CreateQRCodeFrom,
-      "CancelDate" : this.CancelDate
+      "CancelDate" : this.CancelDate,
+      // "DocTotalSys": this.DocTotalSys,
+      // "VatSum": this.VatSum
 
     };
   }

@@ -116,7 +116,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           return <MUITextField
             type="number"
             name="Quantity"
-            // error={(cell.getValue() as number) <= 0}
+            error={(cell.getValue() as number) <= 0}
             defaultValue={cell.getValue()}
             onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
           />;
@@ -136,29 +136,29 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           />;
         },
       },
-      // {
-      //   accessorKey: "DiscountPercent",
-      //   header: "Discount %",
-      //   Cell: ({ cell }: any) => {
-      //     return <MUITextField
-      //       startAdornment={'%'}
-      //       type="number"
-      //       name="DiscountPercent"
-      //       defaultValue={cell.getValue()}
-      //       onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'DiscountPercent')}
-      //     />;
-      //   },
-      // },
-      // {
-      //   accessorKey: "LineTotal",
-      //   header: "Total",
-      //   Cell: ({ cell }: any) => {
-      //     return <MUITextField
-      //       startAdornment={'USD'}
-      //       value={Formular.findLineTotal(cell.row.original.Quantity, cell.row.original.UnitPrice,  cell.row.original.DiscountPercent)}
-      //     />;
-      //   },
-      // },
+      {
+        accessorKey: "DiscountPercent",
+        header: "Discount %",
+        Cell: ({ cell }: any) => {
+          return <MUITextField
+            startAdornment={'%'}
+            type="number"
+            name="DiscountPercent"
+            defaultValue={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'DiscountPercent')}
+          />;
+        },
+      },
+      {
+        accessorKey: "LineTotal",
+        header: "Total",
+        Cell: ({ cell }: any) => {
+          return <MUITextField
+            startAdornment={'USD'}
+            value={Formular.findLineTotal(cell.row.original.Quantity, cell.row.original.Price,  cell.row.original.DiscountPercent)}
+          />;
+        },
+      },
       {
         accessorKey: "UomGroupCode",
         header: "UoM Group",

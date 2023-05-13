@@ -124,7 +124,7 @@ class GoodReturnDetail extends Component<any, any> {
               <div className='flex flex-col gap-1'>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Status</span>
-                  <span className='w-8/12 font-medium'>: {DocumentStatus.getDocumentStatus(this.state.DocumentStatus) || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {(this.state.DocumentStatus?.replace("bost_","")) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Posting Date</span>
@@ -316,11 +316,11 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findItemTotal(data?.items)) ?? ""}</span>
+        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findTotalBeforeDiscount(data?.Items)) ?? ""}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.docDiscountPercent || "N/A"}{data?.docDiscountPrice}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.docDiscountPercent || "N/A"}{data?.DocDiscountPrice}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
@@ -328,15 +328,15 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Tax</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.vatSum}</span>
+        <span className='w-8/12 font-medium text-sm'>:{data?.VatSum}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.docTotalSys} </span>
+        <span className='w-8/12 font-medium text-sm'>:{data?.DocTotalSys} </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Applied Amount</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.appliedAmount} </span>
+        <span className='w-8/12 font-medium text-sm'>:{data?.AppliedAmount} </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Balance Due</span>
@@ -344,7 +344,7 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Remark</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.comments || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.Comments || "N/A"}</span>
       </div>
     </div>
   </div>

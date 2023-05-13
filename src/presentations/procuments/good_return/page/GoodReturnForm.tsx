@@ -30,7 +30,7 @@ class GoodReturnForm extends CoreFormDocument {
       TaxDate: new Date().toISOString(),
       TransportationCode : 1,
       PaymentTerms: -1,
-      PaymentMethod:	"Outgoing BT 02",
+      PaymentMethod:	"Outgoing BT",
       SalesPersonCode	: -1,
       StartFrom	: "Y"
 
