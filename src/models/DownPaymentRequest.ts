@@ -1,12 +1,12 @@
-import {  } from '../utilies';
+import { } from '../utilies';
 import Model, { LineDocumentModel, MasterDocumentModel } from './Model';
 import { MasterDocument, DocumentLine } from './interface/index';
 import moment from 'moment';
 import { ContactEmployee } from './BusinessParter';
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
+import { isItemType } from '@/constants';
 
-export default class PurchaseDownPayment extends MasterDocumentModel{
-
+export default class PurchaseDownPayment extends MasterDocumentModel {
   DocEntry: any;
   DocNum: any;
   Id: any;
@@ -60,7 +60,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel{
   AccountName?: string | undefined;
   constructor(json: any) {
     super();
-    this.Id=json['DocEntry']
+    this.Id = json['DocEntry']
     this.NumberOfInstallments = json['NumberOfInstallments']
     this.SalesPersonCode = json['SalesPersonCode']
     this.DocEntry = json['DocEntry'];
@@ -72,7 +72,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel{
     this.ExtraMonth = json['ExtraMonth'];
     this.ExtraDays = json['ExtraDays'];
     this.Series = json['Series'];
-    this.DocType = json['DocType'] === "dDocument_Service" ? "S" : "I";
+    this.DocType = json['DocType'];
     this.DocNum = json['DocNum'];
     this.ContactPersonList = json['ContactPersonList'];
     this.JournalMemo = json['JournalMemo']
@@ -117,10 +117,10 @@ export default class PurchaseDownPayment extends MasterDocumentModel{
       "DownPaymentType": "dptInvoice",
       "NumberOfInstallments": this.NumberOfInstallments,
       "SalesPersonCode": this.SalesPersonCode,
-      "VatSum":this.VatSum,
+      "VatSum": this.VatSum,
       "NumAtCard": this.NumAtCard,
       "DocumentsOwner": this.DocumentsOwner,
-      "DocumentStatus":this.DocumentStatus,
+      "DocumentStatus": this.DocumentStatus,
       "ImportFileNum": this.ImportFileNum,
       "FederalTaxID": this.FederalTaxID,
       "Indicator": this.Indicator,
@@ -139,7 +139,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel{
       "DocDate": this.DocDate,
       "DocDueDate": this.DocDueDate,
       // "RequriedDate": json['requriedDate'],
-      "TerminateDate":this.TerminateDate,
+      "TerminateDate": this.TerminateDate,
       "Description": this.Description,
       "Status": this.DocumentStatus,
       "Owner": this.DocumentsOwner,
@@ -220,7 +220,7 @@ export class PurchaseDownPaymentDocumentLine extends LineDocumentModel {
     this.UomGroupEntry = uomGroup.AbsEntry;
     this.UomGroupName = uomGroup?.Code;
   }
-  toJson(type = "I",update = false) {
+  toJson(type: string, update = false) {
     let line = {
       "Quantity": this.Quantity,
       "ItemCode": this.ItemCode,
@@ -245,7 +245,7 @@ export class PurchaseDownPaymentDocumentLine extends LineDocumentModel {
 
     };
 
-    if (type === 'S') {
+    if (!isItemType(type)) {
 
       delete line.ItemCode;
       delete line.UnitPrice;

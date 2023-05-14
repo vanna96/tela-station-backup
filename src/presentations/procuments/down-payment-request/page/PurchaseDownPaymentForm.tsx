@@ -23,7 +23,6 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     super(props)
     this.state = {
       ...this.state,
-      DocType: 'I',
       loading: true,
       DocDate: new Date().toISOString(),
       DocDueDate: new Date().toISOString(),
@@ -128,48 +127,48 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     return <>
       <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
         {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
-        <HeadingForm
-          data={this.state}
-          edit={this.props?.edit}
-          handlerOpenVendor={() => {
-            this.handlerOpenVendor('supplier');
-          }}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-          handlerOpenProject={() => this.handlerOpenProject()}
-        />
-        <Content
-          edit={this.props?.edit}
-          data={this.state}
-          handlerAddItem={() => this.handlerOpenItem()}
-          handlerRemoveItem={this.handlerRemoveItem}
-          handlerChangeItem={this.handlerChangeItems}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-        />
-        <Logistic
-          data={this.state}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-          edit={this.props.edit}
-        />
-        <Accounting
-          edit={this.props.edit}
-          data={this.state}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-          handlerOpenProject={() => this.handlerOpenProject()}
+          <HeadingForm
+            data={this.state}
+            edit={this.props?.edit}
+            handlerOpenVendor={() => {
+              this.handlerOpenVendor('supplier');
+            }}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            handlerOpenProject={() => this.handlerOpenProject()}
+          />
+          <Content
+            edit={this.props?.edit}
+            data={this.state}
+            handlerAddItem={() => this.handlerOpenItem()}
+            handlerRemoveItem={this.handlerRemoveItem}
+            handlerChangeItem={this.handlerChangeItems}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+          />
+          <Logistic
+            data={this.state}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            edit={this.props.edit}
+          />
+          <Accounting
+            edit={this.props.edit}
+            data={this.state}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            handlerOpenProject={() => this.handlerOpenProject()}
 
-        />
-        <AttachmentForm />
+          />
+          <AttachmentForm />
 
-        <div className="sticky w-full bottom-4  mt-2/">
-          <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
-            <div className="flex ">
-              <LoadingButton size="small" sx={{ height: '25px' }} variant="contained" disableElevation><span className="px-3 text-[11px] py-1">Copy To</span></LoadingButton>
+          <div className="sticky w-full bottom-4  mt-2/">
+            <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
+              <div className="flex ">
+                <LoadingButton size="small" sx={{ height: '25px' }} variant="contained" disableElevation><span className="px-3 text-[11px] py-1">Copy To</span></LoadingButton>
+              </div>
+              <div className="flex items-center">
+                <LoadingButton type="submit" sx={{ height: '25px' }} className='bg-white' loading={false} size="small" variant="contained" disableElevation>
+                  <span className="px-3 text-[11px] py-1">Save & New</span>
+                </LoadingButton>
+              </div>
             </div>
-            <div className="flex items-center">
-              <LoadingButton type="submit" sx={{ height: '25px' }} className='bg-white' loading={false} size="small" variant="contained" disableElevation>
-                <span className="px-3 text-[11px] py-1">Save & New</span>
-              </LoadingButton>
-            </div>
-          </div>
           </div>
         </>}
       </form>
