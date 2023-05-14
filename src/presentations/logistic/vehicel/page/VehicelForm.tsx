@@ -12,7 +12,9 @@ import WarehouseRepository from '@/services/actions/WarehouseRepository';
 import Warehouses from '@/models/Warehouses';
 import Vehicel from '@/models/Vehicel';
 import VehicelRepository from '@/services/actions/VehicelRepository';
-
+import General from '../component/General';
+import Compartement from '../component/Compartement';
+import shortid from 'shortid';
 
 class VehicelForm extends CoreFormDocument {
 
@@ -21,9 +23,19 @@ class VehicelForm extends CoreFormDocument {
     this.state = {
       ...this.state,
       loading: true,
+      items: [{
+        id: shortid.generate(),
+        u_VEHCOMPNO: null,
+        u_VEHCOMPVO: null,
+        u_VEHCOMPHA: null
+      }]
+
 
     } as any;
     this.handlerSubmit = this.handlerSubmit.bind(this);
+    this.handlerChangeCompartement = this.handlerChangeCompartement.bind(this)
+    // this.handlerChangePartment = this.handlerChangePartment.bind(this);
+
   }
 
   componentDidMount(): void {
@@ -46,7 +58,6 @@ class VehicelForm extends CoreFormDocument {
       }
     }
   }
-
 
 
   async handlerSubmit(event: any) {
@@ -73,15 +84,36 @@ class VehicelForm extends CoreFormDocument {
     });
   }
 
-
+  protected handlerChangeCompartement({ value, record, field }: any) {
+    let items = [...this.state.Items ?? []];
+    let item = this.state.Items?.find(
+      (e: any) => e?.id === record?.id
+    );
+    item[field] = value;
+    const index = items.findIndex(
+      (e: any) => e?.Id === record.id
+    );
+    if (index > 0) items[index] = item;
+    this.setState({ ...this.state, Items: items });
+  }
   FormRender = () => {
+
     return <>
       <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
         {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
 
+          <General
+            data={this.state}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            edit={this.props.edit}
+          />
 
-         
+          <Compartement
+            handlerChangeItem={this.handlerChangeCompartement}
 
+            data={this.state}
+            edit={this.props.edit}
+          />
           <div className="sticky w-full bottom-4  mt-2">
             <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
               <div className="flex ">

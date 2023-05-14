@@ -12,6 +12,7 @@ export abstract class MasterDocumentModel {
     PaymentTerm: string | null = null;
     ShippingType: string | null = null;
     Items: LineDocumentModel[] = [];
+    
 
     abstract setItem(items: any[]): any;
     abstract toJson(update?: boolean): any;

@@ -6,68 +6,59 @@ import EditIcon from "@mui/icons-material/Edit";
 import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
+import { UseQueryResult, useQuery } from "react-query";
+import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
 import VehicelRepository from "@/services/actions/VehicelRepository";
-import { useQuery } from "react-query";
+import OpenDeliveryRepository from "@/services/actions/openDeliveryRepository";
+import OpenTransportationRepository from "@/services/actions/OpenTransportationRepository";
 
-export default function VehicelLists() {
+export default function OpenTransportationLists() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["vh"],
-    queryFn: () => new VehicelRepository().get(),
+    queryKey: ["ot"],
+    queryFn: () => new OpenTransportationRepository().get(),
   });
   console.log(data);
   const columns = React.useMemo(
     () => [
       {
-        accessorKey: "u_VEHCODE",
-        header: "Truck No.", //uses the default width from defaultColumn prop
+        accessorKey: "docEntry",
+        header: "Order Num", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
       },
       {
-        accessorKey: "u_VEHNAME",
-        header: "Truck Name",
+        accessorKey: "u_TRANSPROUTE",
+        header: "Route",
         enableClickToCopy: true,
       },
       {
-        accessorKey: "1",
-        header: "	Driver",
+        accessorKey: "u_TRANSPVEHICLE",
+        header: "	Vehicle",
         // size: 200, //increase the width of this column
       },
       {
-        accessorKey: "u_VEHVOLUME",
-        header: "Volumn",
+        accessorKey: "driver",
+        header: "Driver",
 
       },
       {
-        accessorKey: "1",
-        header: "# of Comp",
+        accessorKey: "u_TRANSPSTATUS",
+        header: "Status",
 
       },
-      
-      {
-        accessorKey: "id",
-        enableFilterMatchHighlighting: false,
-        enableColumnFilterModes: false,
-        enableColumnActions: false,
-        enableColumnFilters: false,
-        enableColumnOrdering: false,
-        header: "Action", //uses the default width from defaultColumn prop
-        Cell: (cell: any) => (
-          <div className="flex gap-4">
-            <button onClick={() => {
-              route('/logistic/vehicel/' + cell.row.original.id, { state: cell.row.original })
-            }}>
-              <VisibilityIcon fontSize="small" className="text-gray-600 " />
-            </button>
-            <button>
-              <EditIcon fontSize="small" className="text-blue-400" />
-            </button>
-          </div>
-        ),
-      },
+
+      // {
+      //   accessorKey: "id",
+      //   enableFilterMatchHighlighting: false,
+      //   enableColumnFilterModes: false,
+      //   enableColumnActions: false,
+      //   enableColumnFilters: false,
+      //   enableColumnOrdering: false,
+      //   header: "Action", //uses the default width from defaultColumn prop
+      // },
     ],
     []
   );
@@ -82,13 +73,13 @@ export default function VehicelLists() {
       <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
         <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full bg-white py-3">
           <h3 className="text-lg 2xl:text-base xl:text-sm">
-            Master Data / Vehicle
+            Master Data / Open Transportation
           </h3>
           <Button
             variant="outlined"
             disableElevation
             size="small"
-            onClick={() => route("/logistic/vehicel/create")}
+            onClick={() => route("/logistic/open-transportation/create")}
           >
             <span className="text-xs">Create</span>
           </Button>
@@ -118,7 +109,7 @@ export default function VehicelLists() {
               return (
                 <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
                   <h3 className="font-bold text-base xl:text-sm">
-                    Vehicle
+                    Open Transportation
                   </h3>
                   {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
                 </div>

@@ -9,35 +9,37 @@ import { useNavigate } from "react-router-dom";
 import { useQueryHook } from '../../../utilies/useQueryHook';
 import { UseQueryResult, useQuery } from "react-query";
 import purchaseQoutationRepository from "@/services/actions/purchaseQoutationRepository";
+import PurchaseQoutationRepository from "@/services/actions/purchaseQoutationRepository";
+import DataTable from "@/components/data_table/DataTable";
 
 
 
 export default function PurchaseQoutationLists() {
   const route = useNavigate();
 
-  const { data, isLoading }: any = useQuery({ queryKey: ['pq'], queryFn: () => new purchaseQoutationRepository().get() })
+
 
   const columns = React.useMemo(
     () => [
       {
-        accessorKey: "docNum",
+        accessorKey: "DocNum",
         header: "Doc Num", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
       },
       {
-        accessorKey: "cardCode",
+        accessorKey: "CardCode",
         header: "Vendor Code",
         enableClickToCopy: true,
       },
       {
-        accessorKey: "cardName",
+        accessorKey: "CardName",
         header: "Vendor Name",
         // size: 200, //increase the width of this column
       },
       {
-        accessorKey: "docDate",
+        accessorKey: "DocDate",
         header: "Posting Date",
         Cell: ({ cell }: any) => (
           <>
@@ -46,7 +48,7 @@ export default function PurchaseQoutationLists() {
         ),
       },
       {
-        accessorKey: "docDueDate",
+        accessorKey: "DocDueDate",
         header: "Delivery Date",
         Cell: ({ cell }) => (
           <>
@@ -56,21 +58,26 @@ export default function PurchaseQoutationLists() {
 
       },
       {
-        accessorKey: "id",
+        accessorKey: "DocEntry",
         enableFilterMatchHighlighting: false,
         enableColumnFilterModes: false,
         enableColumnActions: false,
         enableColumnFilters: false,
         enableColumnOrdering: false,
+        enableSorting: false,
+        minSize: 100, //min size enforced during resizing
+        maxSize: 100, //max size enforced during resizing
         header: "Action", //uses the default width from defaultColumn prop
         Cell: (cell: any) => (
           <div className="flex gap-4">
             <button onClick={() => {
-              route('/procument/purchase-qoutation/' + cell.row.original.id, { state: cell.row.original })
+              route('/procument/purchase-qoutation/' + cell.row.original.DocEntry, { state: cell.row.original, replace: true })
             }}>
               <VisibilityIcon fontSize="small" className="text-gray-600 " />
             </button>
-            <button>
+            <button title="back"
+              onClick={() => route('/procument/purchase-qoutation/' + cell.row.original.DocEntry + '/edit', { state: cell.row.original, replace: true })}
+            >
               <EditIcon fontSize="small" className="text-blue-400" />
             </button>
           </div>
@@ -80,12 +87,65 @@ export default function PurchaseQoutationLists() {
     []
   );
 
+  const [filter, setFilter] = React.useState('');
+  const [sortBy, setSortBy] = React.useState('');
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
+  const purchaseCount = useQuery({
+    queryKey: ['pq-count'], queryFn: () => new purchaseQoutationRepository().documentTotal(`?$select=DocNum${filter}`),
+    staleTime: Infinity
+  })
+
+  const { data, isLoading, error, isError, refetch, isFetching }: any = useQuery({
+    queryKey: ['pq', `${(pagination.pageIndex) * 10}_${filter !== '' ? 'f' : ''}`], queryFn: () => {
+      return new PurchaseQoutationRepository().get(`?$top=${pagination.pageSize}&$skip=${(pagination.pageIndex) * pagination.pageSize}${filter}${sortBy !== '' ? '&$orderby=' + sortBy : ''}`);
+    },
+    staleTime: Infinity,
+    retry: 1,
+  });
 
 
+  const handlerRefresh = React.useCallback(() => {
+    setFilter('');
+    setSortBy('');
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+    setTimeout(() => {
+      purchaseCount.refetch();
+      refetch();
+    }, 500);
+  }, []);
+
+  const handlerSortby = (value: any) => {
+    setSortBy(value);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      refetch();
+    }, 500)
+  }
+
+
+  const handlerSearch = (value: string) => {
+    const qurey = value.replace('CardCode', 'BPCode').replace('CardName', 'BPName');
+    setFilter(qurey);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      purchaseCount.refetch();
+      refetch();
+    }, 500)
+  }
 
   return (
     <>
@@ -101,31 +161,16 @@ export default function PurchaseQoutationLists() {
 
 
         <div className="grow data-table">
-          <MaterialReactTable
+          <DataTable
             columns={columns}
-            data={data ?? []}
-            enableHiding={true}
-            initialState={{ density: "compact" }}
-            enableDensityToggle={false}
-            enableColumnResizing
-            enableStickyHeader={true}
-            enableStickyFooter={true}
-            enablePagination={true}
-            muiTablePaginationProps={{
-              rowsPerPageOptions: [5, 10, 15],
-            }}
-            getRowId={(row: any) => row.DocEntry}
-            onPaginationChange={setPagination}
-            state={{
-              isLoading,
-              pagination
-            }}
-            renderTopToolbarCustomActions={({ table }) => {
-              return <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                <h3 className="font-bold text-base xl:text-sm">Purchase Qoutation</h3>
-                {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
-              </div>
-            }}
+            data={data}
+            handlerRefresh={handlerRefresh}
+            handlerSearch={handlerSearch}
+            handlerSortby={handlerSortby}
+            count={purchaseCount.data ?? 0}
+            loading={isLoading || isFetching}
+            pagination={pagination}
+            paginationChange={setPagination}
           />
         </div>
       </div>

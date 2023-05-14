@@ -163,8 +163,9 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.handlerConfirmRequester = this.handlerConfirmRequester.bind(this);
         this.handlerChangeItems = this.handlerChangeItems.bind(this);
         this.handlerDeleteItem = this.handlerDeleteItem.bind(this);
-    }
 
+    }
+    
     abstract FormRender(): JSX.Element;
 
     render() {
@@ -548,7 +549,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
         this.setState({ ...this.state, Items: items, DocTotalBeforeDiscount, DocTaxTotal, DocTotal })
     }
-
     protected handlerDeleteItem(code: string) {
         let items = [...this.state.Items ?? []];
         const index = items.findIndex((e: any) => e?.ItemCode === code);
