@@ -5,6 +5,7 @@ import moment from 'moment';
 import { ContactEmployee } from './BusinessParter';
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
 import Currency from './Currency';
+import { isItemType } from '@/constants';
 
 export default class PurchaseQouatation extends MasterDocumentModel {
   id: any;
@@ -70,7 +71,7 @@ export default class PurchaseQouatation extends MasterDocumentModel {
     this.ExtraMonth = json['ExtraMonth'];
     this.ExtraDays = json['ExtraDays'];
     this.Series = json['Series'];
-    this.DocType = json['DocType'] === "dDocument_Service" ? "S" : "I";
+    this.DocType = json['DocType'];
     this.DocNum = json['DocNum'];
     this.ContactPersonList = json['ContactPersonList'];
     this.JournalMemo = json['JournalMemo']
@@ -149,7 +150,7 @@ export default class PurchaseQouatation extends MasterDocumentModel {
       "DocCurrency": this.DocCurrency,
       "TaxDate": this.TaxDate,
       "CreateQRCodeFrom": this.CreateQRCodeFrom,
-      "DocumentLines": this.Items?.map((e) => e.toJson(this.DocType, update))
+      "DocumentLines": this.Items?.map((e) => e.toJson(this.DocType ?? '', update))
     };
   }
 
@@ -187,6 +188,8 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
   Currency?: String;
   UomGroupEntry?: number | undefined;
   UomGroupName?: number | undefined;
+
+
   constructor(json: any) {
     super();
     this.SaleVatGroup = json['VatGroup'];
@@ -216,7 +219,7 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
     this.UomGroupEntry = uomGroup.AbsEntry;
     this.UomGroupName = uomGroup?.Code;
   }
-  toJson(type = 'I', update = false) {
+  toJson(type: string, update = false) {
     let body = {
       "VatGroup": this.SaleVatGroup,
       "ItemCode": this.ItemCode,
@@ -238,7 +241,7 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
       "TaxCode": update ? null : this.TaxCode,
 
     }
-    if (type === 'S') {
+    if (!isItemType(type)) {
       delete body.ItemCode;
       delete body.ItemDescription;
       delete body.UnitPrice;

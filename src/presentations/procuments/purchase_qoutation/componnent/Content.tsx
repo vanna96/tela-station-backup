@@ -21,9 +21,10 @@ import SalePerson from "@/components/selectbox/SalePerson";
 import VatGroup from "@/components/selectbox/VatGroup";
 import BuyerSelect from "@/components/selectbox/buyer";
 import Item from './../../../../models/Item';
-import { documentStatusList } from '@/constants';
+import { documentStatusList, documentType, isItemType } from '@/constants';
 import UOMTextField from "@/components/input/UOMTextField";
 import { getUOMGroupByCode } from "@/helpers";
+import VatGroupTextField from "@/components/input/VatGroupTextField";
 
 interface ContentFormProps {
   handlerAddItem: () => void,
@@ -41,7 +42,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
   const handlerChangeInput = (event: any, row: any, field: any) => {
     handlerChangeItem({ value: event.target.value, record: row, field })
     console.log(handlerChangeItem({ value: event.target.value, record: row, field }));
-    
+
   }
 
   const handlerRemoveRow = (row: any) => {
@@ -213,14 +214,14 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         },
       },
       {
-        accessorKey: "ItemDescription",
+        accessorKey: "ItemName",
         header: "Descriptions", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           // return ;
           return <MUITextField
             value={cell.getValue()}
-            name="ItemDescription"
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemDescription')}
+            name="ItemName"
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemName')}
           />;
         },
       },
@@ -230,7 +231,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return (
             <MUIDatePicker
-              value={cell.getValue()}
+              value={cell.getValue() ?? null}
               name="RequiredDate"
               onChange={(event) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'RequiredDate')}
             />
@@ -243,7 +244,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <MUIDatePicker
             // disabled={true}
-            value={cell.getValue()}
+            value={cell.getValue() ?? null}
             onChange={(event) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'ShipDate')}
           />;
         },
@@ -271,14 +272,14 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           return <MUITextField value={cell.getValue()} />;
         },
       },
-    {
-        accessorKey: "PurchaseVatGroup",
+      {
+        accessorKey: "VatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => {
-          return <VatGroup
+          return <VatGroupTextField
             value={cell.getValue()}
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'PurchaseVatGroup')}
-            category="InputTax"
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'VatGroup')}
+            type="InputTax"
           />;
         },
       },
@@ -322,8 +323,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
               </label>
               <div className="">
                 <MUISelect
-                  items={[{ name: 'Item', value: 'I' }, { name: 'Service', value: 'S' }]}
-                  aliaslabel='name'
+                  items={documentType}
+                  aliaslabel='label'
                   aliasvalue='value'
                   name="DocType"
                   disabled={edit}
@@ -337,7 +338,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.DocType === "S" ? serviceColumns : itemColumns}
+          columns={!isItemType(data?.DocType) ? serviceColumns : itemColumns}
           data={[...data?.Items, blankItem] ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
