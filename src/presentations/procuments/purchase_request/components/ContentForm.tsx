@@ -18,6 +18,7 @@ import ItemGroupRepository from "@/services/actions/itemGroupRepository";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
 import BusinessPartnerTextField from "@/components/input/BusinessPartnerTextField";
 import VatGroupTextField from "@/components/input/VatGroupTextField";
+import { documentType, isItemType } from "@/constants";
 
 export interface ContentFormProps {
   handlerAddItem: () => void;
@@ -358,11 +359,8 @@ export default function ContentForm({
               </label>
               <div className="w-1/2">
                 <MUISelect
-                  items={[
-                    { name: "Items", value: "I" },
-                    { name: "Service", value: "S" },
-                  ]}
-                  aliaslabel="name"
+                  items={documentType}
+                  aliaslabel="label"
                   aliasvalue="value"
                   name="DocType"
                   value={data.DocType}
@@ -376,7 +374,7 @@ export default function ContentForm({
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.DocType === "S" ? serviceColumns : itemColumns}
+          columns={!isItemType(data?.DocType) ? serviceColumns : itemColumns}
           data={[...data?.Items, {}]}
           enableStickyHeader={true}
           enableColumnActions={false}
