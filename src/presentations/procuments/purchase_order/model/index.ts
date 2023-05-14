@@ -1,3 +1,4 @@
+import { isItemType } from '@/constants';
 import { ContactEmployee } from '@/models/BusinessParter';
 import { LineDocumentModel, MasterDocumentModel } from '@/models/Model';
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
@@ -50,14 +51,13 @@ export default class PurchaseOrder extends MasterDocumentModel {
     constructor(json: any) {
         super();
 
-        const docType = json['DocType']?.includes('Items') || json['DocType'] === 'I' ? 'I' : 'S';
         this.Series = json['Series'];
         this.DocEntry = json['DocEntry'];
         this.DocumentStatus = json['DocumentStatus'];
         this.FederalTaxID = json['FederalTaxID']
         this.ExtraMonth = json['ExtraMonth'];
         this.ExtraDays = json['ExtraDays'];
-        this.DocType = docType;
+        this.DocType = json['DocType'];
         this.DocNum = json['DocNum'];
         this.VatSum = json['VatSum'];
         this.JournalMemo = json['JournalMemo']
@@ -205,7 +205,7 @@ export class PurchaseOrderLine extends LineDocumentModel {
         };
 
 
-        if (type === 'S') {
+        if (!isItemType(type)) {
             delete line.ItemCode;
             // delete line.UnitPrice;
         }

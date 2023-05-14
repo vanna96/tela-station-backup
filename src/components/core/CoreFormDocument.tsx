@@ -20,6 +20,7 @@ import GLAccount from '@/models/GLAccount';
 import Formular from '@/utilies/formular';
 import DocumentHeaderComponent from '../DocumenHeaderComponent';
 import shortid from 'shortid';
+import { documentType } from '@/constants';
 
 const contextClass: any = {
     success: "bg-blue-600",
@@ -153,7 +154,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             DocDiscountPercent: 0,
             DocDiscountPrice: 0,
             Rounded: false,
-            DocType: 'I',
+            DocType: 'dDocument_Items',
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -165,7 +166,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.handlerDeleteItem = this.handlerDeleteItem.bind(this);
 
     }
-    
+
     abstract FormRender(): JSX.Element;
 
     render() {
@@ -493,8 +494,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let items: any[] = [...this.state.Items ?? []];
         let item: any = {};
 
-
-        if (this.state.DocType === 'S' && !record?.ItemCode) {
+        if (this.state.DocType === documentType[1].value && !record?.ItemCode) {
             item['ItemCode'] = shortid.generate();
             item[field] = value;
             items.push(item);
@@ -504,6 +504,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
         let existingItem = items?.find((e: any) => e?.ItemCode === record?.ItemCode);
         if (!existingItem) return;
+
 
         const index = items.findIndex((e: any) => e?.ItemCode === record.ItemCode);
         switch (field) {

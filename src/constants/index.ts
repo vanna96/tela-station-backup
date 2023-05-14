@@ -1,13 +1,9 @@
-
-
-
-
-export const documentStatusList = (status: string, edit: boolean  | undefined) => {
+export const documentStatusList = (status: string, edit: boolean | undefined) => {
     if (status !== 'D' && edit) {
         return [
-            {value : 'A', label : 'Approved'},
-            {value : 'F', label : 'On Hold'},
-            {value : 'T', label : 'Terminated'},
+            { value: 'A', label: 'Approved' },
+            { value: 'F', label: 'On Hold' },
+            { value: 'T', label: 'Terminated' },
         ]
     }
 
@@ -45,3 +41,17 @@ export const getValueDocumentStatusProcument = (status: string | undefined): str
     }
 
 }
+
+export const documentType = [
+    {
+        value: "dDocument_Items",
+        label: "Items"
+    },
+    {
+        value: "dDocument_Service",
+        label: "Services"
+    },
+
+]
+
+export const isItemType = (value: string): boolean => value === 'dDocument_Items';

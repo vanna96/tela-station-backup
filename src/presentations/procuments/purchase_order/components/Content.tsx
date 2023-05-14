@@ -15,6 +15,7 @@ import BuyerSelect from "@/components/selectbox/buyer";
 import VatGroupTextField from "@/components/input/VatGroupTextField";
 import UOMTextField from "@/components/input/UOMTextField";
 import { getUOMGroupByCode } from "@/helpers";
+import { documentType, isItemType } from "@/constants";
 
 export interface ContentFormProps {
   handlerAddItem: () => void;
@@ -350,11 +351,8 @@ export default function ContentForm({
           </label>
           <div className="">
             <MUISelect
-              items={[
-                { name: "Items", value: "I" },
-                { name: "Service", value: "S" },
-              ]}
-              aliaslabel="name"
+              items={documentType}
+              aliaslabel="label"
               aliasvalue="value"
               name="DocType"
               disabled={edit}
@@ -367,7 +365,7 @@ export default function ContentForm({
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.DocType === "S" ? serviceColumns : itemColumns}
+          columns={isItemType(data?.DocType) ? itemColumns : serviceColumns}
           data={[...data.Items, { ItemCode: '' }]}
           enableStickyHeader={true}
           enableColumnActions={false}

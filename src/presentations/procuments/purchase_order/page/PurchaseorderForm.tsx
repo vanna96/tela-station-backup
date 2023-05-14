@@ -17,7 +17,6 @@ class PurchaseOrderForm extends CoreFormDocument {
     super(props);
     this.state = {
       ...this.state,
-      DocType: "I",
       DocDueDate: null,
     } as any;
 
