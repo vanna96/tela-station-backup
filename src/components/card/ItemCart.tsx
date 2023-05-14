@@ -11,7 +11,7 @@ interface ItemCardProps {
 
 export default function ItemCard({ title, icon, onClick, amount }: ItemCardProps) {
     return (
-        <div role="button" className='flex flex-col justify-between item-box bg-white hover:shadow-lg shadow h-[14rem] 2xl:h-[13rem] xl:h-[10.8rem] p-4 border  rounded-lg' onClick={onClick}>
+        <div role="button" className='flex flex-col justify-between item-box  hover:shadow-lg shadow h-[14rem] 2xl:h-[13rem] xl:h-[10.8rem] p-4 border  rounded-lg' onClick={onClick}>
             <div className='grow xl:text-[13px]'>{title}</div>
             <span className='text-[3rem] flex justify-end 2xl:text-[2.4rem] xl:text-[1.8rem]'>{icon}</span>
             <div className='flex justify-between relative'>

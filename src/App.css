@@ -39,6 +39,22 @@ div.data-grid > div > div:nth-child(1) {
   display: none;
 }
 
+div.data-grid > div {
+  background-color: inherit;
+}
+
+div.data-grid > div > div > table,
+div.data-grid > div > div > table > thead > tr,
+div.data-grid > div > div > table > tbody > tr {
+  background-color: inherit;
+  color: inherit;
+}
+
+div.data-grid > div > div > table > thead > tr > th,
+div.data-grid > div > div > table > tbody > tr > td {
+  color: inherit;
+}
+
 div.data-table > div > div:nth-child(1) > div:nth-child(3) {
   align-items: center;
 }
@@ -172,4 +188,23 @@ input[type="number"] {
 #basic-menu > div:nth-child(3) > ul > li:hover {
   background-color: #60a5fa;
   color: white;
+}
+
+.css-g2tram-MuiToolbar-root {
+  background-color: inherit !important;
+}
+
+.css-80pr5n-MuiPaper-root,
+.css-16253fi-MuiTablePagination-root,
+svg,
+button {
+  color: inherit !important;
+}
+
+.Mui-disabled > svg {
+  color: rgba(0, 0, 0, 0.26) !important;
+}
+
+.MuiPaper-root {
+  color: inherit;
 }

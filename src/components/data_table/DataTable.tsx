@@ -43,7 +43,7 @@ export default function DataTable(props: DataTableProps) {
 
 
     return (
-        <div className="rounded-lg shadow-sm border bg-white p-4 flex flex-col gap-3">
+        <div className="rounded-lg shadow-sm border p-4 flex flex-col gap-3">
             <div className="flex justify-between">
                 <div className="flex gap-2 items-center">
                     {/* <MUITextField placeholder="Search ..." /> */}
@@ -82,7 +82,7 @@ export default function DataTable(props: DataTableProps) {
                 </div >
             </div>
 
-            <div className="grow data-grid border-t">
+            <div className="grow data-grid border-t bg-inherit ">
                 <MaterialReactTable
                     columns={props.columns}
                     data={props.data ?? []}

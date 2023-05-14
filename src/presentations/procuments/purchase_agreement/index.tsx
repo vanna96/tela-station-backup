@@ -182,8 +182,8 @@ export default function PurchaseAgreementLists() {
     return (
         <>
             <ErrorDialogMessage key={error?.message} open={isError} title="Opp Something wrong!" message={error?.message ?? ''} />
-            <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
-                <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full bg-white py-3">
+            <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative ">
+                <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full  py-3">
                     <h3 className="text-lg 2xl:text-base xl:text-sm">Procument / Purchase Agreement</h3>
                     <Button variant="outlined" disableElevation size="small"
                         onClick={() => route('/procument/purchase-agreement/create')}
