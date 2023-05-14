@@ -25,4 +25,15 @@ export default class DocumentStatus {
                 return '';
         }
     }
+
+    public static getDocumentStatus(status: string | null) : string{
+        switch (status) {
+            case 'C':
+                return 'Closed';
+            case 'O':
+                return 'Open';
+            default:
+                return '';
+        }
+    }
 }

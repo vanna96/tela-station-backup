@@ -33,3 +33,15 @@ export const getValueDocumentStatus = (status: string | undefined): string => {
     }
 
 }
+
+export const getValueDocumentStatusProcument = (status: string | undefined): string => {
+    switch (status) {
+        case 'bost_Close':
+            return 'C';
+        case 'bost_Close':
+            return 'O';
+        default:
+            return 'O';
+    }
+
+}

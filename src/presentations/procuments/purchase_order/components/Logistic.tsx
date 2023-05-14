@@ -10,12 +10,15 @@ import * as React from "react";
 
 export interface ILogisticFormProps {
   data: any;
+  edit?: boolean;
   handlerChange: (key: string, value: any) => void;
 }
 
 export default function GeneralForm({
   data,
+
   handlerChange,
+  edit
 }: ILogisticFormProps) {
   return (
     <FormCard title="Logistic">

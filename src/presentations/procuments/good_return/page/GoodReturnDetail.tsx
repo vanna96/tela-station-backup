@@ -1,28 +1,32 @@
 import { withRouter } from '@/routes/withRouter';
-import React, { Component, useEffect } from 'react'
+import React, { Component } from 'react'
+import PurchaseAgreement, { PurchaseAgreementDocumentLine } from '../../../../models/PurchaseAgreement';
 import Taps from '@/components/button/Taps';
-import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
+import MaterialReactTable from 'material-react-table';
 import { useMemo } from 'react';
 import { currencyDetailFormat, currencyFormat, dateFormat, discountFormat, fileToBase64 } from '@/utilies';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { CircularProgress } from '@mui/material';
+import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
-import OwnerRepository from '@/services/actions/ownerRepository';
-import PaymentTermTypeRepository from '@/services/actions/paymentTermTypeRepository';
-import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
-import BusinessPartner, { ContactEmployee } from '@/models/BusinessParter';
-import BuyerRepository from '@/services/actions/BuyerRepository';
+import DocumentStatus from '@/constants/documentStatus';
+import { ContactEmployee } from '@/models/BusinessParter';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
-import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
+import BusinessPartner from '../../../../models/BusinessParter';
+import OwnerRepository from '@/services/actions/ownerRepository';
+import PaymentTermTypeRepository from '../../../../services/actions/paymentTermTypeRepository';
+import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
+import ItemGroupRepository from '@/services/actions/itemGroupRepository';
+import { getUOMGroupByCode } from '@/helpers';
+import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import GoodReturn from '@/models/GoodReturn';
 import GoodReturnRepository from '@/services/actions/goodReturnRepository';
-import SalePersonRepository from '../../../../services/actions/salePersonRepository';
+import SalePersonRepository from '@/services/actions/salePersonRepository';
 import Formular from '@/utilies/formular';
 
 
 class GoodReturnDetail extends Component<any, any> {
-
   constructor(props: any) {
     super(props);
     this.state = {
@@ -42,23 +46,30 @@ class GoodReturnDetail extends Component<any, any> {
   initData() {
     const { id } = this.props.match.params;
     const data = this.props.location.state as GoodReturn;
-    console.log(data);
-
+    console.log(data)
     if (data) {
       setTimeout(() => {
-        let goodReturn = data;
-        goodReturn as GoodReturn;
-        if (goodReturn.contactPersonCode) {
-          new BusinessPartnerRepository().findContactEmployee(goodReturn.cardCode!).then((res: BusinessPartner) => {
-            goodReturn.contactPersonList = res.contactEmployee || [];
-            this.setState({ ...goodReturn, loading: false })
+        let procData = data;
+        procData as GoodReturn;
+
+        const lines = this.props.query.getItems();
+
+        if (procData?.ContactPersonCode) {
+          new BusinessPartnerRepository().findContactEmployee(procData.CardCode!).then((res: BusinessPartner) => {
+            // procData.Email = res.email;
+            // procData.Phone = res.phone;
+            procData.ContactPersonList = res.contactEmployee ?? [];
+            this.setState({ ...procData, loading: false })
           })
         } else {
-          this.setState({ ...goodReturn, loading: false })
+          this.setState({ ...procData, loading: false })
         }
       }, 500)
     } else {
-      new GoodReturnRepository().find(id).then((res: any) => {
+      new GoodReturnRepository().find(id).then(async (res: any) => {
+        const lines = await this.props.query.getItems(res.items);
+        console.log(lines);
+
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {
         this.setState({ isError: true, message: e.message });
@@ -87,47 +98,47 @@ class GoodReturnDetail extends Component<any, any> {
               <div className='flex flex-col gap-1'>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Document Number</span>
-                  <span className='w-8/12 font-medium'>: {this.state.docNum || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {this.state.DocNum || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Vendor</span>
-                  <span className='w-8/12 font-medium'>: {this.state.cardCode || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {this.state.CardCode || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Name</span>
-                  <span className='w-8/12 font-medium'>: {this.state.cardName || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {this.state.CardName || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Contact Person</span>
-                  <span className='w-8/12 font-medium'>: {this.state?.contactPersonList?.find((e: ContactEmployee) => e.id === this.state.contactPersonCode)?.name || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {this.state?.ContactPersonList?.find((e: ContactEmployee) => e.id === this.state.ContactPersonCode)?.name || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Vendor Ref .No</span>
-                  <span className='w-8/12 font-medium'>:{this.state?.numAtCard || " N/A"}</span>
+                  <span className='w-8/12 font-medium'>:{this.state?.NumAtCard || " N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500 '>Local Currency</span>
-                  <span className='w-8/12 font-medium'>: {this.state.docCurrency || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {this.state.DocCurrency || "N/A"}</span>
                 </div>
               </div>
               <div className='flex flex-col gap-1'>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Status</span>
-                  <span className='w-8/12 font-medium'>: {this.state.documentStatus?.replace('bost_', '') || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {(this.state.DocumentStatus?.replace("bost_","")) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Posting Date</span>
-                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDate) || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.DocDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Return Date </span>
-                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.docDueDate) || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.DocDueDate) || "N/A"}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className='w-4/12 text-gray-500'>Document Date</span>
-                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.taxDate) || "N/A"}</span>
+                  <span className='w-8/12 font-medium'>: {dateFormat(this.state.TaxDate) || "N/A"}</span>
                 </div>
-                
+
 
               </div>
             </div>
@@ -139,7 +150,7 @@ class GoodReturnDetail extends Component<any, any> {
                 <Logistic data={this.state} />
                 <Account data={this.state} />
 
-                <PreviewAttachment attachmentEntry={this.state.attachmentEntry || "N/A"} />
+                <PreviewAttachment attachmentEntry={this.state.AttachmentEntry || "N/A"} />
               </Taps>
             </div>
           </>)
@@ -156,106 +167,121 @@ export default withRouter(GoodReturnDetail);
 
 
 function Content(props: any) {
-
   const { data } = props;
+  const itemGroupRepo = new ItemGroupRepository();
+
 
   const itemColumn = useMemo(() => [
     {
-      accessorKey: "itemCode",
+      accessorKey: "ItemCode",
       header: "Item NO.", //uses the default width from defaultColumn prop
       enableClickToCopy: true,
       enableFilterMatchHighlighting: true,
       size: 88,
     },
     {
-      accessorKey: "itemDescription",
-      header: "Descriptions",
-
-    },
-    {
-      accessorKey: "quantity",
-      header: "	Required Qty.",
+      accessorKey: "ItemName",
+      header: "Item Description",
       enableClickToCopy: true,
     },
+    // {
+    //     accessorKey: "ItemGroup",
+    //     header: "Item Group",
+    //     Cell: ({ cell }: any) => itemGroupRepo.find(cell.getValue())?.GroupName,
+    // },
     {
-      accessorKey: "unitPrice",
-      header: "Info Price",
+      accessorKey: "Quantity",
+      header: "Quantity",
+      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+    },
+    {
+      accessorKey: "Price",
+      header: "Unit Price",
+      Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+    },
+    {
+      accessorKey: "DiscountPercent",
+      header: "Discount %",
+      Cell: ({ cell }: any) => (cell.getValue()),
+    },
+     {
+      accessorKey: "VatGroup",
+      header: "Tax Code",
+      Cell: ({ cell }: any) => (cell.getValue()),
+    },
+    {
+      accessorKey: "LineTotal",
+      header: "Total (LC)",
       Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
     {
-      accessorKey: "discountPercent",
-      header: "	Discount",
-      Cell: ({ cell }: any) => discountFormat(cell.getValue()),
+      accessorKey: "UoMGroup",
+      header: "UoM Group",
+      Cell: ({ cell }: any) => getUOMGroupByCode(cell.row.original.ItemCode)?.Code,
     },
     {
-      accessorKey: "vatGroup",
-      header: "Tax Code",
+      accessorKey: "UomCode",
+      header: "UoM Group",
       Cell: ({ cell }: any) => cell.getValue(),
     },
     {
-      accessorKey: "lineTotal",
-      header: "Total (LC)",
-      Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
-      enableClickToCopy: true,
-    },
-    {
-      accessorKey: "uomCode",
-      header: "UoM Code",
+      accessorKey: "UnitsOfMeasurement",
+      header: "Item Per Units",
       Cell: ({ cell }: any) => cell.getValue(),
     },
   ], [data]);
 
   const serviceColumns = React.useMemo(
     () => [
+
       {
-        accessorKey: "itemDescription",
+        accessorKey: "ItemName",
         header: "	Descrition",
         Cell: ({ cell }: any) => cell.getValue(),
-    
+
       },
       {
-        accessorKey: "shipDate",
-        header: "Qouted date",
+        accessorKey: "ShipDate",
+        header: "Quoted date",
         Cell: ({ cell }: any) => dateFormat(cell.getValue()),
       },
       {
-        accessorKey: "requiredDate",
+        accessorKey: "RequiredDate",
         header: "Required Date",
         Cell: ({ cell }: any) => dateFormat(cell.getValue()),
       },
       {
-        accessorKey: "accountCode",
+        accessorKey: "AccountCode",
         header: "G/L Account",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "accountName",
+        accessorKey: "AccountName",
         header: "G/L Account Name",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "VatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "lineTotal",
+        accessorKey: "LineTotal",
         header: "Total (LC)",
         Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
       },
       {
-        accessorKey: "blanketAgreementNumber",
+        accessorKey: "BlanketAgreementNumber",
         header: "BlanketAgreementNumber",
         Cell: ({ cell }: any) => cell.getValue(),
       },
     ],
     [data]
   );
-
   return <div className="data-table  border-none p-0 mt-3">
     <MaterialReactTable
-      columns={data?.docType === 'I' ? itemColumn : serviceColumns}
-      data={data?.items || []}
+      columns={data?.DocType === 'dDocument_Items' ? itemColumn : serviceColumns}
+      data={data?.Items ?? []}
       enableHiding={true}
       initialState={{ density: "compact" }}
       enableDensityToggle={false}
@@ -278,23 +304,23 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Buyer</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new SalePersonRepository().find(data?.salesPersonCode)?.name || "N/A"}
+          : {new SalePersonRepository().find(data?.SalesPersonCode)?.name || "N/A"}
         </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Owner</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new OwnerRepository().find(data?.documentsOwner)?.name || "N/A"}
+          : {new OwnerRepository().find(data?.DocumentsOwner)?.name ?? "N/A"}
 
         </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findItemTotal(data?.items)) ?? ""}</span>
+        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findTotalBeforeDiscount(data?.Items)) ?? ""}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.docDiscountPercent || "N/A"}{data?.docDiscountPrice}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.docDiscountPercent || "N/A"}{data?.DocDiscountPrice}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
@@ -302,23 +328,23 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Tax</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.vatSum}</span>
+        <span className='w-8/12 font-medium text-sm'>:{data?.VatSum}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.docTotalSys} </span>
+        <span className='w-8/12 font-medium text-sm'>:{data?.DocTotalSys} </span>
       </div>
-      <div className='flex gap-2'>
+      {/* <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Applied Amount</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.appliedAmount} </span>
+        <span className='w-8/12 font-medium text-sm'>:{data?.AppliedAmount} </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Balance Due</span>
         <span className='w-8/12 font-medium text-sm'>:{data?.BalanceDue} </span>
-      </div>
+      </div> */}
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Remark</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.comments || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.Comments || "N/A"}</span>
       </div>
     </div>
   </div>
@@ -329,21 +355,21 @@ function Account(props: any) {
 
   return <div className='grow w-full grid grid-cols-2 gap-2 text-sm py-2'>
     <div className='flex flex-col gap-2'>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Jounral Remark</span> <span className='col-span-2 font-medium'>: {data.journalMemo?.replace('at', '') || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data.paymentGroupCode)?.PaymentTermsGroupName || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Methods</span> <span className='col-span-2 font-medium'>: {data.paymentMethod || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Central Bank Ind.</span> <span className='col-span-2 font-medium'>: {data.centralBankIndicator || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Installments</span> <span className='col-span-2 font-medium'>: {data.numberOfInstallments || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalculate Due Date</span> <span className='col-span-2 font-medium'>: {data.StartFrom || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cash Discount Date Offset</span> <span className='col-span-2 font-medium'>: {data.cashDiscountDateOffset || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Jounral Remark</span> <span className='col-span-2 font-medium'>: {data.JournalMemo?.replace('at', '') || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Terms</span> <span className='col-span-2 font-medium'>: {new PaymentTermTypeRepository().find(data?.PaymentGroupCode)?.PaymentTermsGroupName || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Methods</span> <span className='col-span-2 font-medium'>: {data?.PaymentMethod || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Central Bank Ind.</span> <span className='col-span-2 font-medium'>: {data?.CentralBankIndicator || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Installments</span> <span className='col-span-2 font-medium'>: {data?.NumberOfInstallments || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalculate Due Date</span> <span className='col-span-2 font-medium'>: {data?.StartFrom || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cash Discount Date Offset</span> <span className='col-span-2 font-medium'>: {data?.CashDiscountDateOffset || "N/A"}</span></div>
     </div>
     <div className='flex flex-col gap-2'>
-    <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Business partner Project</span> <span className='col-span-2 font-medium'>: {data.project || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Create QR Code From</span> <span className='col-span-2 font-medium'>: {data.createQRCodeFrom || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cancellation Date</span> <span className='col-span-2 font-medium'>: {dateFormat(data.cancelDate || "N/A")}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Indicator</span> <span className='col-span-2 font-medium'>: {data.indicator || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Federal Tax ID</span> <span className='col-span-2 font-medium'>: {data.federalTaxID || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Order Number</span> <span className='col-span-2 font-medium'>: {data.importFileNum || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Business partner Project</span> <span className='col-span-2 font-medium'>: {data?.Project || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Create QR Code From</span> <span className='col-span-2 font-medium'>: {data?.CreateQRCodeFrom || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cancellation Date</span> <span className='col-span-2 font-medium'>: {dateFormat(data?.CancelDate || "N/A")}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Indicator</span> <span className='col-span-2 font-medium'>: {data?.Indicator || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Federal Tax ID</span> <span className='col-span-2 font-medium'>: {data?.FederalTaxID || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Order Number</span> <span className='col-span-2 font-medium'>: {data?.ImportFileNum || "N/A"}</span></div>
     </div>
 
   </div>
@@ -354,9 +380,9 @@ function Logistic(props: any) {
 
   return <div className='grow w-full grid grid-cols-2 gap-2 text-sm py-2'>
     <div className='flex flex-col gap-2'>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500 '>Ship To</span> <span className='col-span-2 font-medium'>: {data.address2}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Pay To</span> <span className='col-span-2 font-medium'>: {data.address}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shiping Type</span> <span className='col-span-2 font-medium'>:  {new ShippingTypeRepository().find(data.shippingType)?.Name}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500 '>Ship To</span> <span className='col-span-2 font-medium'>: {data?.Address2}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Pay To</span> <span className='col-span-2 font-medium'>: {data?.Address}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Shiping Type</span> <span className='col-span-2 font-medium'>:  {new ShippingTypeRepository().find(data?.TransportationCode)?.Name}</span></div>
 
     </div>
   </div>
