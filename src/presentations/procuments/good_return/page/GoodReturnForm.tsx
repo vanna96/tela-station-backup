@@ -26,17 +26,16 @@ class GoodReturnForm extends CoreFormDocument {
       DocDate: new Date().toISOString(),
       DocDueDate: new Date().toISOString(),
       TaxDate: new Date().toISOString(),
-      TransportationCode : 1,
+      TransportationCode: 1,
       PaymentTerms: -1,
-      PaymentMethod:	"Outgoing BT",
-      SalesPersonCode	: -1,
-      StartFrom	: "Y"
+      PaymentMethod: "Outgoing BT",
+      SalesPersonCode: -1,
+      StartFrom: "Y"
 
 
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    this.handlerItemChange = this.handlerItemChange.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
@@ -48,7 +47,7 @@ class GoodReturnForm extends CoreFormDocument {
     if (this.props.edit) {
       if (this.props.location.state) {
         const routeState = this.props.location.state;
-        setTimeout(() => this.setState({ ...this.props.location.state,loading: false, }), 500)
+        setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
       } else {
         // const dd = this.props.query.queryProvider.getQueryData('items');
 
@@ -89,42 +88,6 @@ class GoodReturnForm extends CoreFormDocument {
     this.setState({ ...this.state, Items: items });
   }
 
-  handlerItemChange({ value, record, field }: any) {
-    let items = [...(this.state.Items ?? [])];
-    let item = this.state.Items?.find(
-      (e: any) => e?.ItemCode === record?.ItemCode
-    );
-    const index = items.findIndex((e: any) => e?.ItemCode === record.ItemCode);
-
-    if (field === "AccountNo") {
-      const account = value as GLAccount;
-      item[field] = account.code;
-      item["AccountName"] = account.name;
-    } else {
-      item[field] = value;
-    }
-
-    switch (field) {
-      case "AccountNo":
-        const account = value as GLAccount;
-        item[field] = account.code;
-        item["AccountName"] = account.name;
-        break;
-      case "UomCode":
-        item[field] = value?.Code;
-        item["UoMAbsEntry"] = value.AlternateUoM;
-        item["UnitsOfMeasurement"] = value.BaseQuantity;
-        break;
-      default:
-        item[field] = value;
-    }
-
-    if (index >= 0) {
-      items[index] = item;
-      console.log(item);
-      this.setState({ ...this.state, Items: items });
-    }
-  }
 
   async handlerSubmit(event: any) {
     event.preventDefault();
@@ -169,72 +132,70 @@ class GoodReturnForm extends CoreFormDocument {
     return <>
       <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
         {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
-         
-     
-         <HeadingForm
-          data={this.state}
-          edit={this.props?.edit}
-          handlerOpenVendor={() => {
-            this.handlerOpenVendor('supplier');
-          }}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-          handlerOpenProject={() => this.handlerOpenProject()}
-        />
 
-        <ContentForm
-          edit={this.props?.edit}
-          data={this.state}
-          handlerAddItem={() => this.handlerOpenItem()}
-          handlerRemoveItem={this.handlerRemoveItem}
-          handlerChangeItem={this.handlerChangeItems}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-        />
-        <LogisticsForm
-          data={this.state}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-          edit={this.props?.edit}
-        />
-        <AccountingForm
-          edit={this.props.edit}
-          data={this.state}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-          handlerOpenProject={() => this.handlerOpenProject()}
 
-        />
-        <AttachmentForm />
+          <HeadingForm
+            data={this.state}
+            edit={this.props?.edit}
+            handlerOpenVendor={() => {
+              this.handlerOpenVendor('supplier');
+            }}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            handlerOpenProject={() => this.handlerOpenProject()}
+          />
 
-              <div className="sticky w-full bottom-4  mt-2">
-                <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
-                  <div className="flex ">
-                    <LoadingButton
-                      size="small"
-                      sx={{ height: "25px" }}
-                      variant="contained"
-                      disableElevation
-                    >
-                      <span className="px-3 text-[11px] py-1">Copy To</span>
-                    </LoadingButton>
-                  </div>
-                  <div className="flex items-center">
-                    <LoadingButton
-                      type="submit"
-                      sx={{ height: "25px" }}
-                      className="bg-white"
-                      loading={false}
-                      size="small"
-                      variant="contained"
-                      disableElevation
-                    >
-                      <span className="px-3 text-[11px] py-1">Save </span>
-                    </LoadingButton>
-                  </div>
-                </div>
+          <ContentForm
+            edit={this.props?.edit}
+            data={this.state}
+            handlerAddItem={() => this.handlerOpenItem()}
+            handlerRemoveItem={this.handlerRemoveItem}
+            handlerChangeItem={this.handlerChangeItems}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+          />
+          <LogisticsForm
+            data={this.state}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            edit={this.props?.edit}
+          />
+          <AccountingForm
+            edit={this.props.edit}
+            data={this.state}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            handlerOpenProject={() => this.handlerOpenProject()}
+
+          />
+          <AttachmentForm />
+          <div className="sticky w-full bottom-4  mt-2">
+            <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
+              <div className="flex ">
+                <LoadingButton
+                  size="small"
+                  sx={{ height: "25px" }}
+                  variant="contained"
+                  disableElevation
+                >
+                  <span className="px-3 text-[11px] py-1">Copy To</span>
+                </LoadingButton>
               </div>
-            </>
-          )}
-        </form>
-      </>
-    );
+              <div className="flex items-center">
+                <LoadingButton
+                  type="submit"
+                  sx={{ height: "25px" }}
+                  className="bg-white"
+                  loading={false}
+                  size="small"
+                  variant="contained"
+                  disableElevation
+                >
+                  <span className="px-3 text-[11px] py-1">Save </span>
+                </LoadingButton>
+              </div>
+            </div>
+          </div>
+        </>
+        }
+      </form>
+    </>
   };
 }
 
