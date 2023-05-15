@@ -23,9 +23,12 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
           <div className="">
             <TextField
               size="small"
-              defaultValue={data?.address2 ?? "Level 1 - 168 Walker Street''"}
+              defaultValue={data?.Address2 ?? "Level 1 - 168 Walker Street''"}
               multiline
               rows={4}
+              disabled={
+                data?.DocumentStatus === "bost_Close" ? true :false
+              }
               fullWidth
               name="Description"
               className="w-full "
@@ -44,9 +47,12 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
               multiline
               rows={4}
               fullWidth
+              disabled={
+                data?.DocumentStatus === "bost_Close" ? true : false
+              }
               name="Description"
               className="w-full "
-              defaultValue={data?.address}
+              defaultValue={data?.Address}
             />
           </div>
         </div>

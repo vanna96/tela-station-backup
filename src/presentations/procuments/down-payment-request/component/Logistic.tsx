@@ -27,6 +27,9 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
               multiline
               rows={4}
               fullWidth
+              disabled={
+                data?.DocumentStatus==="bost_Close" ? true:false
+              }
               name="Description"
               className="w-full "
             />
@@ -44,6 +47,9 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
               multiline
               rows={4}
               fullWidth
+              disabled={
+                data?.DocumentStatus === "bost_Close" ? true : false
+              }
               name="Description"
               className="w-full "
               defaultValue={data?.Address}
