@@ -57,6 +57,8 @@ export default class GoodReturn extends MasterDocumentModel {
   Comments?: string;
   DocTotalSys?: number | undefined;
   VatSum?: number | undefined;
+  ExtraMonth?: number | undefined;
+  ExtraDays?: number | undefined;
 
   constructor(json: any) {
     super();
@@ -101,6 +103,11 @@ export default class GoodReturn extends MasterDocumentModel {
     this.ShippingList = json['shippingList'];
     this.DocTotalSys = json['DocTotalSys']
     this.VatSum = json['VatSum']
+    this.PaymentGroupCode = json['PaymentGroupCode']
+    this.ExtraMonth = json['ExtraMonth']
+    this.ExtraDays = json['ExtraDays']
+    this.StartFrom = json['StartFrom']
+    this.CashDiscountDateOffset = json["CashDiscountDateOffset"]
 
     this.CreateQRCodeFrom = json['CreateQRCodeFrom']
     this.Comments = json['Comments'];
@@ -138,20 +145,24 @@ export default class GoodReturn extends MasterDocumentModel {
       "BPCurrency": this.DocCurrency,
       "SalesPersonCode": this.SalesPersonCode,
       "DocumentLines": this.Items.map((e) => e.toJson(this.DocType, update)),
-      "TransportationCode" : this.TransportationCode,
-      "PaymentTermType" : this.PaymentTermType,
-      "JournalMemo" : this.JournalMemo,
-      "CentralBankIndicator" : this.CentralBankIndicator,
-      "NumberOfInstallments" : this.NumberOfInstallments,
-      "StartFrom" : this.StartFrom,
-      "PriceList" : this.PriceList,
-      "Address" : this.Address,
-      "Address2" : this.Address2,
-      "Indicator" : this.Indicator,
-      "FederalTaxID" : this.FederalTaxID,
-      "ImportFileNum" : this.ImportFileNum,
-      "CreateQRCodeFrom" : this.CreateQRCodeFrom,
-      "CancelDate" : this.CancelDate,
+      "TransportationCode": this.TransportationCode,
+      "PaymentTermType": this.PaymentTermType,
+      "JournalMemo": this.JournalMemo,
+      "CentralBankIndicator": this.CentralBankIndicator,
+      "NumberOfInstallments": this.NumberOfInstallments,
+      "StartFrom": this.StartFrom,
+      "PriceList": this.PriceList,
+      "Address": this.Address,
+      "Address2": this.Address2,
+      "Indicator": this.Indicator,
+      "FederalTaxID": this.FederalTaxID,
+      "ImportFileNum": this.ImportFileNum,
+      "CreateQRCodeFrom": this.CreateQRCodeFrom,
+      "CancelDate": this.CancelDate,
+      "PaymentGroupCode": this.PaymentGroupCode,
+      "ExtraMonth" : this.ExtraMonth,
+      "ExtraDays" : this.ExtraDays,
+      "CashDiscountDateOffset" : this.CashDiscountDateOffset
       // "DocTotalSys": this.DocTotalSys,
       // "VatSum": this.VatSum
 

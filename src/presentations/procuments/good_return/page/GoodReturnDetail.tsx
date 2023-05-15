@@ -48,7 +48,7 @@ class GoodReturnDetail extends Component<any, any> {
         let procData = data;
         procData as GoodReturn;
 
-        const lines = this.props?.query.getItems();
+        // const lines = this.props?.query.getItems();
 
         if (procData?.ContactPersonCode) {
           new BusinessPartnerRepository().findContactEmployee(procData.CardCode!).then((res: BusinessPartner) => {
@@ -64,8 +64,8 @@ class GoodReturnDetail extends Component<any, any> {
       }, 500)
     } else {
       new GoodReturnRepository().find(id).then(async (res: any) => {
-        const lines = await this.props.query.getItems(res.items);
-        console.log(lines);
+        // const lines = await this.props.query.getItems(res.items);
+        // console.log(lines);
 
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {

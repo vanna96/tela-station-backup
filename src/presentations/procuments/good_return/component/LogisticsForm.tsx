@@ -1,27 +1,32 @@
-import FormCard from '@/components/card/FormCard';
-import MUISelect from '@/components/selectbox/MUISelect';
-import Owner from '@/components/selectbox/Owner';
-import PaymentMethod from '@/components/selectbox/PaymentMethod';
-import PaymentTerm from '@/components/selectbox/PaymentTerm';
-import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
-import * as React from 'react';
-import ShippingType from '@/components/selectbox/ShippingType';
+import FormCard from "@/components/card/FormCard";
+import MUISelect from "@/components/selectbox/MUISelect";
+import Owner from "@/components/selectbox/Owner";
+import PaymentMethod from "@/components/selectbox/PaymentMethod";
+import PaymentTerm from "@/components/selectbox/PaymentTerm";
+import Checkbox from "@mui/material/Checkbox";
+import TextField from "@mui/material/TextField";
+import * as React from "react";
+import ShippingType from "@/components/selectbox/ShippingType";
 export interface ILogisticFormProps {
-  data: any,
-  handlerChange: (key: string, value: any) => void
-  edit: boolean
+  data: any;
+  handlerChange: (key: string, value: any) => void;
+  edit: boolean;
 }
-export default function Logistic({ data, handlerChange, edit }: ILogisticFormProps) {
+export default function Logistic({
+  data,
+  handlerChange,
+  edit,
+}: ILogisticFormProps) {
   return (
-    <FormCard title='Logistic'>
-      <div className='flex flex-col gap-3 mt-2'>
-        <div className=''>
+    <FormCard title="Logistic">
+      <div className="flex flex-col gap-3 mt-2">
+        <div className="">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Ship To
           </label>
           <div className="">
             <TextField
+              disabled={data?.DocumentStatus === "bost_Close" ?? false}
               size="small"
               defaultValue={data?.Address2 ?? "Level 1 - 168 Walker Street''"}
               multiline
@@ -33,8 +38,8 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
           </div>
         </div>
       </div>
-      <div className='flex flex-col gap-3 mt-2'>
-        <div className=''>
+      <div className="flex flex-col gap-3 mt-2">
+        <div className="">
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
             Pay To
           </label>
@@ -43,6 +48,7 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
               size="small"
               multiline
               rows={2}
+              disabled={data?.DocumentStatus === "bost_Close" ?? false}
               fullWidth
               name="Address"
               className="w-full "
@@ -51,14 +57,16 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
           </div>
         </div>
       </div>
-      <div className='flex flex-col -mt-4'>
-        <div className='grid grid-cols-2'>
+      <div className="flex flex-col -mt-4">
+        <div className="grid grid-cols-2">
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Shipping Type
             </label>
             <ShippingType
-              onChange={(e) => handlerChange('TransportationCode', e.target.value)}
+              onChange={(e) =>
+                handlerChange("TransportationCode", e.target.value)
+              }
               value={data?.TransportationCode}
               name="TransportationCode"
             />
@@ -66,5 +74,5 @@ export default function Logistic({ data, handlerChange, edit }: ILogisticFormPro
         </div>
       </div>
     </FormCard>
-  )
+  );
 }

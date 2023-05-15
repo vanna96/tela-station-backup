@@ -38,7 +38,7 @@ interface ContentFormProps {
 }
 
 
-export default function ContentForm({ data, handlerChangeItem,handlerChange, edit, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
+export default function ContentForm({ data, handlerChangeItem, handlerChange, edit, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
   const [tableKey, setTableKey] = React.useState(Date.now())
 
   const itemGroupRepo = new ItemGroupRepository();
@@ -89,6 +89,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         Cell: ({ cell }: any) => {
           // return ;
           return <MUITextField
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
             value={cell.getValue()}
             onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
             endAdornment
@@ -100,21 +101,26 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
       {
         accessorKey: "ItemName",
         header: "Description",
-        Cell: ({ cell }: any) => <MUITextField  value={cell.getValue()} />
+        Cell: ({ cell }: any) => <MUITextField
+          disabled={data.DocumentStatus === "bost_Close" ?? false}
+          value={cell.getValue()} />
       },
 
       {
         accessorKey: "ItemGroup",
         header: "Item Group",
-        Cell: ({ cell }: any) => <MUITextField  value={itemGroupRepo.find(cell.getValue())?.GroupName} />
+        Cell: ({ cell }: any) => <MUITextField
+          disabled={data.DocumentStatus === "bost_Close" ?? false}
+          value={itemGroupRepo.find(cell.getValue())?.GroupName} />
       },
-    
+
       {
         accessorKey: "Quantity",
         header: "Quantity",
         Cell: ({ cell }: any) => {
           return <MUITextField
             type="number"
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
             name="Quantity"
             error={(cell.getValue() as number) <= 0}
             defaultValue={cell.getValue()}
@@ -129,6 +135,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           return <MUITextField
             startAdornment={'USD'}
             type="number"
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
             name="Price"
             error={(cell.getValue() as number) <= 0}
             defaultValue={cell.getValue()}
@@ -141,6 +148,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         header: "Discount %",
         Cell: ({ cell }: any) => {
           return <MUITextField
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
             startAdornment={'%'}
             type="number"
             name="DiscountPercent"
@@ -154,21 +162,23 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         header: "Total",
         Cell: ({ cell }: any) => {
           return <MUITextField
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
             startAdornment={'USD'}
-            value={Formular.findLineTotal(cell.row.original.Quantity, cell.row.original.Price,  cell.row.original.DiscountPercent)}
+            value={Formular.findLineTotal(cell.row.original.Quantity, cell.row.original.Price, cell.row.original.DiscountPercent)}
           />;
         },
       },
       {
         accessorKey: "UomGroupCode",
         header: "UoM Group",
-        Cell: ({ cell }: any) => <MUITextField  value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+        Cell: ({ cell }: any) => <MUITextField value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
       },
       {
         accessorKey: "UomCode",
         header: "UoM Code",
         Cell: ({ cell }: any) => (
           <UOMTextField
+            // disabled={data.DocumentStatus === "bost_Close" ?? false}
             key={cell.getValue()}
             value={cell.getValue()}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UomCode')}
@@ -181,6 +191,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         Cell: ({ cell }: any) => (
           <MUITextField
             type="number"
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
             value={cell.getValue()}
           />
         ),
@@ -218,6 +229,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           // return ;
           return (
             <MUITextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
               name="ItemName"
               onChange={(event) =>
@@ -239,6 +251,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
             <MUIDatePicker
               value={cell.getValue()}
               name="RequiredDate"
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               onChange={(event) =>
                 handlerChangeInput(
                   { target: { value: event } },
@@ -256,7 +269,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         Cell: ({ cell }: any) => {
           return (
             <MUIDatePicker
-              // disabled={true}
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(
@@ -277,6 +290,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           return (
             <AccountTextField
               value={cell.getValue()}
+              // disabled={data.DocumentStatus === "bost_Close" ?? false}
               name="AccountNo"
               onChange={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "AccountCode")
@@ -298,6 +312,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         Cell: ({ cell }: any) => {
           return (
             <VatGroup
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(
@@ -317,6 +332,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
               onChange={(event: any) =>
                 handlerChangeInput(event, cell?.row?.original, "LineTotal")
@@ -331,6 +347,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
               onChange={(event: any) =>
                 handlerChangeInput(
@@ -355,7 +372,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
   return (
     <FormCard title="Content" >
       <div className="col-span-2 data-table">
-      <div className="flex flex-col my-5">
+        <div className="flex flex-col my-5">
           <div className="grid grid-cols-4">
             <div>
               <label
@@ -383,7 +400,6 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         </div>
         <MaterialReactTable
           key={tableKey}
-          // columns={itemColumns}
           columns={data?.DocType === 'dDocument_Service' ? serviceColumns : itemColumns}
           data={[...data?.Items, blankItem] ?? []}
           enableStickyHeader={true}
@@ -411,7 +427,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           icons={{
             ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />
           }}
-      
+
         />
       </div>
 
@@ -443,155 +459,76 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
             Remarks
           </label>
           <div className="">
-            {data.documentStatus === "bost_Open" ? (
-              <TextField
-                size="small"
-                multiline
-                rows={2}
-                fullWidth
-                name="Comments"
-                className="w-full "
-                value={data?.Comments}
-                onChange={(e) => handlerChange("Comments", e.target.value)}
-              />
-            ) : (
-              <TextField
-                size="small"
-                multiline
-                rows={2}
-                disabled={edit}
-                fullWidth
-                name="Comments"
-                className="w-full "
-                value={data?.Comments}
-                onChange={(e) => handlerChange("Comments", e.target.value)}
-              />
-            )}
+
+            <TextField
+              size="small"
+              multiline
+              rows={2}
+              fullWidth
+              name="Comments"
+              className="w-full "
+              value={data?.Comments}
+              onChange={(e) => handlerChange("Comments", e.target.value)}
+            />
           </div>
         </div>
       </div>
-      {data?.documentStatus === "bost_Open" ? (
-        <div className="flex flex-col gap-3">
-          <div className="w-[100%] gap-3">
+      {/* {data?.DocumentStatus === "bost_Open" ? ( */}
+      <div className="flex flex-col gap-3">
+        <div className="w-[100%] gap-3">
+          <MUITextField
+            disabled={edit}
+            label="Total Before Discount:"
+            value={currencyFormat(data?.DocTotalBeforeDiscount)}
+          />
+        </div>
+        <div className="flex justify-between gap-5">
+          <div className="w-[48%] gap-3">
             <MUITextField
-              label="Total Before Discount:"
-              value={currencyFormat(data?.DocTotalBeforeDiscount)}
+              disabled={data?.DocumentStatus === "bost_Close" ?? false}
+              label="Discount:"
+              startAdornment={"%"}
+              value={data?.DocDiscountPercent}
+              onChange={(e) =>
+                handlerChange("DocDiscountPercent", e.target.value)
+              }
             />
           </div>
-          <div className="flex justify-between gap-5">
-            <div className="w-[48%] gap-3">
-              <MUITextField
-                label="Discount:"
-                startAdornment={"%"}
-                value={data?.DocDiscountPercent}
-                onChange={(e) =>
-                  handlerChange("DocDiscountPercent", e.target.value)
-                }
-              />
-            </div>
-            <div className="w-[48%] gap-3 mt-5">
-              <MUITextField
-                label=""
-                startAdornment={data?.Currency ?? "AUD"}
-                value={data?.DocDiscountPrice}
-                onChange={(e) =>
-                  handlerChange("DocDiscountPrice", e.target.value)
-                }
-              />
-            </div>
-            <div className="flex justify-between">
-              <div className="w-[100%] gap-3">
-                <MUITextField label="Fright:" value={""} />
-              </div>
-            </div>
+          <div className="w-[48%] gap-3 mt-5">
+            <MUITextField
+              label=""
+              startAdornment={data?.Currency ?? "AUD"}
+              value={data?.DocDiscountPrice}
+              disabled={data?.DocumentStatus === "bost_Close" ?? false}
+              onChange={(e) =>
+                handlerChange("DocDiscountPrice", e.target.value)
+              }
+            />
           </div>
           <div className="flex justify-between">
-            <div className="w-[48%] gap-3">
-              <MUITextField
-                label="Tax:"
-                value={currencyFormat(data?.DocTaxTotal)}
-              />
+            <div className="w-[100%] gap-3">
+              <MUITextField disabled={edit} label="Fright:" value={""} />
             </div>
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <div className="w-[48%] gap-3">
+            <MUITextField
+              label="Tax:"
+              disabled={edit}
+              value={currencyFormat(data?.DocTaxTotal)}
+            />
+          </div>
 
-            <div className="w-[48%] gap-3">
-              <MUITextField
-                label="Total Payment Due::"
-                value={currencyFormat(data?.DocTotal)}
-              />
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          <div className="w-[100%] gap-3">
+          <div className="w-[48%] gap-3">
             <MUITextField
-              label="Total Before Discount:"
-              value={currencyFormat(data?.DocTotalBeforeDiscount)}
+              disabled={data?.DocumentStatus === "bost_Close" ?? false}
+              label="Total Credit:"
+              value={currencyFormat(data?.DocTotal)}
             />
           </div>
-          <div className="flex justify-between gap-5">
-            <div className="w-[48%] gap-3">
-              <MUITextField
-                label="Discount:"
-                disabled={edit}
-                startAdornment={"%"}
-                value={data?.DocDiscountPercent}
-                onChange={(e) =>
-                  handlerChange("DocDiscountPercent", e.target.value)
-                }
-              />
-            </div>
-            <div className="w-[48%] gap-3 mt-5">
-              <MUITextField
-                label=""
-                disabled={edit}
-                startAdornment={data?.currency ?? "AUD"}
-                value={data?.DocDiscountPrice}
-                onChange={(e) =>
-                  handlerChange("DocDiscountPrice", e.target.value)
-                }
-              />
-            </div>
-            <div className="flex justify-between">
-              <div className="w-[100%] gap-3">
-                <MUITextField disabled={edit} label="Fright:" value={""} />
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="w-[48%] gap-3">
-              <MUITextField
-                disabled={edit}
-                label="Tax:"
-                value={currencyFormat(data?.DocTaxTotal)}
-              />
-            </div>
-            <div className="w-[48%] gap-3">
-              <MUITextField
-                disabled={edit}
-                label="Total Payment Due::"
-                value={currencyFormat(data?.DocTotal)}
-              />
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="w-[48%] gap-3">
-              <MUITextField
-                disabled={edit}
-                label="Applied Amount:"
-                value={currencyFormat(data?.DocTaxTotalL)}
-              />
-            </div>
-            <div className="w-[48%] gap-3">
-              <MUITextField
-                disabled={edit}
-                label="Balance Due:"
-                value={currencyFormat(data?.DocTotal)}
-              />
-            </div>
-          </div>
         </div>
-      )}
+      </div>
     </FormCard>
   );
 }
