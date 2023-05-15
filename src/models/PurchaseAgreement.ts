@@ -204,7 +204,7 @@ export class PurchaseAgreementDocumentLine extends LineDocumentModel {
             "CumulativeAmountFC": 0.0,
             "PortionOfReturns": null,
             "EndOfWarranty": null,
-            "PlannedAmountLC": 0.0,
+            "PlannedAmountLC": this.UnitPrice,
             "PlannedAmountFC": 0.0,
             "LineDiscount": 0.0,
             "UndeliveredCumulativeQuantity": null,

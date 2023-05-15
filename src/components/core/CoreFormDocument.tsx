@@ -46,14 +46,14 @@ export interface CoreFormDocumentState {
     ContactPersonCode?: number | undefined | null,
     Phone?: string | undefined | null,
     Email?: string | undefined | null,
-    Owner?: string | undefined | null,
-    Buyer?: string | undefined | null,
+    Owner?: any,
+    Buyer?: any,
     // shippingType?: number | any | null,
     PaymentTermType?: string | undefined | null,
     PaymentMethod?: string | undefined | null,
     Currency?: string | undefined | null,
     PriceLists?: string | undefined | null,
-    SalePersonCode?: string | undefined | null,
+    SalesPersonCode?: string | undefined | null,
     ShipToDefault?: string | undefined | null,
     VendorRef?: string | undefined | null,
     DocumentStatus?: string | undefined | null,
@@ -63,7 +63,7 @@ export interface CoreFormDocumentState {
     AttachmentEntry?: number | null,
     Project?: string | undefined | null,
     ContactPersonList?: any[],
-    ShippingType?: string,
+    ShippingType?: number | null,
     Items?: any[],
     Services?: any[],
     Attachments?: any[],
@@ -91,6 +91,9 @@ export interface CoreFormDocumentState {
     DocTaxTotal: number | any,
     Rounded: boolean,
     DocType: string,
+    AgreementMethod: string;
+    Address: string | null;
+    Address2: string | null;
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -106,7 +109,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             CardName: '',
             ContactPersonCode: undefined,
             ContactPersonList: [],
-            ShippingType: '',
+            ShippingType: null,
             Phone: '',
             Email: '',
             Owner: '',
@@ -126,7 +129,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             PaymentTermType: '',
             Currency: '',
             PriceLists: '',
-            SalePersonCode: '',
+            SalesPersonCode: '',
             ShipToDefault: '',
             Renewal: false,
             Items: [],
@@ -155,6 +158,9 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             DocDiscountPrice: 0,
             Rounded: false,
             DocType: 'dDocument_Items',
+            AgreementMethod: 'I',
+            Address: null,
+            Address2: null,
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -266,13 +272,14 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
     // handler vendor 
     protected handlerConfirmVendor(record: BusinessPartner) {
+        console.log(record);
         this.setState({
             ...this.state,
             CardCode: record.cardCode,
             CardName: record.cardName,
             ContactPersonCode: record.contactEmployee!.length > 0 ? record.contactEmployee![0].id : undefined,
             ContactPersonList: record.contactEmployee ?? [],
-            ShippingType: '',
+            ShippingType: record?.shippingType,
             Email: record.email,
             Phone: record.phone,
             PaymentTermType: record.paymentTermTypeCode,
@@ -281,8 +288,10 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             isOpenVendor: false,
             Currency: record.currency,
             PriceLists: record.priceLists,
-            SalePersonCode: record.salePersonCode,
-            ShipToDefault: record.shipToDefault
+            SalesPersonCode: record.salePersonCode,
+            Address2: record.getShipTo(),
+            Address: record.getBillToAddress(),
+            Owner: record?.owner ?? null,
         });
     }
 
@@ -345,7 +354,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let DocTotalBeforeDiscount = this.state.DocTotalBeforeDiscount;
         switch (key) {
             case 'AgreementMethod':
-                temps['items'] = [{}];
+                temps['Items'] = [];
                 break;
             case 'DocType':
                 temps['Items'] = [];
@@ -376,42 +385,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             default:
                 break;
         }
-
-        // if (key === 'AgreementMethod' || key === 'DocType') {
-        //     temps['items'] = [{}];
-        // }
-
-        // if (key === 'Series') {
-        //     const document = this.state.SerieLists.find((e: any) => e.Series === value);
-        //     temps['DocNum'] = document?.NextNumber;
-        // }
-
-        // if (key === 'ReqType') {
-        //     temps['Department'] = null;
-        //     temps['Branch'] = null;
-        //     temps['CardCode'] = null
-        //     temps['CardName'] = null
-        // }
-
-        // discount
-        // let DocDiscountPercent = this.state.DocDiscountPercent;
-        // let DocTotalBeforeDiscount = this.state.DocTotalBeforeDiscount;
-        // if (key === 'DocDiscountPercent') {
-        //     let discount = parseFloat(value);
-        //     temps['DocDiscountPrice'] = discount >= 100 ? 0 : (DocTotalBeforeDiscount * value) / 100;
-        //     temps['DocDiscountPercent'] = discount > 100 ? 100 : value;
-        //     //
-        //     temps = this.findTotalVatRate(temps);
-        // }
-
-        // if (key === 'DocDiscountPrice') {
-        //     const total = parseFloat(value) > DocTotalBeforeDiscount;
-        //     DocDiscountPercent = total ? 100 : ((value / DocTotalBeforeDiscount) * 100);
-        //     temps['DocDiscountPercent'] = (DocDiscountPercent >= 10 ? DocDiscountPercent : DocDiscountPercent / 10);
-        //     temps['DocDiscountPrice'] = total ? 0 : value;
-        //     temps = this.findTotalVatRate(temps);
-        // }
-
         this.setState(temps)
     }
 
@@ -494,7 +467,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let items: any[] = [...this.state.Items ?? []];
         let item: any = {};
 
-        if (this.state.DocType === documentType[1].value && !record?.ItemCode) {
+        if (this.state.AgreementMethod === 'I' || this.state.DocType === documentType[1].value && !record?.ItemCode || this.state.AgreementMethod === 'I') {
+            console.log(value)
             item['ItemCode'] = shortid.generate();
             item[field] = value;
             items.push(item);

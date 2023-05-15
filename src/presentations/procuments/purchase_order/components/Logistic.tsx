@@ -44,8 +44,9 @@ export default function GeneralForm({
             rows={4}
             fullWidth
             name="Address2"
+            key={data?.Address2}
             onBlur={(e) => handlerChange("Address2", e.target.value)}
-            defaultValue={data?.Address2 ?? "Level 1 - 168 Walker Street''"}
+            defaultValue={data?.Address2}
           />
         </div>
       </div>
@@ -61,7 +62,8 @@ export default function GeneralForm({
               rows={4}
               fullWidth
               name="Address"
-              defaultValue={data?.Address}
+              defaultValue={data?.Address1}
+              key={data?.Address1}
             />
           </div>
         </div>
