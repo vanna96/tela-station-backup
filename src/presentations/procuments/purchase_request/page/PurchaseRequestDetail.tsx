@@ -1,35 +1,15 @@
 import { withRouter } from "@/routes/withRouter";
 import React, { Component, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import PurchaseRequest from "@/models/PurchaseRequest";
 // import { PurchaseRequestProps, PurchaseRequestDocumentLineProps } from '../../../../models/PurchaseRequest';
-import EditIcon from "@mui/icons-material/Edit";
-import {
-  HiOutlineEye,
-  HiChevronDoubleLeft,
-  HiChevronDoubleRight,
-  HiChevronLeft,
-  HiChevronRight,
-  HiOutlineDocumentAdd,
-  HiOutlineChevronDown,
-} from "react-icons/hi";
 import Taps from "@/components/button/Taps";
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useMemo } from "react";
 import { currencyFormat, fileToBase64 } from "@/utilies";
-import { AttachmentLine } from "@/models/Attachment";
 import Modal from "@/components/modal/Modal";
 import { CircularProgress } from "@mui/material";
-import BackButton from "@/components/button/BackButton";
-import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
+import PurchaseRequestRepository from "@/services/actions/purchaseRequestRepository";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
-import {
-  PurchaseRequestProps,
-  PurchaseRequestDocumentLineProps,
-} from "../../../../models/PurchaseRequest";
-import Department from "../../../../models/Department";
-import { DocumentLine } from "../../../../models/interface/index";
-import { PurchaseRequestDocumentLine } from "../../../../models/PurchaseRequest";
 import Formular from "../../../../utilies/formular";
 import DocumentHeaderComponent from '../../../../components/DocumenHeaderComponent';
 import OwnerRepository from '@/services/actions/ownerRepository';
@@ -81,7 +61,7 @@ class PurchaseRequestDetail extends Component<any, any> {
           open={this.state.isError}
           title="Oop"
           onClose={() => { }}
-          onOk={() => console.log(this.props.history.goBack())}
+          onOk={() => this.props.history.goBack()}
         >
           <span>{this.state?.message}</span>
         </Modal>
@@ -96,28 +76,28 @@ class PurchaseRequestDetail extends Component<any, any> {
               <div className="flex flex-col gap-1">
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500 ">
-                    Document Numbering
+                    Doc Num
                   </span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.docNum}
+                    : {this.state.DocNum}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Requester</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.requester}
+                    : {this.state.CardCode}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Requester Name</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.requesterName}
+                    : {this.state.CardName}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Branch</span>
                   <span className="w-8/12 font-medium">
-                    : {new BranchRepository().find(this.state.requesterBranch)?.Name}
+                    : {new BranchRepository().find(this.state.RequesterBranch)?.Name}
                     {/* : {new Branchrepository().find(this.state.requesterBranch)?.name} */}
                   </span>
                 </div>
@@ -125,14 +105,14 @@ class PurchaseRequestDetail extends Component<any, any> {
                   <span className="w-4/12 text-gray-500">Department</span>
                   <span className="w-8/12 font-medium">
                     {/* : {this.state.requesterDepartment} */}
-                    : {new DepartmentRepository().find(this.state.requesterDepartment)?.Name}
+                    : {new DepartmentRepository().find(this.state.RequesterDepartment)?.Name}
 
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">E-mail Address</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.requesterEmail}
+                    : {this.state.RequesterEmail}
                   </span>
                 </div>
               </div>
@@ -140,31 +120,31 @@ class PurchaseRequestDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Status</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.status?.replace("bost_", "")}
+                    : {this.state.Status?.replace("bost_", "")}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Posting Date</span>
                   <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.docDate)}
+                    : {dateFormat(this.state.DocDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Valid Until</span>
                   <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.docDueDate)}
+                    : {dateFormat(this.state.DocDueDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Document Date</span>
                   <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.taxDate)}
+                    : {dateFormat(this.state.TaxDate)}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Required Date</span>
                   <span className="w-8/12 font-medium">
-                    : {dateFormat(this.state.requriedDate)}
+                    : {dateFormat(this.state.RequriedDate)}
                   </span>
                 </div>
               </div>
@@ -173,7 +153,7 @@ class PurchaseRequestDetail extends Component<any, any> {
               <Taps items={["Content", "Attachment"]}>
                 <Content data={this.state} />
                 <PreviewAttachment
-                  attachmentEntry={this.state.attachmentEntry}
+                  attachmentEntry={this.state.AttachmentEntry}
                 />
               </Taps>
             </div>
@@ -188,76 +168,55 @@ export default withRouter(PurchaseRequestDetail);
 
 function Content(props: any) {
   const { data } = props;
-  console.log(data);
 
   const itemColumn = useMemo(
     () => [
-      // {
-      //     accessorKey: "lineNum",
-      //     header: "No.",
-
-      //   },
       {
-        accessorKey: "itemCode",
+        accessorKey: "ItemCode",
         header: "Item NO.", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
       },
       {
-        accessorKey: "itemDescription",
+        accessorKey: "ItemName",
         header: "Item Description", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 200,
       },
       {
-        accessorKey: "quantity",
+        accessorKey: "Quantity",
         header: "Required Qty.",
         enableClickToCopy: true,
 
       },
       {
-        accessorKey: "unitPrice",
+        accessorKey: "UnitPrice",
         header: "Info Price",
         enableClickToCopy: true,
-        // Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "discountPercent",
+        accessorKey: "DiscountPercent",
         header: "Discount %	",
         enableClickToCopy: true,
       },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "VatGroup",
         header: "Tax Code",
         enableClickToCopy: true,
       },
       {
-        accessorKey: "lineTotal",
+        accessorKey: "LineTotal",
         header: "Total (LC)	",
         enableClickToCopy: true,
-        // Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
       },
       {
-        accessorKey: "uomCode",
+        accessorKey: "UomCode",
         header: "UoM Code",
-        enableClickToCopy: true,
       },
-      //   {
-      //     accessorKey: "Discount %	",
-      //     header: "Item Group",
-      //     Cell: ({ cell }: any) => cell.getValue(),
-      //   },
-      //   {
-      //     accessorKey: "quantity",
-      //     header: "Quantity",
-      //   },
-      //   {
-      //     accessorKey: "unitPrice",
-      //     header: "Unit Price",
-      //     Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
-      //   },
     ],
     [data]
   );
@@ -265,34 +224,34 @@ function Content(props: any) {
   const serviceColumns = React.useMemo(
     () => [
       {
-        accessorKey: "itemDescription",
+        accessorKey: "ItemName",
         header: "Description",
         Cell: ({ cell }: any) => (cell.getValue()),
       },
       {
-        accessorKey: "requiredDate",
+        accessorKey: "RequiredDate",
         header: "Required Date",
         Cell: ({ cell }: any) => dateFormat(cell.getValue()),
       },
       {
-        accessorKey: "lineVendor",
+        accessorKey: "LineVendor",
         header: "Vendor",
         Cell: ({ cell }: any) => (cell.getValue()),
       },
       {
-        accessorKey: "accountCode",
+        accessorKey: "AccountCode",
         header: "G/L Account",
       },
       {
-        accessorKey: "accountNameD",
+        accessorKey: "AccountNameD",
         header: "G/L Account Name",
       },
       {
-        accessorKey: "vatGroup",
+        accessorKey: "VatGroup",
         header: "Tax Code",
       },
       {
-        accessorKey: "lineTotal",
+        accessorKey: "LineTotal",
         header: "Total (LC)",
         Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
 
@@ -304,8 +263,8 @@ function Content(props: any) {
   return (
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
-        columns={data?.docType === "I" ? itemColumn : serviceColumns}
-        data={data?.items ?? []}
+        columns={data?.DocType === "I" ? itemColumn : serviceColumns}
+        data={data?.Items ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
         enableDensityToggle={false}

@@ -7,12 +7,12 @@ import { LoadingButton } from "@mui/lab";
 import { FormEventHandler } from "react";
 import AttachmentForm from "../components/AttachmentForm";
 import DocumentSerieRepository from "@/services/actions/documentSerie";
-import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
-import { ToastOptions } from "react-toastify";
 import GLAccount from "../../../../models/GLAccount";
 import { UpdateDataSuccess } from "@/utilies/ClientError";
 import Formular from "@/utilies/formular";
 import VatGroupRepository from "@/services/actions/VatGroupRepository";
+import { CircularProgress } from "@mui/material";
+import PurchaseRequestRepository from "../repository/purchaseRequestRepository";
 
 class PurchaseRequestForm extends CoreFormDocument {
   constructor(props: any) {
@@ -34,16 +34,8 @@ class PurchaseRequestForm extends CoreFormDocument {
   }
 
   componentDidMount(): void {
-    if (!this.props?.edit) {
-      setTimeout(
-        () =>
-          this.setState({
-            ...this.state,
-            //  loading: false
-          }),
-        500
-      );
-    }
+    this.setState({ ...this.state, loading: true });
+
 
     if (this.props.edit) {
       if (this.props.location.state) {
@@ -67,12 +59,25 @@ class PurchaseRequestForm extends CoreFormDocument {
             this.setState({ message: e.message });
           });
       }
+    } else {
+      setTimeout(
+        () =>
+          this.setState({
+            ...this.state,
+            loading: false,
+            ReqType: 12,
+            CardCode: this.props?.user?.UserCode,
+            CardName: this.props?.user?.UserName,
+            Branch: this.props?.user?.Branch,
+            Department: this.props?.user?.Department,
+            Email: this.props?.user?.Email,
+          }),
+        500
+      );
     }
 
-    DocumentSerieRepository.getDocumentSeries(
-      PurchaseRequestRepository.documentSerie
-    ).then((res: any) => {
-      this.setState({ ...this.state, series: res, isLoadingSerie: false });
+    DocumentSerieRepository.getDocumentSeries(PurchaseRequestRepository.documentSerie).then((res: any) => {
+      this.setState({ ...this.state, SerieLists: res, isLoadingSerie: false });
     });
 
     if (!this.props.edit) {
@@ -81,8 +86,8 @@ class PurchaseRequestForm extends CoreFormDocument {
       ).then((res: any) => {
         this.setState({
           ...this.state,
-          serie: res?.Series,
-          docNum: res?.NextNumber,
+          Series: res?.Series,
+          DocNum: res?.NextNumber,
           isLoadingSerie: false,
         });
       });
@@ -90,17 +95,15 @@ class PurchaseRequestForm extends CoreFormDocument {
   }
 
   handlerRemoveItem(code: string) {
-    let items = [...(this.state.items ?? [])];
+    let items = [...(this.state.Items ?? [])];
     const index = items.findIndex((e: any) => e?.itemCode === code);
     items.splice(index, 1);
-    this.setState({ ...this.state, items: items });
+    this.setState({ ...this.state, Items: items });
   }
 
   handlerAddItem({ value, record, field }: any) {
-    let items = [...(this.state.items ?? [])];
-    let item = this.state.items?.find(
-      (e: any) => e?.itemCode === record?.itemCode
-    );
+    let items = [...(this.state.Items ?? [])];
+    let item = this.state.Items?.find((e: any) => e?.ItemCode === record?.ItemCode);
 
     if (field === "AccountNo") {
       const account = value as GLAccount;
@@ -110,46 +113,42 @@ class PurchaseRequestForm extends CoreFormDocument {
       item[field] = value;
     }
 
-    if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
-      const total = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
-      item['lineTotal'] = total;
+    if (
+      field === "quantity" ||
+      field === "unitPrice" ||
+      field === "discountPercent"
+    ) {
+      const total = Formular.findLineTotal(
+        item["quantity"],
+        item["unitPrice"],
+        item["discountPercent"]
+      );
+      item["lineTotal"] = total;
     }
 
-    if (field === 'purchaseVatGroup')
-      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
+    if (field === "purchaseVatGroup")
+      item["vatRate"] = new VatGroupRepository().find(value)?.vatRate;
 
     const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
     if (index > 0) items[index] = item;
 
-    this.setState({ ...this.state, items: items, docTotal: Formular.findTotalBeforeDiscount(items) });
+    this.setState({
+      ...this.state,
+      Items: items,
+      DocTotal: Formular.findTotalBeforeDiscount(items),
+    });
   }
 
-  // async handlerSubmit(event: any) {
-  //   event.preventDefault();
-  //   this.setState({ ...this.state, isSubmitting: true });
-
-  //   const { id } = this.props?.match?.params;
-
-  //   await new PurchaseRequestRepository()
-  //     .post(this.state, this.props?.edit, id)
-  //     .then((res: any) => {
-  //       this.showMessage("Success", "Create Successfully");
-  //     })
-  //     .catch((e: Error) => {
-  //       this.showMessage("Errors", e.message);
-  //     });
-  // }
 
   async handlerSubmit(event: any) {
     event.preventDefault();
 
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params;
-
     await new PurchaseRequestRepository()
-      .post(this.state, this.props?.edit, id)
+      .post(new PurchaseRequest(this.state).toJson(this.props?.edit), this.props?.edit, id)
       .then((res: any) => {
-        const purchaseRequest = new PurchaseRequest(res?.data);
+        const purchaseRequest: any = new PurchaseRequest(res?.data);
 
         this.props.history.replace(
           this.props.location.pathname?.replace("create", purchaseRequest.id),
@@ -164,11 +163,10 @@ class PurchaseRequestForm extends CoreFormDocument {
             {
               ...this.state,
               isSubmitting: false,
-              isApproved: this.state.documentStatus === "A",
+              isApproved: this.state.DocumentStatus === "A",
             }
           );
           this.dialog.current?.success(e.message);
-          // const query = this.props.query.query as QueryClient;
           return;
         }
         this.dialog.current?.error(e.message);
@@ -181,60 +179,61 @@ class PurchaseRequestForm extends CoreFormDocument {
   FormRender = () => {
     return (
       <>
-        <form onSubmit={this.handlerSubmit} className="flex flex-col gap-4">
-          <HeadingForm
-            data={this.state}
-            handlerOpenRequester={() => {
-              const { reqType }: any = this.state;
-              if (reqType == 12) {
-                this.handlerOpenRequester();
-              } else {
-                this.handlerOpenRequesterEmployee();
-              }
-            }}
-            handlerChange={(key, value) => {
-              this.handlerChange(key, value);
-            }}
-          />
+        <form onSubmit={this.handlerSubmit} className="w-full h-full flex flex-col gap-4">
+          {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
+            <HeadingForm
+              edit={this.props?.edit}
+              data={this.state}
+              handlerOpenRequester={() => {
+                const { ReqType }: any = this.state;
+                if (ReqType == 12) {
+                  this.handlerOpenRequester();
+                } else {
+                  this.handlerOpenRequesterEmployee();
+                }
+              }}
+              handlerChange={(key, value) => this.handlerChange(key, value)}
+            />
 
-          <ContentForm
-            data={this?.state}
-            handlerAddItem={() => this.handlerOpenItem()}
-            handlerRemoveItem={this.handlerRemoveItem}
-            handlerChangeItem={this.handlerAddItem}
-            handlerChange={(key, value) => this.handlerChange(key, value)}
-          // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
-          />
+            <ContentForm
+              data={this?.state}
+              handlerAddItem={() => this.handlerOpenItem()}
+              handlerRemoveItem={this.handlerRemoveItem}
+              handlerChangeItem={this.handlerChangeItems}
+              handlerChange={(key, value) => this.handlerChange(key, value)}
+            // handlerOpenGLAccount={() => this.handlerOpenGLAccount()}
+            />
 
-          <AttachmentForm />
+            <AttachmentForm />
 
-          <div className="sticky w-full bottom-4  mt-2">
-            <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
-              <div className="flex ">
-                <LoadingButton
-                  size="small"
-                  sx={{ height: "25px" }}
-                  variant="contained"
-                  disableElevation
-                >
-                  <span className="px-3 text-[11px] py-1">Copy To</span>
-                </LoadingButton>
-              </div>
-              <div className="flex items-center">
-                <LoadingButton
-                  type="submit"
-                  sx={{ height: "25px" }}
-                  className="bg-white"
-                  loading={false}
-                  size="small"
-                  variant="contained"
-                  disableElevation
-                >
-                  <span className="px-3 text-[11px] py-1">Save & New</span>
-                </LoadingButton>
+            <div className="sticky w-full bottom-4  mt-2">
+              <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
+                <div className="flex ">
+                  <LoadingButton
+                    size="small"
+                    sx={{ height: "25px" }}
+                    variant="contained"
+                    disableElevation
+                  >
+                    <span className="px-3 text-[11px] py-1">Copy To</span>
+                  </LoadingButton>
+                </div>
+                <div className="flex items-center">
+                  {!this.state.DocumentStatus?.includes('Close') ? <LoadingButton
+                    type="submit"
+                    sx={{ height: "25px" }}
+                    className="bg-white"
+                    loading={false}
+                    size="small"
+                    variant="contained"
+                    disableElevation
+                  >
+                    <span className="px-3 text-[11px] py-1">Save & New</span>
+                  </LoadingButton> : null}
+                </div>
               </div>
             </div>
-          </div>
+          </>}
         </form>
       </>
     );

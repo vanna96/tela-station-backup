@@ -7,16 +7,16 @@ import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
-import GoodReturnRepository from "@/services/goodReturnRepository";
+import PurchaseRequestRepository from "@/services/actions/purchaseRequestRepository";
+import StockTransferRepository from "@/services/actions/stockTransferRepository";
 
-export default function GoodReturnLists() {
+export default function StockTransferLists() {
   const route = useNavigate();
 
   const { data, isLoading }: any = useQuery({
-    queryKey: ["good-return-request"],
-    queryFn: () => new GoodReturnRepository().get(),
+    queryKey: ["st"],
+    queryFn: () => new StockTransferRepository().get(),
   });
-  console.log(data);
   const columns = React.useMemo(
     () => [
       {
@@ -28,16 +28,17 @@ export default function GoodReturnLists() {
       },
       {
         accessorKey: "cardCode",
-        header: "Vendor Code",
+        header: "BP Code",
         enableClickToCopy: true,
       },
       {
         accessorKey: "cardName",
-        header: "Vender Name",
+        header: "BP Name",
         // size: 200, //increase the width of this column
       },
+
       {
-        accessorKey: "creationDate",
+        accessorKey: "taxDate",
         header: "Posting Date",
         Cell: ({ cell }: any) => (
           <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>
@@ -45,9 +46,15 @@ export default function GoodReturnLists() {
       },
       {
         accessorKey: "docDueDate",
-        header: "Return Date",
+        header: "Valid Date",
         Cell: ({ cell }) => <>{moment(cell.getValue()).format("DD-MM-YYYY")}</>,
       },
+      {
+        accessorKey: "documentStatus",
+        header: "Status",
+        Cell: ({ cell }) => <>{(cell.getValue())?.split("bost_")}</>,
+      },
+    
       {
         accessorKey: "id",
         enableFilterMatchHighlighting: false,
@@ -60,10 +67,9 @@ export default function GoodReturnLists() {
           <div className="flex gap-4">
             <button
               onClick={() => {
-                route(
-                  "/procument/good-return-request/" + cell.row.original.id,
-                  { state: cell.row.original }
-                );
+                route("/inventory/stock-transfer/" + cell.row.original.id, {
+                  state: cell.row.original,
+                });
               }}
             >
               <VisibilityIcon fontSize="small" className="text-gray-600 " />
@@ -88,13 +94,13 @@ export default function GoodReturnLists() {
       <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">
         <div className="flex px-8 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full bg-white py-3">
           <h3 className="text-lg 2xl:text-base xl:text-sm">
-            Procument / Good Return Request
+            Inventory / Stock Transfer
           </h3>
           <Button
             variant="outlined"
             disableElevation
             size="small"
-            onClick={() => route("/procument/good-return-request/create")}
+            onClick={() => route("/inventory/stock-transfer/create")}
           >
             <span className="text-xs">Create</span>
           </Button>
@@ -124,7 +130,7 @@ export default function GoodReturnLists() {
               return (
                 <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
                   <h3 className="font-bold text-base xl:text-sm">
-                    Good Return Request
+                    Stock Transfer
                   </h3>
                   {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
                 </div>

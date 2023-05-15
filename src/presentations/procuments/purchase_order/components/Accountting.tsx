@@ -3,13 +3,9 @@ import MUIDatePicker from "@/components/input/MUIDatePicker";
 import MUITextField from "@/components/input/MUITextField";
 import IndicatorSelect from "@/components/selectbox/Indicator";
 import MUISelect from "@/components/selectbox/MUISelect";
-import Owner from "@/components/selectbox/Owner";
 import PaymentMethod from "@/components/selectbox/PaymentMethod";
 import PaymentTerm from "@/components/selectbox/PaymentTerm";
-import ShippingType from "@/components/selectbox/ShippingType";
-import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
-import * as React from "react";
 
 export interface IAccounttingProps {
   data: any;
@@ -29,8 +25,9 @@ export default function AccounttingForm({
       <div className="mt-2">
         <MUITextField
           label="Journal Remarks"
-          value={`Purchase Order - ${data?.vendor?.CardCode ?? ""}`}
-          name="DocumentStatus"
+          key={data?.CardCode + "_remark"}
+          defaultValue={`Purchase Order - ${data?.CardCode ?? ""}`}
+          onBlur={(e) => handlerChange("JournalMemo", e.target.value)}
         />
         <div className="flex gap-3 mt-3">
           <div className="w-[48%]">
@@ -39,9 +36,9 @@ export default function AccounttingForm({
             </label>
             <PaymentTerm
               name="PaymentGroupCode"
-              value={data.paymentGroupCode}
+              value={data.PaymentGroupCode}
               onChange={(e) =>
-                handlerChange("paymentGroupCode", e.target.value)
+                handlerChange("PaymentGroupCode", e.target.value)
               }
             />
           </div>
@@ -53,8 +50,8 @@ export default function AccounttingForm({
               <PaymentMethod
                 type="outgoing"
                 name="PaymentMethod"
-                value={data.paymentMethod}
-                onChange={(e) => handlerChange("paymentMethod", e.target.value)}
+                value={data.PaymentMethod}
+                onChange={(e) => handlerChange("PaymentMethod", e.target.value)}
               />
             </div>
           </div>
@@ -88,7 +85,7 @@ export default function AccounttingForm({
               <MUITextField
                 label="Month+"
                 disabled={edit}
-                value={data?.extraMonth}
+                value={data?.ExtraMonth}
                 name="ExtraMonth"
               />
             </div>
@@ -96,7 +93,7 @@ export default function AccounttingForm({
               <MUITextField
                 disabled={edit}
                 label="Days+"
-                value={data?.extraDays}
+                value={data?.ExtraDays}
                 name="ExtraDays"
               />
             </div>
@@ -105,10 +102,10 @@ export default function AccounttingForm({
         <div className="mt-3">
           <MUITextField
             label="Cash Discount Date Offset"
-            value={data?.cashDiscountDateOffset}
+            value={data?.CashDiscountDateOffset}
             name="CashDiscountDateOffset"
             onChange={(e) =>
-              handlerChange("cashDiscountDateOffset", e.target.value)
+              handlerChange("CashDiscountDateOffset", e.target.value)
             }
           />
         </div>
@@ -118,7 +115,7 @@ export default function AccounttingForm({
           <MUITextField
             label="Project"
             name="Project"
-            value={data.project}
+            value={data.Project}
             endAdornment={true}
             onClick={handlerOpenProject}
           />
@@ -134,7 +131,7 @@ export default function AccounttingForm({
               rows={4}
               fullWidth
               name="CreateQRCodeFrom"
-              value={data?.createQRCodeFrom}
+              value={data?.CreateQRCodeFrom}
             />
           </div>
         </div>
@@ -145,9 +142,9 @@ export default function AccounttingForm({
             </label>
             <div className="">
               <MUIDatePicker
-                value={data.cancelDate}
+                value={data.CancelDate ?? null}
                 name="CancelDate"
-                onChange={(e: any) => handlerChange("startDate", e)}
+                onChange={(e: any) => handlerChange("CancelDate", e)}
               />
             </div>
           </div>
@@ -157,9 +154,9 @@ export default function AccounttingForm({
             </label>
             <div className="">
               <MUIDatePicker
-                value={data.requiredDate}
+                value={data.RequiredDate ?? null}
                 name="RequiredDate"
-                onChange={(e: any) => handlerChange("startDate", e)}
+                onChange={(e: any) => handlerChange("RequiredDate", e)}
               />
             </div>
           </div>
@@ -169,8 +166,8 @@ export default function AccounttingForm({
             Indicator
           </label>
           <IndicatorSelect
-            onChange={(e) => handlerChange("indicator", e.target.value)}
-            value={data?.indicator}
+            onChange={(e) => handlerChange("Indicator", e.target.value)}
+            value={data?.Indicator}
             name="Indicator"
           />
         </div>
@@ -179,10 +176,10 @@ export default function AccounttingForm({
             <div className="">
               <MUITextField
                 label="Federal Tax ID"
-                value={data?.federalTaxID}
+                value={data?.FederalTaxID}
                 name="FederalTaxID"
                 onChange={(e: any) =>
-                  handlerChange("federalTaxID", e.target.value)
+                  handlerChange("FederalTaxID", e.target.value)
                 }
               />
             </div>
@@ -191,10 +188,10 @@ export default function AccounttingForm({
             <div className="">
               <MUITextField
                 label="Order Number"
-                value={data?.importFileNum}
+                value={data?.ImportFileNum}
                 name="ImportFileNum"
                 onChange={(e: any) =>
-                  handlerChange("importFileNum", e.target.value)
+                  handlerChange("ImportFileNum", e.target.value)
                 }
               />
             </div>

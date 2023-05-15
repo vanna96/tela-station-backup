@@ -46,7 +46,7 @@ const DistributionRuleModal: FC<DistributionRuleModalProps> = ({ open, onClose, 
     []
   );
 
-  // console.log(data)
+  console.log(data)
 
 
   const items = useMemo(() => data?.filter((e: any) => e.InWhichDimension === inWhichNum), [data, inWhichNum])
@@ -107,7 +107,3 @@ const DistributionRuleModal: FC<DistributionRuleModalProps> = ({ open, onClose, 
 }
 
 export default DistributionRuleModal;
-
-
-
-

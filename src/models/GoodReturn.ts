@@ -1,354 +1,273 @@
-import { dateFormat } from "../utilies";
-import Model from "./Model";
-import { MasterDocument, DocumentLine } from "./interface/index";
-
-// export default class GoodReturn extends Model implements MasterDocument {
-//   id: any;
-//   docNum: any;
-//   cardCode?: string;
-//   cardName?: string;
-//   constactPersonCode?: number;
-//   status?: string;
-//   owner?: string;
-//   remark?: string;
-//   attachmentEntry?: number;
-//   paymentTerm?: string;
-//   priceList?: number;
-//   serie: string;
-//   paymentMethod?: string;
-//   shippingType?: string | undefined;
-//   documentLine: GoodReturnDocumentLine[];
-//   docDate?: string;
-//   docDueDate?: string;
-//   creationDate?: string;
-//   requiredDate?: string;
-
-//   constructor(json: any) {
-//     super();
-//     this.id = json["DocNum"];
-//     this.serie = json["Series"];
-//     this.docNum = json["DocNum"];
-//     this.cardName = json["CardName"];
-//     this.cardCode = json["CardCode"];
-//     this.constactPersonCode = json["ContactPersonCode"];
-//     this.documentLine = [];
-//     this.docDueDate = json["DocDueDate"];
-//     this.creationDate = json["CreationDate"];
-//     this.requiredDate = json["RequiredDate"];
-//   }
-
-//   toJson(update: boolean) {
-//     throw new Error("Method not implemented.");
-//   }
-
-//   public static toCreate(json: any) {
-//     console.log(json);
-
-//     return {
-//       CardCode: json["cardCode"],
-//       CardName: json["cardName"],
-//       ContactPersonCode: json["contactPersonCode"],
-//       DocumentStatus: json["status"],
-//       DocumentsOwner: json["owner"],
-//       AttachmentEntry: json["attachmentEntry"],
-//       PaymentTerms: json["paymentTerms"],
-//       // "Series": json['serie'],
-//       PaymentMethod: json["paymentMethod"],
-//       ShippingType: json["shippingType"],
-//       NumAtCard: json["numAtCard"],
-//       Project: json["project"],
-//       BPCurrency: json["currency"],
-//       DocumentLines: json["items"].map((e: any) =>
-//         GoodReturnDocumentLine.toCreate(e)
-//       ),
-//     };
-//   }
-
-//   public static toUpdate(json: any) {
-//     return {
-//       CardCode: json["cardCode"],
-//       CardName: json["cardName"],
-//       ContactPersonCode: json["contactPersonCode"],
-//       DocumentStatus: json["status"],
-//       DocumentsOwner: json["owner"],
-//       AttachmentEntry: json["attachmentEntry"],
-//       PaymentTerms: json["paymentTerms"],
-//       // "Series": json['serie'],
-//       PaymentMethod: json["paymentMethod"],
-//       ShippingType: json["shippingType"],
-//       NumAtCard: json["numAtCard"],
-//       Project: json["project"],
-//       BPCurrency: json["currency"],
-//       DocumentLines: [],
-//     };
-//   }
-// }
-
-// export class GoodReturnDocumentLine extends Model implements DocumentLine {
-//   itemNo?: string | undefined;
-//   itemDescription?: string | undefined;
-//   itemGroup?: string | undefined;
-//   quantity?: number | undefined;
-//   unitPrice?: number | undefined;
-//   currency?: string | undefined;
-//   cumilativeQuantity?: number | undefined;
-//   cumilativeAmount?: number | undefined;
-//   plannedAmount?: number;
-//   lineDiscount?: number;
-//   uomEntry?: number | undefined;
-//   uomCode?: string | undefined;
-//   shippingType?: string | undefined;
-//   project?: string | undefined;
-//   taxCode?: string | undefined;
-//   taxRate?: number | undefined;
-
-//   toJson(update: boolean) {
-//     throw new Error("Method not implemented.");
-//   }
-
-//   public static toCreate(json: any) {
-//     return {
-//       ItemCode: json["ItemCode"],
-//       ItemDescription: json["ItemName"],
-//       ItemGroup: json["ItemsGroupCode"],
-//       PlannedQuantity: json["Quantity"],
-//       UnitPrice: json["UnitPrice"],
-//       CumulativeQuantity: null,
-//       CumulativeAmountLC: null,
-//       CumulativeAmountFC: 0.0,
-//       FreeText: json["freeText"] ?? null,
-//       InventoryUoM: json["InventoryUOM"],
-//       PortionOfReturns: null,
-//       EndOfWarranty: null,
-//       PlannedAmountLC: 0.0,
-//       PlannedAmountFC: 0.0,
-//       LineDiscount: 0.0,
-//       UoMEntry: json["UoMGroupEntry"],
-//       UoMCode: null,
-//       UnitsOfMeasurement: 1.0,
-//       UndeliveredCumulativeQuantity: null,
-//       UndeliveredCumulativeAmountLC: null,
-//       UndeliveredCumulativeAmountFC: 0.0,
-//       ShippingType: 1,
-//       Project: null,
-//       TaxCode: null,
-//       TAXRate: null,
-//       PlannedVATAmountLC: null,
-//       PlannedVATAmountFC: null,
-//       CumulativeVATAmountLC: null,
-//       CumulativeVATAmountFC: null,
-//     };
-//   }
-// }
+import { LineDocumentModel, MasterDocumentModel } from './Model';
+import { ContactEmployee } from './BusinessParter';
+import { getValueDocumentStatus, getValueDocumentStatusProcument } from '@/constants';
+import Currency from './Currency';
 
 
+export default class GoodReturn extends MasterDocumentModel {
+  DocEntry: any;
+  // Series: string;
+  DocNum: any;
+  CardCode?: string;
+  CardName?: string;
+  NumAtCard?: string;
+  ContactPersonCode?: number;
+  DocDate?: string;
+  DocDueDate?: string;
+  RequiredDate?: string;
+  Description?: string;
+  Status?: string;
+  DocumentsOwner?: string;
+  Remark?: string;
+  AttachmentEntry?: number;
+  PaymentTermType?: string;
+  PriceList?: number;
+  PaymentGroupCode?: string;
+  // serie: string;
 
-export default class GoodReturn extends Model implements MasterDocument {
-    id: any;
-    docNum: any;
-    cardCode?: string;
-    docType?: string;
-    cardName?: string;
-    journalMemo?: string;
-    constactPersonCode?: number;
-    docDate?: number;
-    docDueDate?: number;
-    taxDate?: number;
-    description?: string;
-    indicator?: number;
-    status?: string;
-    owner?: string;
-    ship?: string;
-    cashDiscountDateOffset?: number;
-    createQRCodeFrom?: string;
-    address?: string;
-    address2?: string;
-    comments?: string;
-    extraMonth?: number;
-    extraDays?: number;
-    discountPercent?: string;
-    cancelDate?: string;
-    requiredDate?: string;
-    attachmentEntry?: number;
-    paymentTerm?: string;
-    salesPersonCode?: string;
-    federalTaxID?: string;
-    importFileNum?: string;
-    serie: string;
-    paymentMethod?: string;
-    documentLine: GoodReturnDocumentLine[];
+  CashDiscountDateOffset?: number;
+  CreateQRCodeFrom?: string;
+  TaxDate?: string;
+  CancelDate?: string;
+  Indicator?: string;
+  FederalTaxID?: string;
+  ImportFileNum?: string;
+  DocCurrency?: string;
+  DocumentStatus?: string;
+  // DocType?: string;
+  TransportationCode?: string;
+  SalesPersonCode?: number;
+  AccountName?: string;
 
-    constructor(json: any) {
-        super();
-        this.id = json['DocEntry'];
-        this.serie = json['Series'];
-        this.docNum = json['DocNum'];
-        this.owner = json['DocumentsOwner'];
-        this.comments = json['Comments'];
-        this.ship = json['TransportationCode'];
-        this.paymentTerm = json['PaymentGroupCode'];
-        this.paymentMethod = json['PaymentMethod'];
-        this.federalTaxID = json['FederalTaxID'];
-        this.cashDiscountDateOffset = json['CashDiscountDateOffset'];
-        this.createQRCodeFrom = json['CashDiscountDateOffset'];
-        this.cancelDate = json['CancelDate'];
-        this.requiredDate = json['RequiredDate'];
-        this.indicator = json['Indicator'];
-        this.importFileNum = json['ImportFileNum'];
-        this.docDate = json['DocDate'];
-        this.docDueDate = json['DocDueDate'];
-        this.taxDate = json['TaxDate'];
-        this.address = json['Address'];
-        this.address2 = json['Address2'];
-        this.extraMonth = json['ExtraMonth'];
-        this.extraDays = json['ExtraDays'];
-        this.docType = json['DocType'];
-        this.salesPersonCode = json['TaxDate'];
-        this.cardName = json['BPName'];
-        this.journalMemo = json['JournalMemo'];
-        this.cardCode = json['CardCode'];
-        this.cardName = json['cardName'],
-        this.constactPersonCode = json['SalesPersonCode'];
-        this.description = json['Description'];
-        this.documentLine = []
+  JournalMemo?: string | undefined;
+  CentralBankIndicator?: string | undefined;
+  NumberOfInstallments?: string | undefined;
+  StartFrom?: string | undefined;
+  Project?: string | undefined;
+
+  ContactPersonList?: ContactEmployee[];
+  Address?: string;
+  Address2?: string;
+  IsEditable?: boolean;
+  Items: GoodReturnDocumentLine[];
+  DocType?: string;
+  DocumentType?: string;
+  Comments?: string;
+  DocTotalSys?: number | undefined;
+  VatSum?: number | undefined;
+
+  constructor(json: any) {
+    super();
+    this.DocEntry = json['DocEntry'];
+    // this.Series = json['Series'];
+    this.DocNum = json['DocNum'];
+    this.CardCode = json['CardCode'] ?? json['BPCode'];
+    this.CardName = json['CardName'] ?? json['BPName'];
+    this.NumAtCard = json['NumAtCard'];
+    this.DocCurrency = json['DocCurrency'];
+    this.ContactPersonCode = json['ContactPersonCode'];
+    this.DocDate = json['DocDate'];
+    this.DocDueDate = json['DocDueDate'];
+    this.TaxDate = json['TaxDate'];
+    this.CancelDate = json['CancelDate'];
+    this.Description = json['Description'];
+    // this.DocType = json['DocType']?.replace('dDocument_', "")?.charAt(0);
+    this.DocType = json['DocType']
+    this.DocumentType = json['DocumentType']?.replace('dDocument_', "");
+    // this.DocumentStatus = getValueDocumentStatusProcument(json['DocumentStatus']);
+    this.DocumentStatus = (json['DocumentStatus']);
+    this.DocumentsOwner = json['DocumentsOwner'];
+    // this.Renewal = json['Renewal'] === 'tYES';
+    this.Remark = json['Remarks'];
+    this.TransportationCode = json['TransportationCode']
+    this.AttachmentEntry = json['AttachmentEntry'];
+    this.PaymentTermType = json['PaymentTerms'];
+    this.JournalMemo = json['JournalMemo']
+    this.CentralBankIndicator = json['CentralBankIndicator']
+    this.NumberOfInstallments = json['NumberOfInstallments']
+    this.StartFrom = json['StartFrom']?.replace('pdt_', "");
+    this.Project = json['Project']
+    this.PriceList = json['PriceList'];
+    this.PaymentMethod = json['PaymentMethod'];
+    this.Address = json['Address'];
+    this.Address2 = json['Address2'];
+    this.ShippingType = json['ShippingType'];
+    this.Indicator = json['Indicator']
+    this.FederalTaxID = json['FederalTaxID']
+    this.ImportFileNum = json['ImportFileNum']
+    this.ContactPersonList = json['contactPersonList'];
+    this.DocTotalSys = json['DocTotalSys']
+    this.VatSum = json['VatSum']
+
+    this.CreateQRCodeFrom = json['CreateQRCodeFrom']
+    this.Comments = json['Comments'];
+    this.DocumentsOwner = json['DocumentsOwner']
+    this.SalesPersonCode = json['SalesPersonCode']
+    this.IsEditable = !json['DocumentStatus']?.replace('dDocument_', "")?.charAt(0)?.includes('O');
+    this.Items = (json['DocumentLines'] ?? json['Items'])?.map((e: any) => new GoodReturnDocumentLine(e));
+  }
+
+  setItem(items: any[]) {
+    this.Items = items;
+  }
+
+  toJson(update = false) {
+    return {
+      "CardCode": this.CardCode,
+      "CardName": this.CardName,
+      "ContactPersonCode": this.ContactPersonCode,
+      "DocDate": this.DocDate,
+      "DocDueDate": this.DocDueDate,
+      "TaxDate": this.TaxDate,
+      "Description": this.Description,
+      // "DocType": this.DocType,
+      "Status": this.Status,
+      "DocumentsOwner": this.DocumentsOwner === '' ? null : this.DocumentsOwner,
+      // "Renewal": this.Renewal ? 'Y' : 'N',
+      "Comments": this.Comments,
+      "AttachmentEntry": this.AttachmentEntry === 0 ? null : this.AttachmentEntry,
+      "PaymentTerms": this.PaymentTerm,
+      "Series": this.Series,
+      "PaymentMethod": this.PaymentMethod,
+      "ShippingType": this.ShippingType,
+      "NumAtCard": this.NumAtCard,
+      "Project": this.Project,
+      "BPCurrency": this.DocCurrency,
+      "SalesPersonCode": this.SalesPersonCode,
+      "DocumentLines": this.Items.map((e) => e.toJson(this.DocType, update)),
+      "TransportationCode" : this.TransportationCode,
+      "PaymentTermType" : this.PaymentTermType,
+      "JournalMemo" : this.JournalMemo,
+      "CentralBankIndicator" : this.CentralBankIndicator,
+      "NumberOfInstallments" : this.NumberOfInstallments,
+      "StartFrom" : this.StartFrom,
+      "PriceList" : this.PriceList,
+      "Address" : this.Address,
+      "Address2" : this.Address2,
+      "Indicator" : this.Indicator,
+      "FederalTaxID" : this.FederalTaxID,
+      "ImportFileNum" : this.ImportFileNum,
+      "CreateQRCodeFrom" : this.CreateQRCodeFrom,
+      "CancelDate" : this.CancelDate,
+      // "DocTotalSys": this.DocTotalSys,
+      // "VatSum": this.VatSum
+
+    };
+  }
+
+
+
+
+  public static getType(status: string | null): string {
+    switch (status) {
+      case 'S':
+        return 'Service Method'
+      default:
+        return 'Items Method';
     }
-    
-
-    toJson(update: boolean) {
-        throw new Error('Method not implemented.');
-    }
-
-    public static toCreate(json: any) {
-        console.log(json)
-
-        return {
-            "CardCode": json['cardCode'],
-            "CardName": json['cardName'],
-            "LineTotal": json['lineTotal'],
-            "ContactPersonCode": json['contactPersonCode'],
-            "JournalMemo": json['journalMemo'],
-            "Description": json['description'],
-            "Address": json['address'],
-            "Address2": json['address2'],
-            "ExtraMonth": json['extraMonth'],
-            "ExtraDays": json['extraDays'],
-            "CashDiscountDateOffset": json['cashDiscountDateOffset'],
-            "CreateQRCodeFrom": json['createQRCodeFrom'],
-            "CancelDate": json['cancelDate'],
-            "RequiredDate": json['requiredDate'],
-            "Indicator": json['indicator'],
-            "FederalTaxID": json['federalTaxID'],
-            "ImportFileNum": json['importFileNum'],
-            "Status": json['status'],
-            "Owner": json['owner'],
-            "Remarks": json['remarks'],
-            "VatGroup": json['vatGroup'],
-            "AttachmentEntry": json['attachmentEntry'],
-            "PaymentTerms":  json['paymentTerms'],
-            "DocType":  json['docType'],
-            "Series": json['series'],
-            "PaymentMethod": json['paymentMethod'],
-            "TransportationCode": json['transportationCode'],
-            "Project": json['project'],
-            "AccountCode": json['AccountCode'],
-            "DocCurrency": json['currency'],
-            "DocumentLines": json['items'].map((e:any) => GoodReturnDocumentLine.toCreate(e, json['docType']))
-        };
-    }
-
-
-    public static toUpdate(json: any) {
-        return {
-            "CardCode": json['cardCode'],
-            "CardName": json['cardName'],
-            "LineTotal": json['lineTotal'],
-            "ContactPersonCode": json['contactPersonCode'],
-            "JournalMemo": json['journalMemo'],
-            "Description": json['description'],
-            "Status": json['status'],
-            "VatGroup": json['VatGroup'],
-            "Address": json['address'],
-            "Address2": json['address2'],
-            "ExtraMonth": json['extraMonth'],
-            "ExtraDays": json['extraDays'],
-            "Owner": json['owner'],
-            "Remarks": json['remarks'],
-            "AttachmentEntry": json['attachmentEntry'],
-            "PaymentTerms":  json['paymentTerms'],
-            "RequiredDate": json['requiredDate'],
-            "FederalTaxID": json['federalTaxID'],
-            "Indicator": json['indicator'],
-            "ImportFileNum": json['importFileNum'],
-            "DocType":  json['docType'],
-            "CashDiscountDateOffset": json['cashDiscountDateOffset'],
-            "CancelDate": json['cancelDate'],
-            "SigningDate": json['signingDate'],
-            "Series": json['series'],
-            "DocNum": json['docNum'],
-            "PaymentMethod": json['paymentMethod'],
-            "TransportationCode": json['TransportationCode'],
-            "NumAtCard": json['numAtCard'],
-            "Project": json['project'],
-            "AccountCode": json['AccountCode'],
-            "DocCurrency": json['currency'],
-            "DocumentLines": []
-        };
-    }
-    
-
+  }
 }
 
-export class GoodReturnDocumentLine extends Model implements DocumentLine {
-    itemNo?: string | undefined;
-    itemDescription?: string | undefined;
-    quantity?: number | undefined;
-    unitPrice?: number | undefined;
-    currency?: string | undefined;
-    lineDiscount?: number;
-    uomEntry?: number | undefined;
-    uomCode?: string | undefined;
-    transportationCode?: string | undefined;
-    project?: string | undefined;
-    taxCode?: string | undefined;
-    taxRate?: number | undefined;
-    vatGroup?: string | undefined;
-    lineTotal?: string | undefined;
-    accountCode?: string | undefined;
-    accountName?: string | undefined;
-    discountPercent?: number | undefined;
-    toJson(update: boolean) {
-        throw new Error('Method not implemented.');
+export class GoodReturnDocumentLine extends LineDocumentModel {
+  ItemCode?: string | undefined;
+  ItemName?: string | undefined;
+  ItemGroup?: string | undefined;
+  Quantity?: number | undefined;
+  Price?: number | undefined;
+  Currency?: string | undefined;
+  LineDiscount?: number;
+  UomEntry?: number | undefined;
+  UomCode?: string | undefined;
+  ShippingType?: string | undefined;
+  Project?: string | undefined;
+  TaxCode?: string | undefined;
+  TaxRate?: number | undefined;
+  ItemDescription?: string | undefined;
+  ItemGroupName?: string | undefined;
+  UomGroupEntry?: number | undefined;
+  UomGroupName?: number | undefined;
+  VatGroup?: string | undefined;
+  AccountName?: string | undefined;
+  UnitsOfMeasurement: number | undefined;
+  ShipDate?: string | undefined;
+  RequiredDate?: string | undefined;
+  AccountCode?: string | undefined;
+  LineTotal?: string | undefined;
+  BlanketAgreementNumber?: string | undefined;
+  DiscountPercent?: number | undefined;
+
+  constructor(json: any) {
+    super();
+    this.ItemCode = json['ItemNo'] ?? json['ItemCode'];
+    this.ItemName = json['ItemDescription'];
+    this.ItemGroup = json['ItemGroup'];
+    this.Quantity = json['Quantity'];
+    this.Price = json['Price'];
+    this.Currency = json['PriceCurrency'];
+    this.LineDiscount = json['LineDiscount'];
+    this.UomEntry = json['UoMEntry'];
+    this.UomCode = json['UoMCode'];
+    this.ShippingType = json['ShippingType'];
+    this.Project = json['Project'];
+    this.TaxCode = json['TaxCode'] ?? json['VatGroup'];
+    this.TaxRate = json['TAXRate'];
+    this.UnitsOfMeasurement = json['UnitsOfMeasurement']
+    this.ShipDate = json['ShipDate'];
+    this.RequiredDate = json['RequiredDate'];
+    this.AccountCode = json['AccountCode'];
+    this.AccountName = json['AccountName'];
+    this.VatGroup = json['VatGroup'];
+    this.LineTotal = json['LineTotal'];
+    this.BlanketAgreementNumber = json['BlanketAgreementNumber'];
+    this.DiscountPercent = json['DiscountPercent'];
+  }
+
+  setUOMGroup(uomGroup: any): void {
+    this.UomGroupEntry = uomGroup.AbsEntry;
+    this.UomGroupName = uomGroup?.Code;
+  }
+
+  setItemGroup(itemGroup: any): void {
+    //   this.itemGroup = itemGroup.
+  }
+
+  toJson(type = 'I', update = false) {
+    let body = {
+      "ItemCode": this.ItemCode,
+      "ItemDescription": this.ItemName,
+      "ItemGroup": this.ItemGroup,
+      "Quantity": this.Quantity,
+      "Price": this.Price,
+      "UoMEntry": this.UomEntry,
+      "UoMCode": this.UomCode,
+      // "UnitsOfMeasurement": 0,
+      // "FreeText": this ?? null,
+      "LineDiscount": this.LineDiscount,
+      "ShippingType": this.ShippingType,
+      // "Project": this.Project,
+      "TaxCode": update ? null : this.TaxCode,
+      // "TAXRate": null,
+      "ShipDate": this.ShipDate,
+      "RequiredDate": this.RequiredDate,
+      "AccountCode": this.AccountCode,
+      "AccountName": null,
+      "VatGroup": this.VatGroup,
+      "LineTotal": this.LineTotal,
+      "Total": null,
+      "BlanketAgreementNumber": this.BlanketAgreementNumber,
+      "DiscountPercent": this.DiscountPercent
+
+    };
+
+    if (type === 'S') {
+      delete body.ItemCode;
+      delete body.ItemDescription;
+      delete body.ItemGroup;
+      delete body.Price;
+      delete body.UoMEntry;
     }
 
-    public static toCreate(json: any, type: string) {
-        
-        let body = {
-            "ItemCode": json["ItemCode"],
-            "ItemDescription": json['ItemDescription'],
-            "UnitPrice": json['UnitPrice'],
-            "ItemGroup": json['ItemGroup'],
-            "DiscountPercent": json['DiscountPercent'],
-            "LineDiscount": 0.0,
-            "DocEntry": json['UoMGroupEntry'],
-            "UoMCode": json["UoMCode"],
-            "TransportationCode": 1,
-            "Project": null,
-            "TaxCode": null,
-            "TAXRate": null,
-            "VatGroup": json["VatGroup"],
-            "LineTotal": json["LineTotal"],
-            "AccountCode": json["AccountCode"],
-            "AccountName": json["AccountName"],
-        };
-
-        if (type === 'S') {
-            delete body.ItemCode;
-            // delete body.ItemDescription;
-            delete body.ItemGroup;
-            delete body.UnitPrice;
-            delete body.DiscountPercent;
-            delete body.UnitPrice;
-        }
-        return body;
-    }
+    return body;
+  }
 }
+

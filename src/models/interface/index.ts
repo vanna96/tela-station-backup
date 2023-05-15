@@ -5,15 +5,18 @@ export interface MasterDocument {
     docNum: any;
     paymentMethod?: string;
     paymentTerm?: string;
-    shippingType?: string;
+    shippingType?: Array<any>;
     items: Array<any>;
+
+    setItems(items: DocumentLine[]): void,
 }
 
 
 export interface DocumentLine {
-    itemNo?: string;
+    itemCode?: string;
     itemDescription?: string;
     itemGroup?: string;
+    itemGroupName?: string;
     quantity?: number;
     unitPrice?: number;
     currency?: string;
@@ -21,16 +24,25 @@ export interface DocumentLine {
     cumilativeAmount?: number;
     plannedAmount?: number;
     lineDiscount?: number;
+    uomGroupEntry?: number;
+    uomGroupName?: number;
     uomEntry?: number;
     uomCode?: string;
-    shippingType?: string;
+    shippingType?: string | undefined;
     project?: string;
     taxCode?: string;
     taxRate?: number;
-    // discountPercent?: number;
     vatGroup?: string;
     accountName?: string;
+    uomLists: any[],
     // accountCode?: number;
+    // discountPercent?: number;
+
+
+    // 
+    setItemGroup(itemGroup: any): void,
+    setUOMGroup(uomGroup: any): void;
+    setUOM(uom: any): void;
 }
 export interface ContactEmployees {
     name?: string 

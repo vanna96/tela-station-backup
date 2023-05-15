@@ -17,7 +17,6 @@ function UsersSelect(props: UsersProps) {
 
     const { data, isLoading }: any = useQuery({ queryKey: ['users'], queryFn: () => new UsersRepository().get(), staleTime: Infinity })
 
-    console.log(data );
     
 
     return <MUISelect

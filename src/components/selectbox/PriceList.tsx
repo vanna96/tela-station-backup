@@ -1,7 +1,6 @@
 import MUISelect from "./MUISelect";
 import { useQuery } from "react-query";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import PositionRepository from "@/services/actions/positionRepository";
 import PriceListRepository from "@/services/actions/pricelistReporitory";
 interface PriceListProps<T = unknown> {
   name?: string,

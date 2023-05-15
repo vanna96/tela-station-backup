@@ -1,77 +1,70 @@
-import FormCard from "@/components/card/FormCard";
-import MUISelect from "@/components/selectbox/MUISelect";
-import Owner from "@/components/selectbox/Owner";
-import PaymentMethod from "@/components/selectbox/PaymentMethod";
-import PaymentTerm from "@/components/selectbox/PaymentTerm";
-import ShippingType from "@/components/selectbox/ShippingType";
-import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
-import * as React from "react";
-
-export interface LogisticsProps {
-  data: any;
-  handlerChange: (key: string, value: any) => void;
+import FormCard from '@/components/card/FormCard';
+import MUISelect from '@/components/selectbox/MUISelect';
+import Owner from '@/components/selectbox/Owner';
+import PaymentMethod from '@/components/selectbox/PaymentMethod';
+import PaymentTerm from '@/components/selectbox/PaymentTerm';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import * as React from 'react';
+import ShippingType from '@/components/selectbox/ShippingType';
+export interface ILogisticFormProps {
+  data: any,
+  handlerChange: (key: string, value: any) => void
+  edit: boolean
 }
-
-export default function LogisticsForm({ data, handlerChange }: LogisticsProps) {
-    console.log(data)
+export default function Logistic({ data, handlerChange, edit }: ILogisticFormProps) {
   return (
-    <FormCard title="Logistics">
-      <div className="flex flex-col gap-2">
-        <div className="grid grid-cols-1 gap-3">
-          <div className="flex flex-col gap-1 text-sm">
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Ship To
-            </label>
-            <div className="">
-              <TextField
-              value={data.Address2 ?? "Level 1 - 168 Walker Street''"}
-                size="small"
-                multiline
-                rows={4}
-                fullWidth
-                name="Address2"
-                className="w-full "
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3"></div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col gap-1 text-sm">
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">
-              Shipping Type
-            </label>
-            <div className="">
-              <ShippingType
-                name="TransportationCode"
-                value={data.shippingType}
-                onChange={(e) => handlerChange("shippingType", e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-1 text-sm">
+    <FormCard title='Logistic'>
+      <div className='flex flex-col gap-3 mt-2'>
+        <div className=''>
           <label htmlFor="Code" className="text-gray-500 text-[14px]">
-            Pay To
+            Ship To
           </label>
           <div className="">
             <TextField
-            value={data?.billToDefault ?? data?.Address2}
               size="small"
+              defaultValue={data?.Address2 ?? "Level 1 - 168 Walker Street''"}
               multiline
-              rows={4}
+              rows={2}
               fullWidth
-              name="Address"
+              name="Address2"
               className="w-full "
             />
           </div>
         </div>
       </div>
+      <div className='flex flex-col gap-3 mt-2'>
+        <div className=''>
+          <label htmlFor="Code" className="text-gray-500 text-[14px]">
+            Pay To
+          </label>
+          <div className="">
+            <TextField
+              size="small"
+              multiline
+              rows={2}
+              fullWidth
+              name="Address"
+              className="w-full "
+              defaultValue={data?.Address}
+            />
+          </div>
+        </div>
+      </div>
+      <div className='flex flex-col -mt-4'>
+        <div className='grid grid-cols-2'>
+          <div>
+            <label htmlFor="Code" className="text-gray-500 text-[14px]">
+              Shipping Type
+            </label>
+            <ShippingType
+              onChange={(e) => handlerChange('TransportationCode', e.target.value)}
+              value={data?.TransportationCode}
+              name="TransportationCode"
+            />
+          </div>
+        </div>
+      </div>
     </FormCard>
-  );
+  )
 }

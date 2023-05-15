@@ -1,12 +1,7 @@
-import { useMemo } from "react";
 import MUISelect from "./MUISelect";
-import { useQueryHook } from "@/utilies/useQueryHook";
-import request from "@/utilies/request";
 import { useQuery } from "react-query";
-import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import OwnerRepository from "@/services/actions/ownerRepository";
-import CountryRepository from "@/services/actions/countryReporitory";
+import CountryRepository from "@/services/actions/CountryRepository";
 
 interface CountryProps<T = unknown> {
   name?: string,

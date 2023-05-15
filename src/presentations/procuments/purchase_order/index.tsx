@@ -6,38 +6,65 @@ import EditIcon from "@mui/icons-material/Edit";
 import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
-import { useQueryHook } from '../../../utilies/useQueryHook';
-import { UseQueryResult, useQuery } from "react-query";
-import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
+import { useQuery } from "react-query";
+import PurchaseOrderRepository from "./repository";
+import DataTable from "@/components/data_table/DataTable";
 
 
 export default function PurchaseOrderLists() {
     const route = useNavigate();
 
-    const { data, isLoading }: any = useQuery({ queryKey: ['pa'], queryFn: () => new PurchaseOrderRepository().get() })
-
     const columns = React.useMemo(
         () => [
             {
-                accessorKey: "docNum",
-                header: "Doc Num", //uses the default width from defaultColumn prop
+                accessorKey: "DocNum",
+                header: "Doc Num",
                 enableClickToCopy: true,
                 enableFilterMatchHighlighting: true,
                 size: 88,
+                type: 'number',
+                visible: true,
             },
             {
-                accessorKey: "cardCode",
+                accessorKey: "CardCode",
                 header: "Vendor Code",
-                // size: 200, //increase the width of this column
+                type: 'string',
+                visible: true,
             },
             {
-                accessorKey: "cardName",
-                header: "Card Name",
-                // size: 200, //increase the width of this column
+                accessorKey: "CardName",
+                header: "Vendor Name",
+                type: 'string',
+                visible: true,
+
             },
             {
-                accessorKey: "docDate",
+                accessorKey: "DocumentStatus",
+                header: "Status",
+                type: 'string',
+                visible: true,
+                Cell: ({ cell }: any) => (
+                    <>
+                        {cell.getValue()?.replace('bost_', '')}
+                    </>
+                ),
+            },
+            {
+                accessorKey: "DocType",
+                header: "Document Type",
+                type: 'string',
+                visible: false,
+                Cell: ({ cell }: any) => (
+                    <>
+                        {cell.getValue()?.replace('bost_', '')}
+                    </>
+                ),
+            },
+            {
+                accessorKey: "DocDate",
                 header: "Posting Date",
+                type: 'date',
+                visible: true,
                 Cell: ({ cell }: any) => (
                     <>
                         {moment(cell.getValue()).format('DD-MM-YYYY')}
@@ -45,26 +72,28 @@ export default function PurchaseOrderLists() {
                 ),
             },
             {
-                accessorKey: "docDueDate",
+                accessorKey: "DocDueDate",
                 header: "Delivery  Date",
-                Cell: ({ cell } : any) => (
+                type: 'date',
+                visible: true,
+                Cell: ({ cell }: any) => (
                     <>
                         {moment(cell.getValue()).format('DD-MM-YYYY')}
                     </>
                 ),
             },
             {
-                accessorKey: "id",
+                accessorKey: "Action",
                 enableFilterMatchHighlighting: false,
                 enableColumnFilterModes: false,
                 enableColumnActions: false,
                 enableColumnFilters: false,
                 enableColumnOrdering: false,
-                header: "Action", //uses the default width from defaultColumn prop
+                header: "Action", //uses the default .DocEntryth from defaultColumn prop
                 Cell: (cell: any) => (
                     <div className="flex gap-4">
                         <button onClick={() => {
-                            route('/procument/purchase-order/' + cell.row.original.id, { state: cell.row.original })
+                            route('/procument/purchase-order/' + cell.row.original.DocEntry, { state: cell.row.original })
                         }}>
                             <VisibilityIcon fontSize="small" className="text-gray-600 " />
                         </button>
@@ -78,10 +107,64 @@ export default function PurchaseOrderLists() {
         []
     );
 
+    const [filter, setFilter] = React.useState('');
+    const [sortBy, setSortBy] = React.useState('');
     const [pagination, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
     });
+
+    const purchaseCount = useQuery({
+        queryKey: ['pa-count'], queryFn: () => new PurchaseOrderRepository().documentTotal(`?$select=DocNum${filter}`),
+        staleTime: Infinity,
+    });
+
+    const { data, isLoading, error, isError, refetch, isFetching }: any = useQuery({
+        queryKey: ['pa', `${(pagination.pageIndex) * 10}_${filter !== '' ? 'f' : ''}`], queryFn: () => {
+            return new PurchaseOrderRepository().get(`?$top=${pagination.pageSize}&$skip=${(pagination.pageIndex) * pagination.pageSize}${filter}${sortBy !== '' ? '&$orderby=' + sortBy : ''}`);
+        },
+        staleTime: Infinity,
+        retry: 1,
+    });
+
+    const handlerRefresh = React.useCallback(() => {
+        setFilter('');
+        setSortBy('');
+        setPagination({
+            pageIndex: 0,
+            pageSize: 10,
+        });
+        setTimeout(() => {
+            purchaseCount.refetch();
+            refetch();
+        }, 500);
+    }, []);
+
+    const handlerSortby = (value: any) => {
+        setSortBy(value);
+        setPagination({
+            pageIndex: 0,
+            pageSize: 10,
+        });
+
+        setTimeout(() => {
+            refetch();
+        }, 500)
+    }
+
+
+    const handlerSearch = (value: string) => {
+        setFilter(value);
+        setPagination({
+            pageIndex: 0,
+            pageSize: 10,
+        });
+
+        setTimeout(() => {
+            purchaseCount.refetch();
+            refetch();
+        }, 500)
+    }
 
 
 
@@ -98,34 +181,17 @@ export default function PurchaseOrderLists() {
                 </div>
 
 
-                <div className="grow data-table">
-                    <MaterialReactTable
-                        columns={columns}
-                        data={data ?? []}
-                        enableHiding={true}
-                        initialState={{ density: "compact" }}
-                        enableDensityToggle={false}
-                        enableColumnResizing
-                        enableStickyHeader={true}
-                        enableStickyFooter={true}
-                        enablePagination={true}
-                        muiTablePaginationProps={{
-                            rowsPerPageOptions: [5, 10, 15],
-                        }}
-                        getRowId={(row: any) => row.DocEntry}
-                        onPaginationChange={setPagination}
-                        state={{
-                            isLoading,
-                            pagination
-                        }}
-                        renderTopToolbarCustomActions={({ table }) => {
-                            return <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                                <h3 className="font-bold text-base xl:text-sm">Purchase Order</h3>
-                                {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
-                            </div>
-                        }}
-                    />
-                </div>
+                <DataTable
+                    columns={columns}
+                    data={data}
+                    handlerRefresh={handlerRefresh}
+                    handlerSearch={handlerSearch}
+                    handlerSortby={handlerSortby}
+                    count={purchaseCount.data ?? 0}
+                    loading={isLoading || isFetching}
+                    pagination={pagination}
+                    paginationChange={setPagination}
+                />
             </div>
         </>
     );

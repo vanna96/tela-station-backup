@@ -1,16 +1,22 @@
 import React from "react";
 
 
-
-
-
-export default abstract class CoreFormContent extends React.Component < any, any >{
-    constructor(props:any) {
+export default class SupplierForm extends React.Component<any, any>{
+    constructor(props: any) {
         super(props)
+
+        this.state = {
+
+        }
+    }
+
+
+    componentDidMount(): void {
+
     }
 
 
     render() {
-        return <div></div>
+        return <div>{this.props.type === 'C' ? 'Customer' : 'Suppier'}</div>
     }
 }

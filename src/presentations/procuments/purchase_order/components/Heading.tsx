@@ -20,6 +20,8 @@ export default function HeadingForm({
   handlerChange,
   handlerOpenProject,
 }: IHeadingFormProps) {
+
+
   return (
     <>
       <FormCard title="Information">
@@ -27,16 +29,14 @@ export default function HeadingForm({
           <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Vendor Code"
-              value={data?.cardCode}
+              value={data?.CardCode}
               disabled={edit}
-              name="BPCode"
               onClick={handlerOpenVendor}
               endAdornment={!edit}
             />
             <MUITextField
               label="Name"
-              value={data?.cardName}
-              name="BPName"
+              value={data?.CardName}
               disabled={edit}
             />
           </div>
@@ -47,14 +47,14 @@ export default function HeadingForm({
               </label>
               <div className="">
                 <MUISelect
-                  items={data?.contactPersonList?.map((e: ContactEmployee) => ({
+                  items={data?.ContactPersonList?.map((e: ContactEmployee) => ({
                     id: e.id,
                     name: e.name,
                   }))}
                   onChange={(e) =>
-                    handlerChange("contactPersonCode", e.target.value)
+                    handlerChange("ContactPersonCode", e.target.value)
                   }
-                  value={data?.contactPersonCode}
+                  value={data?.ContactPersonCode}
                   aliasvalue="id"
                   aliaslabel="name"
                   name="ContactPersonCode"
@@ -65,8 +65,8 @@ export default function HeadingForm({
               <MUITextField
                 label="Vender Ref.No"
                 name="NumAtCard"
-                value={data?.numAtCard}
-                onChange={(e) => handlerChange('numAtCard', e.target.value)}
+                value={data?.NumAtCard}
+                onChange={(e) => handlerChange('NumAtCard', e.target.value)}
               />
             </div>
           </div>
@@ -82,8 +82,8 @@ export default function HeadingForm({
                   fullWidth
                   className="w-full text-field bg-gray-100"
                   name="BPCurrency"
-                  value={data.docCurrency}
-                  // disabled
+                  value={data.Currency}
+                // disabled
                 />
                 <div></div>
               </div>
@@ -97,20 +97,20 @@ export default function HeadingForm({
             </label>
             <div className="grid grid-cols-2 gap-3">
               <MUISelect
-                items={data.series ?? []}
+                items={data.SerieLists ?? []}
                 aliasvalue="Series"
                 aliaslabel="Name"
                 name="Series"
                 disabled={edit}
                 loading={data?.isLoadingSerie}
-                value={data?.serie}
-                onChange={(e: any) => handlerChange("serie", e.target.value)}
+                value={data?.Series}
+                onChange={(e: any) => handlerChange("Series", e.target.value)}
               />
               <TextField
                 size="small"
                 name="DocNum"
-                key={data?.docNum}
-                defaultValue={data?.docNum}
+                key={data?.DocNum}
+                defaultValue={data?.DocNum}
                 disabled={edit}
                 placeholder="Document No"
                 fullWidth
@@ -122,7 +122,7 @@ export default function HeadingForm({
             <MUITextField
               label="Status"
               disabled={edit}
-              value={data?.documentStatus?.replace("bost_", "")}
+              value={data?.DocumentStatus?.replace("bost_", "")}
               name="DocumentStatus"
             />
           </div>
@@ -134,7 +134,8 @@ export default function HeadingForm({
               <div className="">
                 <MUIDatePicker
                   error={data?.message?.includes("DocDate")}
-                  value={data.docDate}
+                  value={data.DocDate}
+                  disabled={edit}
                   onChange={(e: any) => handlerChange("docDate", e)}
                 />
               </div>
@@ -147,8 +148,8 @@ export default function HeadingForm({
                 </label>
                 <div className="">
                   <MUIDatePicker
-                    value={data.startDate}
-                    onChange={(e: any) => handlerChange("startDate", e)}
+                    value={data.DocDueDate}
+                    onChange={(e: any) => handlerChange("DocDueDate", e)}
                   />
                 </div>
               </div>
@@ -159,8 +160,8 @@ export default function HeadingForm({
                 </label>
                 <div className="">
                   <MUIDatePicker
-                    value={data.startDate}
-                    onChange={(e: any) => handlerChange("startDate", e)}
+                    value={data.TaxDate}
+                    onChange={(e: any) => handlerChange("TaxDate", e)}
                   />
                 </div>
               </div>

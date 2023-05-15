@@ -4,11 +4,11 @@ import Encryption from "@/utilies/encryption";
 import request from "@/utilies/request";
 
 export default class UnitOfMeasurementRepository extends Repository<UnitOfMeasurement> {
-   
-    url = '/UnitOfMeasurementGroups?$select=AbsEntry,Code,Name,BaseUoM';
-    
+
+    url = '/UnitOfMeasurements?$select=AbsEntry,Code,Name';
+
     // specific key
-    key = 'unitOfMeasurementGroups';
+    key = 'UnitOfMeasurements';
 
     async get<UnitOfMeasurement>(query?: string | undefined): Promise<UnitOfMeasurement[]> {
         const data = localStorage.getItem(this.key);
@@ -24,12 +24,11 @@ export default class UnitOfMeasurementRepository extends Repository<UnitOfMeasur
         return unitOfMeasurements;
     }
 
-
     find<UnitOfMeasurement>(code: number | undefined | null): any {
         const data = localStorage.getItem(this.key);
         if (!data) return {};
         const unitOfMeasurements: [] = JSON.parse(JSON.parse(Encryption.decrypt(this.key, data ?? '[]')));
-        return new UnitOfMeasurement(unitOfMeasurements.find((e: any) => e?.AbsEntry == code) ?? {});
+        return unitOfMeasurements.find((e: any) => e?.AbsEntry == code);
     }
 
     post(payload: any, isUpdate?: boolean | undefined, id?: any): Promise<UnitOfMeasurement> {

@@ -6,6 +6,7 @@ import { UpdateDataSuccess } from "./ClientError";
 const axiosInstance = axios.create({
     withCredentials: true,
     baseURL: "https://103.120.133.234:50000/b1s/v1",
+    // baseURL: "https://159.138.36.29:50000/b1s/v1",
 });
 
 axiosInstance.interceptors.response.use(
@@ -25,12 +26,12 @@ axiosInstance.interceptors.response.use(
 
 
 const request = async (method: string, url: string, data?: any, responseType?: ResponseType, headers?: any) => {
-   
+
 
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             try {
-                
+
                 axiosInstance({
                     method,
                     url,
@@ -45,7 +46,7 @@ const request = async (method: string, url: string, data?: any, responseType?: R
                     // timeout: 20000,
                 })
                     .then((response) => {
-                        resolve({ data: response.data, headers: response.headers } );
+                        resolve({ data: response.data, headers: response.headers });
                     })
                     .catch((e) => {
                         if (!(e instanceof AxiosError)) {
@@ -53,14 +54,14 @@ const request = async (method: string, url: string, data?: any, responseType?: R
                             console.log(e)
 
                             if (window.location.pathname !== "/login" && e?.status !== 204) {
-                                window.location.href = '/login';
+                                // window.location.href = '/login';
                             }
                             else if (e?.status === 204) {
-                                 reject(new UpdateDataSuccess('Update Successfully'));
+                                reject(new UpdateDataSuccess('Update Successfully'));
                             }
                             else {
                                 reject(new Error('Internal Server Error'));
-                            
+
                             }
 
                             return;
@@ -75,7 +76,7 @@ const request = async (method: string, url: string, data?: any, responseType?: R
                             e?.status === 401 &&
                             window.location.pathname !== "/login"
                         ) {
-                            window.location.href = "/login";
+                            // window.location.href = "/login";
                             return;
                         }
 

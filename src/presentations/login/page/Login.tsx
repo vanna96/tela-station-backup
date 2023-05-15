@@ -17,11 +17,17 @@ import SalePersonRepository from '@/services/actions/salePersonRepository';
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import BranchRepository from '../../../services/actions/branchRepository';
-import UsersRepository from '@/services/actions/usersRepository';
+import WarehouseRepository from '@/services/warehouseRepository';
 import DistributionRuleRepository from '@/services/actions/distributionRulesRepository';
+import PriceListRepository from '@/services/actions/pricelistRepository';
+import UsersRepository from '@/services/actions/usersRepository';
+import CustomsGroupRepository from '@/services/actions/customsGroupRepository';
+import ManufacturerRepository from '@/services/actions/manufacturerRepository';
+import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
+import GetCurrentUserRepository from '../repository/getCurrencyUserRepository';
 
 export default function Login() {
-  const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'uomGroup', 'vatRate']);
+  const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'user']);
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const navigate = useNavigate();
@@ -35,6 +41,8 @@ export default function Login() {
       const auth = new AuthLogin('SBODemoAU', 'manager1', 'manager');
       const response: any = await request('POST', '/Login', auth.toJson());
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
+      const user = await GetCurrentUserRepository.post();
+      setCookie("user", user, { maxAge: 2000 });
       await fetchAllDate()
       navigate("/");
     } catch (e: any) {
@@ -49,6 +57,7 @@ export default function Login() {
     Promise.all([
       await new ItemGroupRepository().get(),
       await new UnitOfMeasurementRepository().get(),
+      await new UnitOfMeasurementGroupRepository().get(),
       await new DepartmentRepository().get(),
       await new PaymentMethodRepository().get(),
       await new PaymentTermTypeRepository().get(),
@@ -58,14 +67,19 @@ export default function Login() {
       await new GLAccountRepository().get(),
       await new VatGroupRepository().get(),
       await new BranchRepository().get(),
+      await new WarehouseRepository().get(),
+      await new DistributionRuleRepository().get(),
+      await new PriceListRepository().get(),
       await new UsersRepository().get(),
       await new DistributionRuleRepository().get,
+      await new CustomsGroupRepository().get(),
+      await new ManufacturerRepository().get()
     ]);
   }
 
   return (
-    <div className='w-full h-full flex justify-center items-center'>
-      <div className='w-[28rem] flex flex-col gap-5 p-10 rounded-xl shadow-lg bg-white'>
+    <div className='w-full h-full flex justify-center items-center dark-theme'>
+      <div className='w-[28rem] flex flex-col gap-5 p-10 rounded-xl shadow-lg '>
         <h2 className=
           'font-bold text-2xl text-center'>LOGIN</h2>
         <div className='my-2'>

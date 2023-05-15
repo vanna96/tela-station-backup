@@ -1,5 +1,9 @@
+import { DocumentLine } from '@/models/interface';
+import itemRepository from '@/services/actions/itemRepostory';
+import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import { ComponentType } from 'react';
-import { MutationFunction, useMutation, useQueryClient } from 'react-query';
+import { useCookies } from 'react-cookie';
+import { MutationFunction, useMutation, useQuery, useQueryClient } from 'react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export interface WithRouterProps<T = ReturnType<typeof useParams>> {
@@ -25,6 +29,8 @@ export const withRouter = <P extends object>(Component: ComponentType<P>) => {
         const navigate = useNavigate();
         const queryClient = useQueryClient();
 
+        const [cookies] = useCookies(['user']);
+
         const history = {
             back: () => navigate(-1),
             goBack: () => navigate(-1),
@@ -38,8 +44,14 @@ export const withRouter = <P extends object>(Component: ComponentType<P>) => {
 
         };
 
+        const items: any = useQuery({
+            queryKey: ["items"],
+            queryFn: () => new itemRepository().get(),
+            staleTime: Infinity,
+        });
+
         const query = {
-            query: queryClient,
+            get: (key: string) => queryClient.getQueryData(key),
             mutation: (key: string, cb: any) => {
                 return useMutation(cb, {
                     onSuccess: (data: any) => {
@@ -62,6 +74,7 @@ export const withRouter = <P extends object>(Component: ComponentType<P>) => {
                 match={match}
                 navigate={navigate}
                 query={query}
+                user={cookies.user}
                 {...props as P}
             />
         );

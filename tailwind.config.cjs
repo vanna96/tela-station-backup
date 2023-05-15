@@ -7,7 +7,12 @@ module.exports = {
         'width': 'width',
         'height': 'height',
       },
-
+      backgroundColor: {
+        skin: {
+          fill: "var(--fill-color)",
+          indicator: "var(--fill-color-indicator)"
+        }
+      }
     },
     screens: {
       '2xl': { 'max': '1535px' },

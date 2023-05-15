@@ -1,238 +1,7 @@
-// import React, { useCallback } from "react";
-// import { IoChevronForwardSharp } from "react-icons/io5";
-// import MaterialReactTable from "material-react-table";
-// import { Button } from "@mui/material";
-// import MUITextField from '../../../../components/input/MUITextField'
-// import { AiOutlineDelete } from "react-icons/ai";
-// import { AiOutlineSetting } from "react-icons/ai";
-// import ShippingType from "@/components/selectbox/ShippingType";
-// import { currencyFormat } from "@/utilies";
-// import ItemModal from "@/components/modal/ItemModal";
-// import FormCard from "@/components/card/FormCard";
-// import Formular from "@/utilies/formular";
-
-
-// interface ContentFormProps {
-//     handlerAddItem: () => void,
-//     handlerChangeItem: (record: any) => void,
-//     handlerRemoveItem: (record: string) => void,
-//     data: any,
-// }
-
-
-// export default function ContentForm({ data, handlerChangeItem, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
-//     const [tableKey, setTableKey] = React.useState(Date.now())
-
-//     const handlerChangeInput = (event: any, row: any, field: any) => {
-//         handlerChangeItem({ value: event.target.value, record: row, field })
-//     }
-
-//     const handlerRemoveRow = (row: any) => {
-//         handlerRemoveItem(row.ItemCode);
-//     }
-
-//     const itemColumns = React.useMemo(
-//         () => [
-//             {
-//                 accessorKey: "Action",
-//                 header: "",
-//                 size: 40,
-//                 enableResizing: false,
-//                 Cell: ({ cell }: any) => {
-//                     return <div role="button" className="flex justify-center items-center">
-//                         <button type="button" className="border border-gray-200 p-1 rounded-sm" onClick={() => handlerRemoveRow(cell.row.original)}><AiOutlineDelete /></button>
-//                     </div>;
-//                 },
-//             },
-//             {
-//                 accessorKey: "ItemCode",
-//                 header: "Item No", //uses the default width from defaultColumn prop
-//                 Cell: ({ cell }: any) => {
-//                     // return ;
-//                     return <MUITextField
-//                         value={cell.getValue()}
-//                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
-//                         onClick={() => { }}
-//                     />;
-//                 },
-//             },
-
-//             {
-//                 accessorKey: "ItemName",
-//                 header: "Description",
-//                 Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />
-//             },
-//             {
-//                 accessorKey: "UoMGroupName",
-//                 header: "UoM Group",
-//                 Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
-//             },
-//             {
-//                 accessorKey: "ItemsGroupName",
-//                 header: "Item Group",
-//                 Cell: ({ cell }: any) => <MUITextField defaultValue={cell.getValue()} />
-//             },
-//             {
-//                 accessorKey: "Quantity",
-//                 header: "Quanitity",
-//                 Cell: ({ cell }: any) => {
-//                     return <MUITextField
-//                         defaultValue={cell.getValue()}
-//                         type="number"
-//                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
-//                     />;
-//                 },
-//             },
-//             {
-//                 accessorKey: "UnitPrice",
-//                 header: "Unit Price",
-//                 Cell: ({ cell }: any) => {
-//                     return <MUITextField
-//                         startAdornment={'USD'}
-//                         type="number"
-//                         defaultValue={cell.getValue()}
-//                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
-//                     />;
-//                 },
-//             },
-//             {
-//                 accessorKey: "Total",
-//                 header: "Total",
-//                 Cell: ({ cell }: any) => {
-
-//                     console.log(cell.row.original.UnitPrice)
-//                     return <MUITextField
-//                         startAdornment={'USD'}
-//                         value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
-//                     />;
-//                 },
-//             },
-//         ],
-//         []
-//     );
-
-//     const serviceColumns = React.useMemo(
-//         () => [
-//             {
-//                 accessorKey: "Action",
-//                 header: "",
-//                 size: 40,
-//                 enableResizing: false,
-//                 Cell: ({ cell }: any) => {
-//                     // return ;
-//                     return <Button size="small" color="error" onClick={() => handlerRemoveRow(cell.row.original)}><AiOutlineDelete /></Button>;
-//                 },
-//             },
-//             {
-//                 accessorKey: "PlannedAmount",
-//                 header: "Planned Amount (LC)", //uses the default width from defaultColumn prop
-//                 Cell: ({ cell }: any) => {
-//                     // return ;
-//                     return <MUITextField
-//                         defaultValue={currencyFormat(cell.getValue())}
-//                         startAdornment={'USD'}
-//                         type="number"
-//                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'PlannedAmount')}
-//                     />;
-//                 },
-//             },
-//             {
-//                 accessorKey: "LineDiscount",
-//                 header: "Line Discount", //uses the default width from defaultColumn prop
-//                 Cell: ({ cell }: any) => {
-//                     return <MUITextField
-//                         defaultValue={cell.getValue()}
-//                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'LineDiscount')}
-//                     />;
-//                 },
-//             },
-//             {
-//                 accessorKey: "OpenAmount",
-//                 header: "Open Amount (LC)", //uses the default width from defaultColumn prop
-//                 Cell: ({ cell }: any) => {
-//                     return <MUITextField
-//                         startAdornment={'USD'}
-//                         value={cell.row?.original?.PlannedAmount}
-//                         disabled={true}
-//                     />;
-//                 },
-//             },
-//             {
-//                 accessorKey: "ShppingType",
-//                 header: "Shipping Type", //uses the default width from defaultColumn prop
-//                 Cell: ({ cell }: any) => {
-//                     return <ShippingType
-//                         value={cell.getValue()}
-//                         onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'ShppingType')}
-//                     />;
-//                 },
-//             },
-//             {
-//                 accessorKey: "Project",
-//                 header: "Project", //uses the default width from defaultColumn prop
-//                 Cell: ({ cell }: any) => {
-//                     return <MUITextField
-//                         defaultValue={cell.getValue()}
-//                         onClick={() => { }}
-//                     />;
-//                 },
-//             },
-//         ],
-//         []
-//     );
-
-//     const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, })
-
-//     return (
-//         <FormCard title="Content" >
-//             <div className="col-span-2 data-table">
-//                 <MaterialReactTable
-//                     key={tableKey}
-//                     // columns={itemColumns}
-//                     columns={data?.agreementMethod === 'M' ? serviceColumns : itemColumns}
-//                     data={data.items ?? []}
-//                     enableStickyHeader={true}
-//                     enableColumnActions={false}
-//                     enableColumnFilters={false}
-//                     enablePagination={false}
-//                     enableSorting={false}
-//                     enableBottomToolbar={false}
-//                     enableTopToolbar={true}
-//                     enableColumnResizing={true}
-//                     enableColumnFilterModes={false}
-//                     enableDensityToggle={false}
-//                     enableFilters={false}
-//                     enableFullScreenToggle={false}
-//                     enableGlobalFilter={false}
-//                     enableHiding={true}
-//                     onColumnVisibilityChange={setColVisibility}
-//                     initialState={{
-//                         density: "compact",
-//                         columnVisibility: colVisibility
-//                     }}
-//                     state={{
-//                         columnVisibility: colVisibility
-//                     }}
-//                     icons={{
-//                         ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />
-//                     }}
-//                     renderTopToolbarCustomActions={({ table }) => {
-//                         return <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-//                             <Button variant="outlined" size="small"
-//                                 onClick={handlerAddItem}
-//                             ><span className="text-xs  capitalize font-normal">+ Add New</span></Button>
-//                         </div>
-//                     }}
-//                 />
-//             </div>
-//         </FormCard>
-//     );
-// }
 import React, { useCallback } from "react";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import MaterialReactTable from "material-react-table";
-import { Button, Checkbox, TextField } from "@mui/material";
-import MUITextField from "../../../../components/input/MUITextField";
+import { Button } from "@mui/material";
 import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineSetting } from "react-icons/ai";
 import ShippingType from "@/components/selectbox/ShippingType";
@@ -242,35 +11,55 @@ import FormCard from "@/components/card/FormCard";
 import Formular from "@/utilies/formular";
 import MUISelect from "@/components/selectbox/MUISelect";
 import { ContactEmployee } from "@/models/BusinessParter";
+import TextField from "@mui/material/TextField";
+import MUITextField from "@/components/input/MUITextField";
+import Checkbox from "@mui/material/Checkbox";
 import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "@/components/input/AccountTextField";
+import MUIDatePicker from "@/components/input/MUIDatePicker";
+import SalePerson from "@/components/selectbox/SalePerson";
+import VatGroup from "@/components/selectbox/VatGroup";
+import BuyerSelect from "@/components/selectbox/buyer";
+import Item from "./../../../../models/Item";
+import { documentStatusList } from "@/constants";
+import ItemGroupRepository from "@/services/actions/itemGroupRepository";
+import UnitOfMeasurementGroupRepository from "@/services/actions/unitOfMeasurementGroupRepository";
+import { getUOMGroupByCode } from "@/helpers";
+import UOMTextField from "@/components/input/UOMTextField";
 
-export interface ContentFormProps {
-  handlerAddItem: () => void;
-  handlerChangeItem: (record: any) => void;
-  handlerRemoveItem: (record: string) => void;
+
+interface ContentFormProps {
   handlerChange: (key: string, value: any) => void;
-  handlerOpenGLAccount?: () => void;
-  data: any;
+  handlerAddItem: () => void,
+  handlerChangeItem: (record: any) => void,
+  handlerRemoveItem: (record: string) => void,
+  data: any,
+  edit?: boolean
 }
 
-export default function ContentForm({
-  data,
-  handlerChangeItem,
-  handlerAddItem,
-  handlerRemoveItem,
-  handlerChange,
-  handlerOpenGLAccount,
-}: ContentFormProps) {
-  const [tableKey, setTableKey] = React.useState(Date.now());
+
+export default function ContentForm({ data, handlerChangeItem,handlerChange, edit, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
+  const [tableKey, setTableKey] = React.useState(Date.now())
+
+  const itemGroupRepo = new ItemGroupRepository();
+  const uomGroupRepo = new UnitOfMeasurementGroupRepository();
+
+  // const handlerChangeInput = (event: any, row: any, field: any) => {
+  //   // if (data?.isApproved) return;
+
+  //   let value = event.target.value;
+  //   handlerChangeItem({ value: value, record: row, field })
+  // }
 
   const handlerChangeInput = (event: any, row: any, field: any) => {
     handlerChangeItem({ value: event.target.value, record: row, field });
   };
 
   const handlerRemoveRow = (row: any) => {
+    if (data?.isApproved) return;
+
     handlerRemoveItem(row.ItemCode);
-  };
+  }
 
   const itemColumns = React.useMemo(
     () => [
@@ -278,6 +67,7 @@ export default function ContentForm({
         accessorKey: "Action",
         header: "",
         size: 40,
+        pin: true,
         enableResizing: false,
         Cell: ({ cell }: any) => {
           return (
@@ -298,106 +88,115 @@ export default function ContentForm({
         header: "Item No", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           // return ;
-          return (
-            <MUITextField
-              value={cell.getValue()}
-              onBlur={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "ItemCode")
-              }
-              onClick={() => {}}
-            />
-          );
+          return <MUITextField
+            value={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
+            endAdornment
+            onClick={handlerAddItem}
+          />;
         },
       },
 
       {
         accessorKey: "ItemName",
         header: "Description",
-        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
+        Cell: ({ cell }: any) => <MUITextField  value={cell.getValue()} />
       },
+
+      {
+        accessorKey: "ItemGroup",
+        header: "Item Group",
+        Cell: ({ cell }: any) => <MUITextField  value={itemGroupRepo.find(cell.getValue())?.GroupName} />
+      },
+    
       {
         accessorKey: "Quantity",
-        header: "Quanitity",
+        header: "Quantity",
         Cell: ({ cell }: any) => {
-          return (
-            <MUITextField
-              defaultValue={cell.getValue()}
-              type="number"
-              onBlur={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "Quantity")
-              }
-            />
-          );
+          return <MUITextField
+            type="number"
+            name="Quantity"
+            error={(cell.getValue() as number) <= 0}
+            defaultValue={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
+          />;
         },
       },
       {
-        accessorKey: "UnitPrice",
+        accessorKey: "Price",
         header: "Unit Price",
         Cell: ({ cell }: any) => {
-          return (
-            <MUITextField
-              startAdornment={"USD"}
-              type="number"
-              defaultValue={cell.getValue()}
-              onBlur={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "UnitPrice")
-              }
-            />
-          );
+          return <MUITextField
+            startAdornment={'USD'}
+            type="number"
+            name="Price"
+            error={(cell.getValue() as number) <= 0}
+            defaultValue={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Price')}
+          />;
         },
       },
       {
         accessorKey: "DiscountPercent",
         header: "Discount %",
         Cell: ({ cell }: any) => {
-          return (
-            <MUITextField
-              defaultValue={cell.getValue()}
-              type="number"
-              onBlur={(event) =>
-                handlerChangeInput(
-                  event,
-                  cell?.row?.original,
-                  "DiscountPercent"
-                )
-              }
-            />
-          );
+          return <MUITextField
+            startAdornment={'%'}
+            type="number"
+            name="DiscountPercent"
+            defaultValue={cell.getValue()}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'DiscountPercent')}
+          />;
         },
       },
       {
-        accessorKey: "Total",
+        accessorKey: "LineTotal",
         header: "Total",
         Cell: ({ cell }: any) => {
-          console.log(cell.row.original.UnitPrice);
-          return (
-            <MUITextField
-              startAdornment={"USD"}
-              value={Formular.findToTal(
-                cell.row.original.Quantity,
-                cell.row.original.UnitPrice
-              )}
-            />
-          );
+          return <MUITextField
+            startAdornment={'USD'}
+            value={Formular.findLineTotal(cell.row.original.Quantity, cell.row.original.Price,  cell.row.original.DiscountPercent)}
+          />;
         },
       },
       {
-        accessorKey: "UoMCode",
+        accessorKey: "UomGroupCode",
+        header: "UoM Group",
+        Cell: ({ cell }: any) => <MUITextField  value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+      },
+      {
+        accessorKey: "UomCode",
         header: "UoM Code",
         Cell: ({ cell }: any) => (
-          <MUITextField defaultValue={cell.getValue()} />
+          <UOMTextField
+            key={cell.getValue()}
+            value={cell.getValue()}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UomCode')}
+            data={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+        ),
+      },
+      {
+        accessorKey: "UnitsOfMeasurement",
+        header: "Item Per Units",
+        Cell: ({ cell }: any) => (
+          <MUITextField
+            type="number"
+            value={cell.getValue()}
+          />
         ),
       },
     ],
     []
   );
 
+
+
   const serviceColumns = React.useMemo(
     () => [
       {
         accessorKey: "Action",
         header: "",
-        size: 60,
+        size: 40,
         enableResizing: false,
         Cell: ({ cell }: any) => {
           // return ;
@@ -413,18 +212,19 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "ItemDescription",
-        header: "Description", //uses the default width from defaultColumn prop
+        accessorKey: "ItemName",
+        header: "Descriptions", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           // return ;
           return (
             <MUITextField
-              defaultValue={currencyFormat(cell.getValue())}
-              onBlur={(event) =>
+              value={cell.getValue()}
+              name="ItemName"
+              onChange={(event) =>
                 handlerChangeInput(
                   event,
                   cell?.row?.original,
-                  "ItemDescription"
+                  "ItemName"
                 )
               }
             />
@@ -432,15 +232,54 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "AccountNo",
+        accessorKey: "RequiredDate",
+        header: "Required Date",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUIDatePicker
+              value={cell.getValue()}
+              name="RequiredDate"
+              onChange={(event) =>
+                handlerChangeInput(
+                  { target: { value: event } },
+                  cell?.row?.original,
+                  "requiredDate"
+                )
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "ShipDate",
+        header: "Quoted Date", //uses the default width from defaultColumn prop
+        Cell: ({ cell }: any) => {
+          return (
+            <MUIDatePicker
+              // disabled={true}
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(
+                  { target: { value: event } },
+                  cell?.row?.original,
+                  "shipDate"
+                )
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "AccountCode",
         header: "G/L Account", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           console.log(cell.getValue());
           return (
             <AccountTextField
               value={cell.getValue()}
+              name="AccountNo"
               onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "AccountNo")
+                handlerChangeInput(event, cell?.row?.original, "AccountCode")
               }
             />
           );
@@ -454,29 +293,41 @@ export default function ContentForm({
         },
       },
       {
-        accessorKey: "VatGroup",
-        header: "Tax Code", //uses the default width from defaultColumn prop
+        accessorKey: "PurchaseVatGroup",
+        header: "Tax Code",
         Cell: ({ cell }: any) => {
           return (
-            <MUITextField
+            <VatGroup
               value={cell.getValue()}
-              onChange={(event: any) =>
-                handlerChangeInput(event, cell?.row?.original, "VatGroup")
+              onChange={(event) =>
+                handlerChangeInput(
+                  event,
+                  cell?.row?.original,
+                  "PurchaseVatGroup"
+                )
               }
+              category="InputTax"
             />
           );
         },
       },
       {
         accessorKey: "LineTotal",
-        header: "Total (LC)", //uses the default width from defaultColumn prop
+        header: "Total LC", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField value={cell.getValue()} />;
+          return (
+            <MUITextField
+              value={cell.getValue()}
+              onChange={(event: any) =>
+                handlerChangeInput(event, cell?.row?.original, "LineTotal")
+              }
+            />
+          );
         },
       },
       {
         accessorKey: "BlanketAgreementNumber",
-        header: "	Blanket Agreement No.", //uses the default width from defaultColumn prop
+        header: "BlanketAgreementNumber", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
@@ -496,48 +347,51 @@ export default function ContentForm({
     []
   );
 
-  const [colVisibility, setColVisibility] = React.useState<
-    Record<string, boolean>
-  >({ Total: false, ItemsGroupName: false, UoMGroupName: false });
-  console.log(data);
+  const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, });
 
+  const blankItem = {
+    ItemCode: ''
+  };
   return (
-    <FormCard title="Content">
+    <FormCard title="Content" >
       <div className="col-span-2 data-table">
-        <div className="my-4 w-[30%]">
-          <label
-            htmlFor="AgreementMethod"
-            className="text-gray-500 text-[14px]"
-          >
-            Item/Service Type
-          </label>
-          <div className="">
-            <MUISelect
-              items={[
-                { name: "Items", value: "I" },
-                { name: "Service", value: "S" },
-              ]}
-              aliaslabel="name"
-              aliasvalue="value"
-              name="DocType"
-              value={data.docType}
-              onChange={(e) => handlerChange("docType", e.target.value)}
-            />
+      <div className="flex flex-col my-5">
+          <div className="grid grid-cols-4">
+            <div>
+              <label
+                htmlFor=" Item/ServiceType"
+                className="text-gray-500 text-[14px]"
+              >
+                Item/Service Type
+              </label>
+              <div className="">
+                <MUISelect
+                  items={[
+                    { name: "Item", value: "dDocument_Items" },
+                    { name: "Service", value: "dDocument_Service" },
+                  ]}
+                  aliaslabel="name"
+                  aliasvalue="value"
+                  name="DocType"
+                  disabled={edit}
+                  value={data.DocType}
+                  onChange={(e) => handlerChange("DocType", e.target.value)}
+                />
+              </div>
+            </div>
           </div>
         </div>
-
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.docType === "S" ? serviceColumns : itemColumns}
-          data={data.items ?? []}
+          columns={data?.DocType === 'dDocument_Service' ? serviceColumns : itemColumns}
+          data={[...data?.Items, blankItem] ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
           enableColumnFilters={false}
           enablePagination={false}
           enableSorting={false}
-          enableBottomToolbar={false}
-          enableTopToolbar={true}
+          enableTopToolbar={false}
           enableColumnResizing={true}
           enableColumnFilterModes={false}
           enableDensityToggle={false}
@@ -546,51 +400,31 @@ export default function ContentForm({
           enableGlobalFilter={false}
           enableHiding={true}
           onColumnVisibilityChange={setColVisibility}
+          enableStickyFooter
           initialState={{
             density: "compact",
             columnVisibility: colVisibility,
           }}
           state={{
-            columnVisibility: colVisibility,
+            columnVisibility: colVisibility
           }}
           icons={{
-            ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />,
+            ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />
           }}
-          renderTopToolbarCustomActions={({ table }) => {
-            return (
-              <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={handlerAddItem}
-                >
-                  <span className="text-xs  capitalize font-normal">
-                    + Add New
-                  </span>
-                </Button>
-              </div>
-            );
-          }}
+      
         />
       </div>
+
       <div className="flex flex-col gap-3">
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <label htmlFor="Code" className="text-gray-500 text-[14px]">
               Buyer
             </label>
-            <MUISelect
-              items={data?.contactPersonList?.map((e: ContactEmployee) => ({
-                id: e.id,
-                name: e.name,
-              }))}
-              onChange={(e) =>
-                handlerChange("contactPersonCode", e.target.value)
-              }
-              value={data?.contactPersonCode}
-              aliasvalue="id"
-              aliaslabel="name"
-              name="ContactPersonCode"
+            <BuyerSelect
+              onChange={(e) => handlerChange("SalesPersonCode", e.target.value)}
+              value={data?.SalesPersonCode}
+              name="SalesPersonCode"
             />
           </div>
           <div className="w-[48%]">
@@ -598,9 +432,9 @@ export default function ContentForm({
               Owner
             </label>
             <Owner
+              onChange={(e) => handlerChange("DocumentsOwner", e.target.value)}
+              value={data?.DocumentsOwner}
               name="DocumentsOwner"
-              value={data?.owner}
-              onChange={(e: any) => handlerChange("owner", e.target.value)}
             />
           </div>
         </div>
@@ -609,64 +443,155 @@ export default function ContentForm({
             Remarks
           </label>
           <div className="">
-            <TextField
-              size="small"
-              multiline
-              rows={4}
-              fullWidth
-              name="Comments"
-              value={data?.comments}
-            />
+            {data.documentStatus === "bost_Open" ? (
+              <TextField
+                size="small"
+                multiline
+                rows={2}
+                fullWidth
+                name="Comments"
+                className="w-full "
+                value={data?.Comments}
+                onChange={(e) => handlerChange("Comments", e.target.value)}
+              />
+            ) : (
+              <TextField
+                size="small"
+                multiline
+                rows={2}
+                disabled={edit}
+                fullWidth
+                name="Comments"
+                className="w-full "
+                value={data?.Comments}
+                onChange={(e) => handlerChange("Comments", e.target.value)}
+              />
+            )}
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-3">
-        <div className="w-[100%] gap-3">
-          <MUITextField
-            label="Total Credit"
-            value={data.LineTotal}
-            name="LineTotal"
-          />
-        </div>
-        <div className="flex justify-between">
-          <div className="w-[48%] gap-3">
+      {data?.documentStatus === "bost_Open" ? (
+        <div className="flex flex-col gap-3">
+          <div className="w-[100%] gap-3">
             <MUITextField
-              label="Discount"
-              value={data.DiscountPercent}
-              name="DiscountPercent"
-              startAdornment={"%"}
+              label="Total Before Discount:"
+              value={currencyFormat(data?.DocTotalBeforeDiscount)}
             />
           </div>
-          <div className="w-[48%] gap-3 mt-5">
-            <MUITextField label="" />
-          </div>
-        </div>
-        <div className="flex justify-between">
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Fright" name="" />
-          </div>
-          <div className="w-[48%] gap-3 mt-5">
-            <div className="flex items-center gap-1 text-sm">
-              <Checkbox
-                name="Renewal"
-                checked={data.renewal}
-                onChange={(e) => handlerChange("renewal", !data.renewal)}
+          <div className="flex justify-between gap-5">
+            <div className="w-[48%] gap-3">
+              <MUITextField
+                label="Discount:"
+                startAdornment={"%"}
+                value={data?.DocDiscountPercent}
+                onChange={(e) =>
+                  handlerChange("DocDiscountPercent", e.target.value)
+                }
               />
-              <label htmlFor="Renewal" className="text-gray-500 text-[14px]">
-                Rounding
-              </label>
+            </div>
+            <div className="w-[48%] gap-3 mt-5">
+              <MUITextField
+                label=""
+                startAdornment={data?.Currency ?? "AUD"}
+                value={data?.DocDiscountPrice}
+                onChange={(e) =>
+                  handlerChange("DocDiscountPrice", e.target.value)
+                }
+              />
+            </div>
+            <div className="flex justify-between">
+              <div className="w-[100%] gap-3">
+                <MUITextField label="Fright:" value={""} />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField
+                label="Tax:"
+                value={currencyFormat(data?.DocTaxTotal)}
+              />
+            </div>
+
+            <div className="w-[48%] gap-3">
+              <MUITextField
+                label="Total Payment Due::"
+                value={currencyFormat(data?.DocTotal)}
+              />
             </div>
           </div>
         </div>
-        <div className="flex justify-between">
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Tax:" value={data.Tax} />
+      ) : (
+        <div className="flex flex-col gap-3">
+          <div className="w-[100%] gap-3">
+            <MUITextField
+              label="Total Before Discount:"
+              value={currencyFormat(data?.DocTotalBeforeDiscount)}
+            />
           </div>
-          <div className="w-[48%] gap-3">
-            <MUITextField label="Total Payment Due" value={data.Tax} />
+          <div className="flex justify-between gap-5">
+            <div className="w-[48%] gap-3">
+              <MUITextField
+                label="Discount:"
+                disabled={edit}
+                startAdornment={"%"}
+                value={data?.DocDiscountPercent}
+                onChange={(e) =>
+                  handlerChange("DocDiscountPercent", e.target.value)
+                }
+              />
+            </div>
+            <div className="w-[48%] gap-3 mt-5">
+              <MUITextField
+                label=""
+                disabled={edit}
+                startAdornment={data?.currency ?? "AUD"}
+                value={data?.DocDiscountPrice}
+                onChange={(e) =>
+                  handlerChange("DocDiscountPrice", e.target.value)
+                }
+              />
+            </div>
+            <div className="flex justify-between">
+              <div className="w-[100%] gap-3">
+                <MUITextField disabled={edit} label="Fright:" value={""} />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField
+                disabled={edit}
+                label="Tax:"
+                value={currencyFormat(data?.DocTaxTotal)}
+              />
+            </div>
+            <div className="w-[48%] gap-3">
+              <MUITextField
+                disabled={edit}
+                label="Total Payment Due::"
+                value={currencyFormat(data?.DocTotal)}
+              />
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[48%] gap-3">
+              <MUITextField
+                disabled={edit}
+                label="Applied Amount:"
+                value={currencyFormat(data?.DocTaxTotalL)}
+              />
+            </div>
+            <div className="w-[48%] gap-3">
+              <MUITextField
+                disabled={edit}
+                label="Balance Due:"
+                value={currencyFormat(data?.DocTotal)}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </FormCard>
   );
 }

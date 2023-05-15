@@ -5,7 +5,7 @@ import request from "@/utilies/request";
 
 export default class DistributionRuleRepository extends Repository<DistributionRule> {
    
-    url = `/DistributionRules?$select=FactorCode,FactorDescription, InWhichDimension&$filter=Active eq 'tYES'`;
+    url = `/DistributionRules?$select=FactorCode,FactorDescription,InWhichDimension&$filter=Active eq 'tYES'`;
     
     // specific key
     key = 'distributionRules';
@@ -14,6 +14,7 @@ export default class DistributionRuleRepository extends Repository<DistributionR
         const data = localStorage.getItem(this.key);
         if (data) {
             const distributionRules = JSON.parse(Encryption.decrypt(this.key, data));
+            // console.log(distributionRules)
             return JSON.parse(distributionRules);
         }
 

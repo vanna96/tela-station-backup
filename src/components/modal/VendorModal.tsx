@@ -25,6 +25,8 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
     staleTime: Infinity,
   });
 
+  // console.log(data)
+
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 8,
@@ -98,7 +100,7 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
           muiTableBodyRowProps={({ row }) => ({
             // onClick: row.getToggleSelectedHandler(),
             onClick: () => {
-              onOk(new BusinessPartner(row.original));
+              onOk(new BusinessPartner(row.original, 0));
               onClose()
             },
             sx: { cursor: 'pointer' },

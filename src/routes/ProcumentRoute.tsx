@@ -10,7 +10,7 @@ import ProcumentPage from '@/presentations/procuments';
 import PurchaseRequestLists from '../presentations/procuments/purchase_request/PurchaseRequestLists';
 import PurchaseRequestForm from '@/presentations/procuments/purchase_request/page/PurchaseRequestForm';
 import PurchaseRequestDetail from '@/presentations/procuments/purchase_request/page/PurchaseRequestDetail';
-import GoodReturnLists from '@/presentations/procuments/good_return/page/list';
+import GoodReturnLists from '@/presentations/procuments/good_return/page/GoodReturnLists';
 import GoodReturnDetail from '@/presentations/procuments/good_return/page/GoodReturnDetail';
 import GoodReturnForm from '@/presentations/procuments/good_return/page/GoodReturnForm';
 import PurchaseQoutationLists from '@/presentations/procuments/purchase_qoutation';
@@ -18,7 +18,11 @@ import PurchaseQoutationForm from '@/presentations/procuments/purchase_qoutation
 import PurchaseQoutationDetail from '@/presentations/procuments/purchase_qoutation/page/PurchaseQoutationDetail';
 import PurchaseOrderLists from '@/presentations/procuments/purchase_order';
 import PurchaseOrderDetail from '@/presentations/procuments/purchase_order/page/PurchaseOrderDetail';
-import PurchaseorderForm from '@/presentations/procuments/purchase_order/page/PurchaseorderForm';
+import PurchaseorderForm from '@/presentations/procuments/purchase_order/page/PurchaseOrderForm';
+import PurchaseDownPaymentList from '@/presentations/procuments/down-payment-request';
+import PurchaseDownPaymentDetail from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentDetail';
+import PurchaseDownForm from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentForm';
+import PurchaseDownPaymentForm from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentForm';
 
 export default function ProcumentRoute() {
     return (
@@ -41,6 +45,8 @@ export default function ProcumentRoute() {
                 <Route index element={<GoodReturnLists />} />
                 <Route path=':id' element={<GoodReturnDetail />} />
                 <Route path='create' element={<GoodReturnForm />} />
+                <Route path=':id/edit' element={<GoodReturnForm edit={true} />} />
+
             </Route>
             <Route path='/purchase-qoutation' >
                 <Route index element={<PurchaseQoutationLists />} />
@@ -53,6 +59,12 @@ export default function ProcumentRoute() {
                 <Route path=':id' element={<PurchaseOrderDetail />} />
                 <Route path='create' element={<PurchaseorderForm />} />
                 <Route path=':id/edit' element={<PurchaseorderForm edit={true} />} />
+            </Route>
+            <Route path='/purchase-down-payment' >
+                <Route index element={<PurchaseDownPaymentList />} />
+                <Route path=':id' element={<PurchaseDownPaymentDetail />} />
+                <Route path='create' element={<PurchaseDownPaymentForm/>} />
+                <Route path=':id/edit' element={<PurchaseDownPaymentForm edit={true} />} />
             </Route>
         </Routes>
     )

@@ -1,369 +1,232 @@
-import { dateFormat } from "../utilies";
-import Model from "./Model";
-import { MasterDocument, DocumentLine } from "./interface/index";
-import Department from "./Department";
-import ItemGroup from './ItemGroup';
-import GLAccountRepository from '@/services/actions/GLAccountRepository';
+import shortid from "shortid";
+import { LineDocumentModel, MasterDocumentModel } from "./Model";
 
-export interface PurchaseRequestProps {
-  id: any;
-  docNum: any;
-  cardCode?: string;
-  cardName?: string;
-  constactPersonCode?: number;
-  startDate?: string;
-  endDate?: string;
-  terminateDate?: string;
-  description?: string;
-  agreementType?: string;
-  status?: string;
-  owner?: string;
-  renewal?: boolean;
-  remindUnit?: string;
-  remindTime?: string;
-  remark?: string;
-  attachmentEntry?: number;
-  settlementProbability?: number;
-  agreementMethod?: string;
-  paymentTerm?: string;
-  priceList?: number;
-  signeDate?: string;
-  serie: string;
-  paymentMethod?: string;
-  shippingType?: string | undefined;
-  items: PurchaseRequestDocumentLineProps[];
-  documentLine: PurchaseRequestDocumentLineProps[];
-}
 
-export interface PurchaseRequestDocumentLineProps {
-  itemNo?: string | undefined;
-  itemDescription?: string | undefined;
-  itemGroup?: string | undefined;
-  quantity?: number | undefined;
-  unitPrice?: number | undefined;
-  currency?: string | undefined;
-  lineDiscount?: number;
-  uomEntry?: number | undefined;
-  uomCode?: string | undefined;
-  shippingType?: string | undefined;
-  project?: string | undefined;
-  vatGroup?: string | undefined;
-}
-
-export default class PurchaseRequest extends Model implements MasterDocument {
-  id: any;
-  docNum: any;
-  cardCode?: string;
-  cardName?: string;
-  requester?: string;
-  requesterName?: string;
-  requesterEmail?: string;
-  requesterBranch?: string;
-  requesterDepartment?: string;
-  reqType?: string;
-  reqCode?: string;
-  inventoryStatus?: string;
-  docType?: string;
-  docDate?: string;
-  docDueDate?: string;
-  attachmentEntry?: number;
-  docCurrency?: string;
-  docRate?: string;
-  reference1?: string;
-  reference2?: string;
-  comments?: string;
-  journalMemo?: string;
-  paymentGroupCode?: string;
-  salesPersonCode?: string;
-  transportationCode?: string;
-  confirmed?: string;
-  contactPersonCode?: string;
-  series?: string;
-  taxDate?: string;
-  partialSupply?: string;
-  docObjectCode?: string;
-  indicator?: string;
-  federalTaxID?: string;
-  discountPercent?: string;
-  creationDate?: string;
-  requriedDate?: string;
-  updateDate?: string;
-  userSign?: string;
-  vatSum?: string;
-  docTotalSys?: string;
-  cancelDate?: string;
-  rounding?: string;
-  address2?: string;
-  documentStatus?: string;
-  periodIndicator?: string;
-  payToCode?: string;
-  manualNumber?: string;
-  useShpdGoodsAct?: string;
-  totalDiscount?: string;
-  vatPercent?: string;
-  extraMonth?: string;
-  extraDays?: string;
-  startFrom?: string;
-  downPaymentStatus?: string;
-  bPLName?: string;
-  vATRegNum?: string;
-  paymentTerm?: string;
-  priceList?: number;
-  serie: string;
-  paymentMethod?: string;
-  shippingType?: string | undefined;
-  items: PurchaseRequestDocumentLine[];
-  DocTotalSys?: number;
-  documentowner?: string;
-  vatSumSys?: string;
-  price?: number;
-  userCode?: string;
-  userName?: string;
-  department?: string;
-  branch?: string;
-  status?: string;
-  email?: string;
-  owner?: string;
-  documentLine?: PurchaseRequestDocumentLine[];
+export default class PurchaseRequest extends MasterDocumentModel {
+  Series: string;
+  DocEntry: any;
+  DocNum: number;
+  CardCode: string;
+  CardName?: string;
+  RequesterEmail?: string;
+  RequesterBranch?: string;
+  RequesterDepartment?: string;
+  ReqType?: string;
+  ReqCode?: string;
+  InventoryStatus?: string;
+  DocType: string;
+  DocDate: string;
+  DocDueDate?: string;
+  AttachmentEntry?: number;
+  DocCurrency?: string;
+  DocRate?: string;
+  Reference1?: string;
+  Reference2?: string;
+  Comments?: string;
+  JournalMemo?: string;
+  PaymentGroupCode?: string;
+  SalesPersonCode?: string;
+  TransportationCode?: string;
+  Confirmed?: string;
+  ContactPersonCode?: string;
+  TaxDate?: string;
+  PartialSupply?: string;
+  DocObjectCode?: string;
+  Indicator?: string;
+  FederalTaxID?: string;
+  DiscountPercent?: string;
+  CreationDate?: string;
+  RequriedDate?: string;
+  UpdateDate?: string;
+  UserSign?: string;
+  VatSum?: string;
+  DocTotalSys?: string;
+  CancelDate?: string;
+  Rounding?: string;
+  Address2?: string;
+  DocumentStatus?: string;
+  PeriodIndicator?: string;
+  PayToCode?: string;
+  ManualNumber?: string;
+  UseShpdGoodsAct?: string;
+  TotalDiscount?: string;
+  VatPercent?: string;
+  ExtraMonth?: string;
+  ExtraDays?: string;
+  StartFrom?: string;
+  DownPaymentStatus?: string;
+  BPLName?: string;
+  VATRegNum?: string;
+  PaymentTerm: string;
+  PaymentMethod: string;
+  ShippingType: string;
+  Items: PurchaseRequestDocumentLine[];
+  Documentowner?: string;
+  VatSumSys?: string;
+  Price?: number;
+  UserCode?: string;
+  UserName?: string;
+  Department?: string;
+  Branch?: string;
+  Status?: string;
+  Email?: string;
+  Owner?: string;
+  DocumentLine?: PurchaseRequestDocumentLine[];
 
   constructor(json: any) {
     super();
-    this.id = json["DocNum"];
-    this.cardCode = json["Requester"];
-    this.reqType = json["ReqType"];
-    this.cardName = json["RequesterName"];
-    this.department = json["RequesterDepartment"];
-    this.branch = json["RequesterBranch"];
-    this.requester = json["Requester"];
-    this.requesterName = json["RequesterName"];
-    this.requesterEmail = json["RequesterEmail"];
-    this.requesterDepartment = json["RequesterDepartment"];
-    this.requesterBranch = json["RequesterBranch"];
-    this.serie = json["Seriesss"];
-    this.docTotalSys = json["DocTotalSys"];
-    this.owner = json["DocumentsOwner"];
-    this.status = json["DocumentStatus"];
-    this.vatSumSys = json["VatSumSys"];
-    this.price = json["Price"];
-    this.docNum = json["DocNum"];
-    this.requriedDate = json["RequriedDate"];
-    this.taxDate = json["TaxDate"];
-    this.docDueDate = json["DocDueDate"];
-    this.docDate = json["DocDate"];
-    this.docType = json["DocType"].replace("dDocument_", "")?.charAt(0);
-    this.comments = json["Comments"];
-    // this.documentLine = [];
-    // this.isEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
-    this.items = json["DocumentLines"]?.map(
-      (e: any) => new PurchaseRequestDocumentLine(e)
-    );
-    // this.documentLine = json["DocumentLines"]?.map(
-    //   (e: any) => new PurchaseRequestDocumentLine(e)
-    // );
-    this.userCode = json["Requester"];
-    this.userName = json["RequesterName"];
-    this.department = json["RequesterDepartment"];
-    this.branch = json["RequesterBranch"];
-    this.documentStatus = json["DocumentStatus"]
-      .replace("bost_", "")
-      ?.charAt(0);
-    this.email = json["RequesterEmail"];
-    this.reqType = json["ReqType"];
+    this.DocEntry = json["DocEntry"];
+    this.DocNum = json["DocNum"];
+    this.ReqType = json["ReqType"];
+    this.Department = json["Department"];
+    this.Branch = json["Branch"];
+    this.CardCode = json['CardCode'] ?? json['Requester'];
+    this.CardName = json['CardName'] ?? json['RequesterName'];
+    this.RequesterEmail = json["RequesterEmail"] ?? json["Email"];
+    this.RequesterDepartment = json["RequesterDepartment"] ?? json["Department"];
+    this.RequesterBranch = json["RequesterBranch"] ?? json["Branch"];
+    this.Series = json["Series"];
+    this.DocTotalSys = json["DocTotalSys"];
+    this.Owner = json["DocumentsOwner"];
+    this.Status = json["DocumentStatus"];
+    this.VatSumSys = json["VatSumSys"];
+    this.Price = json["Price"];
+    this.DocNum = json["DocNum"];
+    this.RequriedDate = json["RequriedDate"];
+    this.TaxDate = json["TaxDate"];
+    this.DocDueDate = json["DocDueDate"];
+    this.DocDate = json["DocDate"];
+    this.DocType = json["DocType"].replace("dDocument_", "")?.charAt(0);
+    this.Comments = json["Comments"];
+    this.UserCode = json["Requester"];
+    this.UserName = json["RequesterName"];
+    this.Department = json["RequesterDepartment"];
+    this.Branch = json["RequesterBranch"];
+    this.DocumentStatus = json["DocumentStatus"].replace("bost_", "");
+    this.Email = json["RequesterEmail"];
+    this.ReqType = json["ReqType"];
+    this.PaymentTerm = json['PaymentGroupCode']
+    this.PaymentMethod = json['PaymentMethod']
+    this.ShippingType = json['TransportationCode']
+    this.DocTotalSys = json['DocTotalSys'] ?? 0;
+    this.Items = (json["DocumentLines"] ?? json['Items'])?.map((e: any) => new PurchaseRequestDocumentLine(e));
   }
 
-  toJson(update: boolean) {
+  setItem(items: any[]) {
     throw new Error("Method not implemented.");
   }
 
-  public static toCreate(json: any) {
-    console.log(json);
-
+  toJson(update = false) {
     return {
-      Requester: json["cardCode"],
-      RequesterName: json["cardName"],
-      RequesterEmail: json["email"],
-      RequesterBranch: json["branch"],
-      RequesterDepartment: json["department"],
-      ReqType: json["reqType"],
-      DocType: json["docType"],
-      TaxDate: json["taxDate"],
-      DocDate: json["docDate"],
-      RequriedDate: json["requriedDate"],
-      DocDueDate: json["docDueDate"],
-      DocumentOwner: json["owner"],
-      AttachmentEntry: ["attachmentEntry"],
-      DocCurrency: json["docCurrency"],
-      DocRate: json["docRate"],
-      Comments: json["comments"],
-      PriceList: json["priceList"],
-      // Serie: json["serie"],
-      // Series: json["Series"],
-      DocTotalSys: json["DocTotalSys"],
-      DiscountPercent: json["DiscountPercent"],
-      Rounding: json["Rounding"],
-      Address2: json["Address2"],
-      DocumentStatus: json["DocumentStatus"],
-      DocumentLines: json["items"]?.map((e: any) =>
-        PurchaseRequestDocumentLine.toCreate(e, json["docType"])
-      ),
-      
-      // documentLine: json["items"]?.map((e: any) =>
-      // PurchaseRequestDocumentLine.toCreate(e, json["DocType"])),
-    };
-  }
-
-  public static toUpdate(json: any) {
-    return {
-      Requester: json["userCode"],
-      RequesterName: json["userName"],
-      RequesterEmail: json["requesterEmail"],
-      RequesterBranch: json["requesterBranch"],
-      RequesterDepartment: json["requesterDepartment"],
-      docDueDate: json["DocDueDate"],
-      attachmentEntry: ["AttachmentEntry"],
-      docCurrency: json["DocCurrency"],
-      docRate: json["DocRate"],
-      reference1: json["Reference1"],
-      reference2: json["Reference2"],
-      comments: json["Comments"],
-      journalMemo: json["JournalMemo"],
-      paymentGroupCode: json["PaymentGroupCode"],
-      salesPersonCode: json["SalesPersonCode"],
-      transportationCode: json["TransportationCode"],
-      confirmed: json["Confirmed"],
-      contactPersonCode: json["ContactPersonCode"],
-      series: json["Series"],
-      taxDate: json["TaxDate"],
-      partialSupply: json["PartialSupply"],
-      docObjectCode: json["DocObjectCode"],
-      indicator: json["Indicator"],
-      federalTaxID: json["FederalTaxID"],
-      discountPercent: json["DiscountPercent"],
-      creationDate: json["CreationDate"],
-      updateDate: json["UpdateDate"],
-      userSign: json["UserSign"],
-      vatSum: json["VatSum"],
-      docTotalSys: json["DocTotalSys"],
-      requiredDate: json["RequriedDate"],
-      cancelDate: json["CancelDate"],
-      rounding: json["Rounding"],
-      address2: json["Address2"],
-      documentStatus: json["DocumentStatus"],
-      periodIndicator: json["PeriodIndicator"],
-      payToCode: json["PayToCode"],
-      manualNumber: json["ManualNumber"],
-      useShpdGoodsAct: json["UseShpdGoodsAct"],
-      totalDiscount: json["TotalDiscount"],
-      vatPercent: json["VatPercent"],
-      extraMonth: json["ExtraMonth"],
-      extraDays: json["ExtraDays"],
-      startFrom: json["StartFrom"],
-      downPaymentStatus: json["DownPaymentStatus"],
-      bPLName: json["BPLName"],
-      vatRegNum: json["VATRegNum"],
-      paymentTerm: json["PaymentTerm"],
-      priceList: json["PriceList"],
-      serie: json["Serie"],
-      paymentMethod: json["PaymentMethod"],
-      shippingType: json["ShippingType"],
-      DocTotalSys: json["DocTotalSys"],
-      docType: json["DocType"],
-      items: [],
+      Series: this.Series,
+      Requester: this.CardCode,
+      RequesterName: this.CardName,
+      RequesterEmail: this.RequesterEmail,
+      RequesterBranch: this.RequesterBranch,
+      RequesterDepartment: this.RequesterDepartment,
+      ReqType: this.ReqType,
+      DocType: this.DocType,
+      TaxDate: this.TaxDate,
+      DocDate: this.DocDate,
+      RequriedDate: this.RequriedDate,
+      DocDueDate: this.DocDueDate,
+      DocumentOwner: this.Owner,
+      AttachmentEntry: this.AttachmentEntry,
+      DocCurrency: this.DocCurrency,
+      DocRate: this.DocRate,
+      Comments: this.Comments,
+      DocTotalSys: this.DocTotalSys,
+      DiscountPercent: this.DiscountPercent,
+      Rounding: this.Rounding,
+      Address2: this.Address2,
+      DocumentStatus: this.DocumentStatus,
+      DocumentLines: this.Items?.map((e: any) => e.toJson(this.DocType, update)),
     };
   }
 }
-export class PurchaseRequestDocumentLine extends Model implements DocumentLine {
-  itemCode?: string | undefined;
-  itemDescription?: string | undefined;
-  itemGroup?: string | undefined;
-  quantity?: number | undefined;
-  unitPrice?: number | undefined;
-  currency?: string | undefined;
-  lineDiscount?: number;
-  uomEntry?: number | undefined;
-  uomCode?: string | undefined;
-  TransportationCode?: string | undefined;
-  project?: string | undefined;
-  taxCode?: string | undefined;
-  taxRate?: number | undefined;
-  vatGroup?: string | undefined;
-  lineTotal?: string | undefined;
-  requiredDate?: string | undefined;
-  shipDate?: string | undefined;
-  accountCode?: number | undefined;
-  accountNo?: number | undefined;
-  accountName?: string | undefined;
-  blanketAgreementNumber?: string | undefined;
-  discountPercent?: number;
-  requriedDate?: string;
-  itemName?: string;
-  saleVatGroup?: string;
-  lineVendor?: string;
-  purchaseVatGroup?: string;
-  accountNameD?: string ;
+
+
+export class PurchaseRequestDocumentLine extends LineDocumentModel {
+  ItemCode: string | undefined;
+  ItemName: string | undefined;
+  ItemGroup: string | undefined;
+  Quantity: number | undefined;
+  UnitPrice: number | undefined;
+  Currency: string | undefined;
+  LineDiscount: number;
+  UomEntry: number | undefined;
+  UomCode: string | undefined;
+  TransportationCode: string | undefined;
+  Project: string | undefined;
+  TaxCode: string | undefined;
+  TaxRate: number | undefined;
+  VatGroup: string | undefined;
+  LineTotal: string | undefined;
+  RequiredDate: string | undefined;
+  ShipDate: string | undefined;
+  AccountCode: number | undefined;
+  AccountNo: number | undefined;
+  AccountName: string | undefined;
+  BlanketAgreementNumber: string | undefined;
+  DiscountPercent: number;
+  LineVendor: string;
+  VatRate: number;
 
 
   constructor(json: any) {
     super();
-    this.saleVatGroup = json["VatGroup"];
-    this.itemCode = json["ItemCode"];
-    this.itemDescription = json["ItemDescription"];
-    this.itemGroup = json["ItemGroup"];
-    this.quantity = json["Quantity"];
-    this.unitPrice = json["UnitPrice"];
-    this.currency = json["PriceCurrency"];
-    this.lineDiscount = json["LineDiscount"];
-    this.uomEntry = json["UoMEntry"];
-    this.uomCode = json["UoMCode"];
-    this.vatGroup = json["VatGroup"];
-    this.purchaseVatGroup = json["VatGroup"];
-    this.requiredDate = json["RequiredDate"];
-    this.discountPercent = json["DiscountPercent"];
-    this.shipDate = json["ShipDate"];
-    this.accountCode = json["AccountCode"];
-    this.accountNo = json["AccountNo"];
-    this.accountName = json["AccountName"];
-    this.lineTotal = json["LineTotal"];
-    this.lineVendor = json["LineVendor"];
-    this.itemName = json["ItemDescription"];
-    this.taxRate = json["Rate"]
-    this.accountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
-// {(new OwnerRepository().find(data.owner)?.name) || "N/A"}
-  }
-  toJson(update: boolean) {
-    throw new Error("Method not implemented.");
+    this.ItemCode = json["ItemCode"] ?? shortid.generate();
+    this.ItemName = json["ItemName"] ?? json["ItemDescription"];
+    this.ItemGroup = json["ItemGroup"];
+    this.Quantity = json["Quantity"];
+    this.UnitPrice = json["UnitPrice"];
+    this.LineDiscount = json["LineDiscount"];
+    this.UomEntry = json["UomEntry"] ?? json["UoMEntry"];
+    this.UomCode = json["UomCode"] ?? json["UoMCode"];
+    this.VatGroup = json["VatGroup"];
+    this.RequiredDate = json["RequiredDate"];
+    this.DiscountPercent = json["DiscountPercent"];
+    this.ShipDate = json["ShipDate"];
+    this.AccountCode = json["AccountCode"];
+    this.AccountNo = json["AccountNo"] ?? json["AccountCode"];
+    this.AccountName = json["AccountName"];
+    this.LineTotal = json["LineTotal"];
+    this.LineVendor = json["LineVendor"];
+    this.TaxRate = json["Rate"];
+    this.VatRate = json["TaxPercentagePerRow"];
   }
 
-  public static toCreate(json: any, type: any) {
-    let line = {
-      Quantity: json["quantity"],
-      ItemCode: json["itemCode"],
-      ItemDescription: json["itemName"],
-      // ItemGroup: json["itemGroup"],
-      UnitPrice: json["unitPrice"],
-      // LineDiscount: 0.0,
-      DocEntry: json["uomGroupEntry"],
-      UoMCode: json["uomCode"],
-      // TransportationCode: 1,
+
+  toJson(type: string, update: boolean): any {
+    let line: any = {
+      Quantity: this.Quantity,
+      ItemCode: this.ItemCode,
+      ItemDescription: this.ItemName,
+      UnitPrice: this.UnitPrice,
+      LineDiscount: 0.0,
+      UoMCode: this.UomCode,
+      TransportationCode: this.TransportationCode,
       // Project: null,
       // TaxCode: null,
       // TAXRate: null,
-      UoMEntry: json["uomEntry"],
-      // VatGroup: json["vatGroup"],
-      VatGroup: json["purchaseVatGroup"],
-      LineVendor: json["lineVendor"],
-      LineTotal: json["lineTotal"],
-      RequiredDate: json["requiredDate"],
-      AccountCode: json["AccountNo"],
-      // AccountName: json["AccountName"],
-      DiscountPercent: json["discountPercent"],
+      // UoMEntry: this.UoMEntry,
+      // VatGroup: this.vatGroup,
+      VatGroup: this.VatGroup,
+      LineVendor: this.LineVendor,
+      RequiredDate: this.RequiredDate,
+      AccountCode: this.AccountNo,
+      // AccountName: this.AccountName,
+      DiscountPercent: this.DiscountPercent,
     };
 
     if (type === "S") {
       delete line.ItemCode;
-      delete line.UnitPrice;
+      // delete line.UnitPrice;
+      line['LineTotal'] = line.UnitPrice;
     }
 
     return line;
   }
+
+
 }
