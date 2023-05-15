@@ -22,19 +22,11 @@ class GoodReturnForm extends CoreFormDocument {
     this.state = {
       ...this.state,
       loading: true,
-
-      DocType: 'dDocument_Items',
       DocumentStatus: 'bost_Open',
       DocDate: new Date().toISOString(),
       DocDueDate: new Date().toISOString(),
       TaxDate: new Date().toISOString(),
-      TransportationCode : 1,
-      PaymentTerms: -1,
-      PaymentMethod:	"Outgoing BT",
-      SalesPersonCode	: -1,
-      StartFrom	: "Y"
-
-
+      StartFrom: "Y"
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
@@ -50,7 +42,7 @@ class GoodReturnForm extends CoreFormDocument {
     if (this.props.edit) {
       if (this.props.location.state) {
         const routeState = this.props.location.state;
-        setTimeout(() => this.setState({ ...this.props.location.state,loading: false, }), 500)
+        setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
       } else {
         // const dd = this.props.query.queryProvider.getQueryData('items');
 
@@ -143,39 +135,39 @@ class GoodReturnForm extends CoreFormDocument {
     return <>
       <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
         {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
-         
-     
-         <HeadingForm
-          data={this.state}
-          edit={this.props?.edit}
-          handlerOpenVendor={() => {
-            this.handlerOpenVendor('supplier');
-          }}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-          handlerOpenProject={() => this.handlerOpenProject()}
-        />
 
-        <ContentForm
-          edit={this.props?.edit}
-          data={this.state}
-          handlerAddItem={() => this.handlerOpenItem()}
-          handlerRemoveItem={this.handlerRemoveItem}
-          handlerChangeItem={this.handlerChangeItems}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-        />
-        <LogisticsForm
-          data={this.state}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-          edit={this.props?.edit}
-        />
-        <AccountingForm
-          edit={this.props.edit}
-          data={this.state}
-          handlerChange={(key, value) => this.handlerChange(key, value)}
-          handlerOpenProject={() => this.handlerOpenProject()}
 
-        />
-        <AttachmentForm />
+          <HeadingForm
+            data={this.state}
+            edit={this.props?.edit}
+            handlerOpenVendor={() => {
+              this.handlerOpenVendor('supplier');
+            }}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            handlerOpenProject={() => this.handlerOpenProject()}
+          />
+
+          <ContentForm
+            edit={this.props?.edit}
+            data={this.state}
+            handlerAddItem={() => this.handlerOpenItem()}
+            handlerRemoveItem={this.handlerRemoveItem}
+            handlerChangeItem={this.handlerChangeItems}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+          />
+          <LogisticsForm
+            data={this.state}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            edit={this.props?.edit}
+          />
+          <AccountingForm
+            edit={this.props.edit}
+            data={this.state}
+            handlerChange={(key, value) => this.handlerChange(key, value)}
+            handlerOpenProject={() => this.handlerOpenProject()}
+
+          />
+          <AttachmentForm />
 
           <div className="sticky w-full bottom-4  mt-2">
             <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">

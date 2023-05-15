@@ -1,31 +1,25 @@
-import React, { useCallback } from "react";
-import { IoChevronForwardSharp } from "react-icons/io5";
+import React from "react";
 import MaterialReactTable from "material-react-table";
 import { Button } from "@mui/material";
 import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineSetting } from "react-icons/ai";
 import ShippingType from "@/components/selectbox/ShippingType";
 import { currencyFormat } from "@/utilies";
-import ItemModal from "@/components/modal/ItemModal";
 import FormCard from "@/components/card/FormCard";
 import Formular from "@/utilies/formular";
 import MUISelect from "@/components/selectbox/MUISelect";
-import { ContactEmployee } from "@/models/BusinessParter";
 import TextField from "@mui/material/TextField";
 import MUITextField from "@/components/input/MUITextField";
-import Checkbox from "@mui/material/Checkbox";
 import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "@/components/input/AccountTextField";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
-import SalePerson from "@/components/selectbox/SalePerson";
-import VatGroup from "@/components/selectbox/VatGroup";
-import BuyerSelect from "@/components/selectbox/buyer";
-import Item from "./../../../../models/Item";
-import { documentStatusList } from "@/constants";
+import { documentStatusList, documentType, isItemType } from "@/constants";
 import ItemGroupRepository from "@/services/actions/itemGroupRepository";
 import UnitOfMeasurementGroupRepository from "@/services/actions/unitOfMeasurementGroupRepository";
 import { getUOMGroupByCode } from "@/helpers";
 import UOMTextField from "@/components/input/UOMTextField";
+import BuyerSelect from "@/components/selectbox/Buyer";
+import VatGroupTextField from "@/components/input/VatGroupTextField";
 
 
 interface ContentFormProps {
@@ -38,7 +32,7 @@ interface ContentFormProps {
 }
 
 
-export default function ContentForm({ data, handlerChangeItem,handlerChange, edit, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
+export default function ContentForm({ data, handlerChangeItem, handlerChange, edit, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
   const [tableKey, setTableKey] = React.useState(Date.now())
 
   const itemGroupRepo = new ItemGroupRepository();
@@ -100,15 +94,15 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
       {
         accessorKey: "ItemName",
         header: "Description",
-        Cell: ({ cell }: any) => <MUITextField  value={cell.getValue()} />
+        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />
       },
 
       {
         accessorKey: "ItemGroup",
         header: "Item Group",
-        Cell: ({ cell }: any) => <MUITextField  value={itemGroupRepo.find(cell.getValue())?.GroupName} />
+        Cell: ({ cell }: any) => <MUITextField value={itemGroupRepo.find(cell.getValue())?.GroupName} />
       },
-    
+
       {
         accessorKey: "Quantity",
         header: "Quantity",
@@ -155,14 +149,14 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         Cell: ({ cell }: any) => {
           return <MUITextField
             startAdornment={'USD'}
-            value={Formular.findLineTotal(cell.row.original.Quantity, cell.row.original.Price,  cell.row.original.DiscountPercent)}
+            value={Formular.findLineTotal(cell.row.original.Quantity, cell.row.original.Price, cell.row.original.DiscountPercent)}
           />;
         },
       },
       {
         accessorKey: "UomGroupCode",
         header: "UoM Group",
-        Cell: ({ cell }: any) => <MUITextField  value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+        Cell: ({ cell }: any) => <MUITextField value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
       },
       {
         accessorKey: "UomCode",
@@ -237,13 +231,13 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         Cell: ({ cell }: any) => {
           return (
             <MUIDatePicker
-              value={cell.getValue()}
+              value={cell.getValue() ?? null}
               name="RequiredDate"
               onChange={(event) =>
                 handlerChangeInput(
                   { target: { value: event } },
                   cell?.row?.original,
-                  "requiredDate"
+                  "RequiredDate"
                 )
               }
             />
@@ -257,12 +251,12 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           return (
             <MUIDatePicker
               // disabled={true}
-              value={cell.getValue()}
+              value={cell.getValue() ?? null}
               onChange={(event) =>
                 handlerChangeInput(
                   { target: { value: event } },
                   cell?.row?.original,
-                  "shipDate"
+                  "ShipDate"
                 )
               }
             />
@@ -293,20 +287,20 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         },
       },
       {
-        accessorKey: "PurchaseVatGroup",
+        accessorKey: "VatGroup",
         header: "Tax Code",
         Cell: ({ cell }: any) => {
           return (
-            <VatGroup
+            <VatGroupTextField
               value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(
                   event,
                   cell?.row?.original,
-                  "PurchaseVatGroup"
+                  "VatGroup"
                 )
               }
-              category="InputTax"
+              type="InputTax"
             />
           );
         },
@@ -355,7 +349,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
   return (
     <FormCard title="Content" >
       <div className="col-span-2 data-table">
-      <div className="flex flex-col my-5">
+        <div className="flex flex-col my-5">
           <div className="grid grid-cols-4">
             <div>
               <label
@@ -366,11 +360,8 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
               </label>
               <div className="">
                 <MUISelect
-                  items={[
-                    { name: "Item", value: "dDocument_Items" },
-                    { name: "Service", value: "dDocument_Service" },
-                  ]}
-                  aliaslabel="name"
+                  items={documentType}
+                  aliaslabel="label"
                   aliasvalue="value"
                   name="DocType"
                   disabled={edit}
@@ -384,7 +375,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.DocType === 'dDocument_Service' ? serviceColumns : itemColumns}
+          columns={!isItemType(data?.DocType) ? serviceColumns : itemColumns}
           data={[...data?.Items, blankItem] ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
@@ -411,7 +402,7 @@ export default function ContentForm({ data, handlerChangeItem,handlerChange, edi
           icons={{
             ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />
           }}
-      
+
         />
       </div>
 

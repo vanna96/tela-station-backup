@@ -58,9 +58,10 @@ export default class GoodReturnRepository extends Repository<GoodReturn> {
       return await request(
         "PATCH",
         this.url + "(" + id + ")",
-        new GoodReturn(payload).toJson()
+        new GoodReturn(payload).toJson(true)
       );
 
+    console.log(new GoodReturn(payload).toJson())
     return await request("POST", this.url, new GoodReturn(payload).toJson());
   }
 

@@ -44,12 +44,6 @@ export const withRouter = <P extends object>(Component: ComponentType<P>) => {
 
         };
 
-        const items: any = useQuery({
-            queryKey: ["items"],
-            queryFn: () => new itemRepository().get(),
-            staleTime: Infinity,
-        });
-
         const query = {
             get: (key: string) => queryClient.getQueryData(key),
             mutation: (key: string, cb: any) => {

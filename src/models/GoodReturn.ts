@@ -1,6 +1,6 @@
 import { LineDocumentModel, MasterDocumentModel } from './Model';
 import { ContactEmployee } from './BusinessParter';
-import { getValueDocumentStatus, getValueDocumentStatusProcument } from '@/constants';
+import { getValueDocumentStatus, getValueDocumentStatusProcument, isItemType } from '@/constants';
 import Currency from './Currency';
 
 
@@ -59,7 +59,7 @@ export default class GoodReturn extends MasterDocumentModel {
   constructor(json: any) {
     super();
     this.DocEntry = json['DocEntry'];
-    // this.Series = json['Series'];
+    this.Series = json['Series'];
     this.DocNum = json['DocNum'];
     this.CardCode = json['CardCode'] ?? json['BPCode'];
     this.CardName = json['CardName'] ?? json['BPName'];
@@ -71,9 +71,9 @@ export default class GoodReturn extends MasterDocumentModel {
     this.TaxDate = json['TaxDate'];
     this.CancelDate = json['CancelDate'];
     this.Description = json['Description'];
-    // this.DocType = json['DocType']?.replace('dDocument_', "")?.charAt(0);
+    this.DocType = json['DocType'];
     this.DocType = json['DocType']
-    this.DocumentType = json['DocumentType']?.replace('dDocument_', "");
+    this.DocumentType = json['DocType'];
     // this.DocumentStatus = getValueDocumentStatusProcument(json['DocumentStatus']);
     this.DocumentStatus = (json['DocumentStatus']);
     this.DocumentsOwner = json['DocumentsOwner'];
@@ -98,7 +98,6 @@ export default class GoodReturn extends MasterDocumentModel {
     this.ContactPersonList = json['contactPersonList'];
     this.DocTotalSys = json['DocTotalSys']
     this.VatSum = json['VatSum']
-
     this.CreateQRCodeFrom = json['CreateQRCodeFrom']
     this.Comments = json['Comments'];
     this.DocumentsOwner = json['DocumentsOwner']
@@ -120,7 +119,7 @@ export default class GoodReturn extends MasterDocumentModel {
       "DocDueDate": this.DocDueDate,
       "TaxDate": this.TaxDate,
       "Description": this.Description,
-      // "DocType": this.DocType,
+      "DocType": this.DocType,
       "Status": this.Status,
       "DocumentsOwner": this.DocumentsOwner === '' ? null : this.DocumentsOwner,
       // "Renewal": this.Renewal ? 'Y' : 'N',
@@ -134,21 +133,21 @@ export default class GoodReturn extends MasterDocumentModel {
       "Project": this.Project,
       "BPCurrency": this.DocCurrency,
       "SalesPersonCode": this.SalesPersonCode,
-      "DocumentLines": this.Items.map((e) => e.toJson(this.DocType, update)),
-      "TransportationCode" : this.TransportationCode,
-      "PaymentTermType" : this.PaymentTermType,
-      "JournalMemo" : this.JournalMemo,
-      "CentralBankIndicator" : this.CentralBankIndicator,
-      "NumberOfInstallments" : this.NumberOfInstallments,
-      "StartFrom" : this.StartFrom,
-      "PriceList" : this.PriceList,
-      "Address" : this.Address,
-      "Address2" : this.Address2,
-      "Indicator" : this.Indicator,
-      "FederalTaxID" : this.FederalTaxID,
-      "ImportFileNum" : this.ImportFileNum,
-      "CreateQRCodeFrom" : this.CreateQRCodeFrom,
-      "CancelDate" : this.CancelDate,
+      "DocumentLines": this.Items.map((e) => e.toJson(this.DocType ?? '', update)),
+      "TransportationCode": this.TransportationCode,
+      "PaymentTermType": this.PaymentTermType,
+      "JournalMemo": this.JournalMemo,
+      "CentralBankIndicator": this.CentralBankIndicator,
+      "NumberOfInstallments": this.NumberOfInstallments,
+      "StartFrom": this.StartFrom,
+      "PriceList": this.PriceList,
+      "Address": this.Address,
+      "Address2": this.Address2,
+      "Indicator": this.Indicator,
+      "FederalTaxID": this.FederalTaxID,
+      "ImportFileNum": this.ImportFileNum,
+      "CreateQRCodeFrom": this.CreateQRCodeFrom,
+      "CancelDate": this.CancelDate,
       // "DocTotalSys": this.DocTotalSys,
       // "VatSum": this.VatSum
 
@@ -231,7 +230,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
     //   this.itemGroup = itemGroup.
   }
 
-  toJson(type = 'I', update = false) {
+  toJson(type: string, update = false) {
     let body = {
       "ItemCode": this.ItemCode,
       "ItemDescription": this.ItemName,
@@ -259,7 +258,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
 
     };
 
-    if (type === 'S') {
+    if (!isItemType(type)) {
       delete body.ItemCode;
       delete body.ItemDescription;
       delete body.ItemGroup;
