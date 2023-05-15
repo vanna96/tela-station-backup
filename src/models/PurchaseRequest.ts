@@ -104,7 +104,6 @@ export default class PurchaseRequest extends MasterDocumentModel {
     this.Department = json["RequesterDepartment"];
     this.Branch = json["RequesterBranch"];
     this.DocumentStatus = json["DocumentStatus"].replace("bost_", "");
-    this.Email = json["RequesterEmail"];
     this.ReqType = json["ReqType"];
     this.PaymentTerm = json['PaymentGroupCode']
     this.PaymentMethod = json['PaymentMethod']

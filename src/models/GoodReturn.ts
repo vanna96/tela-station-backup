@@ -137,7 +137,7 @@ export default class GoodReturn extends MasterDocumentModel {
       "Comments": this.Comments,
       "AttachmentEntry": this.AttachmentEntry === 0 ? null : this.AttachmentEntry,
       "PaymentTerms": this.PaymentTerm,
-      "Series": this.Series,
+      // "Series": this.Series,
       "PaymentMethod": this.PaymentMethod,
       "ShippingType": this.ShippingType,
       "NumAtCard": this.NumAtCard,
@@ -160,9 +160,9 @@ export default class GoodReturn extends MasterDocumentModel {
       "CreateQRCodeFrom": this.CreateQRCodeFrom,
       "CancelDate": this.CancelDate,
       "PaymentGroupCode": this.PaymentGroupCode,
-      "ExtraMonth" : this.ExtraMonth,
-      "ExtraDays" : this.ExtraDays,
-      "CashDiscountDateOffset" : this.CashDiscountDateOffset
+      "ExtraMonth": this.ExtraMonth,
+      "ExtraDays": this.ExtraDays,
+      "CashDiscountDateOffset": this.CashDiscountDateOffset
       // "DocTotalSys": this.DocTotalSys,
       // "VatSum": this.VatSum
 

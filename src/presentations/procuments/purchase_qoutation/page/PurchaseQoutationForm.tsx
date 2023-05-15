@@ -44,10 +44,12 @@ class PurchaseQoutationForm extends CoreFormDocument {
   componentDidMount(): void {
 
     if (!this.props?.edit) {
-      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
-    }
-
-    if (this.props.edit) {
+      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500);
+      // Get default serie
+      DocumentSerieRepository.getDefaultDocumentSerie(purchaseQoutationRepository.documentSerie).then((res: any) => {
+        this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber, isLoadingSerie: false })
+      });
+    } else {
       if (this.props.location.state) {
         const routeState = this.props.location.state;
         setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
@@ -60,13 +62,11 @@ class PurchaseQoutationForm extends CoreFormDocument {
       }
     }
 
+    // Get Series Lists
     DocumentSerieRepository.getDocumentSeries(purchaseQoutationRepository?.documentSerie).then((res: any) => {
       this.setState({ ...this.state, SerieLists: res, })
     });
 
-    DocumentSerieRepository.getDefaultDocumentSerie(purchaseQoutationRepository.documentSerie).then((res: any) => {
-      this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber, isLoadingSerie: false })
-    });
   }
 
   handlerRemoveItem(code: string) {
@@ -76,33 +76,6 @@ class PurchaseQoutationForm extends CoreFormDocument {
     this.setState({ ...this.state, Items: items })
   }
 
-  handlerAddItem({ value, record, field }: any) {
-    let items = [...(this.state.Items ?? [])];
-    let item = this.state.Items?.find(
-      (e: any) => e?.ItemCode === record?.ItemCode
-    );
-
-    if (field === "AccountCode") {
-      const account = value as GLAccount;
-      item[field] = account.code;
-      item["AccountName"] = account.name;
-    } else {
-      item[field] = value;
-    }
-
-    if (field === 'Quantity' || field === 'UnitPrice' || field === 'DiscountPercent') {
-      const total = Formular.findLineTotal(item['Quantity'], item['UnitPrice'], item['DiscountPercent']);
-      item['LineTotal'] = total;
-    }
-
-    if (field === 'PurchaseVatGroup')
-      item['VatRate'] = new VatGroupRepository().find(value)?.VatRate;
-
-    const index = items.findIndex((e: any) => e?.ItemCode === record.ItemCode);
-    if (index > 0) items[index] = item;
-
-    this.setState({ ...this.state, Items: items, DocTotal: Formular.findTotalBeforeDiscount(items) });
-  }
   async handlerSubmit(event: any) {
     event.preventDefault();
 

@@ -151,7 +151,7 @@ class PurchaseRequestForm extends CoreFormDocument {
         const purchaseRequest: any = new PurchaseRequest(res?.data);
 
         this.props.history.replace(
-          this.props.location.pathname?.replace("create", purchaseRequest.id),
+          this.props.location.pathname?.replace("create", purchaseRequest.DocEntry),
           purchaseRequest
         );
         this.dialog.current?.success("Create Successfully.");

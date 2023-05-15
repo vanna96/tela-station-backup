@@ -194,7 +194,7 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
     super();
     this.SaleVatGroup = json['VatGroup'];
     this.ItemCode = json['ItemCode'];
-    this.ItemDescription = json['ItemDescription'];
+    this.ItemDescription = json['ItemDescription'] ?? json['ItemName'];
     this.Quantity = json['Quantity'];
     this.UnitPrice = json['UnitPrice'];
     this.Currency = json['PriceCurrency'];
@@ -209,7 +209,7 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
     this.AccountCode = json['AccountCode'];
     this.AccountName = json['AccountName'];
     this.LineTotal = json['LineTotal'];
-    this.ItemName = json['ItemDescription'];
+    this.ItemName = json['ItemDescription'] ?? json['ItemName'];
     this.BlanketAgreementNumber = json['BlanketAgreementNumber'];
     this.TaxCode = json['TaxCode'] ?? json['VatGroup'];
 
