@@ -26,54 +26,91 @@ import SalePersonRepository from '@/services/actions/salePersonRepository';
 import Formular from '@/utilies/formular';
 
 
+// class GoodReturnDetail extends Component<any, any> {
+//   constructor(props: any) {
+//     super(props);
+//     this.state = {
+//       loading: true,
+//       isError: false,
+//       message: '',
+//     }
+
+//     this.initData = this.initData.bind(this);
+//   }
+
+
+//   componentDidMount(): void {
+//     this.initData()
+//   }
+
+//   initData() {
+//     const { id } = this.props.match.params;
+//     const data = this.props.location.state as GoodReturn;
+//     console.log(data)
+//     if (data) {
+//       setTimeout(() => {
+//         let procData = data;
+//         procData as GoodReturn;
+
+//         const lines = this.props?.query.getItems();
+
+//         if (procData?.ContactPersonCode) {
+//           new BusinessPartnerRepository().findContactEmployee(procData.CardCode!).then((res: BusinessPartner) => {
+//             // procData.Email = res.email;
+//             // procData.Phone = res.phone;
+//             procData.ContactPersonList = res.contactEmployee ?? [];
+//             this.setState({ ...procData, loading: false })
+//           })
+//         } else {
+//           this.setState({ ...procData, loading: false })
+//         }
+//       }, 500)
+//     } else {
+//       new GoodReturnRepository().find(id).then(async (res: any) => {
+//         const lines = await this.props.query.getItems(res.items);
+//         console.log(lines);
+
+//         this.setState({ ...res, loading: false });
+//       }).catch((e: Error) => {
+//         this.setState({ isError: true, message: e.message });
+//       })
+//     }
+//   }
+
+
+
 class GoodReturnDetail extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       loading: true,
       isError: false,
-      message: '',
-    }
+      message: "",
+    };
 
     this.initData = this.initData.bind(this);
   }
 
-
   componentDidMount(): void {
-    this.initData()
+    this.initData();
+
   }
 
   initData() {
     const { id } = this.props.match.params;
     const data = this.props.location.state as GoodReturn;
-    console.log(data)
+
     if (data) {
-      setTimeout(() => {
-        let procData = data;
-        procData as GoodReturn;
-
-        const lines = this.props.query.getItems();
-
-        if (procData?.ContactPersonCode) {
-          new BusinessPartnerRepository().findContactEmployee(procData.CardCode!).then((res: BusinessPartner) => {
-            // procData.Email = res.email;
-            // procData.Phone = res.phone;
-            procData.ContactPersonList = res.contactEmployee ?? [];
-            this.setState({ ...procData, loading: false })
-          })
-        } else {
-          this.setState({ ...procData, loading: false })
-        }
-      }, 500)
+      setTimeout(() => this.setState({ ...data, loading: false }), 500);
     } else {
-      new GoodReturnRepository().find(id).then(async (res: any) => {
-        const lines = await this.props.query.getItems(res.items);
-        console.log(lines);
-
-        this.setState({ ...res, loading: false });
-      }).catch((e: Error) => {
-        this.setState({ isError: true, message: e.message });
-      })
+      new GoodReturnRepository()
+        .find(id)
+        .then((res: any) => {
+          this.setState({ ...res, loading: false });
+        })
+        .catch((e: Error) => {
+          this.setState({ isError: true, message: e.message });
+        });
     }
   }
 
