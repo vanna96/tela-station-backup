@@ -122,6 +122,7 @@ class GoodReturnForm extends CoreFormDocument {
     this.setState({ ...this.state, isSubmitting: true });
     const { id } = this.props?.match?.params
     const payloads = new GoodReturn(this.state).toJson(this.props?.edit);
+    console.log(payloads)
     await new GoodReturnRepository().post(payloads, this.props?.edit, id).then((res: any) => {
       const procumentData = new GoodReturn(res?.data)
       this.props.history.replace(this.props.location.pathname?.replace('create', procumentData.DocEntry), procumentData);
