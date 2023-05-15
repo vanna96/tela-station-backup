@@ -115,7 +115,6 @@ class GoodReturnForm extends CoreFormDocument {
             {
               ...this.state,
               isSubmitting: false,
-              isApproved: this.state.DocumentStatus === "A",
             }
           );
           this.dialog.current?.success(e.message);

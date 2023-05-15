@@ -77,10 +77,10 @@ export default class GoodReturn extends MasterDocumentModel {
     this.CancelDate = json['CancelDate'];
     this.Description = json['Description'];
     this.DocType = json['DocType'];
-    this.DocumentType = json['DocType']?.replace("dDocument_","");
+    this.DocumentType = json['DocType']
     // this.DocumentStatus = getValueDocumentStatusProcument(json['DocumentStatus']);
     // this.DocumentStatus = (json['DocumentStatus']);
-    this.DocumentStatus = json["DocumentStatus"].replace("bost_", "");
+    this.DocumentStatus = json["DocumentStatus"]
     this.DocStatus = (json['DocumentStatus']?.replace("bost_",""));
     this.DocumentsOwner = json['DocumentsOwner'];
     // this.Renewal = json['Renewal'] === 'tYES';
