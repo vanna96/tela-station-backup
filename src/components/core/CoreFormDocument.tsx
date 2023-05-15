@@ -467,7 +467,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let items: any[] = [...this.state.Items ?? []];
         let item: any = {};
 
-        if (this.state.AgreementMethod === 'I' || this.state.DocType === documentType[1].value && !record?.ItemCode) {
+        if (this.state.DocType === documentType[1].value && !record?.ItemCode) {
             console.log(value)
             item['ItemCode'] = shortid.generate();
             item[field] = value;
