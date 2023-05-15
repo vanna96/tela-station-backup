@@ -2,6 +2,7 @@ import { LineDocumentModel, MasterDocumentModel } from './Model';
 import { ContactEmployee } from './BusinessParter';
 import { getValueDocumentStatus, getValueDocumentStatusProcument } from '@/constants';
 import Currency from './Currency';
+import { BPAddress } from './BusinessParter';
 
 
 export default class GoodReturn extends MasterDocumentModel {
@@ -46,6 +47,7 @@ export default class GoodReturn extends MasterDocumentModel {
   Project?: string | undefined;
 
   ContactPersonList?: ContactEmployee[];
+  ShippingList?: BPAddress[];
   Address?: string;
   Address2?: string;
   IsEditable?: boolean;
@@ -96,6 +98,7 @@ export default class GoodReturn extends MasterDocumentModel {
     this.FederalTaxID = json['FederalTaxID']
     this.ImportFileNum = json['ImportFileNum']
     this.ContactPersonList = json['contactPersonList'];
+    this.ShippingList = json['shippingList'];
     this.DocTotalSys = json['DocTotalSys']
     this.VatSum = json['VatSum']
 
