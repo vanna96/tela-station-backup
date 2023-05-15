@@ -27,20 +27,46 @@ export default function PurchaseQoutationLists() {
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
+        visible: true,
+        type: 'number',
       },
       {
         accessorKey: "CardCode",
         header: "Vendor Code",
         enableClickToCopy: true,
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "CardName",
         header: "Vendor Name",
+        visible: true,
+        type: 'string',
         // size: 200, //increase the width of this column
+      },
+      {
+        accessorKey: "DocumentStatus",
+        header: "Status", //uses the default width from defaultColumn prop
+        enableClickToCopy: true,
+        enableFilterMatchHighlighting: true,
+        size: 88,
+        visible: false,
+        type: 'string',
+      },
+      {
+        accessorKey: "DocType",
+        header: "Type", //uses the default width from defaultColumn prop
+        enableClickToCopy: true,
+        enableFilterMatchHighlighting: true,
+        size: 88,
+        visible: false,
+        type: 'string',
       },
       {
         accessorKey: "DocDate",
         header: "Posting Date",
+        visible: true,
+        type: 'date',
         Cell: ({ cell }: any) => (
           <>
             {moment(cell.getValue()).format('DD-MM-YYYY')}
@@ -50,7 +76,9 @@ export default function PurchaseQoutationLists() {
       {
         accessorKey: "DocDueDate",
         header: "Delivery Date",
-        Cell: ({ cell }) => (
+        visible: true,
+        type: 'date',
+        Cell: ({ cell }: any) => (
           <>
             {moment(cell.getValue()).format('DD-MM-YYYY')}
           </>
