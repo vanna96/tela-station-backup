@@ -353,11 +353,11 @@ export default function ContentForm({
           </label>
           <div className="">
             <MUISelect
+              disabled
               items={documentType}
               aliaslabel="label"
               aliasvalue="value"
               name="DocType"
-              disabled={edit}
               value={data.DocType}
               onChange={(e) => handlerChange("DocType", e.target.value)}
             />
@@ -423,7 +423,7 @@ export default function ContentForm({
             Remarks
           </label>
           <div className="">
-            {data.documentStatus === "bost_Open" ? (
+            {data.DocumentStatus === "bost_Open" ? (
               <TextField
                 size="small"
                 multiline
