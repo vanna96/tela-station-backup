@@ -20,7 +20,7 @@ class PurchaseOrderForm extends CoreFormDocument {
       DocDueDate: null,
     } as any;
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    this.handlerItemChange = this.handlerItemChange.bind(this);
+    this.handlerChangeItems = this.handlerChangeItems.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 

@@ -81,7 +81,7 @@ export default function HeadingForm({
                   size="small"
                   fullWidth
                   className="w-full text-field bg-gray-100"
-                  name="BPCurrency"
+                  name="DocCurrency"
                   value={data.Currency}
                 // disabled
                 />
