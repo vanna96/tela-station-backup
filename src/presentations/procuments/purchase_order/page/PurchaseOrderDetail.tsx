@@ -16,7 +16,8 @@ import { dateFormat } from "../../../../utilies/index";
 import BusinessPartnerRepository from "@/services/actions/bussinessPartnerRepository";
 import PurchaseOrder from "../model";
 import MaterialReactTable from "material-react-table";
-import BuyerRepository from "@/services/actions/BuyerRepository";
+import BuyerRepository from "@/services/actions/buyerRepository";
+import { isItemType } from "@/constants";
 
 class PurchaseOrderDetail extends Component<any, any> {
   constructor(props: any) {
@@ -267,7 +268,7 @@ function Content(props: any) {
   return (
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
-        columns={data?.DocType === "I" ? itemColumn : serviceColumns}
+        columns={isItemType(data?.DocType) ? itemColumn : serviceColumns}
         data={data?.Items ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
