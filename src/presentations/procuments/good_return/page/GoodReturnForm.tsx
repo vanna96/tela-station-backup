@@ -24,7 +24,7 @@ class GoodReturnForm extends CoreFormDocument {
       DocType: 'dDocument_Items',
       DocumentStatus: 'bost_Open',
       DocDate: new Date().toISOString(),
-      DocDueDate: new Date().toISOString(),
+      DocDueDate: null,
       TaxDate: new Date().toISOString(),
       TransportationCode: 1,
       PaymentTerms: -1,

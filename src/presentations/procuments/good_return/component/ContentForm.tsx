@@ -381,8 +381,9 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
                   aliaslabel="label"
                   aliasvalue="value"
                   name="DocType"
-                  disabled={edit}
+                  disabled
                   value={data.DocType}
+                  // value={"dDocument_Items"}
                   onChange={(e) => handlerChange("DocType", e.target.value)}
                 />
               </div>
