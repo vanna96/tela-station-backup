@@ -45,6 +45,13 @@ export default function PurchaseRequestLists() {
         // size: 200, //increase the width of this column
       },
       {
+        accessorKey: "DocumentStatus",
+        header: "Status",
+        type: 'string',
+        visible: true,
+        // size: 200, //increase the width of this column
+      },
+      {
         accessorKey: "TaxDate",
         header: "Document Date",
         type: 'date',

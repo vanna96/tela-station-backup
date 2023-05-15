@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import MaterialReactTable from "material-react-table";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import MUITextField from '../../../../components/input/MUITextField'
 import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineSetting } from "react-icons/ai";
@@ -17,6 +17,7 @@ import UnitOfMeasurementRepository from '../../../../services/actions/unitOfMeas
 import UOMTextField from "@/components/input/UOMTextField";
 import UnitOfMeasurementGroupRepository from "@/services/actions/unitOfMeasurementGroupRepository";
 import { getUOMGroupByCode } from "@/helpers";
+import MUIDatePicker from "@/components/input/MUIDatePicker";
 
 
 interface ContentFormProps {
@@ -171,14 +172,25 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
             {
                 accessorKey: "Action",
                 header: "",
-                size: 60,
+                size: 40,
+                pin: true,
                 enableResizing: false,
                 Cell: ({ cell }: any) => {
-                    return <Button size="small" color="error" onClick={() => handlerRemoveRow(cell.row.original)}><AiOutlineDelete /></Button>;
+                    return (
+                        <div role="button" className="flex justify-center items-center">
+                            <button
+                                type="button"
+                                className="border border-gray-200 p-1 rounded-sm"
+                                onClick={() => handlerRemoveRow(cell.row.original)}
+                            >
+                                <AiOutlineDelete />
+                            </button>
+                        </div>
+                    );
                 },
             },
             {
-                accessorKey: "PlannedAmount",
+                accessorKey: "UnitPrice",
                 header: "Planned Amount (LC)", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
                     return <MUITextField
@@ -186,18 +198,18 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                         startAdornment={'USD'}
                         type="number"
                         disabled={data?.isApproved}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'PlannedAmount')}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
                     />;
                 },
             },
             {
-                accessorKey: "lineDiscount",
+                accessorKey: "LineDiscount",
                 header: "Line Discount", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
                     return <MUITextField
                         defaultValue={cell.getValue()}
                         disabled={data?.isApproved}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'lineDiscount')}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'LineDiscount')}
                     />;
                 },
             },
@@ -207,16 +219,16 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => {
                     return <MUITextField
                         startAdornment={'USD'}
-                        value={cell.row?.original?.PlannedAmount}
+                        value={cell.row?.original?.UnitPrice}
                         disabled={true}
                     />;
                 },
             },
             {
-                accessorKey: "ShppingType",
-                header: "Shipping Type", //uses the default width from defaultColumn prop
+                accessorKey: "FreeText",
+                header: "Free Text", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
-                    return <ShippingType
+                    return <MUITextField
                         value={cell.getValue()}
                         disabled={data?.isApproved}
                         onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'ShppingType')}
@@ -224,10 +236,17 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 },
             },
             {
-                accessorKey: "Project",
-                header: "Project", //uses the default width from defaultColumn prop
+                accessorKey: "PortionOfReturns",
+                header: "Portion Of Returns %", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
-                    return <ProjectionTextField value={cell.getValue()} onChange={(project) => handlerChangeInput(project, cell?.row?.original, 'Project')} />;
+                    return <MUITextField type="number" value={cell.getValue()} onChange={(value) => handlerChangeInput(value, cell?.row?.original, 'PortionOfReturns')} />;
+                },
+            },
+            {
+                accessorKey: "EndOfWarranty",
+                header: "End Of Warranty", //uses the default width from defaultColumn prop
+                Cell: ({ cell }: any) => {
+                    return <MUIDatePicker value={cell.getValue() ?? null} onChange={(value) => handlerChangeInput(value, cell?.row?.original, 'EndOfWarranty')} />;
                 },
             },
         ],
@@ -236,9 +255,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
 
     const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, });
 
-    const blankItem = {
-        ItemCode: ''
-    };
+    const blankItem = { ItemCode: '' };
 
     return (
         <FormCard title="Content" >
@@ -246,7 +263,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 <MaterialReactTable
                     key={tableKey}
                     // columns={itemColumns}
-                    columns={data?.agreementMethod === 'M' ? serviceColumns : itemColumns}
+                    columns={data?.AgreementMethod === 'M' ? serviceColumns : itemColumns}
                     data={[...data?.Items, blankItem] ?? []}
                     enableStickyHeader={true}
                     enableColumnActions={false}

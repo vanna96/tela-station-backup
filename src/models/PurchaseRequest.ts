@@ -1,5 +1,6 @@
 import shortid from "shortid";
 import { LineDocumentModel, MasterDocumentModel } from "./Model";
+import { isItemType } from "@/constants";
 
 
 export default class PurchaseRequest extends MasterDocumentModel {
@@ -96,7 +97,7 @@ export default class PurchaseRequest extends MasterDocumentModel {
     this.TaxDate = json["TaxDate"];
     this.DocDueDate = json["DocDueDate"];
     this.DocDate = json["DocDate"];
-    this.DocType = json["DocType"].replace("dDocument_", "")?.charAt(0);
+    this.DocType = json["DocType"];
     this.Comments = json["Comments"];
     this.UserCode = json["Requester"];
     this.UserName = json["RequesterName"];
@@ -219,7 +220,7 @@ export class PurchaseRequestDocumentLine extends LineDocumentModel {
       DiscountPercent: this.DiscountPercent,
     };
 
-    if (type === "S") {
+    if (!isItemType(type)) {
       delete line.ItemCode;
       // delete line.UnitPrice;
       line['LineTotal'] = line.UnitPrice;

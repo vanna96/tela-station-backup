@@ -2,7 +2,6 @@ import Model from "./Model";
 
 
 export default class BusinessPartner extends Model {
-
     cardCode?: string | null | undefined;
     cardCode2?: string | null | undefined;
     cardName?: string | null | undefined;
@@ -28,7 +27,6 @@ export default class BusinessPartner extends Model {
     priceLists: string | null | undefined;
     deliveryNoteBalance?: number | null | undefined;
     street: string | null | undefined;
-    ;
     openOrderBalance?: number | null | undefined;;
     vatGroup?: string | null | undefined;
     shippingType?: number | null | undefined;;
@@ -42,8 +40,9 @@ export default class BusinessPartner extends Model {
     bpPaymentMethod?: [] | null | undefined;;
     internalCode?: number | null | undefined;
     id?: number;
+    owner?: number | null;
 
-    constructor (json: any, index:number ) {
+    constructor(json: any, index: number) {
         super();
         this.id = index + 1;
         this.cardCode = json?.CardCode;
@@ -82,6 +81,7 @@ export default class BusinessPartner extends Model {
         this.contactEmployee = json?.ContactEmployees?.map((e: any) => new ContactEmployee(e));
         this.bpPaymentMethod = [];
         this.priceLists = json?.PriceListNum;
+        this.owner = json?.OwnerCode;
     }
 
 
@@ -106,9 +106,16 @@ export default class BusinessPartner extends Model {
         return `${shipAddress.street}, ${shipAddress.city}, ${shipAddress.country}.`;
     }
 
+    public getShipTo(): string {
+        const shipAddress = this.bpAddress?.find((e: BPAddress) => e.addressName === this.shipToDefault);
+
+        if (!shipAddress) return '';
+
+        return `${shipAddress.street}, ${shipAddress.city}, ${shipAddress.country}.`;
+    }
 
     public getBillToAddress(): string {
-        const shipAddress = this.bpAddress?.find((e: BPAddress) => e.addressName === this.shipToDefault);
+        const shipAddress = this.bpAddress?.find((e: BPAddress) => e.addressName === this.billToDefault);
 
         if (!shipAddress) return '';
 

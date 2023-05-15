@@ -24,6 +24,7 @@ export default function HeadingForm({
   handlerOpenProject,
   edit,
 }: IHeadingFormProps) {
+  console.log(data)
   return (
     <>
       <FormCard title="Information">
@@ -130,10 +131,10 @@ export default function HeadingForm({
               <MUISelect
                 items={[
                   { value: "bost_Open", label: "Open" },
-                  { value: "bost_Closed", label: "Closed" },
+                  { value: "bost_Close", label: "Closed" },
                 ]}
                 name="DocumentStatus"
-                disabled={data?.isOpen}
+                disabled={edit}
                 value={data?.DocumentStatus}
                 onChange={(e) =>
                   handlerChange("DocumentStatus", e.target.value)
@@ -141,13 +142,14 @@ export default function HeadingForm({
               />
               <div className="flex flex-col gap-1 text-sm -mt-6">
                 <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                  Document Date
+                  Posting Date
                 </label>
                 <div className="">
                   <MUIDatePicker
-                    error={data?.message?.includes("TaxDate")}
-                    value={data.taxDate}
-                    onChange={(e: any) => handlerChange("taxDate", e)}
+                    disabled={data?.DocumentStatus === "bost_Close" ?? false}
+                    error={data?.message?.includes("DocDate")}
+                    value={data.DocDate}
+                    onChange={(e: any) => handlerChange("DocDate", e)}
                   />
                 </div>
               </div>
@@ -155,65 +157,36 @@ export default function HeadingForm({
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {data?.DocumentStatus === "bost_Open" ? (
-              <>
-                <div className="flex flex-col gap-1 text-sm">
-                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                    Posting Date
-                  </label>
-                  <div className="">
-                    <MUIDatePicker
-                      error={data?.message?.includes("DocDate")}
-                      value={data.docDate}
-                      onChange={(e: any) => handlerChange("docDate", e)}
-                    />
-                  </div>
+            {/* {data?.DocumentStatus === "bost_Open" ? ( */}
+            <>
+              <div className="flex flex-col gap-1 text-sm">
+                <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                  Document Date
+                </label>
+                <div className="">
+                  <MUIDatePicker
+                    disabled={data?.DocumentStatus === "bost_Close" ?? false}
+                    error={data?.message?.includes("TaxDate")}
+                    value={data.TaxDate}
+                    onChange={(e: any) => handlerChange("TaxDate", e)}
+                  />
                 </div>
+              </div>
 
-                <div className="flex flex-col gap-1 text-sm">
-                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                    Valid Until
-                  </label>
-                  <div className="">
-                    <MUIDatePicker
-                      error={data?.message?.includes("DocDueDate")}
-                      value={data.docDueDate}
-                      onChange={(e: any) => handlerChange("docDueDate", e)}
-                    />
-                  </div>
+              <div className="flex flex-col gap-1 text-sm">
+                <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                  Return Date
+                </label>
+                <div className="">
+                  <MUIDatePicker
+                    error={data?.message?.includes("DocDueDate")}
+                    value={data.DocDueDate}
+                    onChange={(e: any) => handlerChange("DocDueDate", e)}
+                  />
                 </div>
-              </>
-            ) : (
-              <>
-                <div className="flex flex-col gap-1 text-sm">
-                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                    Posting Date
-                  </label>
-                  <div className="">
-                    <MUIDatePicker
-                      disabled={edit}
-                      error={data?.message?.includes("DocDate")}
-                      value={data.docDate}
-                      onChange={(e: any) => handlerChange("docDate", e)}
-                    />
-                  </div>
-                </div>
+              </div>
+            </>
 
-                <div className="flex flex-col gap-1 text-sm">
-                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                    Return Date
-                  </label>
-                  <div className="">
-                    <MUIDatePicker
-                      disabled={edit}
-                      error={data?.message?.includes("DocDueDate")}
-                      value={data.docDueDate}
-                      onChange={(e: any) => handlerChange("docDueDate", e)}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </FormCard>

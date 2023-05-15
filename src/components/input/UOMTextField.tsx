@@ -8,10 +8,11 @@ import UoMListModal from '../modal/UomListModal';
 interface UOMTextField {
     value: any,
     data: any[],
-    onChange: (project: any) => void
+    onChange: (project: any) => void,
+    disabled:boolean
 }
 
-const UOMTextField: FC<UOMTextField> = ({ value, onChange, data }: UOMTextField) => {
+const UOMTextField: FC<UOMTextField> = ({ value, onChange, data,disabled }: UOMTextField) => {
     const [open, setOpen] = React.useState<boolean>(false)
 
     const handlerConfirm = (value: any) => {
@@ -22,7 +23,7 @@ const UOMTextField: FC<UOMTextField> = ({ value, onChange, data }: UOMTextField)
 
     return <>
         <UoMListModal open={open} onClose={onClose} onOk={handlerConfirm} data={data} />
-        <MUITextField endAdornment value={value} onClick={() => setOpen(true)} />
+        <MUITextField disabled={disabled} endAdornment value={value} onClick={() => setOpen(true)} />
     </>
 }
 

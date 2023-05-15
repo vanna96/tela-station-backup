@@ -99,7 +99,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                     aliasvalue='value'
                                     name="AgreementMethod"
                                     disabled={edit}
-                                    value={data.agreementMethod}
+                                    value={data.AgreementMethod}
                                     onChange={(e) => handlerChange('AgreementMethod', e.target.value)}
                                 />
                             </div>
@@ -130,11 +130,11 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 {/* <div className='col-span-2'></div> */}
                 <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-1 text-sm">
-                        <MUITextField label="Tel. No" value={data.Phone} disabled={edit} />
+                        <MUITextField label="Tel. No" value={data.Phone} disabled={true} />
                     </div>
 
                     <div className="flex flex-col gap-1 text-sm">
-                        <MUITextField label="Email" value={data.Email} disabled={edit} />
+                        <MUITextField label="Email" value={data.Email} disabled={true} />
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">
@@ -165,7 +165,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                             Description
                         </label>
                         <div className="">
-                            {/* <TextField
+                            <TextField
                                 size="small"
                                 multiline
                                 rows={4}
@@ -174,7 +174,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 onBlur={(e) => handlerChange('Description', e.target.value)}
                                 name="Description"
                                 className="w-full"
-                            /> */}
+                            />
                         </div>
                     </div>
                 </div>

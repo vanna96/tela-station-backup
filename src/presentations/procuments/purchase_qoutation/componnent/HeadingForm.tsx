@@ -14,7 +14,7 @@ export interface IHeadingFormProps {
   handlerOpenProject?: () => void,
 }
 
-export default function HeadingForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject,edit }: IHeadingFormProps) {
+export default function HeadingForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject, edit }: IHeadingFormProps) {
 
 
   return (
@@ -59,7 +59,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                   name="DocCurrency"
                   value={data.DocCurrency}
                   onChange={(e) => handlerChange('DocCurrency', e.target.value)}
-                disabled={edit}
+                  disabled={edit}
                 />
                 <div></div>
               </div>
@@ -97,28 +97,28 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                   value={data.agreementMethod}
                   onChange={(e) => handlerChange('agreementMethod', e.target.value)}
                 /> */}
-            <MUITextField label="Status" disabled={edit} value={(data?.DocumentStatus).replace("bost_","")} name="DocumentStatus" />
+            <MUITextField label="Status" disabled={edit} value={(data?.DocumentStatus).replace("bost_", "")} name="DocumentStatus" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {data.documentStatus === "bost_Open" ? 
+            {data.documentStatus === "bost_Open" ?
               <>
-              <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Posting Date
-              </label>
-              <div className="">
-                <MUIDatePicker error={data?.message?.includes('DocDate')}value={data.DocDate} onChange={(e: any) => handlerChange('DocDate', e)} />
-              </div>
-            </div>
+                <div className="flex flex-col gap-1 text-sm">
+                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                    Posting Date
+                  </label>
+                  <div className="">
+                    <MUIDatePicker error={data?.message?.includes('DocDate')} value={data.DocDate} onChange={(e: any) => handlerChange('DocDate', e)} />
+                  </div>
+                </div>
 
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Valid Until
-              </label>
-              <div className="">
-                <MUIDatePicker error={data?.message?.includes('DocDueDate')} value={data.DocDueDate} onChange={(e: any) => handlerChange('DocDueDate', e)} />
-              </div>
+                <div className="flex flex-col gap-1 text-sm">
+                  <label htmlFor="Code" className="text-gray-500 text-[14px]">
+                    Valid Until
+                  </label>
+                  <div className="">
+                    <MUIDatePicker error={data?.message?.includes('DocDueDate')} value={data.DocDueDate} onChange={(e: any) => handlerChange('DocDueDate', e)} />
+                  </div>
                 </div>
               </> :
               <>
@@ -139,10 +139,10 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                     <MUIDatePicker disabled={edit} error={data?.message?.includes('DocDueDate')} value={data.DocDueDate} onChange={(e: any) => handlerChange('DocDueDate', e)} />
                   </div>
                 </div>
-              </> 
-          } 
-            
-          
+              </>
+            }
+
+
           </div>
           {/* 2 */}
           <div className="grid grid-cols-2 gap-3">
@@ -160,14 +160,14 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                 Requried Date
               </label>
               <div className="">
-                <MUIDatePicker error={data?.message?.includes('RequriedDate')} value={data.RequriedDate} onChange={(e: any) => handlerChange('RequriedDate', e)} />
+                <MUIDatePicker error={data?.message?.includes('RequriedDate')} value={data.RequriedDate ?? null} onChange={(e: any) => handlerChange('RequriedDate', e)} />
 
               </div>
             </div>
           </div>
         </div>
         {/* <div className='col-span-2'></div> */}
-       
+
       </FormCard>
     </>
   )

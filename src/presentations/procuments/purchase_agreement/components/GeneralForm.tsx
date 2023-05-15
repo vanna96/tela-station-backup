@@ -4,7 +4,7 @@ import Owner from '@/components/selectbox/Owner';
 import PaymentMethod from '@/components/selectbox/PaymentMethod';
 import PaymentTerm from '@/components/selectbox/PaymentTerm';
 import ShippingType from '@/components/selectbox/ShippingType';
-import { documentStatusList } from '@/constants';
+import { agreementMethodLists, documentStatusList } from '@/constants';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 
@@ -23,7 +23,7 @@ export default function GeneralForm({ data, handlerChange, edit }: IGeneralFormP
                         <label htmlFor='Code' className='text-gray-500 text-[14px]'>Agreement Type</label>
                         <div className=''>
                             <MUISelect
-                                items={[{ value: 'G', label: 'General' }, { value: 'S', label: 'Specific' }]}
+                                items={agreementMethodLists}
                                 name="AgreementType"
                                 disabled={data?.isApproved}
                                 value={data?.AgreementType}

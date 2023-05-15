@@ -7,11 +7,9 @@ import { LoadingButton } from '@mui/lab';
 import AttachmentForm from '../components/AttachmentForm';
 import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
-import GLAccount from '@/models/GLAccount';
 import { CircularProgress } from '@mui/material';
 import { UpdateDataSuccess } from '../../../../utilies/ClientError';
 import PurchaseAgreement from '../../../../models/PurchaseAgreement';
-import { QueryClient, useMutation } from 'react-query';
 
 
 class PurchaseAgreementForm extends CoreFormDocument {
@@ -20,21 +18,20 @@ class PurchaseAgreementForm extends CoreFormDocument {
         super(props)
         this.state = {
             ...this.state,
-            agreementMethod: 'I',
-            agreementType: 'G',
-            status: 'D',
-            renewal: false,
-            startDate: null,
-            terminateDate: null,
-            signingDate: null,
-            endDate: null,
+            AgreementMethod: 'I',
+            AgreementType: 'atGeneral',
+            Status: 'D',
+            Renewal: false,
+            // StartDate: null,
+            TerminateDate: null,
+            SigningDate: null,
+            EndDate: null,
             loading: true,
 
 
         } as any;
 
         this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-        this.handlerItemChange = this.handlerItemChange.bind(this);
         this.handlerSubmit = this.handlerSubmit.bind(this);
     }
 
@@ -76,48 +73,14 @@ class PurchaseAgreementForm extends CoreFormDocument {
         this.setState({ ...this.state, Items: items })
     }
 
-    handlerItemChange({ value, record, field }: any) {
-        let items = [...this.state.Items ?? []];
-        let item = this.state.Items?.find((e: any) => e?.ItemCode === record?.ItemCode);
-        const index = items.findIndex((e: any) => e?.ItemCode === record.ItemCode);
-
-        if (field === 'AccountNo') {
-            const account = value as GLAccount;
-            item[field] = account.code;
-            item['AccountName'] = account.name;
-        } else {
-            item[field] = value;
-        }
-
-        switch (field) {
-            case 'AccountNo':
-                const account = value as GLAccount;
-                item[field] = account.code;
-                item['AccountName'] = account.name;
-                break;
-            case 'UomCode':
-                item[field] = value?.Code;
-                item['UoMAbsEntry'] = value.AlternateUoM;
-                item['UnitsOfMeasurement'] = value.BaseQuantity;
-                break;
-            default:
-                item[field] = value;
-        }
-
-
-        if (index >= 0) {
-            items[index] = item;
-            console.log(item)
-            this.setState({ ...this.state, Items: items })
-        }
-    }
-
 
     async handlerSubmit(event: any) {
         event.preventDefault();
-        this.setState({ ...this.state, isSubmitting: true });
         const { id } = this.props?.match?.params
         const payloads = new PurchaseAgreement(this.state).toJson(this.props?.edit);
+        console.log(this.state);
+        return;
+        // this.setState({ ...this.state, isSubmitting: true });
         await new PurchaseAgreementRepository().post(payloads, this.props?.edit, id).then((res: any) => {
             const purchaseAgreement = new PurchaseAgreement(res?.data)
             this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.DocEntry), purchaseAgreement);
@@ -157,7 +120,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
                         data={this.state}
                         handlerAddItem={() => this.handlerOpenItem()}
                         handlerRemoveItem={this.handlerRemoveItem}
-                        handlerChangeItem={this.handlerItemChange}
+                        handlerChangeItem={this.handlerChangeItems}
                     />
 
                     <AttachmentForm />

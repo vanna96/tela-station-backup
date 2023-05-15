@@ -56,9 +56,6 @@ class PurchaseAgreementDetail extends Component<any, any> {
             setTimeout(() => {
                 let purchaseAgreement = data;
                 purchaseAgreement as PurchaseAgreement;
-
-                const lines = this.props.query.getItems();
-
                 if (purchaseAgreement.ContactPersonCode) {
                     new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.CardCode!).then((res: BusinessPartner) => {
                         purchaseAgreement.Email = res.email;
