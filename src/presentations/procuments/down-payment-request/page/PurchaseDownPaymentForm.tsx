@@ -43,10 +43,10 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
 
     if (this.props.edit) {
       if (this.props.location.state) {
-        setTimeout(() => this.setState({ ...this.props.location.state, loading: true, }), 500)
+        setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
       } else {
         new PurchaseDownPaymentRepository().find(this.props.match.params.id).then((res: any) => {
-          this.setState({ ...res, loading: false, isApproved: res?.status === 'A' || res?.status === 'T', });
+          this.setState({ ...res, loading: false});
         }).catch((e: Error) => {
           this.setState({ message: e.message });
         })

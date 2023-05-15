@@ -18,11 +18,10 @@ import PurchaseQoutationForm from '@/presentations/procuments/purchase_qoutation
 import PurchaseQoutationDetail from '@/presentations/procuments/purchase_qoutation/page/PurchaseQoutationDetail';
 import PurchaseOrderLists from '@/presentations/procuments/purchase_order';
 import PurchaseOrderDetail from '@/presentations/procuments/purchase_order/page/PurchaseOrderDetail';
-import PurchaseorderForm from '@/presentations/procuments/purchase_order/page/PurchaseOrderForm';
 import PurchaseDownPaymentList from '@/presentations/procuments/down-payment-request';
 import PurchaseDownPaymentDetail from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentDetail';
-import PurchaseDownForm from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentForm';
 import PurchaseDownPaymentForm from '@/presentations/procuments/down-payment-request/page/PurchaseDownPaymentForm';
+import PurchaseOrderForm from '@/presentations/procuments/purchase_order/page/PurchaseorderForm';
 
 export default function ProcumentRoute() {
     return (
@@ -57,8 +56,8 @@ export default function ProcumentRoute() {
             <Route path='/purchase-order' >
                 <Route index element={<PurchaseOrderLists />} />
                 <Route path=':id' element={<PurchaseOrderDetail />} />
-                <Route path='create' element={<PurchaseorderForm />} />
-                <Route path=':id/edit' element={<PurchaseorderForm edit={true} />} />
+                <Route path='create' element={<PurchaseOrderForm />} />
+                <Route path=':id/edit' element={<PurchaseOrderForm edit={true} />} />
             </Route>
             <Route path='/purchase-down-payment' >
                 <Route index element={<PurchaseDownPaymentList />} />
