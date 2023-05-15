@@ -44,7 +44,7 @@ export default class PurchaseQouatation extends MasterDocumentModel {
   Indicator: string;
   FederalTaxID: string;
   ImportFileNum: string;
-  DocCurrency: string;
+  Currency: string;
   DocumentStatus: string;
   Project: string;
   DiscountPercent?: string;
@@ -98,7 +98,7 @@ export default class PurchaseQouatation extends MasterDocumentModel {
     this.Indicator = json['Indicator'];
     this.ImportFileNum = json['ImportFileNum'];
     this.PaymentMethod = json['PaymentMethod'];
-    this.DocCurrency = json['DocCurrency'];
+    this.Currency = json['DocCurrency'];
     this.Project = json['Project'];
     this.DiscountPercent = json['DiscountPercent'];
     this.ItemName = json['ItemDescription'];
@@ -147,7 +147,7 @@ export default class PurchaseQouatation extends MasterDocumentModel {
       "PaymentMethod": this.PaymentMethod,
       "TransportationCode": this.TransportationCode,
       "Project": this.Project,
-      "DocCurrency": this.DocCurrency,
+      "DocCurrency": this.Currency,
       "TaxDate": this.TaxDate,
       "CreateQRCodeFrom": this.CreateQRCodeFrom,
       "DocumentLines": this.Items?.map((e) => e.toJson(this.DocType ?? '', update))
