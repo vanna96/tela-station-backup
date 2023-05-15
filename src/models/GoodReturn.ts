@@ -59,6 +59,7 @@ export default class GoodReturn extends MasterDocumentModel {
   VatSum?: number | undefined;
   ExtraMonth?: number | undefined;
   ExtraDays?: number | undefined;
+  DocStatus?: string | undefined;
 
   constructor(json: any) {
     super();
@@ -76,10 +77,11 @@ export default class GoodReturn extends MasterDocumentModel {
     this.CancelDate = json['CancelDate'];
     this.Description = json['Description'];
     this.DocType = json['DocType'];
-    this.DocType = json['DocType']
-    this.DocumentType = json['DocType'];
+    this.DocumentType = json['DocType']?.replace("dDocument_","");
     // this.DocumentStatus = getValueDocumentStatusProcument(json['DocumentStatus']);
-    this.DocumentStatus = (json['DocumentStatus']);
+    // this.DocumentStatus = (json['DocumentStatus']);
+    this.DocumentStatus = json["DocumentStatus"].replace("bost_", "");
+    this.DocStatus = (json['DocumentStatus']?.replace("bost_",""));
     this.DocumentsOwner = json['DocumentsOwner'];
     // this.Renewal = json['Renewal'] === 'tYES';
     this.Remark = json['Remarks'];

@@ -39,14 +39,14 @@ export default function GoodReturnLists() {
       },
       {
         accessorKey: "DocumentStatus",
-        header: "Document Type",
-        visible: true,
+        header: "Status",
+        visible: false,
         type: 'string',
       },
       {
-        accessorKey: "DocType",
-        header: "Document Type",
-        visible: true,
+        accessorKey: "DocumentType",
+        header: "Doc. Type",
+        visible: false,
         type: 'string',
       },
       {

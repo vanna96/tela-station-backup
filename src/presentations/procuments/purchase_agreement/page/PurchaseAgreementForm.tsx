@@ -79,8 +79,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
         const { id } = this.props?.match?.params
         const payloads = new PurchaseAgreement(this.state).toJson(this.props?.edit);
         console.log(this.state);
-        return;
-        // this.setState({ ...this.state, isSubmitting: true });
+        this.setState({ ...this.state, isSubmitting: true });
         await new PurchaseAgreementRepository().post(payloads, this.props?.edit, id).then((res: any) => {
             const purchaseAgreement = new PurchaseAgreement(res?.data)
             this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.DocEntry), purchaseAgreement);
