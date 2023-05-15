@@ -1,6 +1,5 @@
 import { withRouter } from '@/routes/withRouter';
 import React, { Component } from 'react'
-import PurchaseAgreement, { PurchaseAgreementDocumentLine } from '../../../../models/PurchaseAgreement';
 import Taps from '@/components/button/Taps';
 import MaterialReactTable from 'material-react-table';
 import { useMemo } from 'react';
@@ -8,9 +7,7 @@ import { currencyDetailFormat, currencyFormat, dateFormat, discountFormat, fileT
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { CircularProgress } from '@mui/material';
-import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
-import DocumentStatus from '@/constants/documentStatus';
 import { ContactEmployee } from '@/models/BusinessParter';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import BusinessPartner from '../../../../models/BusinessParter';
@@ -19,7 +16,6 @@ import PaymentTermTypeRepository from '../../../../services/actions/paymentTermT
 import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
 import ItemGroupRepository from '@/services/actions/itemGroupRepository';
 import { getUOMGroupByCode } from '@/helpers';
-import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import GoodReturn from '@/models/GoodReturn';
 import GoodReturnRepository from '@/services/actions/goodReturnRepository';
 import SalePersonRepository from '@/services/actions/salePersonRepository';
@@ -52,12 +48,14 @@ class GoodReturnDetail extends Component<any, any> {
         let procData = data;
         procData as GoodReturn;
 
+        // const lines = this.props?.query.getItems();
 
         if (procData?.ContactPersonCode) {
           new BusinessPartnerRepository().findContactEmployee(procData.CardCode!).then((res: BusinessPartner) => {
             // procData.Email = res.email;
             // procData.Phone = res.phone;
             procData.ContactPersonList = res.contactEmployee ?? [];
+            // procData.ShippingType = res.shippingType ?? [];
             this.setState({ ...procData, loading: false })
           })
         } else {
@@ -66,8 +64,8 @@ class GoodReturnDetail extends Component<any, any> {
       }, 500)
     } else {
       new GoodReturnRepository().find(id).then(async (res: any) => {
-        const lines = await this.props.query.getItems(res.items);
-        console.log(lines);
+        // const lines = await this.props.query.getItems(res.items);
+        // console.log(lines);
 
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {
@@ -75,6 +73,7 @@ class GoodReturnDetail extends Component<any, any> {
       })
     }
   }
+
 
   render() {
 

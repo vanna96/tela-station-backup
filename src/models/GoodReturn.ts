@@ -2,6 +2,7 @@ import { LineDocumentModel, MasterDocumentModel } from './Model';
 import { ContactEmployee } from './BusinessParter';
 import { getValueDocumentStatus, getValueDocumentStatusProcument, isItemType } from '@/constants';
 import Currency from './Currency';
+import { BPAddress } from './BusinessParter';
 
 
 export default class GoodReturn extends MasterDocumentModel {
@@ -46,6 +47,7 @@ export default class GoodReturn extends MasterDocumentModel {
   Project?: string | undefined;
 
   ContactPersonList?: ContactEmployee[];
+  ShippingList?: BPAddress[];
   Address?: string;
   Address2?: string;
   IsEditable?: boolean;
@@ -55,6 +57,8 @@ export default class GoodReturn extends MasterDocumentModel {
   Comments?: string;
   DocTotalSys?: number | undefined;
   VatSum?: number | undefined;
+  ExtraMonth?: number | undefined;
+  ExtraDays?: number | undefined;
 
   constructor(json: any) {
     super();
@@ -96,8 +100,15 @@ export default class GoodReturn extends MasterDocumentModel {
     this.FederalTaxID = json['FederalTaxID']
     this.ImportFileNum = json['ImportFileNum']
     this.ContactPersonList = json['contactPersonList'];
+    this.ShippingList = json['shippingList'];
     this.DocTotalSys = json['DocTotalSys']
     this.VatSum = json['VatSum']
+    this.PaymentGroupCode = json['PaymentGroupCode']
+    this.ExtraMonth = json['ExtraMonth']
+    this.ExtraDays = json['ExtraDays']
+    this.StartFrom = json['StartFrom']
+    this.CashDiscountDateOffset = json["CashDiscountDateOffset"]
+
     this.CreateQRCodeFrom = json['CreateQRCodeFrom']
     this.Comments = json['Comments'];
     this.DocumentsOwner = json['DocumentsOwner']
@@ -148,6 +159,10 @@ export default class GoodReturn extends MasterDocumentModel {
       "ImportFileNum": this.ImportFileNum,
       "CreateQRCodeFrom": this.CreateQRCodeFrom,
       "CancelDate": this.CancelDate,
+      "PaymentGroupCode": this.PaymentGroupCode,
+      "ExtraMonth" : this.ExtraMonth,
+      "ExtraDays" : this.ExtraDays,
+      "CashDiscountDateOffset" : this.CashDiscountDateOffset
       // "DocTotalSys": this.DocTotalSys,
       // "VatSum": this.VatSum
 

@@ -68,7 +68,7 @@ export default function AccountingForm({
             </div>
             <div className="grid grid-cols-2 gap-3">
               <MUITextField
-              label="Central Bank Indicator"
+                label="Central Bank Indicator"
                 onChange={(e) =>
                   handlerChange("CentralBankIndicator", e.target.value)
                 }
@@ -125,6 +125,7 @@ export default function AccountingForm({
             <div className="grid grid-cols-1 gap-3">
               <MUITextField
                 label="Cash Discount Date Offset"
+
                 onChange={(e) =>
                   handlerChange("CashDiscountDateOffset", e.target.value)
                 }
@@ -141,7 +142,8 @@ export default function AccountingForm({
                   Payment Term
                 </label>
                 <PaymentTerm
-                  disabled={edit}
+                  disabled={data?.DocumentStatus === "bost_Close" ?? false}
+
                   onChange={(e) =>
                     handlerChange("PaymentGroupCode", e.target.value)
                   }
@@ -155,7 +157,8 @@ export default function AccountingForm({
                 </label>
                 <div className="">
                   <PaymentMethod
-                    disabled={edit}
+                    disabled={data?.DocumentStatus === "bost_Close" ?? false}
+
                     type="outgoing"
                     name="PaymentMethod"
                     value={data.PaymentMethod}
@@ -172,6 +175,7 @@ export default function AccountingForm({
                   Central Bank Ind.
                 </label>
                 <MUITextField
+                  disabled={edit}
                   onChange={(e) =>
                     handlerChange("CentralBankIndicator", e.target.value)
                   }
@@ -207,6 +211,7 @@ export default function AccountingForm({
                     { value: "E", name: "Month End" },
                     { value: "H", name: "Half Month" },
                     { value: "Y", name: "Month Start" },
+                    { value: "pdt_None", name: "None" },
                   ]}
                   aliaslabel="name"
                   aliasvalue="value"
@@ -237,7 +242,7 @@ export default function AccountingForm({
             </div>
             <div className="grid grid-cols-1 gap-3">
               <MUITextField
-                disabled={edit}
+
                 label="Cash Discount Date Offset"
                 value={data?.CashDiscountDateOffSet}
                 name="CashDiscountDateOffset"
