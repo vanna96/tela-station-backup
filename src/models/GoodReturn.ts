@@ -146,6 +146,7 @@ export default class GoodReturn extends MasterDocumentModel {
       "AttachmentEntry": this.AttachmentEntry === 0 ? null : this.AttachmentEntry,
       "PaymentTerms": this.PaymentTerm,
       // "Series": this.Series,
+      // "Series": this.Series,
       "PaymentMethod": this.PaymentMethod,
       "ShippingType": this.ShippingType,
       "NumAtCard": this.NumAtCard,

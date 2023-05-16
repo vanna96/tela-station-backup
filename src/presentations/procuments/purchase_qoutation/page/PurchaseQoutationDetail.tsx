@@ -25,6 +25,7 @@ import BuyerRepository from '@/services/actions/buyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
 import { getUOMGroupByCode } from '@/helpers';
+import { isItemType } from '@/constants';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -39,7 +40,7 @@ class PurchaseQoutationDetail extends Component<any, any> {
 
     this.initData = this.initData.bind(this);
     console.log(this.state);
-    
+
   }
 
 
@@ -275,7 +276,7 @@ function Content(props: any) {
 
   return <div className="data-table  border-none p-0 mt-3">
     <MaterialReactTable
-      columns={data?.DocType === 'I' ? itemColumn : serviceColumns}
+      columns={isItemType(data?.DocType) ? itemColumn : serviceColumns}
       data={data?.Items || []}
       enableHiding={true}
       initialState={{ density: "compact" }}

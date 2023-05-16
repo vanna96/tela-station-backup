@@ -92,7 +92,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
       },
 
       {
-        accessorKey: "ItemDescription",
+        accessorKey: "ItemName",
         header: "Description",
         Cell: ({ cell }: any) => {
 
@@ -101,8 +101,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
             }
-            name="ItemDescription"
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemDescription')}
+            name="ItemName"
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemName')}
           />;
         },
       },
