@@ -62,6 +62,7 @@ class GoodReturnDetail extends Component<any, any> {
           this.setState({ ...procData, loading: false })
         }
       }, 500)
+
     } else {
       new GoodReturnRepository().find(id).then(async (res: any) => {
         // const lines = await this.props.query.getItems(res.items);
@@ -73,6 +74,7 @@ class GoodReturnDetail extends Component<any, any> {
       })
     }
   }
+
 
 
   render() {
@@ -193,7 +195,7 @@ function Content(props: any) {
       Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
     },
     {
-      accessorKey: "Price",
+      accessorKey: "UnitPrice",
       header: "Unit Price",
       Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
     },
@@ -314,11 +316,11 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findTotalBeforeDiscount(data?.Items)) ?? ""}</span>
+        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findTotalBeforeDiscount(data?.Items))}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.docDiscountPercent || "N/A"}{data?.DocDiscountPrice}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.DiscountPercent || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>

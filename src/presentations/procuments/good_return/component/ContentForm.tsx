@@ -485,11 +485,11 @@ export default function ContentForm({
           <div className="w-[48%] gap-3 mt-5">
             <div className="flex items-center gap-1 text-sm">
               <Checkbox
-                name="Renewal"
-                checked={data.Renewal}
-                onChange={(e) => handlerChange("Renewal", !data.Renewal)}
+                name="Rounding"
+                checked={data.Rounding}
+                onChange={(e) => handlerChange("Rounding", !data.Rounding)}
               />
-              <label htmlFor="Renewal" className="text-gray-500 text-[14px]">
+              <label htmlFor="Rounding" className="text-gray-500 text-[14px]">
                 Rounding
               </label>
             </div>
@@ -505,7 +505,7 @@ export default function ContentForm({
 
           <div className="w-[48%] gap-3">
             <MUITextField
-              label="Total Payment Due:"
+              label="Total Credit:"
               value={currencyFormat(docTaxTotal + docTotal)}
             />
           </div>

@@ -60,6 +60,9 @@ export default class GoodReturn extends MasterDocumentModel {
   ExtraMonth?: number | undefined;
   ExtraDays?: number | undefined;
   DocStatus?: string | undefined;
+  DiscountPercent?: number | undefined;
+  TotalDiscount?: number | undefined;
+  Rounding?: string | undefined;
 
   constructor(json: any) {
     super();
@@ -110,6 +113,9 @@ export default class GoodReturn extends MasterDocumentModel {
     this.ExtraDays = json['ExtraDays']
     this.StartFrom = json['StartFrom']
     this.CashDiscountDateOffset = json["CashDiscountDateOffset"]
+    this.DiscountPercent = json['DiscountPercent']
+    this.TotalDiscount = json['TotalDiscount']
+    this.Rounding = json['Rounding']
 
     this.CreateQRCodeFrom = json['CreateQRCodeFrom']
     this.Comments = json['Comments'];
@@ -139,7 +145,7 @@ export default class GoodReturn extends MasterDocumentModel {
       "Comments": this.Comments,
       "AttachmentEntry": this.AttachmentEntry === 0 ? null : this.AttachmentEntry,
       "PaymentTerms": this.PaymentTerm,
-      "Series": this.Series,
+      // "Series": this.Series,
       "PaymentMethod": this.PaymentMethod,
       "ShippingType": this.ShippingType,
       "NumAtCard": this.NumAtCard,
@@ -164,7 +170,8 @@ export default class GoodReturn extends MasterDocumentModel {
       "PaymentGroupCode": this.PaymentGroupCode,
       "ExtraMonth" : this.ExtraMonth,
       "ExtraDays" : this.ExtraDays,
-      "CashDiscountDateOffset" : this.CashDiscountDateOffset
+      "CashDiscountDateOffset" : this.CashDiscountDateOffset,
+      "Rounding" : this.Rounding,
       // "DocTotalSys": this.DocTotalSys,
       // "VatSum": this.VatSum
 
@@ -189,7 +196,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
   ItemName?: string | undefined;
   ItemGroup?: string | undefined;
   Quantity?: number | undefined;
-  Price?: number | undefined;
+  UnitPrice?: number | undefined;
   Currency?: string | undefined;
   LineDiscount?: number;
   UomEntry?: number | undefined;
@@ -218,7 +225,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
     this.ItemName = json['ItemDescription'];
     this.ItemGroup = json['ItemGroup'];
     this.Quantity = json['Quantity'];
-    this.Price = json['Price'];
+    this.UnitPrice = json['UnitPrice'];
     this.Currency = json['PriceCurrency'];
     this.LineDiscount = json['LineDiscount'];
     this.UomEntry = json['UoMEntry'];
@@ -253,7 +260,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
       "ItemDescription": this.ItemName,
       "ItemGroup": this.ItemGroup,
       "Quantity": this.Quantity,
-      "Price": this.Price,
+      "UnitPrice": this.UnitPrice,
       "UoMEntry": this.UomEntry,
       "UoMCode": this.UomCode,
       // "UnitsOfMeasurement": 0,
@@ -279,7 +286,7 @@ export class GoodReturnDocumentLine extends LineDocumentModel {
       delete body.ItemCode;
       delete body.ItemDescription;
       delete body.ItemGroup;
-      delete body.Price;
+      delete body.UnitPrice;
       delete body.UoMEntry;
     }
 

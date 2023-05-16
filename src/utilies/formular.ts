@@ -14,7 +14,7 @@ export default class Formular {
 
 
   public static findTotalBeforeDiscount(items: any[]): number {
-    const total = items?.reduce((prev: number, currentItem: any) => prev + currentItem?.lineTotal, 0);
+    const total = items?.reduce((prev: number, currentItem: any) => prev + currentItem?.LineTotal, 0);
 
     if (isNaN(total)) return 0;
 

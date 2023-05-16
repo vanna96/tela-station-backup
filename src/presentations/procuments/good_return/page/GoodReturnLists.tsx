@@ -40,15 +40,20 @@ export default function GoodReturnLists() {
       {
         accessorKey: "DocumentStatus",
         header: "Status",
-        visible: false,
+        visible: true,
         type: 'string',
+        Cell: ({ cell }: any) => (
+          <>
+            {(cell.getValue())?.replace("bost_","")}
+          </>
+        ),
       },
-      {
-        accessorKey: "DocumentType",
-        header: "Doc. Type",
-        visible: false,
-        type: 'string',
-      },
+      // {
+      //   accessorKey: "DocumentType",
+      //   header: "Doc. Type",
+      //   visible: false,
+      //   type: 'string',
+      // },
       {
         accessorKey: "DocDate",
         header: "Posting Date ",
