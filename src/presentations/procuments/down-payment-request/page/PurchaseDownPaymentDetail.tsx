@@ -18,7 +18,7 @@ import OwnerRepository from '@/services/actions/ownerRepository';
 import PaymentTermTypeRepository from '@/services/actions/paymentTermTypeRepository';
 import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
 import BusinessPartner, { ContactEmployee } from '@/models/BusinessParter';
-import BuyerRepository from '@/services/actions/BuyerRepository';
+import BuyerRepository from '@/services/actions/buyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
 import PurchaseDownPayment from '@/models/DownPaymentRequest';

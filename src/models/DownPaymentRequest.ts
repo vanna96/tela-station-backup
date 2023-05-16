@@ -72,7 +72,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel {
     this.ExtraMonth = json['ExtraMonth'];
     this.ExtraDays = json['ExtraDays'];
     this.Series = json['Series'];
-    this.DocType = json['DocType'];
+    this.DocType = json['DocType']?.replace('dDocument_', "")?.charAt(0);
     this.DocNum = json['DocNum'];
     this.ContactPersonList = json['ContactPersonList'];
     this.JournalMemo = json['JournalMemo']
@@ -120,7 +120,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel {
       "VatSum": this.VatSum,
       "NumAtCard": this.NumAtCard,
       "DocumentsOwner": this.DocumentsOwner,
-      "DocumentStatus": this.DocumentStatus,
+      "DocumentStatus": update ? null : this.DocumentStatus,
       "ImportFileNum": this.ImportFileNum,
       "FederalTaxID": this.FederalTaxID,
       "Indicator": this.Indicator,
@@ -132,21 +132,21 @@ export default class PurchaseDownPayment extends MasterDocumentModel {
       "CardCode": this.CardCode,
       "CardName": this.CardName,
       "Comments": this.Comments,
-      "DocType": this.DocType,
+      "DocType":  this.DocType,
       "Address": this.Address,
       "Address2": this.Address2,
       "ContactPersonCode": this.ContactPersonCode,
-      "DocDate": this.DocDate,
+      "DocDate": update ? null : this.DocDate,
       "DocDueDate": this.DocDueDate,
       // "RequriedDate": json['requriedDate'],
       "TerminateDate": this.TerminateDate,
       "Description": this.Description,
-      "Status": this.DocumentStatus,
+      "Status": update ? null : this.DocumentStatus,
       "Owner": this.DocumentsOwner,
       "Remarks": this.Remark,
       "AttachmentEntry": this.AttachmentEntry,
       "PaymentGroupCode": this.PaymentGroupCode,
-      "Series": this.Series,
+      // "Series": update ? null : this.Series,
       "PaymentMethod": this.PaymentMethod,
       "TransportationCode": this.TransportationCode,
       "Project": this.Project,
@@ -220,35 +220,36 @@ export class PurchaseDownPaymentDocumentLine extends LineDocumentModel {
     this.UomGroupEntry = uomGroup.AbsEntry;
     this.UomGroupName = uomGroup?.Code;
   }
-  toJson(type: string, update = false) {
+  toJson(type="I", update = false) {
     let line = {
       "Quantity": this.Quantity,
       "ItemCode": this.ItemCode,
-      "ItemDescription": update ? null : this.ItemDescription,
+      "ItemDescription": this.ItemDescription,
       "ItemName": this.ItemName,
       "UnitPrice": this.UnitPrice,
-      "LineDiscount": 0.0,
       "UoMEntry": this.UomEntry,
       "UoMCode": this.UomCode,
-      "TransportationCode": 1,
-      "Project": null,
-      "TAXRate": null,
+
       "VatGroup": this.VatGroup,
       "LineTotal": this.LineTotal,
       "RequiredDate": this.RequiredDate,
       "ShipDate": this.ShipDate,
-      "AccountCode": this.AccountCode,
+      "AccountCode": null ? 0 : this.AccountCode,
       "AccountName": this.AccountName,
       "BlanketAgreementNumber": this.BlanketAgreementNumber,
-      "DiscountPercent": this.DiscountPercent,
+      "DiscountPercent": update ? null: this.DiscountPercent,
       "TaxCode": this.TaxCode,
 
     };
 
-    if (!isItemType(type)) {
+    if (type=== "S") {
 
       delete line.ItemCode;
       delete line.UnitPrice;
+      delete line.DiscountPercent;
+      delete line.UnitPrice;
+
+      
     }
     return line;
   }

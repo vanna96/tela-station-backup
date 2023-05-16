@@ -92,13 +92,13 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
 
       {
         accessorKey: "ItemName",
-        header: "Description",
+        header: "ItemDescription",
         Cell: ({ cell }: any) => {
 
           return <MUITextField
             value={cell.getValue()}
             name="ItemDescription"
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemDescription')}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemName')}
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
             }
@@ -258,39 +258,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
               data?.DocumentStatus === "bost_Close" ? true : false
             }
             value={cell.getValue()}
-            name="ItemName"
+            name="ItemDescription"
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemName')}
-          />;
-        },
-      },
-      {
-        accessorKey: "RequiredDate",
-        header: "Required Date",
-        Cell: ({ cell }: any) => {
-          return (
-            <MUIDatePicker
-              disabled={
-                data?.DocumentStatus === "bost_Close" ? true : false
-              }
-              value={cell.getValue()}
-              name="RequiredDate"
-              onChange={(event) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'RequiredDate')}
-            />
-          );
-        },
-      },
-      {
-        accessorKey: "ShipDate",
-        header: "Quoted Date", //uses the default width from defaultColumn prop
-        Cell: ({ cell }: any) => {
-          return <MUIDatePicker
-            // disabled={true}
-            disabled={
-              data?.DocumentStatus === "bost_Close" ? true : false
-            }
-            name="ShipDate"
-            value={cell.getValue() ?? null}
-            onChange={(event) => handlerChangeInput({ target: { value: event } }, cell?.row?.original, 'ShipDate')}
           />;
         },
       },
@@ -319,7 +288,11 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <MUITextField disabled={
             data?.DocumentStatus === "bost_Close" ? true : false
-          } name="AccountName" value={cell.getValue()} />;
+          } name="AccountName" value={cell.getValue()}
+            onChange={(event) =>
+              handlerChangeInput(event, cell?.row?.original, "AccountName")
+            }
+          />;
         },
       },
       {
@@ -331,7 +304,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             // disabled={
             //   data?.DocumentStatus === "bost_Close" ? true : false
             // }
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'PurchaseVatGroup')}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'VatGroup')}
             type="InputTax"
             name="VatGroup"
           />;
@@ -397,7 +370,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={!isItemType(data?.DocType) ? serviceColumns : itemColumns}
+          columns={data?.DocType === "S" ? serviceColumns : itemColumns}
           data={[...data?.Items, blankItem ?? []]}
           enableStickyHeader={true}
           enableColumnActions={false}

@@ -52,15 +52,25 @@ export default function PurchaseQoutationLists() {
         size: 88,
         visible: false,
         type: 'string',
+        Cell: ({ cell }: any) => (
+          <>
+            {cell.getValue()?.replace('bost_', '')}
+          </>
+        ),
       },
       {
         accessorKey: "DocType",
-        header: "Type", //uses the default width from defaultColumn prop
+        header: "Document Type", //uses the default width from defaultColumn prop
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
         visible: false,
         type: 'string',
+        Cell: ({ cell }: any) => (
+          <>
+            {cell.getValue()?.replace('dDocument_', '')}
+          </>
+        ),
       },
       {
         accessorKey: "DocDate",

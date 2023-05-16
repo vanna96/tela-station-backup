@@ -25,16 +25,50 @@ export default function PurchaseDownPaymentList() {
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "CardCode",
         header: "Vendor Code",
         enableClickToCopy: true,
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "CardName",
         header: "Vendor Name",
         // size: 200, //increase the width of this column
+        visible: true,
+        type: 'string',
+      },
+      {
+        accessorKey: "DocumentStatus",
+        header: "Status", //uses the default width from defaultColumn prop
+        enableClickToCopy: true,
+        enableFilterMatchHighlighting: true,
+        size: 88,
+        visible: false,
+        type: 'string',
+        Cell: ({ cell }: any) => (
+          <>
+            {cell.getValue()?.replace('bost_', '')}
+          </>
+        ),
+      },
+      {
+        accessorKey: "DocType",
+        header: "Document Type", //uses the default width from defaultColumn prop
+        enableClickToCopy: true,
+        enableFilterMatchHighlighting: true,
+        size: 88,
+        visible: false,
+        type: 'string',
+        Cell: ({ cell }: any) => (
+          <>
+            {cell.getValue()?.replace('dDocument_', '')}
+          </>
+        ),
       },
       {
         accessorKey: "DocDate",
@@ -44,15 +78,19 @@ export default function PurchaseDownPaymentList() {
             {moment(cell.getValue()).format('DD-MM-YYYY')}
           </>
         ),
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "DocDueDate",
         header: "Delivery Date",
-        Cell: ({ cell }) => (
+        Cell: ({ cell }:any) => (
           <>
             {moment(cell.getValue()).format('DD-MM-YYYY')}
           </>
         ),
+        visible: true,
+        type: 'string',
 
       },
       {
