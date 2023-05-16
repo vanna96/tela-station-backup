@@ -2,7 +2,7 @@ import { withRouter } from "@/routes/withRouter";
 import React, { Component } from "react";
 import Taps from "@/components/button/Taps";
 import { useMemo } from "react";
-import { currencyFormat } from "@/utilies";
+import { currencyDetailFormat, currencyFormat } from "@/utilies";
 import Modal from "@/components/modal/Modal";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import { CircularProgress } from "@mui/material";
@@ -38,6 +38,8 @@ class PurchaseOrderDetail extends Component<any, any> {
   initData() {
     const { id } = this.props.match.params;
     const data = this.props.location.state as PurchaseOrder;
+    
+  
     console.log(data);
 
     if (data) {
@@ -68,6 +70,7 @@ class PurchaseOrderDetail extends Component<any, any> {
   }
 
   render() {
+    
     return (
       <div className="w-full h-full flex flex-col p-4 gap-4">
         <DocumentHeaderComponent data={this.state} />
@@ -122,14 +125,13 @@ class PurchaseOrderDetail extends Component<any, any> {
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Vendor Ref .No</span>
                   <span className="w-8/12 font-medium">
-                    {" "}
-                    : {this.state.NumAtCard}
+                    : {this.state.NumAtCard ?? "N/A"}
                   </span>
                 </div>
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500 ">Local Currency</span>
                   <span className="w-8/12 font-medium">
-                    : {this.state.DocCurrency}
+                    : {this.state.Currency}
                   </span>
                 </div>
               </div>
@@ -184,7 +186,9 @@ export default withRouter(PurchaseOrderDetail);
 
 function Content(props: any) {
   const { data } = props;
-
+  const subTotal = data.Items?.reduce((accumulator: any, currentLine: any) => {
+    return accumulator + currentLine.LineTotal;
+  }, 0);
   const itemColumn = useMemo(
     () => [
       {
@@ -203,7 +207,7 @@ function Content(props: any) {
       {
         accessorKey: "UnitPrice",
         header: "Info Price",
-        Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        Cell: ({ cell }: any) =>  currencyDetailFormat(cell.getValue()),
       },
       {
         accessorKey: "DiscountPercent",
@@ -218,7 +222,7 @@ function Content(props: any) {
       {
         accessorKey: "LineTotal",
         header: "Total (LC)",
-        Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
+        Cell: ({ cell }: any) =>  currencyDetailFormat(cell.getValue()),
       },
       {
         accessorKey: "UomCode",
@@ -237,7 +241,7 @@ function Content(props: any) {
         Cell: ({ cell }: any) => cell.getValue(),
       },
       {
-        accessorKey: "AccountCode",
+        accessorKey: "AccountNo",
         header: "G/L Account",
         Cell: ({ cell }: any) => cell.getValue(),
       },
@@ -308,7 +312,7 @@ function Content(props: any) {
             Total Before Discount
           </span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.LineTotal}
+            : {subTotal?.toFixed(2)}
           </span>
         </div>
         <div className="flex gap-2">
@@ -319,14 +323,14 @@ function Content(props: any) {
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Tax</span>
-          <span className="w-8/12 font-medium text-sm">: {data?.VatSum}</span>
+          <span className="w-8/12 font-medium text-sm">: {data?.VatSum?.toFixed(2)}</span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">
             Total Payment Due
           </span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.FocTotalSys}
+            : {data?.DocTotalSys?.toFixed(2)}
           </span>
         </div>
         <div className="flex gap-2">

@@ -40,6 +40,8 @@ export default function AccounttingForm({
               onChange={(e) =>
                 handlerChange("PaymentGroupCode", e.target.value)
               }
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
+
             />
           </div>
           <div className="w-[50%]">
@@ -107,6 +109,8 @@ export default function AccounttingForm({
             onChange={(e) =>
               handlerChange("CashDiscountDateOffset", e.target.value)
             }
+            disabled={data.DocumentStatus === "bost_Close" ? true : false}
+
           />
         </div>
       </div>

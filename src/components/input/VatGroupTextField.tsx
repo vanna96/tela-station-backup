@@ -7,10 +7,11 @@ interface VatGroupTextField {
     value: any,
     onChange: (businessPartner: any) => void
     name?: any,
+    disabled?: any,
     type: VatCategory
 }
 
-const VatGroupTextField: FC<VatGroupTextField> = ({ value, onChange, name, type }: VatGroupTextField) => {
+const VatGroupTextField: FC<VatGroupTextField> = ({ value, onChange, name, type, disabled }: VatGroupTextField) => {
     const [open, setOpen] = React.useState<boolean>(false)
 
     const handlerConfirm = (businessPartner: any) => {
@@ -21,7 +22,7 @@ const VatGroupTextField: FC<VatGroupTextField> = ({ value, onChange, name, type 
 
     return <>
         <VatGroupModal type={type} open={open} onClose={onClose} onOk={handlerConfirm} />
-        <MUITextField endAdornment value={value} name={name} onClick={() => setOpen(true)} />
+        <MUITextField endAdornment value={value} name={name} disabled={disabled}  onClick={() => setOpen(true)} />
     </>
 }
 
