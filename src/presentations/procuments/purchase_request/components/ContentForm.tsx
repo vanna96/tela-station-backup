@@ -410,8 +410,8 @@ export default function ContentForm({
           </label>
           <Owner
             name="DocumentsOwner"
-            value={data?.owner}
-            onChange={(e: any) => handlerChange("owner", e.target.value)}
+            value={data?.Owner}
+            onChange={(e: any) => handlerChange("Owner", e.target.value)}
           />
         </div>
         <div className="flex flex-col gap-1 text-sm">
@@ -425,8 +425,8 @@ export default function ContentForm({
               rows={4}
               fullWidth
               name="Comments"
-              value={data?.comments}
-              onChange={(e: any) => handlerChange("comments", e.target.value)}
+              value={data?.Comments}
+              onChange={(e: any) => handlerChange("Comments", e.target.value)}
             />
           </div>
         </div>

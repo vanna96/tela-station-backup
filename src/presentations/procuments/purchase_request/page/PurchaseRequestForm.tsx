@@ -20,12 +20,12 @@ class PurchaseRequestForm extends CoreFormDocument {
     this.state = {
       ...this.state,
       loading: true,
-      docType: "I",
-      documentStatus: "O",
-      requriedDate: null,
-      docDate: new Date().toISOString(),
-      taxDate: new Date().toISOString(),
-      docDueDate: new Date().toISOString(),
+      DocType: "dDocument_Items",
+      DocumentStatus: "O",
+      RequriedDate: null,
+      DocDate: new Date().toISOString(),
+      TaxDate: new Date().toISOString(),
+      DocDueDate: new Date().toISOString(),
     } as any;
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
@@ -219,7 +219,7 @@ class PurchaseRequestForm extends CoreFormDocument {
                   </LoadingButton>
                 </div>
                 <div className="flex items-center">
-                  {!this.state.DocumentStatus?.includes('Close') ? <LoadingButton
+                  <LoadingButton
                     type="submit"
                     sx={{ height: "25px" }}
                     className="bg-white"
@@ -228,12 +228,13 @@ class PurchaseRequestForm extends CoreFormDocument {
                     variant="contained"
                     disableElevation
                   >
-                    <span className="px-3 text-[11px] py-1">Save & New</span>
-                  </LoadingButton> : null}
+                    <span className="px-3 text-[11px] py-1">Save </span>
+                  </LoadingButton>
                 </div>
               </div>
             </div>
-          </>}
+          </>
+          }
         </form>
       </>
     );

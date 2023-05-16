@@ -68,8 +68,8 @@ export default function HeadingForm({
               <div className="mt-1">
                 <DepartmentSelect
                   name="RequesterDepartment"
-                  value={data.Department}
-                  onChange={(e) => handlerChange("Department", e.target.value)}
+                  value={data.RequesterDepartment}
+                  onChange={(e) => handlerChange("RequesterDepartment", e.target.value)}
                 />
               </div>
             </div>
@@ -82,8 +82,8 @@ export default function HeadingForm({
               <div className="">
                 <BranchSelect
                   name="Branch"
-                  value={data.Branch}
-                  onChange={(e) => handlerChange("Branch", e.target.value)}
+                  value={data.RequesterBranch}
+                  onChange={(e) => handlerChange("RequesterBranch", e.target.value)}
                 />
               </div>
             </div>
@@ -91,7 +91,8 @@ export default function HeadingForm({
             <div className="flex flex-col gap-1 text-sm">
               <MUITextField
                 label="Email"
-                value={data?.Email}
+                disabled={edit}
+                value={data?.RequesterEmail}
                 name="RequesterEmail"
               />
             </div>
@@ -158,7 +159,7 @@ export default function HeadingForm({
               <div className="">
                 <MUIDatePicker
                   value={data.DocDueDate}
-                  addOnDay={31}
+                  // addOnDay={31}
                   onChange={(e: any) => handlerChange("DocDueDate", e)}
                 />
               </div>
