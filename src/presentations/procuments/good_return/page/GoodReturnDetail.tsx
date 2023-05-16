@@ -331,7 +331,7 @@ function Content(props: any) {
         <span className='w-8/12 font-medium text-sm'>:{data?.VatSum}</span>
       </div>
       <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
+        <span className='w-4/12 text-gray-500 text-sm'>Total Credit</span>
         <span className='w-8/12 font-medium text-sm'>:{data?.DocTotalSys} </span>
       </div>
       {/* <div className='flex gap-2'>
