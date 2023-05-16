@@ -6,6 +6,7 @@ import { ContactEmployee } from './BusinessParter';
 import GLAccountRepository from '@/services/actions/GLAccountRepository';
 import Currency from './Currency';
 import { isItemType } from '@/constants';
+import shortid from 'shortid';
 
 export default class PurchaseQouatation extends MasterDocumentModel {
   id: any;
@@ -71,7 +72,7 @@ export default class PurchaseQouatation extends MasterDocumentModel {
     this.ExtraMonth = json['ExtraMonth'];
     this.ExtraDays = json['ExtraDays'];
     this.Series = json['Series'];
-    this.DocType = json['DocType'];
+    this.DocType = json['DocType']?.replace('dDocument_', "")?.charAt(0);
     this.DocNum = json['DocNum'];
     this.ContactPersonList = json['ContactPersonList'];
     this.JournalMemo = json['JournalMemo']
@@ -154,9 +155,6 @@ export default class PurchaseQouatation extends MasterDocumentModel {
     };
   }
 
-
-
-
 }
 
 
@@ -188,12 +186,12 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
   Currency?: String;
   UomGroupEntry?: number | undefined;
   UomGroupName?: number | undefined;
-
+  RequiredQuantity?: number;
 
   constructor(json: any) {
     super();
     this.SaleVatGroup = json['VatGroup'];
-    this.ItemCode = json['ItemCode'];
+    this.ItemCode = json['ItemCode'] ?? shortid.generate();
     this.ItemDescription = json['ItemDescription'] ?? json['ItemName'];
     this.Quantity = json['Quantity'];
     this.UnitPrice = json['UnitPrice'];
@@ -212,14 +210,15 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
     this.ItemName = json['ItemDescription'] ?? json['ItemName'];
     this.BlanketAgreementNumber = json['BlanketAgreementNumber'];
     this.TaxCode = json['TaxCode'] ?? json['VatGroup'];
-
+    this.RequiredQuantity = json['RequiredQuantity'];
+    this.RequiredDate = json['RequiredDate'];
   }
 
   setUOMGroup(uomGroup: any): void {
     this.UomGroupEntry = uomGroup.AbsEntry;
     this.UomGroupName = uomGroup?.Code;
   }
-  toJson(type: string, update = false) {
+  toJson(type = "I", update = false) {
     let body = {
       "VatGroup": this.SaleVatGroup,
       "ItemCode": this.ItemCode,
@@ -232,20 +231,23 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
       "UoMCode": this.UomCode,
       "Project": this.Project,
       "RequriedDate": this.RequiredDate,
-      "DiscountPercent": this.DiscountPercent,
+      "DiscountPercent": update ? null : this.DiscountPercent,
       "ShipDate": this.ShipDate,
       "AccountCode": this.AccountCode,
       "AccountName": this.AccountName,
       "LineTotal": this.LineTotal,
       "BlanketAgreementNumber": this.BlanketAgreementNumber,
       "TaxCode": update ? null : this.TaxCode,
-
+      "RequiredQuantity": this.RequiredQuantity,
+      "RequiredDate": this.RequiredDate,
     }
-    if (!isItemType(type)) {
+    if (type === 'S') {
+      delete body.DiscountPercent;
       delete body.ItemCode;
-      delete body.ItemDescription;
       delete body.UnitPrice;
-      delete body.UoMEntry;
+      delete body.LineDiscount;
+      delete body.ShipDate;
+      delete body.Project
     }
 
     return body;

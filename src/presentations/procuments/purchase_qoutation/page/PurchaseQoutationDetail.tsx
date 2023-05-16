@@ -26,6 +26,7 @@ import BusinessPartnerRepository from '@/services/actions/bussinessPartnerReposi
 import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
 import { getUOMGroupByCode } from '@/helpers';
 import { isItemType } from '@/constants';
+import moment from 'moment';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -76,7 +77,7 @@ class PurchaseQoutationDetail extends Component<any, any> {
   }
 
   render() {
-
+ 
 
     return (
       <div className='w-full h-full flex flex-col p-4 gap-4'>
@@ -170,7 +171,9 @@ export default withRouter(PurchaseQoutationDetail);
 function Content(props: any) {
 
   const { data } = props;
-
+  const subTotal = data.Items?.reduce((accumulator: any, currentLine: any) => {
+    return accumulator + currentLine.LineTotal;
+  }, 0);
   const itemColumn = useMemo(() => [
     {
       accessorKey: "ItemCode",
@@ -182,16 +185,40 @@ function Content(props: any) {
     {
       accessorKey: "ItemDescription",
       header: "Descriptions",
-
+    
     },
     {
-      accessorKey: "Quantity",
-      header: "	Required Qty.",
+      accessorKey: "RequiredDate",
+      header: "Required Date",
+      Cell: ({ cell }: any) => (
+        <>
+          {moment(cell?.getValue())?.format('DD-MM-YYYY')}
+        </>
+      ),
+    },
+    {
+      accessorKey: "ShipDate",
+      header: "Quoted Date", //uses the default width from defaultColumn prop
+      Cell: ({ cell }: any) => (
+        <>
+          {moment(cell?.getValue())?.format('DD-MM-YYYY')}
+        </>
+      ),
+    },
+    {
+      accessorKey: "RequiredQuantity",
+      header: "Required Quantity",
       enableClickToCopy: true,
     },
     {
+      accessorKey: "Quantity",
+      header: "Quoted Quantity",
+      enableClickToCopy: true,
+    },
+ 
+    {
       accessorKey: "UnitPrice",
-      header: "Info Price",
+      header: "Unit Price",
       Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
     {
@@ -230,7 +257,7 @@ function Content(props: any) {
   const serviceColumns = React.useMemo(
     () => [
       {
-        accessorKey: "ItemDescription",
+        accessorKey: "ItemName",
         header: "	Descrition",
         Cell: ({ cell }: any) => cell.getValue(),
 
@@ -276,7 +303,7 @@ function Content(props: any) {
 
   return <div className="data-table  border-none p-0 mt-3">
     <MaterialReactTable
-      columns={isItemType(data?.DocType) ? itemColumn : serviceColumns}
+      columns={data?.DocType === "I" ? itemColumn : serviceColumns}
       data={data?.Items || []}
       enableHiding={true}
       initialState={{ density: "compact" }}
@@ -311,7 +338,7 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.DocTotalBeforeDiscount || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {subTotal?.toFixed(2) || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>

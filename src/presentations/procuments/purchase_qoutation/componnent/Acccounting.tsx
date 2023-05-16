@@ -53,7 +53,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
             <div className='grid grid-cols-2 gap-3'>
               <div>
                 <label htmlFor="AgreementMethod" className="text-gray-500 text-[14px]">
-                  Manually Rcalculate Due Date
+                  Manually Recalculate Due Date
                 </label>
 
                 <MUISelect
@@ -77,7 +77,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
               </div>
             </div>
             <div className='grid grid-cols-1 gap-3'>
-              <MUITextField label="Cash Discount Date Offsetys" value={''} name="CashDiscountDateOffset" />
+              <MUITextField label="Cash Discount Date Offset" value={''} name="CashDiscountDateOffset" />
 
             </div>
           </> :
@@ -104,7 +104,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
         <div className='grid grid-cols-2 gap-3'>
           <div>
             <label htmlFor="AgreementMethod" className="text-gray-500 text-[14px]">
-              Manually Rcalculate Due Date
+              Manually Recalculate Due Date
             </label>
 
             <MUISelect
@@ -129,7 +129,7 @@ export default function Accounting({ data, handlerChange, handlerOpenProject,edi
           </div>
         </div>
         <div className='grid grid-cols-1 gap-3'>
-              <MUITextField disabled={edit} label="Cash Discount Date Offsetys" value={''} name="CashDiscountDateOffset" />
+              <MUITextField disabled={edit} label="Cash Discount Date Offset" value={''} name="CashDiscountDateOffset" />
 
         </div>
           </>
