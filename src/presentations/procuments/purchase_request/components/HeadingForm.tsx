@@ -68,8 +68,8 @@ export default function HeadingForm({
               <div className="mt-1">
                 <DepartmentSelect
                   name="RequesterDepartment"
-                  value={data.RequesterDepartment}
-                  onChange={(e) => handlerChange("RequesterDepartment", e.target.value)}
+                  value={edit ? data?.RequesterDepartment : data.Department}
+                  onChange={edit ? (e) => handlerChange("RequesterDepartment", e.target.value): (e) => handlerChange("Department", e.target.value)}
                 />
               </div>
             </div>
@@ -82,8 +82,8 @@ export default function HeadingForm({
               <div className="">
                 <BranchSelect
                   name="Branch"
-                  value={data.RequesterBranch}
-                  onChange={(e) => handlerChange("RequesterBranch", e.target.value)}
+                  value={edit ? data?.RequesterBranch : data.Branch}
+                  onChange={edit ? (e) => handlerChange("RequesterBranch", e.target.value) : (e) => handlerChange("Branch", e.target.value)}
                 />
               </div>
             </div>
@@ -92,7 +92,8 @@ export default function HeadingForm({
               <MUITextField
                 label="Email"
                 disabled={edit}
-                value={data?.RequesterEmail}
+                value={edit ? data?.RequesterEmail : data?.Email}
+                onChange={edit ? (e) => handlerChange("RequesterEmail", e.target.value) : (e) => handlerChange("Email", e.target.value)}
                 name="RequesterEmail"
               />
             </div>
@@ -159,7 +160,7 @@ export default function HeadingForm({
               <div className="">
                 <MUIDatePicker
                   value={data.DocDueDate}
-                  // addOnDay={31}
+                  addOnDay={31}
                   onChange={(e: any) => handlerChange("DocDueDate", e)}
                 />
               </div>
