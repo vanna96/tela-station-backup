@@ -214,21 +214,21 @@ function Content(props: any) {
       header: "Total (LC)",
       Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
-    {
-      accessorKey: "UoMGroup",
-      header: "UoM Group",
-      Cell: ({ cell }: any) => getUOMGroupByCode(cell.row.original.ItemCode)?.Code,
-    },
+    // {
+    //   accessorKey: "UoMGroup",
+    //   header: "UoM Group",
+    //   Cell: ({ cell }: any) => getUOMGroupByCode(cell.row.original.ItemCode)?.Code,
+    // },
     {
       accessorKey: "UomCode",
       header: "UoM Group",
       Cell: ({ cell }: any) => cell.getValue(),
     },
-    {
-      accessorKey: "UnitsOfMeasurement",
-      header: "Item Per Units",
-      Cell: ({ cell }: any) => cell.getValue(),
-    },
+    // {
+    //   accessorKey: "UnitsOfMeasurement",
+    //   header: "Item Per Units",
+    //   Cell: ({ cell }: any) => cell.getValue(),
+    // },
   ], [data]);
 
   const serviceColumns = React.useMemo(
@@ -360,7 +360,7 @@ function Account(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Methods</span> <span className='col-span-2 font-medium'>: {data?.PaymentMethod || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Central Bank Ind.</span> <span className='col-span-2 font-medium'>: {data?.CentralBankIndicator || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Installments</span> <span className='col-span-2 font-medium'>: {data?.NumberOfInstallments || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalculate Due Date</span> <span className='col-span-2 font-medium'>: {data?.StartFrom || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalculate Due Date</span> <span className='col-span-2 font-medium'>: {data?.StartFrom?.replace("pdt_","") || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cash Discount Date Offset</span> <span className='col-span-2 font-medium'>: {data?.CashDiscountDateOffset || "N/A"}</span></div>
     </div>
     <div className='flex flex-col gap-2'>
