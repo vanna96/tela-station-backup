@@ -76,6 +76,7 @@ export default function ContentForm({
           // return ;
           return (
             <MUITextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
               // onChange={(event) => handlerChangeInput(event, cell?.row?.original, "ItemCode")}
               endAdornment
@@ -91,6 +92,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
             />
           );
@@ -103,6 +105,7 @@ export default function ContentForm({
           console.log(cell.getValue())
           return (
             <MUITextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               defaultValue={cell.getValue()}
               key={cell?.row?.original?.ItemCode + "_q" + cell.getValue()}
               type="number"
@@ -125,7 +128,7 @@ export default function ContentForm({
               key={cell?.row?.original?.ItemCode + "_d" + cell.getValue()}
               startAdornment={"%"}
               type="number"
-              // disabled={data?.DocumentDtatus}
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               onBlur={(event) =>
                 handlerChangeInput(
                   event,
@@ -143,6 +146,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               defaultValue={cell.getValue()}
               key={cell?.row?.original?.ItemCode + "_u" + cell.getValue()}
               startAdornment={"$"}
@@ -159,6 +163,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <VatGroupTextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(
@@ -178,7 +183,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              disabled={data?.isApproved}
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               startAdornment={"$"}
               value={cell.getValue()}
             />
@@ -196,6 +201,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => (
           <UOMTextField
             // key={cell.getValue()}
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
             value={cell.getValue()}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UomCode')}
             data={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
@@ -206,6 +212,7 @@ export default function ContentForm({
         header: "Item Per Units",
         Cell: ({ cell }: any) => (
           <MUITextField
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
             type="number"
             value={cell.getValue()}
           />
@@ -423,28 +430,17 @@ export default function ContentForm({
             Remarks
           </label>
           <div className="">
-            {data.DocumentStatus === "bost_Open" ? (
-              <TextField
-                size="small"
-                multiline
-                rows={4}
-                fullWidth
-                name="Comments"
-                className="w-full "
-                defaultValue={data?.Comments}
-              />
-            ) : (
-              <TextField
-                size="small"
-                multiline
-                rows={4}
-                disabled={edit}
-                fullWidth
-                name="Comments"
-                className="w-full "
-                defaultValue={data?.Comments}
-              />
-            )}
+            <TextField
+              size="small"
+              multiline
+              rows={4}
+              fullWidth
+              name="Comments"
+              className="w-full "
+              onChange={(e) => handlerChange("Comments", e.target.value)}
+              value={data?.Comments}
+            />
+
           </div>
         </div>
       </div>
