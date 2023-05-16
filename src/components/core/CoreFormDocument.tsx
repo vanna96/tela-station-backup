@@ -467,8 +467,15 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let items: any[] = [...this.state.Items ?? []];
         let item: any = {};
 
+        if (this.state.AgreementMethod === 'M' && !record?.ItemCode) {
+            item['ItemCode'] = shortid.generate();
+            item[field] = value;
+            items.push(item);
+            this.setState({ ...this.state, Items: items });
+            return;
+        }
+
         if (this.state.DocType === documentType[1].value && !record?.ItemCode) {
-            console.log(value)
             item['ItemCode'] = shortid.generate();
             item[field] = value;
             items.push(item);
@@ -513,11 +520,11 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         if (field === 'Quantity' || field === 'UnitPrice' || field === 'DiscountPercent' || field?.includes('Vat') || field === 'LineTotal') {
             items[index]['LineTotal'] = Formular.findLineTotal(items[index]['Quantity'], items[index]['UnitPrice'], items[index]['DiscountPercent']);
             // 
-            DocTotalBeforeDiscount = items.reduce((prev, current) => prev + parseFloat(current.LineTotal), 0);
-            let total = DocTotalBeforeDiscount - this.state.DocDiscountPrice;
-            DocTaxTotal = items.reduce((prev, cur) => prev + (cur?.VatRate ?? 0), 0);
-            DocTaxTotal = (total * DocTaxTotal / 100);
-            DocTotal = total + DocTaxTotal;
+            // DocTotalBeforeDiscount = items.reduce((prev, current) => prev + parseFloat(current.LineTotal), 0);
+            // let total = DocTotalBeforeDiscount - this.state.DocDiscountPrice;
+            // DocTaxTotal = items.reduce((prev, cur) => prev + (cur?.VatRate ?? 0), 0);
+            // DocTaxTotal = (total * DocTaxTotal / 100);
+            // DocTotal = total + DocTaxTotal;
         }
 
 

@@ -20,6 +20,7 @@ import ShippingTypeRepository from '@/services/actions/shippingTypeRepository';
 import ItemGroupRepository from '@/services/actions/itemGroupRepository';
 import { getUOMGroupByCode } from '@/helpers';
 import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
+import { useQuery } from 'react-query';
 
 
 class PurchaseAgreementDetail extends Component<any, any> {
@@ -31,51 +32,25 @@ class PurchaseAgreementDetail extends Component<any, any> {
             message: '',
         }
 
-        this.initData = this.initData.bind(this);
+        this.fetchData = this.fetchData.bind(this);
     }
-
 
     componentDidMount(): void {
-        this.initData()
+        this.fetchData()
     }
 
-    initData() {
+    async fetchData() {
         const { id } = this.props.match.params;
-        const data = this.props.location.state as PurchaseAgreement;
-
-        // new PurchaseAgreementRepository().find(id).then(async (res: any) => {
-        //     const lines = await this.props.query.getItems(res.items);
-        //     console.log(lines);
-
-        //     this.setState({ ...res, loading: false });
-        // }).catch((e: Error) => {
-        //     this.setState({ isError: true, message: e.message });
-        // })
-
-        if (data) {
-            setTimeout(() => {
-                let purchaseAgreement = data;
-                purchaseAgreement as PurchaseAgreement;
-                if (purchaseAgreement.ContactPersonCode) {
-                    new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.CardCode!).then((res: BusinessPartner) => {
-                        purchaseAgreement.Email = res.email;
-                        purchaseAgreement.Phone = res.phone;
-                        purchaseAgreement.ContactPersonList = res.contactEmployee ?? [];
-                        this.setState({ ...purchaseAgreement, loading: false })
-                    })
-                } else {
-                    this.setState({ ...purchaseAgreement, loading: false })
-                }
-            }, 500)
-        } else {
+        const data = this.props.query.find('pa-id-' + id);
+        if (!data) {
             new PurchaseAgreementRepository().find(id).then(async (res: any) => {
-                const lines = await this.props.query.getItems(res.items);
-                console.log(lines);
-
+                this.props.query.set('pa-id-' + id, res);
                 this.setState({ ...res, loading: false });
             }).catch((e: Error) => {
                 this.setState({ isError: true, message: e.message });
             })
+        } else {
+            this.setState({ ...data, loading: false });
         }
     }
 
@@ -97,11 +72,11 @@ class PurchaseAgreementDetail extends Component<any, any> {
                         <div className='grid grid-cols-2 sm:grid-cols-1 gap-2 w-full shadow-sm rounded-lg bg-white text-[12px] p-6'>
                             <div className='flex flex-col gap-1'>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>BP Code</span>
+                                    <span className='w-4/12 text-gray-500'>Vendor Code</span>
                                     <span className='w-8/12 font-medium'>: {this.state.CardCode}</span>
                                 </div>
                                 <div className='flex gap-2'>
-                                    <span className='w-4/12 text-gray-500'>BP Name</span>
+                                    <span className='w-4/12 text-gray-500'>Vendor Name</span>
                                     <span className='w-8/12 font-medium'>: {this.state.CardName}</span>
                                 </div>
                                 <div className='flex gap-2'>
@@ -234,7 +209,7 @@ function Content(props: any) {
     const serviceColumns = React.useMemo(
         () => [
             {
-                accessorKey: "PlannedAmount",
+                accessorKey: "PlannedAmountLC",
                 header: "Planned Amount (LC)",
                 Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
             },
@@ -244,7 +219,7 @@ function Content(props: any) {
                 Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
             },
             {
-                accessorKey: "OpenAmount",
+                accessorKey: "PlannedAmountLC",
                 header: "Open Amount (LC)",
                 Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
             },

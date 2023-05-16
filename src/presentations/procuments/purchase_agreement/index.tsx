@@ -126,7 +126,7 @@ export default function PurchaseAgreementLists() {
     });
 
     const purchaseCount = useQuery({
-        queryKey: ['pa-count'], queryFn: () => new PurchaseAgreementRepository().documentTotal(`?$select=DocNum${filter}`),
+        queryKey: ['pa-count' + filter !== '' ? '-f' : ''], queryFn: () => new PurchaseAgreementRepository().documentTotal(`?$select=DocNum${filter}`),
         staleTime: Infinity,
     });
 

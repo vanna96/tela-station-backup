@@ -44,14 +44,14 @@ export default function GeneralForm({ data, handlerChange, edit }: IGeneralFormP
                     <div className='flex flex-col gap-1 text-sm'>
                         <label htmlFor='PayTermsGrpCode' className='text-gray-500 text-[14px]'>Payment Terms</label>
                         <div className=''>
-                            <PaymentTerm name="PaymentTerms" disabled={data?.isApproved} value={data.PaymentTermType} onChange={(e) => handlerChange('PaymentTermType', e.target.value)} />
+                            <PaymentTerm name="PaymentTerms" disabled={edit && data?.Status.includes('A')} value={data.PaymentTermType} onChange={(e) => handlerChange('PaymentTermType', e.target.value)} />
                         </div>
                     </div>
 
                     <div className='flex flex-col gap-1 text-sm'>
                         <label htmlFor='Code' className='text-gray-500 text-[14px]'>Payment Method </label>
                         <div className=''>
-                            <PaymentMethod type='outgoing' name="PaymentMethod" value={data.PaymentMethod} onChange={(e) => handlerChange('PaymentMethod', e.target.value)} />
+                            <PaymentMethod type='outgoing' disabled={edit && data?.Status.includes('A')} name="PaymentMethod" value={data.PaymentMethod} onChange={(e) => handlerChange('PaymentMethod', e.target.value)} />
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@ export default function GeneralForm({ data, handlerChange, edit }: IGeneralFormP
                     <div className='flex flex-col gap-1 text-sm'>
                         <label htmlFor='Code' className='text-gray-500 text-[14px]'>Shipping Type</label>
                         <div className=''>
-                            <ShippingType name="ShippingType" disabled={data?.isApproved} value={data.ShippingType} onChange={(e) => handlerChange('ShippingType', e.target.value)} />
+                            <ShippingType name="ShippingType" disabled={edit && data?.Status.includes('A')} value={data.ShippingType} onChange={(e) => handlerChange('ShippingType', e.target.value)} />
                         </div>
                     </div>
                     <div className='flex flex-col gap-1 text-sm'>
@@ -86,9 +86,9 @@ export default function GeneralForm({ data, handlerChange, edit }: IGeneralFormP
                         <div className=''>
                             <MUISelect
                                 value={data?.Status}
-                                items={documentStatusList(data?.status, edit)}
+                                items={documentStatusList(data?.Status, edit)}
                                 name="Status"
-                                disabled={data?.status === 'T' && edit && data?.isApproved}
+                                disabled={data?.Status?.includes('T') && edit}
                                 onChange={(e) => handlerChange('Status', e.target.value)}
                             />
                         </div>

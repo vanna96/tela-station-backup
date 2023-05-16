@@ -9,10 +9,10 @@ interface UOMTextField {
     value: any,
     data: any[],
     onChange: (project: any) => void,
-    disabled:boolean
+    disabled?: boolean
 }
 
-const UOMTextField: FC<UOMTextField> = ({ value, onChange, data,disabled }: UOMTextField) => {
+const UOMTextField: FC<UOMTextField> = ({ value, onChange, data, disabled }: UOMTextField) => {
     const [open, setOpen] = React.useState<boolean>(false)
 
     const handlerConfirm = (value: any) => {

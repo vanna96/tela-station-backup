@@ -24,10 +24,6 @@ const UoMListModal: FC<UoMListModalProps> = ({ open, onClose, onOk, data }) => {
   const uomGroups = useQuery({ queryKey: 'uomGroup', queryFn: () => new UnitOfMeasurementGroupRepository().get(), staleTime: Infinity })
   const uoms = useQuery({ queryKey: 'uom', queryFn: () => new UnitOfMeasurementRepository().get(), staleTime: Infinity })
 
-
-  const handlerConfirm = () => {
-  }
-
   const [rowSelection, setRowSelection] = React.useState({});
 
 
@@ -54,6 +50,7 @@ const UoMListModal: FC<UoMListModalProps> = ({ open, onClose, onOk, data }) => {
 
     return uomLists;
   }, [uomGroups.data, data])
+
 
   return (
     <Modal

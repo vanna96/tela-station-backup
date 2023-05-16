@@ -1,6 +1,7 @@
 import { LineDocumentModel, MasterDocumentModel } from './Model';
 import { ContactEmployee } from './BusinessParter';
 import { getValueDocumentStatus } from '@/constants';
+import Item from './Item';
 
 
 export default class PurchaseAgreement extends MasterDocumentModel {
@@ -48,8 +49,9 @@ export default class PurchaseAgreement extends MasterDocumentModel {
         this.EndDate = json['EndDate'];
         this.TerminateDate = json['TerminateDate'];
         this.Description = json['Description'];
-        this.AgreementType = json['AgreementType']?.replace('at', "")?.charAt(0);
-        this.Status = getValueDocumentStatus(json['Status']);
+        // this.AgreementType = json['AgreementType']?.replace('at', "")?.charAt(0);
+        this.AgreementType = json['AgreementType'];
+        this.Status = json['Status'];
         this.Owner = json['Owner'];
         this.Renewal = json['Renewal'] === 'tYES';
         this.RemindUnit = json['RemindUnit']?.replace('reu_', "")?.charAt(0);
@@ -57,8 +59,9 @@ export default class PurchaseAgreement extends MasterDocumentModel {
         this.Remark = json['Remarks'];
         this.AttachmentEntry = json['AttachmentEntry'];
         this.SettlementProbability = json['SettlementProbability'];
-        this.AgreementMethod = json['AgreementMethod']?.replace('am', "")?.charAt(0);;
-        this.PaymentTermType = json['PaymentTerms'];
+        // this.AgreementMethod = json['AgreementMethod'];
+        this.AgreementMethod = json['AgreementMethod']?.replace('am', "")?.charAt(0);
+        this.PaymentTermType = json['PaymentTerms'] ?? json['PaymentTermType'];
         this.PriceList = json['PriceList'];
         this.SigningDate = json['SigningDate'];
         this.PaymentMethod = json['PaymentMethod'];
@@ -66,6 +69,7 @@ export default class PurchaseAgreement extends MasterDocumentModel {
         this.Phone = json['Phone'];
         this.ContactPersonList = json['contactPersonList'];
         this.Project = json['Project'];
+        this.ShippingType = json['ShippingType'];
         this.IsEditable = !json['Status']?.replace('as', "")?.charAt(0)?.includes('A');
         this.Items = (json['BlanketAgreements_ItemsLines'] ?? json['Items'])?.map((e: any) => new PurchaseAgreementDocumentLine(e));
     }
@@ -75,7 +79,7 @@ export default class PurchaseAgreement extends MasterDocumentModel {
     }
 
     toJson(update = false) {
-        return {
+        let json: any = {
             "BPCode": this.CardCode,
             "BPName": this.CardName,
             "ContactPersonCode": this.ContactPersonCode,
@@ -105,6 +109,22 @@ export default class PurchaseAgreement extends MasterDocumentModel {
             // "BPCurrency": this.Cur,
             "BlanketAgreements_ItemsLines": this.Items.map((e) => e.toJson(this.AgreementMethod, update))
         };
+
+        if (update) {
+            delete json.Series;
+            delete json.BPCode;
+            delete json.BPName;
+        }
+
+        if (update && (this.Status?.includes('T') || this.Status?.includes('A') || this.Status?.includes('F'))) {
+            delete json?.PaymentMethod;
+            delete json?.ShippingType;
+            delete json?.PaymentTerms;
+            delete json?.BlanketAgreements_ItemsLines;
+        }
+
+
+        return json;
     }
 
 
@@ -157,14 +177,19 @@ export class PurchaseAgreementDocumentLine extends LineDocumentModel {
     VatGroup?: string | undefined;
     AccountName?: string | undefined;
     UnitsOfMeasurement: number | undefined;
+    PortionOfReturns: number | null;
+    EndOfWarranty: string | null;
+    PlannedAmountLC: number | null;
 
     constructor(json: any) {
+
         super();
         this.ItemCode = json['ItemNo'] ?? json['ItemCode'];
         this.ItemName = json['ItemDescription'];
         this.ItemGroup = json['ItemGroup'];
         this.Quantity = json['PlannedQuantity'] ?? json['Quantity'];
-        this.UnitPrice = json['UnitPrice'];
+        this.UnitPrice = json['UnitPrice'] ?? json['PlannedAmountLC'];
+        this.PlannedAmountLC = json['PlannedAmountLC'];
         this.Currency = json['PriceCurrency'];
         this.CumulativeQuantity = json['CumulativeQuantity'];
         this.CumulativeAmount = json['CumulativeAmountFC'];
@@ -176,6 +201,8 @@ export class PurchaseAgreementDocumentLine extends LineDocumentModel {
         this.Project = json['Project'];
         this.TaxCode = json['TaxCode'] ?? json['VatGroup'];
         this.TaxRate = json['TAXRate'];
+        this.PortionOfReturns = json['PortionOfReturns'];
+        this.EndOfWarranty = json['EndOfWarranty'];
         this.UnitsOfMeasurement = json['UnitsOfMeasurement']
     }
 
@@ -199,25 +226,14 @@ export class PurchaseAgreementDocumentLine extends LineDocumentModel {
             "UoMCode": this.UomCode,
             // "UnitsOfMeasurement": 0,
             // "FreeText": this ?? null,
-            "CumulativeQuantity": null,
-            "CumulativeAmountLC": null,
-            "CumulativeAmountFC": 0.0,
-            "PortionOfReturns": null,
-            "EndOfWarranty": null,
-            "PlannedAmountLC": this.UnitPrice,
-            "PlannedAmountFC": 0.0,
-            "LineDiscount": 0.0,
-            "UndeliveredCumulativeQuantity": null,
-            "UndeliveredCumulativeAmountLC": null,
-            "UndeliveredCumulativeAmountFC": 0.0,
+            "PortionOfReturns": this.PortionOfReturns,
+            "EndOfWarranty": this.EndOfWarranty,
+            "PlannedAmountLC": this.PlannedAmountLC,
+            "PlannedAmountFC": this.PlannedAmountLC,
+            "LineDiscount": this.LineDiscount,
             "ShippingType": this.ShippingType,
-            "Project": null,
             "TaxCode": update ? null : this.TaxCode,
             // "TAXRate": null,
-            "PlannedVATAmountLC": null,
-            "PlannedVATAmountFC": null,
-            "CumulativeVATAmountLC": null,
-            "CumulativeVATAmountFC": null,
         };
 
         if (type === 'M') {

@@ -41,18 +41,34 @@ class PurchaseAgreementForm extends CoreFormDocument {
         }
 
         if (this.props.edit) {
-            if (this.props.location.state) {
-                const routeState = this.props.location.state;
-                setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A' || routeState?.status === 'T', loading: false, }), 500)
-            } else {
-                // const dd = this.props.query.queryProvider.getQueryData('items');
+            const { id } = this.props.match.params;
+            const state = this.props.query.find('pa-id-' + id);
 
-                new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
-                    this.setState({ ...res, loading: false, isApproved: res?.status === 'A' || res?.status === 'T', });
+            if (!state) {
+                new PurchaseAgreementRepository().find(id).then(async (res: any) => {
+                    this.props.query.set('pa-id-' + id, res);
+                    this.setState({ ...res, loading: false });
                 }).catch((e: Error) => {
-                    this.setState({ message: e.message });
+                    // this.setState({ isError: true, message: e.message });
                 })
+            } else {
+                console.log(state)
+                this.setState({ ...state, loading: false });
             }
+
+
+            // if (this.props.location.state) {
+            //     const routeState = this.props.location.state;
+            //     setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A' || routeState?.status === 'T', loading: false, }), 500)
+            // } else {
+            //     // const dd = this.props.query.queryProvider.getQueryData('items');
+
+            //     new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
+            //         this.setState({ ...res, loading: false, isApproved: res?.status === 'A' || res?.status === 'T', });
+            //     }).catch((e: Error) => {
+            //         this.setState({ message: e.message });
+            //     })
+            // }
         }
 
         DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie).then((res: any) => {
@@ -77,17 +93,18 @@ class PurchaseAgreementForm extends CoreFormDocument {
     async handlerSubmit(event: any) {
         event.preventDefault();
         const { id } = this.props?.match?.params
-        const payloads = new PurchaseAgreement(this.state).toJson(this.props?.edit);
-        console.log(this.state);
-        return;
-        // this.setState({ ...this.state, isSubmitting: true });
-        await new PurchaseAgreementRepository().post(payloads, this.props?.edit, id).then((res: any) => {
+        // const payloads = new PurchaseAgreement(this.state).toJson(this.props?.edit);
+        this.setState({ ...this.state, isSubmitting: true });
+        await new PurchaseAgreementRepository().post(this.state, this.props?.edit, id).then((res: any) => {
             const purchaseAgreement = new PurchaseAgreement(res?.data)
             this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.DocEntry), purchaseAgreement);
             this.dialog.current?.success("Create Successfully.");
         }).catch((e: any) => {
             if (e instanceof UpdateDataSuccess) {
-                this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.DocumentStatus === 'A' });
+                
+                const agreement = new PurchaseAgreement(this.state);
+                this.props.query.set('pa-id-' + id, agreement);
+                this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state });
                 this.dialog.current?.success(e.message);
                 return;
             }
@@ -116,6 +133,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
                         edit={this.props?.edit}
                         handlerChange={(key, value) => this.handlerChange(key, value)}
                     />
+
                     <ContentForm
                         data={this.state}
                         handlerAddItem={() => this.handlerOpenItem()}

@@ -1,5 +1,5 @@
 export const documentStatusList = (status: string, edit: boolean | undefined) => {
-    if (status !== 'D' && edit) {
+    if ((status?.includes('A') || status?.includes('F') || status?.includes('T')) && edit) {
         return [
             { value: 'A', label: 'Approved' },
             { value: 'F', label: 'On Hold' },

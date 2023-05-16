@@ -37,7 +37,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
     const handlerChangeInput = (event: any, row: any, field: any) => {
         if (data?.isApproved) return;
 
-        let value = event.target.value;
+        let value = event?.target?.value ?? event;
         handlerChangeItem({ value: value, record: row, field })
     }
 
@@ -190,15 +190,15 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 },
             },
             {
-                accessorKey: "UnitPrice",
+                accessorKey: "PlannedAmountLC",
                 header: "Planned Amount (LC)", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
                     return <MUITextField
-                        defaultValue={currencyFormat(cell.getValue())}
+                        defaultValue={cell.getValue() ? currencyFormat(cell.getValue()) : null}
                         startAdornment={'USD'}
                         type="number"
                         disabled={data?.isApproved}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'PlannedAmountLC')}
                     />;
                 },
             },
