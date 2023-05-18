@@ -4,13 +4,13 @@ import CitySelect from '@/components/selectbox/City';
 import CountrySelect from '@/components/selectbox/Country';
 import { Checkbox, SelectChangeEvent } from '@mui/material';
 import React from 'react';
-export interface ILogisticFormProps {
+export interface IGeneralProps {
   data: any,
   handlerChange: (key: string, value: any) => void
   edit: boolean
 }
 
-export default function General({ data, handlerChange, edit }: ILogisticFormProps) {
+export default function General({ data, handlerChange, edit }: IGeneralProps) {
   const [bShow, setBShow] = React.useState<any>({});
   
   const handleSelectChangeB = (event:any) => {

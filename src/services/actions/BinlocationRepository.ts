@@ -18,7 +18,15 @@ export default class BinlocationRepository extends Repository<Binlocation> {
 
     return response;
   }
+  async documentTotal<T>(query?: string): Promise<number> {
+    const response: any = await request('GET', this.url + '/$count' + query).then(async (res: any) => {
+      return res.data;
+    }).catch((e: Error) => {
+      throw new Error(e.message);
+    });
 
+    return response;
+  }
   async find<T>(id: any): Promise<any> {
     const binlocation = await request('GET', `${this.url}(${id})`).then((res: any) => new Binlocation(res.data))
       .catch((e: Error) => {

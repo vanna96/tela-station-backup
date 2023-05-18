@@ -8,15 +8,11 @@ import moment from "moment/moment";
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
 import WarehouseRepository from "@/services/actions/WarehouseRepository";
+import DataTable from "@/components/data_table/DataTable";
 
 export default function WarehoseLists() {
   const route = useNavigate();
-
-  const { data, isLoading }: any = useQuery({
-    queryKey: ["wh"],
-    queryFn: () => new WarehouseRepository().get(),
-  });
-  console.log(data);
+  
   const columns = React.useMemo(
     () => [
       {
@@ -25,31 +21,42 @@ export default function WarehoseLists() {
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "warehouseName",
         header: "Warehouse Name",
         enableClickToCopy: true,
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "country",
         header: "Country",
         // size: 200, //increase the width of this column
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "city",
         header: "City",
+        visible: true,
+        type: 'string',
        
       },
       {
         accessorKey: "street",
         header: "Street",
+        visible: true,
+        type: 'string',
         
       },
       {
         accessorKey: "zipCode",
         header: "ZipCode",
-        
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "id",
@@ -76,10 +83,65 @@ export default function WarehoseLists() {
     []
   );
 
+  const [filter, setFilter] = React.useState('');
+  const [sortBy, setSortBy] = React.useState('');
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
+  const masterCount = useQuery({
+    queryKey: ['wh-count'], queryFn: () => new WarehouseRepository().documentTotal(`?$select=WarehouseCode${filter}`),
+    staleTime: Infinity
+  })
+
+  const { data, isLoading, error, isError, refetch, isFetching }: any = useQuery({
+    queryKey: ['wh', `${(pagination.pageIndex) * 10}_${filter !== '' ? 'f' : ''}`], queryFn: () => {
+      return new WarehouseRepository().get(`?$top=${pagination.pageSize}&$skip=${(pagination.pageIndex) * pagination.pageSize}${filter}${sortBy !== '' ? '&$orderby=' + sortBy : ''}`);
+    },
+    staleTime: Infinity,
+    retry: 1,
+  });
+
+
+  const handlerRefresh = React.useCallback(() => {
+    setFilter('');
+    setSortBy('');
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+    setTimeout(() => {
+      masterCount.refetch();
+      refetch();
+    }, 500);
+  }, []);
+
+  const handlerSortby = (value: any) => {
+    setSortBy(value);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      refetch();
+    }, 500)
+  }
+
+
+  const handlerSearch = (value: string) => {
+    const qurey = value.replace('CardCode', 'BPCode').replace('CardName', 'BPName');
+    setFilter(qurey);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      masterCount.refetch();
+      refetch();
+    }, 500)
+  }
 
   return (
     <>
@@ -99,35 +161,16 @@ export default function WarehoseLists() {
         </div>
 
         <div className="grow data-table">
-          <MaterialReactTable
+          <DataTable
             columns={columns}
-            data={data ?? []}
-            enableHiding={true}
-            initialState={{ density: "compact" }}
-            enableDensityToggle={false}
-            enableColumnResizing
-            enableStickyHeader={true}
-            enableStickyFooter={true}
-            enablePagination={true}
-            muiTablePaginationProps={{
-              rowsPerPageOptions: [5, 10, 15],
-            }}
-            getRowId={(row: any) => row.DocEntry}
-            onPaginationChange={setPagination}
-            state={{
-              isLoading,
-              pagination,
-            }}
-            renderTopToolbarCustomActions={({ table }) => {
-              return (
-                <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                  <h3 className="font-bold text-base xl:text-sm">
-                    Warehouse
-                  </h3>
-                  {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
-                </div>
-              );
-            }}
+            data={data}
+            handlerRefresh={handlerRefresh}
+            handlerSearch={handlerSearch}
+            handlerSortby={handlerSortby}
+            count={masterCount.data ?? 0}
+            loading={isLoading || isFetching}
+            pagination={pagination}
+            paginationChange={setPagination}
           />
         </div>
       </div>

@@ -27,6 +27,11 @@ import PurchaseQoutationRepository from '../../../../services/actions/purchaseQo
 import { getUOMGroupByCode } from '@/helpers';
 import { isItemType } from '@/constants';
 import moment from 'moment';
+import { useQuery } from 'react-query';
+import ChartOfAccount from '@/models/ChartOfAccount';
+import ChartOfAccountRepository from '@/services/actions/ChartOfaccountRepository';
+import shortid from 'shortid';
+import { log } from 'console';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -174,6 +179,22 @@ function Content(props: any) {
   const subTotal = data.Items?.reduce((accumulator: any, currentLine: any) => {
     return accumulator + currentLine.LineTotal;
   }, 0);
+  // const { data: chartData, isLoading }: any = useQuery({ queryKey: ['chartOfAccount'], queryFn: () => new ChartOfAccountRepository().get(), staleTime: Infinity })
+  // let test = chartData;
+  
+  //   data?.Items?.map((e:any, index:any) => {
+  //     const matchingAccount = test?.find(
+  //       (account:any) => account.Code === e.AccountCode
+  //     );
+  //     const accountName = matchingAccount
+  //       ? matchingAccount.Name
+  //       : e.AccountName;
+  //     return {
+  //       key: shortid.generate(),
+  //       accountName: accountName
+  //     }
+  //   })
+  console.log(data)
   const itemColumn = useMemo(() => [
     {
       accessorKey: "ItemCode",

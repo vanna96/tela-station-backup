@@ -38,29 +38,31 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
   componentDidMount(): void {
 
     if (!this.props?.edit) {
-      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
-    }
-
-    if (this.props.edit) {
+      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500);
+      // Get default serie
+      DocumentSerieRepository.getDefaultDocumentSerie(PurchaseDownPaymentRepository.documentSerie).then((res: any) => {
+        this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber, isLoadingSerie: false })
+      });
+    } else {
       if (this.props.location.state) {
-        setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
+        const routeState = this.props.location.state;
+        setTimeout(() => this.setState({ ...this.props.location.state }), 500)
       } else {
         new PurchaseDownPaymentRepository().find(this.props.match.params.id).then((res: any) => {
-          this.setState({ ...res, loading: false});
+          this.setState({ ...res, loading: false });
         }).catch((e: Error) => {
           this.setState({ message: e.message });
         })
       }
     }
 
-    DocumentSerieRepository.getDocumentSeries(PurchaseDownPaymentRepository?.documentSerie).then((res: any) => {
+    // Get Series Lists
+    DocumentSerieRepository.getDocumentSeries(purchaseQoutationRepository?.documentSerie).then((res: any) => {
       this.setState({ ...this.state, SerieLists: res, })
     });
 
-    DocumentSerieRepository.getDefaultDocumentSerie(PurchaseDownPaymentRepository.documentSerie).then((res: any) => {
-      this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber, isLoadingSerie: false })
-    });
   }
+
 
   handlerRemoveItem(code: string) {
     let items = [...this.state.Items ?? []];

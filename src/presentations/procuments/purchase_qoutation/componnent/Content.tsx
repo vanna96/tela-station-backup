@@ -373,9 +373,9 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <VatGroupTextField
             value={cell.getValue()}
-            // disabled={
-            //   data?.DocumentStatus === "bost_Close" ? true : false
-            // }
+            disabled={
+              data?.DocumentStatus === "bost_Close" ? true : false
+            }
             onChange={(event) => {
               if (data?.DocumentStatus === "bost_Close") return;
               handlerChangeInput(event, cell?.row?.original, 'VatGroup')
@@ -451,7 +451,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.DocType === "S" ? serviceColumns : itemColumns}
+          columns={data?.DocType === "dDocument_Service" ? serviceColumns : itemColumns}
           data={[...data?.Items, blankItem] ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
