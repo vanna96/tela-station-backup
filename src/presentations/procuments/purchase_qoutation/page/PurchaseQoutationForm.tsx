@@ -37,36 +37,57 @@ class PurchaseQoutationForm extends CoreFormDocument {
 
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    // this.handlerAddItem = this.handlerAddItem.bind(this);
+    this.onInit = this.onInit.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
   componentDidMount(): void {
-
-    if (!this.props?.edit) {
-      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500);
-      // Get default serie
-      DocumentSerieRepository.getDefaultDocumentSerie(purchaseQoutationRepository.documentSerie).then((res: any) => {
-        this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber, isLoadingSerie: false })
-      });
-    } else {
-      if (this.props.location.state) {
-        const routeState = this.props.location.state;
-        setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
-      } else {
-        new purchaseQoutationRepository().find(this.props.match.params.id).then((res: any) => {
-          this.setState({ ...res, loading: false });
-        }).catch((e: Error) => {
-          this.setState({ message: e.message });
-        })
-      }
-    }
-
     // Get Series Lists
     DocumentSerieRepository.getDocumentSeries(purchaseQoutationRepository?.documentSerie).then((res: any) => {
       this.setState({ ...this.state, SerieLists: res, })
     });
 
+
+    this.onInit()
+  }
+
+  async onInit() {
+    if (this.props.edit) {
+      const { id } = this.props.match.params;
+      let state: any = this.props.query.find('pr-id-' + id);
+      let disables: any = {};
+
+      if (!state) {
+        await new purchaseQoutationRepository()
+          .find(this.props.match.params.id)
+          .then((res: any) => {
+            state = res;
+            this.props.query.set('pqoutation-id-' + id, res);
+          }).catch(e => {
+            console.log(e)
+            this.setState({ message: 'Data no found.' });
+            return;
+          })
+      }
+
+      disables['C'] = state?.DocumentStatus !== 'Open';
+      disables['CardCode'] = state?.DocumentStatus !== 'Open';
+      disables['CardName'] = state?.DocumentStatus !== 'Open';
+      disables['RequesterBranch'] = state?.DocumentStatus !== 'Open';
+      disables['RequesterDepartment'] = state?.DocumentStatus !== 'Open';
+      disables['RequesterEmail'] = state?.DocumentStatus !== 'Open';
+      disables['DocDate'] = state?.DocumentStatus !== 'Open';
+      disables['DocDueDate'] = state?.DocumentStatus !== 'Open';
+      disables['TaxDate'] = state?.DocumentStatus !== 'Open';
+      disables['RequriedDate'] = state?.DocumentStatus !== 'Open';
+      disables['DocumentLine'] = state?.DocumentStatus !== 'Open';
+      this.setState({ ...state, disable: disables, loading: false });
+    } else {
+      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500);
+      DocumentSerieRepository.getDefaultDocumentSerie(purchaseQoutationRepository.documentSerie).then((res: any) => {
+        this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber, isLoadingSerie: false })
+      });
+    }
   }
 
   handlerRemoveItem(code: string) {
@@ -84,14 +105,15 @@ class PurchaseQoutationForm extends CoreFormDocument {
 
     await new PurchaseQoutationRepository().post(this.state, this.props?.edit, id).then((res: any) => {
       const purchaseQoutation = new PurchaseQouatation(res?.data)
-
       this.props.history.replace(this.props.location.pathname?.replace('create', purchaseQoutation.id), purchaseQoutation);
+      this.props.query.set('pqoutation-id-' + id, purchaseQoutation);
       this.dialog.current?.success("Create Successfully.");
     }).catch((e: any) => {
       if (e instanceof UpdateDataSuccess) {
         this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.DocumentStatus === 'A' });
         this.dialog.current?.success(e.message);
-        // const query = this.props.query.query as QueryClient;
+        const purchaseQoutation = new PurchaseQouatation(this.state)
+        this.props.query.set('pqoutation-id-' + id, purchaseQoutation);
         return;
       }
       this.dialog.current?.error(e.message);

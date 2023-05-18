@@ -1,20 +1,12 @@
 import { withRouter } from '@/routes/withRouter';
-import React, { Component, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
-import PurchaseAgreement from '../../../../models/PurchaseAgreement';
-import EditIcon from "@mui/icons-material/Edit";
-import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
+import React, { Component } from 'react'
 import Taps from '@/components/button/Taps';
-import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
+import MaterialReactTable from 'material-react-table';
 import { useMemo } from 'react';
 import { currencyDetailFormat, currencyFormat, dateFormat, discountFormat, fileToBase64 } from '@/utilies';
-import { AttachmentLine } from '../../../../models/Attachment';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { CircularProgress } from '@mui/material';
-import BackButton from '@/components/button/BackButton';
-import PurchaseAgreementRepository from '../../../../services/actions/purchaseQoutationRepository';
-import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
 import PurchaseQoutation from '@/models/PurchaseQoutation';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
 import OwnerRepository from '@/services/actions/ownerRepository';
@@ -25,13 +17,7 @@ import BuyerRepository from '@/services/actions/buyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
 import { getUOMGroupByCode } from '@/helpers';
-import { isItemType } from '@/constants';
 import moment from 'moment';
-import { useQuery } from 'react-query';
-import ChartOfAccount from '@/models/ChartOfAccount';
-import ChartOfAccountRepository from '@/services/actions/ChartOfaccountRepository';
-import shortid from 'shortid';
-import { log } from 'console';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -56,33 +42,25 @@ class PurchaseQoutationDetail extends Component<any, any> {
 
   initData() {
     const { id } = this.props.match.params;
-    const data = this.props.location.state as PurchaseQoutation;
-    console.log(data);
 
-    if (data) {
-      setTimeout(() => {
-        let purchaseQoutation = data;
-        purchaseQoutation as PurchaseQoutation;
-        if (purchaseQoutation.ContactPersonCode) {
-          new BusinessPartnerRepository().findContactEmployee(purchaseQoutation.CardCode!).then((res: BusinessPartner) => {
-            purchaseQoutation.ContactPersonList = res.contactEmployee || [];
-            this.setState({ ...purchaseQoutation, loading: false })
-          })
-        } else {
-          this.setState({ ...purchaseQoutation, loading: false })
-        }
-      }, 500)
-    } else {
-      new PurchaseQoutationRepository().find(id).then((res: any) => {
+    const data = this.props.query.find('pqoutation-id-' + id);
+    if (!data) {
+      new PurchaseQoutationRepository().find(id).then(async (res: any) => {
+        this.props.query.set('pa-id-' + id, res);
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {
         this.setState({ isError: true, message: e.message });
       })
+    } else {
+      this.setState({ ...data, loading: false });
     }
   }
 
+
+
+
   render() {
- 
+
 
     return (
       <div className='w-full h-full flex flex-col p-4 gap-4'>
@@ -181,7 +159,7 @@ function Content(props: any) {
   }, 0);
   // const { data: chartData, isLoading }: any = useQuery({ queryKey: ['chartOfAccount'], queryFn: () => new ChartOfAccountRepository().get(), staleTime: Infinity })
   // let test = chartData;
-  
+
   //   data?.Items?.map((e:any, index:any) => {
   //     const matchingAccount = test?.find(
   //       (account:any) => account.Code === e.AccountCode
@@ -206,7 +184,7 @@ function Content(props: any) {
     {
       accessorKey: "ItemDescription",
       header: "Descriptions",
-    
+
     },
     {
       accessorKey: "RequiredDate",
@@ -236,7 +214,7 @@ function Content(props: any) {
       header: "Quoted Quantity",
       enableClickToCopy: true,
     },
- 
+
     {
       accessorKey: "UnitPrice",
       header: "Unit Price",
@@ -359,7 +337,7 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {subTotal?.toFixed(2) || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(subTotal)}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
@@ -367,11 +345,11 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Tax</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.VatSum}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.VatSum}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.DocTotalSys} </span>
+        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(data?.DocTotalSys)} </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Remark</span>

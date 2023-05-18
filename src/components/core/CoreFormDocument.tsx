@@ -171,6 +171,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.handlerConfirmRequester = this.handlerConfirmRequester.bind(this);
         this.handlerChangeItems = this.handlerChangeItems.bind(this);
         this.handlerDeleteItem = this.handlerDeleteItem.bind(this);
+        this.handlerChange = this.handlerChange.bind(this);
 
     }
 
