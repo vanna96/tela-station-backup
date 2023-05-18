@@ -56,4 +56,16 @@ export default class ItemMasterDataRepository extends Repository<ItemMasterData>
         throw new Error('Method not implemented.');
     }
 
+    async documentTotal<T>(query?: string): Promise<number> {
+        const response: any = await request("GET", this.url + "/$count" + query)
+          .then(async (res: any) => {
+            return res.data;
+          })
+          .catch((e: Error) => {
+            throw new Error(e.message);
+          });
+    
+        return response;
+      }
+    
 }
