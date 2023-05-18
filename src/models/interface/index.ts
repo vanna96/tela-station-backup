@@ -45,12 +45,37 @@ export interface DocumentLine {
     setUOM(uom: any): void;
 }
 export interface ContactEmployees {
-    name?: string;
+    name?: string 
+    cardCode?: number 
+    position?: string 
+    address?: string 
+    phone1?: number 
+    phone2?: number 
+    mobilePhone?: number 
+    fax?: string 
+    e_Mail?: string 
+    pager?: string 
+    remarks1?: string 
+    remarks2?: string 
+    password?: number 
+    internalCode?: number 
+    placeOfBirth?: string 
+    dateOfBirth?: string 
+    gender?: string | string;
+    profession?: string 
+    title?: string 
+    cityOfBirth?: string 
+    firstName?: string 
+    middleName?: string 
+    lastName?: string 
+    emailGroupCode?: number 
+    connectedAddressName?: string 
+    connectedAddressType?: string 
+    foreignCountry?: string
 }
 
 export interface BPAddresses {
     addressName?: string;
     addressName2?: string;
     addressName3?: string;
-
 }

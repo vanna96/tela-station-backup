@@ -43,9 +43,10 @@ export default class PurchaseOrder extends MasterDocumentModel {
     Indicator: string;
     FederalTaxID: string;
     ImportFileNum: string;
-    DocCurrency: string;
+    Currency: string;
     DocumentStatus: string;
     Project: string;
+  DocumentLines: any;
 
 
     constructor(json: any) {
@@ -84,7 +85,7 @@ export default class PurchaseOrder extends MasterDocumentModel {
         this.Indicator = json['Indicator'];
         this.ImportFileNum = json['ImportFileNum'];
         this.PaymentMethod = json['PaymentMethod'];
-        this.DocCurrency = json['DocCurrency'];
+        this.Currency = json['DocCurrency'];
         this.Project = json['Project'];
         this.Items = (json['DocumentLines'] ?? json['Items'])?.map((e: any) => new PurchaseOrderLine(e));
     }
@@ -129,7 +130,7 @@ export default class PurchaseOrder extends MasterDocumentModel {
             "TransportationCode": this.TransportationCode,
             "Project": this.Project,
             "DocNum": this.DocNum,
-            "DocCurrency": this.DocCurrency,
+            "DocCurrency": this.Currency,
             "TaxDate": this.TaxDate,
             "CreateQRCodeFrom": this.CreateQRCodeFrom,
             "DocumentLines": this.Items.map((e) => e.toJson(this.DocType, update))
@@ -156,8 +157,8 @@ export class PurchaseOrderLine extends LineDocumentModel {
     LineTotal?: string | undefined;
     RequiredDate?: string | undefined
     ShipDate?: string | undefined;
-    AccountCode?: string | undefined;
-    AccountName?: string | undefined;
+    AccountNo?: string | undefined;
+    AccountNameD?: string | undefined;
     BlanketAgreementNumber?: string | undefined;
     DiscountPercent?: string;
     RequriedDate?: string;
@@ -170,15 +171,14 @@ export class PurchaseOrderLine extends LineDocumentModel {
         this.UnitPrice = json['UnitPrice'];
         this.Currency = json['PriceCurrency'];
         this.LineDiscount = json['LineDiscount'];
-        // this.uomEntry = json['UoMEntry'];
         this.UomCode = json['UoMCode'] ?? json['UomCode'];
         this.Project = json['Project'];
         this.VatGroup = json['VatGroup'];
         this.DiscountPercent = json['DiscountPercent'];
-        this.AccountCode = json['AccountCode'];
-        this.AccountName = json['AccountName'];
+        this.AccountNo = json['AccountCode'];
         this.LineTotal = json['LineTotal'];
         this.BlanketAgreementNumber = json['BlanketAgreementNumber']
+        this.AccountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
     }
 
 
@@ -198,8 +198,8 @@ export class PurchaseOrderLine extends LineDocumentModel {
             "LineTotal": this.LineTotal,
             "RequiredDate": this.RequiredDate,
             "ShipDate": this.ShipDate,
-            "AccountCode": this.AccountCode,
-            "AccountName": this.AccountName,
+            "AccountCode": this.AccountNo,
+            "AccountName": this.AccountNameD,
             "BlanketAgreementNumber": this.BlanketAgreementNumber,
             "DiscountPercent": this.DiscountPercent,
         };

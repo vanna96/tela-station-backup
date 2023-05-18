@@ -3,6 +3,7 @@ import Model from "./Model";
 
 export default class BusinessPartner extends Model {
     cardCode?: string | null | undefined;
+    cardCode2?: string | null | undefined;
     cardName?: string | null | undefined;
     cardType?: string | null | undefined;
     groupCode?: string | null | undefined;
@@ -45,6 +46,7 @@ export default class BusinessPartner extends Model {
         super();
         this.id = index + 1;
         this.cardCode = json?.CardCode;
+        this.cardCode2 = json?.CardCode2;
         this.cardName = json?.CardName;
         this.internalCode = json?.InternalCode;
         this.cardType = json?.CardType;

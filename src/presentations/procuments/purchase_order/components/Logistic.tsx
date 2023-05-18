@@ -47,6 +47,7 @@ export default function GeneralForm({
             key={data?.Address2}
             onBlur={(e) => handlerChange("Address2", e.target.value)}
             defaultValue={data?.Address2}
+            disabled={data.DocumentStatus === "bost_Close" ? true : false}
           />
         </div>
       </div>
@@ -64,6 +65,7 @@ export default function GeneralForm({
               name="Address"
               defaultValue={data?.Address1}
               key={data?.Address1}
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
             />
           </div>
         </div>

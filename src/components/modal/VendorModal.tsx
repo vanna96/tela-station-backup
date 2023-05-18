@@ -62,6 +62,7 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
   // console.log(type)
 
   const items = useMemo(() => data?.filter((e: any) => e?.CardType?.slice(1)?.toLowerCase() === type), [data, type])
+  
 
   return (
     <Modal

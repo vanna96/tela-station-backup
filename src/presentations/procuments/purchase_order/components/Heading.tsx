@@ -81,7 +81,7 @@ export default function HeadingForm({
                   size="small"
                   fullWidth
                   className="w-full text-field bg-gray-100"
-                  name="BPCurrency"
+                  name="DocCurrency"
                   value={data.Currency}
                 // disabled
                 />
@@ -135,8 +135,9 @@ export default function HeadingForm({
                 <MUIDatePicker
                   error={data?.message?.includes("DocDate")}
                   value={data.DocDate}
-                  disabled={edit}
                   onChange={(e: any) => handlerChange("docDate", e)}
+                  disabled={data.DocumentStatus === "bost_Close" ? true : false}
+
                 />
               </div>
             </div>
@@ -150,6 +151,8 @@ export default function HeadingForm({
                   <MUIDatePicker
                     value={data.DocDueDate}
                     onChange={(e: any) => handlerChange("DocDueDate", e)}
+                    disabled={data.DocumentStatus === "bost_Close" ? true : false}
+
                   />
                 </div>
               </div>

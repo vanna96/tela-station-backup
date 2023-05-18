@@ -35,8 +35,8 @@ export default function Heading({
               No
             </label>
             <div className="grid grid-cols-2 gap-3">
-              <MUISelect
-                items={data.series ?? []}
+              {/* <MUISelect
+                // items={data.series ?? []}
                 aliasvalue="Series"
                 aliaslabel="Name"
                 name="Series"
@@ -44,6 +44,12 @@ export default function Heading({
                 loading={data?.isLoadingSerie}
                 value={data?.series}
                 onChange={(e: any) => handlerChange("series", e.target.value)}
+              /> */}
+               <MUITextField
+                name="CardCode"
+                value={data?.cardCode}
+                disabled={edit}
+                onChange={(e: any) => handlerChange("cardCode", e.target.value)}
               />
 
               <MUITextField
@@ -51,7 +57,6 @@ export default function Heading({
                 value={data?.cardCode}
                 disabled={edit}
                 onChange={(e: any) => handlerChange("cardCode", e.target.value)}
-
               />
             </div>
           </div>
@@ -106,15 +111,6 @@ export default function Heading({
         </div>
         <div className="flex flex-col gap-2 mt-2">
           <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1 text-sm">
-              <label htmlFor="Code" className="text-gray-500 text-[14px]">
-                Currency
-              </label>
-              <BranchSelect
-                value={data?.branch}
-                onChange={(e) => handlerChange("branch", e.target.value)}
-              />
-            </div>
             <MUITextField
               label="Account Balance"
               value={data?.currentAccountBalance}
@@ -124,15 +120,17 @@ export default function Heading({
                 handlerChange("currentAccountBalance", e.target.value)
               }
             />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Goods Receipt POs"
               value={data?.openDeliveryNotesBalance}
               disabled
               name="OpenDeliveryNotesBalance"
-              onChange={(e: any) => handlerChange("openDeliveryNotesBalance", e.target.value)}
+              onChange={(e: any) =>
+                handlerChange("openDeliveryNotesBalance", e.target.value)
+              }
             />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
             <MUITextField
               label="Purchase Orders:"
               disabled

@@ -2,15 +2,9 @@ import FormCard from "@/components/card/FormCard";
 import MUITextField from "@/components/input/MUITextField";
 import BankChargesAllocationCodesSelect from "@/components/selectbox/BankChargesAllocationCodes";
 import CountrySelect from "@/components/selectbox/Country";
-import HolidaySelect from "@/components/selectbox/Holidays";
 import HouseBankAccounts from "@/components/selectbox/HouseBankAccount";
-import MUISelect from "@/components/selectbox/MUISelect";
 import PaymentBlockSelect from "@/components/selectbox/PaymentBlock";
-import PaymentTerm from "@/components/selectbox/PaymentTerm";
-import PriceListSelect from "@/components/selectbox/PriceList";
-import PrioritySelect from "@/components/selectbox/Priority";
 import BankSelect from "@/components/selectbox/bank";
-import PaymentBlock from "@/models/PaymentBlock";
 import { Checkbox } from "@mui/material";
 
 export interface IPaymentRunProps {
@@ -72,11 +66,11 @@ export default function PaymentRun({
             </div>
             <MUITextField
               label="Branch"
-              value={data?.HouseBankBranch}
+              value={data?.houseBankBranch}
               disabled
               name="HouseBankBranch"
               onChange={(e: any) =>
-                handlerChange("HouseBankBranch", e.target.value)
+                handlerChange("houseBankBranch", e.target.value)
               }
             />
           </div>

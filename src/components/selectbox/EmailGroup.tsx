@@ -4,8 +4,8 @@ import { SelectInputProps } from "@mui/material/Select/SelectInput";
 import EmailGroupRepository from "@/services/actions/emailGroupReporitory";
 interface EmailGroupProps<T = unknown> {
   name?: string,
-  defaultValue?: any,
   value?: any,
+  defaultValue?: any,
   onChange?: SelectInputProps<T>['onChange'],
   disabled?: boolean,
 }

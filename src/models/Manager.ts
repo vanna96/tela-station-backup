@@ -1,7 +1,6 @@
 import Model from './Model';
 
 export default class Manager extends Model {
-
   code: string;
   name: string;
 

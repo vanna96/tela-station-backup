@@ -37,7 +37,11 @@ export default function ContentForm({
   const [tableKey, setTableKey] = React.useState(Date.now());
 
   const handlerChangeInput = (event: any, row: any, field: any) => {
-    handlerChangeItem({ value: event.target.value ?? event, record: row, field });
+    handlerChangeItem({
+      value: event.target.value ?? event,
+      record: row,
+      field,
+    });
   };
 
   const handlerRemoveRow = (row: any) => {
@@ -76,6 +80,7 @@ export default function ContentForm({
               // onChange={(event) => handlerChangeInput(event, cell?.row?.original, "ItemCode")}
               endAdornment
               onClick={() => handlerAddItem()}
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
             />
           );
         },
@@ -88,6 +93,7 @@ export default function ContentForm({
           return (
             <MUITextField
               value={cell.getValue()}
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
             />
           );
         },
@@ -96,7 +102,7 @@ export default function ContentForm({
         accessorKey: "Quantity",
         header: "Quantity",
         Cell: ({ cell }: any) => {
-          console.log(cell.getValue())
+          console.log(cell.getValue());
           return (
             <MUITextField
               defaultValue={cell.getValue()}
@@ -107,6 +113,7 @@ export default function ContentForm({
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "Quantity")
               }
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
             />
           );
         },
@@ -129,6 +136,7 @@ export default function ContentForm({
                   "DiscountPercent"
                 )
               }
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
             />
           );
         },
@@ -145,6 +153,7 @@ export default function ContentForm({
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "UnitPrice")
               }
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
             />
           );
         },
@@ -157,12 +166,10 @@ export default function ContentForm({
             <VatGroupTextField
               value={cell.getValue()}
               onChange={(event) =>
-                handlerChangeInput(
-                  event,
-                  cell?.row?.original,
-                  "VatGroup"
-                )
+                handlerChangeInput(event, cell?.row?.original, "VatGroup")
               }
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
+
               type="InputTax"
             />
           );
@@ -174,9 +181,10 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              disabled={data?.isApproved}
+              // disabled={data?.isApproved}
               startAdornment={"$"}
               value={cell.getValue()}
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
             />
           );
         },
@@ -184,7 +192,12 @@ export default function ContentForm({
       {
         accessorKey: "UomGroupCode",
         header: "UoM Group",
-        Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+        Cell: ({ cell }: any) => (
+          <MUITextField
+            value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code}
+            disabled={data.DocumentStatus === "bost_Close" ? true : false}
+          />
+        ),
       },
       {
         accessorKey: "UomCode",
@@ -193,8 +206,13 @@ export default function ContentForm({
           <UOMTextField
             // key={cell.getValue()}
             value={cell.getValue()}
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UomCode')}
-            data={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+            onChange={(event) =>
+              handlerChangeInput(event, cell?.row?.original, "UomCode")
+            }
+            data={getUOMGroupByCode(cell.row.original.ItemCode)?.Code}
+            // disabled={false}
+            disabled={data.DocumentStatus === "bost_Close" ? true : false}
+          />
         ),
       },
       {
@@ -204,6 +222,7 @@ export default function ContentForm({
           <MUITextField
             type="number"
             value={cell.getValue()}
+            disabled={data.DocumentStatus === "bost_Close" ? true : false}
           />
         ),
       },
@@ -241,7 +260,10 @@ export default function ContentForm({
             <MUITextField
               key={cell.getValue()}
               defaultValue={cell.getValue()}
-              onBlur={(event) => handlerChangeInput(event, cell?.row?.original, "ItemName")}
+              name="ItemDescription"
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "ItemName")
+              }
             />
           );
         },
@@ -254,12 +276,16 @@ export default function ContentForm({
             <AccountTextField
               name="AccountNo"
               value={cell.getValue()}
-              onChange={(event) => handlerChangeInput(event, cell?.row?.original, "AccountNo")} />
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "AccountNo")
+              }
+              disabled={false}
+            />
           );
         },
       },
       {
-        accessorKey: "AccountName",
+        accessorKey: "AccountNameD",
         header: "G/L Account Name", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return <MUITextField value={cell.getValue()} />;
@@ -272,7 +298,9 @@ export default function ContentForm({
           return (
             <VatGroupTextField
               value={cell.getValue()}
-              onChange={(event) => handlerChangeInput(event, cell.row.original, 'VatGroup')}
+              onChange={(event) =>
+                handlerChangeInput(event, cell.row.original, "VatGroup")
+              }
               type="InputTax"
             />
           );
@@ -282,11 +310,14 @@ export default function ContentForm({
         accessorKey: "LineTotal",
         header: "Total (LC)", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField defaultValue={cell.getValue()} onBlur={(event) => handlerChangeInput(
-            event,
-            cell?.row?.original,
-            "LineTotal"
-          )} />;
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "LineTotal")
+              }
+            />
+          );
         },
       },
       {
@@ -362,7 +393,7 @@ export default function ContentForm({
           key={tableKey}
           // columns={itemColumns}
           columns={isItemType(data?.DocType) ? itemColumns : serviceColumns}
-          data={[...data.Items, { ItemCode: '' }]}
+          data={[...data.Items, { ItemCode: "" }]}
           enableStickyHeader={true}
           enableColumnActions={false}
           enableColumnFilters={false}
@@ -447,6 +478,7 @@ export default function ContentForm({
           <MUITextField
             label="Total Before Discount:"
             value={currencyFormat(docTotal)}
+            disabled
           />
         </div>
         <div className="flex justify-between">
@@ -458,6 +490,8 @@ export default function ContentForm({
               onChange={(e) =>
                 handlerChange("DocDiscountPercent", e.target.value)
               }
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
+
             />
           </div>
           <div className="w-[48%] gap-3 mt-5">
@@ -468,12 +502,14 @@ export default function ContentForm({
               onChange={(e) =>
                 handlerChange("DocDiscountPrice", e.target.value)
               }
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
+
             />
           </div>
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
-            <MUITextField label="Fright:" value={""} />
+            <MUITextField label="Fright:" value={""} disabled />
           </div>
 
           <div className="w-[48%] gap-3 mt-5">
@@ -491,16 +527,15 @@ export default function ContentForm({
         </div>
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
-            <MUITextField
-              label="Tax:"
-              value={currencyFormat(docTaxTotal)}
-            />
+            <MUITextField label="Tax:" value={currencyFormat(docTaxTotal)} disabled />
           </div>
 
           <div className="w-[48%] gap-3">
             <MUITextField
               label="Total Payment Due:"
               value={currencyFormat(docTaxTotal + docTotal)}
+              disabled={data.DocumentStatus === "bost_Close" ? true : false}
+
             />
           </div>
         </div>
