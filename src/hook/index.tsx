@@ -1,10 +1,9 @@
+import Formular from "@/utilies/formular";
 import React from "react";
 
 export const useDocumentTotalHook = (items: any[]) => {
     const docTotal: number = React.useMemo(() => {
-        let total = items.reduce((prev: number, cur: any) => {
-            return prev + parseFloat(cur?.LineTotal ?? 0);
-        }, 0);
+        let total = items.reduce((prev: number, cur: any) => prev + Formular.findLineTotal(cur?.Quantity, cur?.UnitPrice, cur?.LineDiscount), 0);
 
         return total;
     }, [items]);

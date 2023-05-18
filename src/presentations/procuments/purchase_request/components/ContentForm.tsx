@@ -19,6 +19,7 @@ import MUIDatePicker from "@/components/input/MUIDatePicker";
 import BusinessPartnerTextField from "@/components/input/BusinessPartnerTextField";
 import VatGroupTextField from "@/components/input/VatGroupTextField";
 import { documentType, isItemType } from "@/constants";
+import { useDocumentTotalHook } from "@/hook";
 
 export interface ContentFormProps {
   handlerAddItem: () => void;
@@ -79,7 +80,8 @@ export default function ContentForm({
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "ItemCode")
               }
-              endAdornment
+              endAdornment={!data?.disable['DocumentLine'] ?? true}
+              disabled={data?.disable['DocumentLine']}
               onClick={handlerAddItem}
             />
           );
@@ -89,12 +91,12 @@ export default function ContentForm({
       {
         accessorKey: "ItemName",
         header: "Description",
-        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} />,
+        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} disabled={data?.disable['DocumentLine']} />,
       },
       {
-        accessorKey: "ItemGroup",
-        header: "Item Group",
-        Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={new ItemGroupRepository().find(cell.getValue())?.GroupName} />
+        accessorKey: "LineVendor",
+        header: "Vendor",
+        Cell: ({ cell }: any) => <MUITextField value={cell.getValue()} disabled={data?.disable['DocumentLine']} />
       },
       {
         accessorKey: "Quantity",
@@ -102,11 +104,12 @@ export default function ContentForm({
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
+              key={'q_' + cell.getValue()}
               defaultValue={cell.getValue()}
               type="number"
               name="Quantity"
               error={(cell.getValue() as number) <= 0}
-              disabled={data?.isApproved}
+              disabled={data?.disable['DocumentLine']}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "Quantity")
               }
@@ -122,13 +125,28 @@ export default function ContentForm({
             <MUITextField
               startAdornment={"USD"}
               type="number"
+              key={'price_' + cell.getValue()}
               name="UnitPrice"
-              disabled={data?.isApproved}
+              disabled={data?.disable['DocumentLine']}
               error={(cell.getValue() as number) <= 0}
               defaultValue={cell.getValue()}
               onBlur={(event) =>
                 handlerChangeInput(event, cell?.row?.original, "UnitPrice")
               }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "PriceAfterVAT",
+        header: "Gross Price",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              startAdornment={"USD"}
+              type="number"
+              disabled={true}
+              value={cell.getValue()}
             />
           );
         },
@@ -141,6 +159,7 @@ export default function ContentForm({
             <MUITextField
               value={cell.getValue()}
               type="number"
+              disabled={data?.disable['DocumentLine']}
               onBlur={(event) =>
                 handlerChangeInput(
                   event,
@@ -159,7 +178,7 @@ export default function ContentForm({
           return (
             <MUITextField
               startAdornment={"USD"}
-              disabled={data?.isApproved}
+              disabled={data?.disable['DocumentLine']}
               value={currencyFormat(cell.getValue())}
             />
           );
@@ -175,6 +194,7 @@ export default function ContentForm({
               value={cell.getValue()}
               onChange={(e) => handlerChangeInput(e.target.value, cell.row.original, 'VatGroup')}
               type="InputTax"
+              disabled={data?.disable['DocumentLine']}
             />
           );
         },
@@ -182,7 +202,7 @@ export default function ContentForm({
       {
         accessorKey: "UomGroupCode",
         header: "UoM Group",
-        Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+        Cell: ({ cell }: any) => <MUITextField disabled={data?.disable['DocumentLine']} value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
       },
       {
         accessorKey: "UomCode",
@@ -191,6 +211,7 @@ export default function ContentForm({
           <UOMTextField
             // key={cell.getValue()}
             value={cell.getValue()}
+            disabled={data?.disable['DocumentLine']}
             onChange={(event) => {
               return handlerChangeInput(event.target.value, cell?.row?.original, 'UomCode');
             }}
@@ -203,6 +224,7 @@ export default function ContentForm({
         Cell: ({ cell }: any) => (
           <MUITextField
             type="number"
+            disabled={data?.disable['DocumentLine']}
             value={cell.getValue()}
           />
         ),
@@ -331,22 +353,9 @@ export default function ContentForm({
   >({ Total: false, ItemsGroupName: false, UoMGroupName: false });
 
 
-  const docTotal: number = React.useMemo(() => {
-    let total = data?.Items.reduce((prev: number, cur: any) => {
-      return prev + parseFloat(cur?.LineTotal);
-    }, 0);
+  const [docTotal, docTaxTotal] = useDocumentTotalHook(data?.Items);
 
-    return total;
-  }, [data?.Items]);
-
-  const docTaxTotal: number = React.useMemo(() => {
-    let total = data?.Items.reduce((prev: number, cur: any) => {
-      return prev + ((parseFloat(cur?.VatRate ?? 1) * parseFloat(cur?.LineTotal ?? 1)) / 100);
-    }, 0);
-
-    return total;
-  }, [data?.Items]);
-
+  console.log(data?.Items)
 
   return (
     <FormCard title="Content">
@@ -435,6 +444,7 @@ export default function ContentForm({
         <div className="w-[100%] gap-3">
           <MUITextField
             label="Total Before Discount"
+            disabled={true}
             value={currencyFormat(docTotal)}
           />
         </div>
@@ -447,12 +457,14 @@ export default function ContentForm({
           <div className="w-[48%] gap-3">
             <MUITextField
               label="Tax:"
+              disabled={true}
               value={currencyFormat(docTaxTotal)}
             />
           </div>
           <div className="w-[48%] gap-3">
             <MUITextField
               label="Total Payment Due"
+              disabled={true}
               value={currencyFormat(parseFloat(docTotal.toString()) + parseFloat(docTaxTotal.toString()))}
             />
           </div>

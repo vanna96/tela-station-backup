@@ -13,6 +13,7 @@ import VatGroup from '@/models/VatGroup';
 import ItemGroupRepository from '@/services/actions/itemGroupRepository';
 import UnitOfMeasurementRepository from '@/services/actions/unitOfMeasurementRepository';
 import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
+import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 
 type ItemType = 'purchase' | 'sale' | 'inventory';
 
@@ -29,6 +30,12 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
     const { data, isLoading }: any = useQuery({
         queryKey: ["items"],
         queryFn: () => new itemRepository().get(),
+        staleTime: Infinity,
+    });
+
+    const vendors: any = useQuery({
+        queryKey: ["venders_supplier"],
+        queryFn: () => new BusinessPartnerRepository().get(`&$filter=CardType eq 'cSupplier'`),
         staleTime: Infinity,
     });
 
@@ -81,7 +88,11 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
         const uomGroups: any = await new UnitOfMeasurementGroupRepository().get();
         const uoms = await new UnitOfMeasurementRepository().get();
 
+
+
         selectItems = selectItems.map((e: any) => {
+            const vendor = vendors.data?.find((bp: any) => bp?.CardCode === e?.Mainsupplier);
+            const defaultPrice = e?.ItemPrices?.find((row: any) => row?.PriceList === vendor?.PriceListNum)?.Price;
             let vatRate: any = 0;
             switch (type) {
                 case 'purchase':
@@ -90,9 +101,6 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 case 'sale':
                     vatRate = (new VatGroupRepository().find(e?.SalesVATGroup) as VatGroup).vatRate;
                     break;
-                // case 'inventory':
-                //     vatRate = (new VatGroupRepository().find(e?.SalesVATGroup) as VatGroup).vatRate;
-                //     break;
                 default:
                     vatRate = 0;
                     break;
@@ -109,8 +117,11 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
             })
             const baseUOM: any = uoms.find((row: any) => row.AbsEntry === uomGroup?.BaseUoM);
 
+            const total = (defaultPrice ?? 0) * 1;
+
             return ({
                 ItemCode: e?.ItemCode,
+                LineVendor: vendor?.CardCode,
                 ItemName: e?.ItemName,
                 ItemDescription: e?.ItemName,
                 UomEntry: e?.UoMGroupEntry,
@@ -119,10 +130,12 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 PurchaseVatGroup: e?.PurchaseVATGroup,
                 VatGroup: e?.PurchaseVATGroup,
                 VatRate: vatRate,
-                Quantity: 0,
-                UnitPrice: 0,
+                Quantity: defaultPrice !== undefined ? 1 : 0,
+                UnitPrice: defaultPrice ?? 0,
                 DiscountPercent: 0,
-                Total: 0,
+                LineTotal: total,
+                Total: total,
+                // GrossPrice: total + ((total * vatRate) / 100),
                 UomGroupAbsEntry: e?.UoMGroupEntry,
                 UomGroupCode: uomGroup?.Code,
                 UomAbsEntry: baseUOM?.AbsEntry,
@@ -133,6 +146,8 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 UnitsOfMeasurement: uomGroup?.UoMGroupDefinitionCollection.find((e: any) => e?.AlternateUoM === uomGroup?.BaseUoM)?.BaseQuantity,
             })
         });
+
+        console.log(selectItems)
         onOk(selectItems)
     }
 

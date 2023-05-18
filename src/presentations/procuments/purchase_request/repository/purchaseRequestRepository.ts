@@ -26,7 +26,7 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
             .catch((e: Error) => {
                 throw new Error(e.message)
             })
-        return PurchaseRequest;
+        return purchasRequest;
     }
 
     async documentTotal<T>(query?: string): Promise<number> {

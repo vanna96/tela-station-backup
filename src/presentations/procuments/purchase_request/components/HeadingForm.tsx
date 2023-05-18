@@ -39,6 +39,7 @@ export default function HeadingForm({
                   aliasvalue="id"
                   aliaslabel="name"
                   name="ReqType"
+                  disabled={data?.disable['ReqType']}
                 />
               </div>
             </div>
@@ -48,6 +49,8 @@ export default function HeadingForm({
               onClick={handlerOpenRequester}
               endAdornment={true}
               key={data?.CardCode}
+              disabled={data?.disable['CardCode']}
+
             />
           </div>
 
@@ -57,7 +60,9 @@ export default function HeadingForm({
                 Requester name
               </label>
               <div className="">
-                <MUITextField name="CardName" value={data.CardName} key={data?.CardName} />
+                <MUITextField name="CardName" value={data.CardName} key={data?.CardName}
+                  disabled={data?.disable['CardCode']}
+                />
               </div>
             </div>
 
@@ -69,7 +74,8 @@ export default function HeadingForm({
                 <DepartmentSelect
                   name="RequesterDepartment"
                   value={edit ? data?.RequesterDepartment : data.Department}
-                  onChange={edit ? (e) => handlerChange("RequesterDepartment", e.target.value): (e) => handlerChange("Department", e.target.value)}
+                  disabled={data?.disable['RequesterDepartment']}
+                  onChange={edit ? (e) => handlerChange("RequesterDepartment", e.target.value) : (e) => handlerChange("Department", e.target.value)}
                 />
               </div>
             </div>
@@ -83,6 +89,7 @@ export default function HeadingForm({
                 <BranchSelect
                   name="Branch"
                   value={edit ? data?.RequesterBranch : data.Branch}
+                  disabled={data?.disable['RequesterBranch']}
                   onChange={edit ? (e) => handlerChange("RequesterBranch", e.target.value) : (e) => handlerChange("Branch", e.target.value)}
                 />
               </div>
@@ -131,6 +138,7 @@ export default function HeadingForm({
                   size="small"
                   name="DocNum"
                   value={data?.DocNum}
+                  disabled={edit}
                   placeholder="Document No"
                 />
               </div>
@@ -138,7 +146,7 @@ export default function HeadingForm({
           </div>
 
           <div className="grid grid-cols-1 gap-3">
-            <MUITextField label="Status" value={data?.DocumentStatus ?? 'Open'} disabled={true} name="DocumentStatus" />
+            <MUITextField label="Status" value={`${data?.DocumentStatus ?? 'Open'}${data?.Printed ? '; Printed' : ''}`} disabled={true} name="DocumentStatus" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -149,6 +157,7 @@ export default function HeadingForm({
               <div className="">
                 <MUIDatePicker
                   value={data.DocDate}
+                  disabled={data?.disable['DocDate']}
                   onChange={(e: any) => handlerChange("DocDate", e)}
                 />
               </div>
@@ -161,6 +170,7 @@ export default function HeadingForm({
                 <MUIDatePicker
                   value={data.DocDueDate}
                   addOnDay={31}
+                  disabled={data?.disable['DocDueDate']}
                   onChange={(e: any) => handlerChange("DocDueDate", e)}
                 />
               </div>
@@ -174,6 +184,7 @@ export default function HeadingForm({
               <div className="">
                 <MUIDatePicker
                   value={data.TaxDate}
+                  disabled={data?.disable['TaxDate']}
                   onChange={(e: any) => handlerChange("TaxDate", e)}
                 />
               </div>
@@ -185,6 +196,7 @@ export default function HeadingForm({
               <div className="">
                 <MUIDatePicker
                   value={data.RequriedDate ?? null}
+                  disabled={data?.disable['RequriedDate']}
                   onChange={(e: any) => handlerChange("RequriedDate", e)}
                 />
               </div>

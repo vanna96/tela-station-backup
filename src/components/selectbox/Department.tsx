@@ -10,6 +10,7 @@ interface DepartmentProps<T = unknown> {
     defaultValue?: any,
     value?: any,
     onChange?: SelectInputProps<T>['onChange'],
+    disabled?: boolean,
 }
 
 
@@ -23,6 +24,7 @@ function DepartmentSelect(props: DepartmentProps) {
         aliasvalue="Code"
         loading={isLoading}
         items={data}
+        disabled={props.disabled}
     />
 }
 

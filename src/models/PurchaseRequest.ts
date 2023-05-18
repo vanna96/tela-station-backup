@@ -73,6 +73,7 @@ export default class PurchaseRequest extends MasterDocumentModel {
   Status?: string;
   Email?: string;
   Owner?: string;
+  Printed: boolean;
   DocumentLine?: PurchaseRequestDocumentLine[];
 
   constructor(json: any) {
@@ -89,7 +90,7 @@ export default class PurchaseRequest extends MasterDocumentModel {
     this.RequesterBranch = json["RequesterBranch"] ?? json["Branch"];
     this.Series = json["Series"];
     this.DocTotalSys = json["DocTotalSys"];
-    this.Owner = json["DocumentsOwner"];
+    this.Owner = json['Owner'] ?? json["DocumentsOwner"];
     this.Status = json["DocumentStatus"];
     this.VatSumSys = json["VatSumSys"];
     this.Price = json["Price"];
@@ -110,6 +111,7 @@ export default class PurchaseRequest extends MasterDocumentModel {
     this.PaymentMethod = json['PaymentMethod']
     this.ShippingType = json['TransportationCode']
     this.DocTotalSys = json['DocTotalSys'] ?? 0;
+    this.Printed = json['Printed'] === "psYes";
     this.Items = (json["DocumentLines"] ?? json['Items'])?.map((e: any) => new PurchaseRequestDocumentLine(e));
   }
 
@@ -172,6 +174,7 @@ export class PurchaseRequestDocumentLine extends LineDocumentModel {
   DiscountPercent: number;
   LineVendor: string;
   VatRate: number;
+  PriceAfterVAT: number;
 
 
   constructor(json: any) {
@@ -195,6 +198,7 @@ export class PurchaseRequestDocumentLine extends LineDocumentModel {
     this.LineVendor = json["LineVendor"];
     this.TaxRate = json["Rate"];
     this.VatRate = json["TaxPercentagePerRow"];
+    this.PriceAfterVAT = json['PriceAfterVAT'];
   }
 
 

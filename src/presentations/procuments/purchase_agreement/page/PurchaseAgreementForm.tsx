@@ -67,7 +67,6 @@ class PurchaseAgreementForm extends CoreFormDocument {
                 });
             }
             state['Status'] = state['Status'] === 'O' ? 'F' : state['Status'];
-
             disables['StartDate'] = state?.Status?.includes('A') || state?.Status?.includes('T');
             disables['EndDate'] = state?.Status?.includes('A') || state?.Status?.includes('T');
             disables['PaymentMethod'] = state?.Status?.includes('A') || state?.Status?.includes('T');
@@ -79,7 +78,6 @@ class PurchaseAgreementForm extends CoreFormDocument {
             disables['Projects'] = state?.Status?.includes('A') || state?.Status?.includes('T');
             disables['TerminateDate'] = true;
             disables['DocumentLine'] = state?.Status?.includes('A') || state?.Status?.includes('T');
-
             this.setState({ ...state, disable: disables, loading: false });
         }
 
@@ -104,7 +102,6 @@ class PurchaseAgreementForm extends CoreFormDocument {
             this.dialog.current?.success("Create Successfully.");
         }).catch((e: any) => {
             if (e instanceof UpdateDataSuccess) {
-
                 const agreement = new PurchaseAgreement(this.state);
                 this.props.query.set('pa-id-' + id, agreement);
                 this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state });

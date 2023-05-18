@@ -10,6 +10,7 @@ interface BranchProps<T = unknown> {
     defaultValue?: any,
     value?: any,
     onChange?: SelectInputProps<T>['onChange'],
+    disabled?: boolean,
 }
 
 
@@ -24,6 +25,7 @@ function BranchSelect(props: BranchProps) {
         aliasvalue="Code"
         loading={isLoading}
         items={data}
+        disabled={props?.disabled}
     />
 }
 

@@ -24,7 +24,7 @@ const UOMTextField: FC<UOMTextField> = ({ value, onChange, data, disabled }: UOM
 
     return <>
         <UoMListModal open={open} onClose={onClose} onOk={handlerConfirm} data={data} />
-        <MUITextField disabled={disabled} endAdornment={onChange !== undefined} value={value} onClick={() => setOpen(true)} />
+        <MUITextField disabled={disabled} endAdornment={onChange !== undefined && !disabled} value={value} onClick={() => setOpen(true)} />
     </>
 }
 

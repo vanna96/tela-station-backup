@@ -27,14 +27,7 @@ export default class PurchaseRequestRepository extends Repository<PurchaseReques
             .catch((e: Error) => {
                 throw new Error(e.message)
             })
-
-        // const businessPartner: BusinessPartner = await new BusinessPartnerRepository().findContactEmployee(purchaseAgreement.cardCode!);
-
-        // purchaseAgreement.email = businessPartner.email;
-        // purchaseAgreement.phone = businessPartner.phone;
-        // purchaseAgreement.contactPersonList = businessPartner.contactEmployee ?? [];
-
-        return PurchaseRequest;
+        return purchasRequest;
     }
 
     async documentTotal<T>(query?: string): Promise<number> {

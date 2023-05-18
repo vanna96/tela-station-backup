@@ -8,7 +8,6 @@ import { useMemo } from "react";
 import { currencyFormat, fileToBase64 } from "@/utilies";
 import Modal from "@/components/modal/Modal";
 import { CircularProgress } from "@mui/material";
-import PurchaseRequestRepository from "@/services/actions/purchaseRequestRepository";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import Formular from "../../../../utilies/formular";
 import DocumentHeaderComponent from '../../../../components/DocumenHeaderComponent';
@@ -16,6 +15,7 @@ import OwnerRepository from '@/services/actions/ownerRepository';
 import DepartmentRepository from '@/services/actions/departmentRepository';
 import { dateFormat } from '../../../../utilies/index';
 import BranchRepository from '../../../../services/actions/branchRepository';
+import PurchaseRequestRepository from "../repository/purchaseRequestRepository";
 
 class PurchaseRequestDetail extends Component<any, any> {
   constructor(props: any) {
@@ -34,22 +34,21 @@ class PurchaseRequestDetail extends Component<any, any> {
 
   }
 
-  initData() {
+  async initData() {
     const { id } = this.props.match.params;
-    const data = this.props.location.state as PurchaseRequest;
-console.log(data)
-    if (data) {
-      setTimeout(() => this.setState({ ...data, loading: false }), 500);
-    } else {
-      new PurchaseRequestRepository()
-        .find(id)
+    let state: any = this.props.query.find('pr-id-' + id);
+    if (!state) {
+      await new PurchaseRequestRepository()
+        .find(this.props.match.params.id)
         .then((res: any) => {
-          this.setState({ ...res, loading: false });
-        })
-        .catch((e: Error) => {
+          state = res;
+          this.props.query.set('pr-id-' + id, res);
+        }).catch((e) => {
           this.setState({ isError: true, message: e.message });
-        });
+          return;
+        })
     }
+    this.setState({ ...state, loading: false });
   }
 
   render() {

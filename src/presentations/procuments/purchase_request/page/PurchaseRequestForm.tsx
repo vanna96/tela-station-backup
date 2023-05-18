@@ -31,50 +31,12 @@ class PurchaseRequestForm extends CoreFormDocument {
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
     this.handlerAddItem = this.handlerAddItem.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
+    this.onInit = this.onInit.bind(this);
   }
 
   componentDidMount(): void {
     this.setState({ ...this.state, loading: true });
-
-
-    if (this.props.edit) {
-      if (this.props.location.state) {
-        const routeState = this.props.location.state;
-        setTimeout(
-          () =>
-            this.setState({
-              ...this.props.location.state,
-              isApproved: routeState?.status === "A",
-              loading: false,
-            }),
-          500
-        );
-      } else {
-        new PurchaseRequestRepository()
-          .find(this.props.match.params.id)
-          .then((res: any) => {
-            this.setState({ ...res, loading: false });
-          })
-          .catch((e: Error) => {
-            this.setState({ message: e.message });
-          });
-      }
-    } else {
-      setTimeout(
-        () =>
-          this.setState({
-            ...this.state,
-            loading: false,
-            ReqType: 12,
-            CardCode: this.props?.user?.UserCode,
-            CardName: this.props?.user?.UserName,
-            Branch: this.props?.user?.Branch,
-            Department: this.props?.user?.Department,
-            Email: this.props?.user?.Email,
-          }),
-        500
-      );
-    }
+    this.onInit();
 
     DocumentSerieRepository.getDocumentSeries(PurchaseRequestRepository.documentSerie).then((res: any) => {
       this.setState({ ...this.state, SerieLists: res, isLoadingSerie: false });
@@ -92,6 +54,56 @@ class PurchaseRequestForm extends CoreFormDocument {
         });
       });
     }
+  }
+
+  async onInit() {
+    if (this.props.edit) {
+      const { id } = this.props.match.params;
+      let state: any = this.props.query.find('pr-id-' + id);
+      let disables: any = {};
+
+      if (!state) {
+        await new PurchaseRequestRepository()
+          .find(this.props.match.params.id)
+          .then((res: any) => {
+            state = res;
+            this.props.query.set('pr-id-' + id, res);
+          }).catch(e => {
+            console.log(e)
+            this.setState({ message: 'Data no found.' });
+            return;
+          })
+      }
+
+      disables['ReqType'] = state?.DocumentStatus !== 'Open';
+      disables['CardCode'] = state?.DocumentStatus !== 'Open';
+      disables['CardName'] = state?.DocumentStatus !== 'Open';
+      disables['RequesterBranch'] = state?.DocumentStatus !== 'Open';
+      disables['RequesterDepartment'] = state?.DocumentStatus !== 'Open';
+      disables['RequesterEmail'] = state?.DocumentStatus !== 'Open';
+      disables['DocDate'] = state?.DocumentStatus !== 'Open';
+      disables['DocDueDate'] = state?.DocumentStatus !== 'Open';
+      disables['TaxDate'] = state?.DocumentStatus !== 'Open';
+      disables['RequriedDate'] = state?.DocumentStatus !== 'Open';
+      disables['DocumentLine'] = state?.DocumentStatus !== 'Open';
+      this.setState({ ...state, disable: disables, loading: false });
+    } else {
+      setTimeout(
+        () =>
+          this.setState({
+            ...this.state,
+            loading: false,
+            ReqType: 12,
+            CardCode: this.props?.user?.UserCode,
+            CardName: this.props?.user?.UserName,
+            Branch: this.props?.user?.Branch,
+            Department: this.props?.user?.Department,
+            Email: this.props?.user?.Email,
+          }),
+        500
+      );
+    }
+
   }
 
   handlerRemoveItem(code: string) {
@@ -154,6 +166,9 @@ class PurchaseRequestForm extends CoreFormDocument {
           this.props.location.pathname?.replace("create", purchaseRequest.DocEntry),
           purchaseRequest
         );
+
+        const payloads = new PurchaseRequest(this.state);
+        this.props.query.set('pr-id-' + id, payloads);
         this.dialog.current?.success("Create Successfully.");
       })
       .catch((e: any) => {
@@ -166,6 +181,9 @@ class PurchaseRequestForm extends CoreFormDocument {
               isApproved: this.state.DocumentStatus === "A",
             }
           );
+
+          const payloads = new PurchaseRequest(this.state);
+          this.props.query.set('pr-id-' + id, payloads);
           this.dialog.current?.success(e.message);
           return;
         }
