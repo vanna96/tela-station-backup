@@ -603,7 +603,7 @@ export default class ItemMaster {
       "MaxInventory": json["maxInventory"],
       "DesiredInventory": json['desiredInventory'],
       "MinInventory": json['minInventory'],
-      "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
+      // "ManageStockByWarehouse": json["manageStockByWarehouse"] ? 'tYES' : 'tNO',
       "PurchaseHeightUnit1": json["purchaseHeightUnit1"],
       "PurchaseUnitHeight1": json["purchaseUnitHeight1"],
       "PurchaseLengthUnit1": json["purchaseLengthUnit1"],
@@ -645,7 +645,7 @@ export default class ItemMaster {
       "Employee": json["employee"],
       "Location": json["location"],
       "AssetStatus": json["assetStatus"],
-      "ManageByQuantity": json["manageByQuantity"],
+      // "ManageByQuantity": json["manageByQuantity"],
       "UoMGroupEntry": json["uomGroupEntry"],
       "InventoryUoMEntry": json["inventoryUoMEntry"],
       "DefaultSalesUoMEntry": json["defaultSalesUoMEntry"],
@@ -672,8 +672,8 @@ export default class ItemMaster {
         }
       ],
       // 
-      "ManageSerialNumbers": json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
-      "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
+      // "ManageSerialNumbers": json['manageItemByDrop'] === 'L' ? "tYES" : "tNO",
+      // "ManageBatchNumbers": json['manageItemByDrop'] === 'T' ? "tYES" : "tNO",
       DocumentStatus: json["DocumentStatus"],
       "ItemWarehouseInfoCollection": json["warehouse"]?.map((e: any) =>
         ItemWarehouseInfo.toCreate(e)
