@@ -231,12 +231,12 @@ export default function ItemMasterDataLists() {
         Cell: (cell: any) => (
           <div className="flex gap-4">
             <button onClick={() => {
-              route('/master-data/item-master-data/' + cell.row.original.ItemCode, { state: cell.row.original, replace: true })
+              route('/master-data/item-master-data/' + cell.row.original.id, { state: cell.row.original, replace: true })
             }}>
               <VisibilityIcon fontSize="small" className="text-gray-600 " />
             </button>
             <button title="back"
-              onClick={() => route('/master-data/item-master-data/' + cell.row.original.ItemCode + '/edit', { state: cell.row.original, replace: true })}
+              onClick={() => route('/master-data/item-master-data/' + cell.row.original.id + '/edit', { state: cell.row.original, replace: true })}
             >
               <EditIcon fontSize="small" className="text-blue-400" />
             </button>

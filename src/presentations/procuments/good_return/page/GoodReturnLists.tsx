@@ -131,6 +131,12 @@ export default function GoodReturnLists() {
     retry: 1,
   });
 
+  const queryFn = () => {
+    return new GoodReturnRepository().get(`?$top=${pagination.pageSize}&$skip=${(pagination.pageIndex) * pagination.pageSize}${filter}${sortBy !== '' ? '&$orderby=' + sortBy : ''}`);
+  };
+  
+  console.log(queryFn); // Log the queryFn
+
 
   const handlerRefresh = React.useCallback(() => {
     setFilter('');

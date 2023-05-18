@@ -11,7 +11,7 @@ export default class ItemMasterDataRepository extends Repository<ItemMasterData>
     }
     
     async get<T>(query?: string): Promise<T[]> {
-        const response: any = await request('GET', this.url).then((res: any) => {
+        const response: any = await request('GET', this.url + query).then((res: any) => {
             const data = res?.data?.value?.map((e: any) => new ItemMasterData(e));
             return data;
         }).catch((e) => {
