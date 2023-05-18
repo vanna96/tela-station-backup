@@ -1,20 +1,28 @@
 import CoreFormDocument from '@/components/core/CoreFormDocument';
 import { withRouter } from '@/routes/withRouter';
 import { LoadingButton } from '@mui/lab';
-import DocumentSerieRepository from '@/services/actions/documentSerie';
-import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
-import GLAccount from '@/models/GLAccount';
 import { CircularProgress } from '@mui/material';
 import { UpdateDataSuccess } from '../../../../utilies/ClientError';
-import PurchaseAgreement from '../../../../models/PurchaseAgreement';
-import { QueryClient, useMutation } from 'react-query';
-import HeadingForm from '../component/HeadingForm';
 import WarehouseRepository from '@/services/actions/WarehouseRepository';
 import Warehouses from '@/models/Warehouses';
+import HeadingForm from '../component/HeadingForm';
 import General from '../component/General';
+import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify';
+import { documentType } from '@/constants';
+import React, { Component } from 'react';
+import FormMessageModal from '@/components/modal/FormMessageModal';
+
+const contextClass: any = {
+  success: "bg-blue-600",
+  error: "bg-red-600",
+  info: "bg-gray-600",
+  warning: "bg-orange-400",
+  default: "bg-indigo-600",
+  dark: "bg-white-600 font-gray-300",
+};
 
 
-class WarehouseForm extends CoreFormDocument {
+class WarehouseForm extends Component<any,any> {
 
   constructor(props: any) {
     super(props)
@@ -23,7 +31,7 @@ class WarehouseForm extends CoreFormDocument {
     } as any;
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
-
+  dialog = React.createRef<FormMessageModal>();
   componentDidMount(): void {
 
     if (!this.props?.edit) {
@@ -70,14 +78,54 @@ class WarehouseForm extends CoreFormDocument {
       this.setState({ ...this.state, isSubmitting: false })
     });
   }
+  protected toast(message: string, type: TypeOptions) {
+    toast(message, {
+      position: 'top-right',
+      type: type,
+      theme: 'colored',
+      icon: false,
+    })
+  }
 
+
+  protected showMessage(title: string, message: string) {
+    this.setState({
+      ...this.state,
+      title: title,
+      message: message,
+      showDialogMessage: true,
+      isSubmitting: false,
+    })
+  }
+
+  protected handlerCloseDialogMessage(cb?: Function) {
+    this.setState({
+      ...this.state,
+      showDialogMessage: false,
+    });
+
+    if (cb) {
+      cb();
+    }
+  }
+  protected handlerChange(key: string, value: any) {
+    let temps: any = { ...this.state };
+    temps[key] = value;
+    
+    this.setState(temps)
+  }
 
   FormRender = () => {
     return <>
       <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
         {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
 
-
+          <ToastContainer
+            toastClassName={({ type }: any) => contextClass[type || "default"] +
+              " relative flex p-1 min-h-6 rounded-md justify-between overflow-hidden cursor-pointer"
+            }
+            bodyClassName={() => "text-sm font-white font-med block p-3"}
+          />
           <HeadingForm
             data={this.state}
             edit={this.props?.edit}

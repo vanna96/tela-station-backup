@@ -72,7 +72,7 @@ export default class PurchaseQouatation extends MasterDocumentModel {
     this.ExtraMonth = json['ExtraMonth'];
     this.ExtraDays = json['ExtraDays'];
     this.Series = json['Series'];
-    this.DocType = json['DocType']?.replace('dDocument_', "")?.charAt(0);
+    this.DocType = json['DocType'];
     this.DocNum = json['DocNum'];
     this.ContactPersonList = json['ContactPersonList'];
     this.JournalMemo = json['JournalMemo']
@@ -227,7 +227,7 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
     this.UomGroupEntry = uomGroup.AbsEntry;
     this.UomGroupName = uomGroup?.Code;
   }
-  toJson(type = "I", update = false) {
+  toJson(type = "dDocument_Items", update = false) {
     let body = {
       "VatGroup": this.SaleVatGroup,
       "ItemCode": this.ItemCode,
@@ -250,12 +250,11 @@ export class PurchaseQoutationDocumentLine extends LineDocumentModel {
       "RequiredQuantity": this.RequiredQuantity,
       "RequiredDate": this.RequiredDate,
     }
-    if (type === 'S') {
+    if (type === 'dDocument_Service') {
       delete body.DiscountPercent;
       delete body.ItemCode;
       delete body.UnitPrice;
       delete body.LineDiscount;
-      delete body.ShipDate;
       delete body.Project
     }
 

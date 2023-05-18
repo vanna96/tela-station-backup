@@ -56,8 +56,8 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
               <div className="grid grid-cols-2 gap-3">
                 <MUITextField
                   name="DocCurrency"
-                  value={data.DocCurrency}
-                  onChange={(e) => handlerChange('DocCurrency', e.target.value)}
+                  value={data.Currency}
+                  onChange={(e) => handlerChange('Currency', e.target.value)}
                 disabled={edit}
                 />
                 <div></div>

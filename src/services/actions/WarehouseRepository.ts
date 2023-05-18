@@ -22,7 +22,15 @@ export default class WarehouseRepository extends Repository<Warehouses> {
 
     return response;
   }
+  async documentTotal<T>(query?: string): Promise<number> {
+    const response: any = await request('GET', this.url + '/$count' + query).then(async (res: any) => {
+      return res.data;
+    }).catch((e: Error) => {
+      throw new Error(e.message);
+    });
 
+    return response;
+  }
   async find<T>(id: any): Promise<any> {
     const warehouse = await request('GET', `${this.url}(${id})`).then((res: any) => new Warehouses(res.data))
       .catch((e: Error) => {

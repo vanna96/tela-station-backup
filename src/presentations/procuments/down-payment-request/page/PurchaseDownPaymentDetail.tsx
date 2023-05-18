@@ -268,7 +268,7 @@ function Content(props: any) {
 
   return <div className="data-table  border-none p-0 mt-3">
     <MaterialReactTable
-      columns={data?.DocType === 'I' ? itemColumn : serviceColumns}
+      columns={data?.DocType === 'dDocument_Items' ? itemColumn : serviceColumns}
       data={data?.Items || []}
       enableHiding={true}
       initialState={{ density: "compact" }}

@@ -42,7 +42,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel {
   Indicator: number;
   FederalTaxID: string;
   ImportFileNum: string;
-  DocCurrency: string;
+  Currency: string;
   DocumentStatus: string;
   Project: string;
   DiscountPercent?: string;
@@ -72,7 +72,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel {
     this.ExtraMonth = json['ExtraMonth'];
     this.ExtraDays = json['ExtraDays'];
     this.Series = json['Series'];
-    this.DocType = json['DocType']?.replace('dDocument_', "")?.charAt(0);
+    this.DocType = json['DocType'];
     this.DocNum = json['DocNum'];
     this.ContactPersonList = json['ContactPersonList'];
     this.JournalMemo = json['JournalMemo']
@@ -98,7 +98,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel {
     this.Indicator = json['Indicator'];
     this.ImportFileNum = json['ImportFileNum'];
     this.PaymentMethod = json['PaymentMethod'];
-    this.DocCurrency = json['DocCurrency'];
+    this.Currency = json['DocCurrency'];
     this.Project = json['Project'];
     this.DiscountPercent = json['DiscountPercent'];
     this.ItemName = json['ItemDescription'];
@@ -114,7 +114,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel {
   }
   toJson(update = false) {
     return {
-      "DownPaymentType": "dptInvoice",
+      "DownPaymentType": "dptRequest",
       "NumberOfInstallments": this.NumberOfInstallments,
       "SalesPersonCode": this.SalesPersonCode,
       "VatSum": this.VatSum,
@@ -150,7 +150,7 @@ export default class PurchaseDownPayment extends MasterDocumentModel {
       "PaymentMethod": this.PaymentMethod,
       "TransportationCode": this.TransportationCode,
       "Project": this.Project,
-      "DocCurrency": this.DocCurrency,
+      "DocCurrency": this.Currency,
       "TaxDate": this.TaxDate,
       "CreateQRCodeFrom": this.CreateQRCodeFrom,
       "DocumentLines": this.Items?.map((e) => e.toJson(this.DocType, update))
@@ -220,7 +220,7 @@ export class PurchaseDownPaymentDocumentLine extends LineDocumentModel {
     this.UomGroupEntry = uomGroup.AbsEntry;
     this.UomGroupName = uomGroup?.Code;
   }
-  toJson(type="I", update = false) {
+  toJson(type="dDocument_Items", update = false) {
     let line = {
       "Quantity": this.Quantity,
       "ItemCode": this.ItemCode,
@@ -242,7 +242,7 @@ export class PurchaseDownPaymentDocumentLine extends LineDocumentModel {
 
     };
 
-    if (type=== "S") {
+    if (type === "dDocument_Service") {
 
       delete line.ItemCode;
       delete line.UnitPrice;

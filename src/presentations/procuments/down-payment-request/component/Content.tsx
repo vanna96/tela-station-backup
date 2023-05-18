@@ -82,6 +82,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
             endAdornment
             onClick={handlerAddItem}
+            key={cell.getValue()}
+
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
             }
@@ -98,6 +100,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           return <MUITextField
             value={cell.getValue()}
             name="ItemDescription"
+            key={cell.getValue()}
+
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemName')}
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
@@ -114,6 +118,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             value={cell.getValue()}
             type="number"
             name="Quantity"
+            key={cell.getValue()}
+
             error={(cell.getValue() as number) <= 0}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
             disabled={
@@ -129,6 +135,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           return <MUITextField
             value={cell.getValue()}
             type="number"
+            key={cell.getValue()}
+
             startAdornment={'%'}
             name="DiscountPercent"
             onChange={(event) =>
@@ -149,6 +157,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             startAdornment={'USD'}
             type="number"
             name="UnitPrice"
+            key={cell.getValue()}
+
             error={(cell.getValue() as number) <= 0}
             value={cell.getValue()}
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
@@ -174,6 +184,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <VatGroup
             value={cell.getValue()}
+            key={cell.getValue()}
+
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'PurchaseVatGroup')}
             category="InputTax"
             name="VatGroup"
@@ -189,6 +201,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <MUITextField
             startAdornment={'USD'}
+            key={cell.getValue()}
+
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
             }
@@ -199,7 +213,10 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
       {
         accessorKey: "UomGroupCode",
         header: "UoM Group",
-        Cell: ({ cell }: any) => <MUITextField disabled={
+        Cell: ({ cell }: any) => <MUITextField
+          key={cell.getValue()}
+
+          disabled={
           data?.DocumentStatus === "bost_Close" ? true : false
         } value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
       },
@@ -223,6 +240,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => (
           <MUITextField
             type="number"
+            key={cell.getValue()}
+
             value={cell.getValue()}
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
@@ -243,7 +262,10 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         enableResizing: false,
         Cell: ({ cell }: any) => {
           // return ;
-          return <Button disabled={
+          return <Button
+            key={cell.getValue()}
+
+            disabled={
             data?.DocumentStatus === "bost_Close" ? true : false
           } size="small" color="error" onClick={() => handlerRemoveRow(cell.row.original)}><AiOutlineDelete /></Button>;
         },
@@ -254,6 +276,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           // return ;
           return <MUITextField
+            key={cell.getValue()}
+
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
             }
@@ -270,6 +294,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
           console.log(cell.getValue());
           return (
             <AccountTextField
+              key={cell.getValue()}
+
               disabled={
                 data?.DocumentStatus === "bost_Close" ? true : false
               }
@@ -286,7 +312,10 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         accessorKey: "AccountName",
         header: "	G/L Account Name", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
-          return <MUITextField disabled={
+          return <MUITextField
+            key={cell.getValue()}
+
+            disabled={
             data?.DocumentStatus === "bost_Close" ? true : false
           } name="AccountName" value={cell.getValue()}
             onChange={(event) =>
@@ -301,9 +330,11 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <VatGroupTextField
             value={cell.getValue()}
-            // disabled={
-            //   data?.DocumentStatus === "bost_Close" ? true : false
-            // }
+            disabled={
+              data?.DocumentStatus === "bost_Close" ? true : false
+            }
+            key={cell.getValue()}
+
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'VatGroup')}
             type="InputTax"
             name="VatGroup"
@@ -316,6 +347,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           return <MUITextField
             value={cell.getValue()}
+            key={cell.getValue()}
+
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
             }
@@ -328,6 +361,8 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         header: "BlanketAgreementNumber", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return <MUITextField
+            key={cell.getValue()}
+
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
             }
@@ -370,7 +405,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
-          columns={data?.DocType === "S" ? serviceColumns : itemColumns}
+          columns={data?.DocType === "dDocument_Service" ? serviceColumns : itemColumns}
           data={[...data?.Items, blankItem ?? []]}
           enableStickyHeader={true}
           enableColumnActions={false}

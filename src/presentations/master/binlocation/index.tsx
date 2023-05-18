@@ -7,18 +7,13 @@ import moment from "moment/moment";
 //Date Picker Imports
 import { useNavigate } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
-import PurchaseRequestRepository from "@/services/purchaseRequestRepository";
 import WarehouseRepository from "@/services/actions/WarehouseRepository";
 import BinlocationRepository from "@/services/actions/BinlocationRepository";
+import DataTable from "@/components/data_table/DataTable";
 
 export default function BinlocationLists() {
   const route = useNavigate();
 
-  const { data, isLoading }: any = useQuery({
-    queryKey: ["bl"],
-    queryFn: () => new BinlocationRepository().get(),
-  });
-  console.log(data);
   const columns = React.useMemo(
     () => [
       {
@@ -27,20 +22,28 @@ export default function BinlocationLists() {
         enableClickToCopy: true,
         enableFilterMatchHighlighting: true,
         size: 88,
+        visible: true,
+        type: 'number',
       },
       {
         accessorKey: "warehouse",
         header: "Warehouse",
         enableClickToCopy: true,
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "binCode",
         header: "Bin Code",
         // size: 200, //increase the width of this column
+        visible: true,
+        type: 'string',
       },
       {
         accessorKey: "inactive",
         header: "Status",
+        visible: true,
+        type: 'string',
        
       },
       {
@@ -68,10 +71,66 @@ export default function BinlocationLists() {
     []
   );
 
+  const [filter, setFilter] = React.useState('');
+  const [sortBy, setSortBy] = React.useState('');
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
+  const masterCount = useQuery({
+    queryKey: ['bl-count'], queryFn: () => new BinlocationRepository().documentTotal(`?$select=absEntry${filter}`),
+    staleTime: Infinity
+  })
+
+  const { data, isLoading, error, isError, refetch, isFetching }: any = useQuery({
+    queryKey: ['bl', `${(pagination.pageIndex) * 10}_${filter !== '' ? 'f' : ''}`], queryFn: () => {
+      return new BinlocationRepository().get(`?$top=${pagination.pageSize}&$skip=${(pagination.pageIndex) * pagination.pageSize}${filter}${sortBy !== '' ? '&$orderby=' + sortBy : ''}`);
+    },
+    staleTime: Infinity,
+    retry: 1,
+  });
+
+
+  const handlerRefresh = React.useCallback(() => {
+    setFilter('');
+    setSortBy('');
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+    setTimeout(() => {
+      masterCount.refetch();
+      refetch();
+    }, 500);
+  }, []);
+
+  const handlerSortby = (value: any) => {
+    setSortBy(value);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      refetch();
+    }, 500)
+  }
+
+
+  const handlerSearch = (value: string) => {
+    // const qurey = value.replace('CardCode', 'BPCode').replace('CardName', 'BPName');
+    // setFilter(qurey);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 10,
+    });
+
+    setTimeout(() => {
+      masterCount.refetch();
+      refetch();
+    }, 500)
+  }
+
 
   return (
     <>
@@ -91,35 +150,16 @@ export default function BinlocationLists() {
         </div>
 
         <div className="grow data-table">
-          <MaterialReactTable
+          <DataTable
             columns={columns}
-            data={data ?? []}
-            enableHiding={true}
-            initialState={{ density: "compact" }}
-            enableDensityToggle={false}
-            enableColumnResizing
-            enableStickyHeader={true}
-            enableStickyFooter={true}
-            enablePagination={true}
-            muiTablePaginationProps={{
-              rowsPerPageOptions: [5, 10, 15],
-            }}
-            getRowId={(row: any) => row.DocEntry}
-            onPaginationChange={setPagination}
-            state={{
-              isLoading,
-              pagination,
-            }}
-            renderTopToolbarCustomActions={({ table }) => {
-              return (
-                <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                  <h3 className="font-bold text-base xl:text-sm">
-                    Binlocation
-                  </h3>
-                  {/* ({pagination.pageSize}/{count?.data?.data ?? 0}) */}
-                </div>
-              );
-            }}
+            data={data}
+            handlerRefresh={handlerRefresh}
+            handlerSearch={handlerSearch}
+            handlerSortby={handlerSortby}
+            count={masterCount.data ?? 0}
+            loading={isLoading || isFetching}
+            pagination={pagination}
+            paginationChange={setPagination}
           />
         </div>
       </div>
