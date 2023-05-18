@@ -112,7 +112,7 @@ export default class PurchaseQouatation extends MasterDocumentModel {
     this.Items = items;
   }
   toJson(update = false) {
-    return {
+    const json: any = {
       "UoMCode": this.UomCode,
       "SalesPersonCode": this.SalesPersonCode,
       "VatSum": this.VatSum,
@@ -153,6 +153,15 @@ export default class PurchaseQouatation extends MasterDocumentModel {
       "CreateQRCodeFrom": this.CreateQRCodeFrom,
       "DocumentLines": this.Items?.map((e) => e.toJson(this.DocType ?? '', update))
     };
+
+  
+    if (update) {
+      delete json.Series;
+      delete json.CardCode;
+      delete json.CardName;
+    }
+
+    return json;
   }
 
 }

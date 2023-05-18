@@ -7,8 +7,9 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
-   server: {
-    port: 8080
+  server: {
+    port: 8080,
+    // host: '192.168.1.120 '
   },
   resolve: {
     alias: [

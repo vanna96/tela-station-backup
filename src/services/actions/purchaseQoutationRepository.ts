@@ -52,7 +52,7 @@ export default class PurchaseQoutationRepository extends Repository<PurchaseQoua
 
   async post(payload: any, isUpdate?: boolean, id?: any): Promise<any> {
 
-    if (isUpdate) return await request('PATCH', this.url + "(" + id + ")",new PurchaseQouatation(payload).toJson());
+    if (isUpdate) return await request('PATCH', this.url + "(" + id + ")", new PurchaseQouatation(payload).toJson(true));
 
     return await request('POST', this.url, new PurchaseQouatation(payload).toJson());
   }

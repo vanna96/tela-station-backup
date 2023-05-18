@@ -49,9 +49,8 @@ export default class PurchaseAgreement extends MasterDocumentModel {
         this.EndDate = json['EndDate'];
         this.TerminateDate = json['TerminateDate'];
         this.Description = json['Description'];
-        // this.AgreementType = json['AgreementType']?.replace('at', "")?.charAt(0);
-        this.AgreementType = json['AgreementType'];
-        this.Status = json['Status'];
+        this.AgreementType = json['AgreementType']?.replace('at', "")?.charAt(0);
+        this.Status = json['Status']?.replace('as', "")?.charAt(0);
         this.Owner = json['Owner'];
         this.Renewal = json['Renewal'] === 'tYES';
         this.RemindUnit = json['RemindUnit']?.replace('reu_', "")?.charAt(0);
@@ -59,7 +58,6 @@ export default class PurchaseAgreement extends MasterDocumentModel {
         this.Remark = json['Remarks'];
         this.AttachmentEntry = json['AttachmentEntry'];
         this.SettlementProbability = json['SettlementProbability'];
-        // this.AgreementMethod = json['AgreementMethod'];
         this.AgreementMethod = json['AgreementMethod']?.replace('am', "")?.charAt(0);
         this.PaymentTermType = json['PaymentTerms'] ?? json['PaymentTermType'];
         this.PriceList = json['PriceList'];
@@ -185,7 +183,7 @@ export class PurchaseAgreementDocumentLine extends LineDocumentModel {
 
         super();
         this.ItemCode = json['ItemNo'] ?? json['ItemCode'];
-        this.ItemName = json['ItemDescription'];
+        this.ItemName = json['ItemName'] ?? json['ItemDescription'];
         this.ItemGroup = json['ItemGroup'];
         this.Quantity = json['PlannedQuantity'] ?? json['Quantity'];
         this.UnitPrice = json['UnitPrice'] ?? json['PlannedAmountLC'];

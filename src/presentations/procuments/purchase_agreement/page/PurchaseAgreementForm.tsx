@@ -31,6 +31,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
         } as any;
 
+        this.onInit = this.onInit.bind(this);
         this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
         this.handlerSubmit = this.handlerSubmit.bind(this);
     }
@@ -40,36 +41,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
             setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
         }
 
-        if (this.props.edit) {
-            const { id } = this.props.match.params;
-            const state = this.props.query.find('pa-id-' + id);
-
-            if (!state) {
-                new PurchaseAgreementRepository().find(id).then(async (res: any) => {
-                    this.props.query.set('pa-id-' + id, res);
-                    this.setState({ ...res, loading: false });
-                }).catch((e: Error) => {
-                    // this.setState({ isError: true, message: e.message });
-                })
-            } else {
-                console.log(state)
-                this.setState({ ...state, loading: false });
-            }
-
-
-            // if (this.props.location.state) {
-            //     const routeState = this.props.location.state;
-            //     setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A' || routeState?.status === 'T', loading: false, }), 500)
-            // } else {
-            //     // const dd = this.props.query.queryProvider.getQueryData('items');
-
-            //     new PurchaseAgreementRepository().find(this.props.match.params.id).then((res: any) => {
-            //         this.setState({ ...res, loading: false, isApproved: res?.status === 'A' || res?.status === 'T', });
-            //     }).catch((e: Error) => {
-            //         this.setState({ message: e.message });
-            //     })
-            // }
-        }
+        this.onInit();
 
         DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie).then((res: any) => {
             this.setState({ ...this.state, SerieLists: res, isLoadingSerie: false })
@@ -80,6 +52,37 @@ class PurchaseAgreementForm extends CoreFormDocument {
                 this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber })
             });
         }
+    }
+
+    async onInit() {
+        if (this.props.edit) {
+            const { id } = this.props.match.params;
+            let state: any = this.props.query.find('pa-id-' + id);
+            let disables: any = {};
+
+            if (!state) {
+                await new PurchaseAgreementRepository().find(id).then(async (res: any) => {
+                    state = res;
+                    this.props.query.set('pa-id-' + id, res);
+                });
+            }
+            state['Status'] = state['Status'] === 'O' ? 'F' : state['Status'];
+
+            disables['StartDate'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+            disables['EndDate'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+            disables['PaymentMethod'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+            disables['PaymentMethod'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+            disables['ShippingType'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+            disables['PaymentTermType'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+            disables['Status'] = state?.Status?.includes('T');
+            disables['AgreementType'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+            disables['Projects'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+            disables['TerminateDate'] = true;
+            disables['DocumentLine'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+
+            this.setState({ ...state, disable: disables, loading: false });
+        }
+
     }
 
     handlerRemoveItem(code: string) {
@@ -101,7 +104,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
             this.dialog.current?.success("Create Successfully.");
         }).catch((e: any) => {
             if (e instanceof UpdateDataSuccess) {
-                
+
                 const agreement = new PurchaseAgreement(this.state);
                 this.props.query.set('pa-id-' + id, agreement);
                 this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state });
@@ -131,7 +134,9 @@ class PurchaseAgreementForm extends CoreFormDocument {
                     <GeneralForm
                         data={this.state}
                         edit={this.props?.edit}
-                        handlerChange={(key, value) => this.handlerChange(key, value)}
+                        handlerChange={(key, value) => {
+                            this.handlerChange(key, value);
+                        }}
                     />
 
                     <ContentForm

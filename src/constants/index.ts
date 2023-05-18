@@ -58,6 +58,6 @@ export const isItemType = (value: string): boolean => value === 'dDocument_Items
 
 
 export const agreementMethodLists = [
-    { value: 'atGeneral', label: 'General' },
-    { value: 'atSpecific', label: 'Specific' }
+    { value: 'G', label: 'General' },
+    { value: 'S', label: 'Specific' }
 ]

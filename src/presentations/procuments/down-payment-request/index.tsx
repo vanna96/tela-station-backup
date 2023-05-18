@@ -26,7 +26,7 @@ export default function PurchaseDownPaymentList() {
         enableFilterMatchHighlighting: true,
         size: 88,
         visible: true,
-        type: 'string',
+        type: 'number',
       },
       {
         accessorKey: "CardCode",
@@ -84,7 +84,7 @@ export default function PurchaseDownPaymentList() {
       {
         accessorKey: "DocDueDate",
         header: "Delivery Date",
-        Cell: ({ cell }:any) => (
+        Cell: ({ cell }: any) => (
           <>
             {moment(cell.getValue()).format('DD-MM-YYYY')}
           </>

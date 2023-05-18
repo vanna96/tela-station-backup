@@ -94,6 +94,7 @@ export interface CoreFormDocumentState {
     AgreementMethod: string;
     Address: string | null;
     Address2: string | null;
+    disable: {}
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -102,7 +103,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
     protected constructor(props: any) {
         super(props);
-
         this.state = {
             collapse: true,
             CardCode: '',
@@ -161,6 +161,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             AgreementMethod: 'I',
             Address: null,
             Address2: null,
+            disable: {}
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -352,10 +353,12 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         // discount
         let DocDiscountPercent = this.state.DocDiscountPercent;
         let DocTotalBeforeDiscount = this.state.DocTotalBeforeDiscount;
+
         switch (key) {
-            case 'AgreementMethod':
-                temps['Items'] = [];
+            case 'Status':
+                temps['disable'] = { ...temps['disable'], TerminateDate: !(value === 'T') };
                 break;
+            case 'AgreementMethod':
             case 'DocType':
                 temps['Items'] = [];
                 break;

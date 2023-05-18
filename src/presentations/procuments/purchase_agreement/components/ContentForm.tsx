@@ -76,9 +76,9 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     // return ;
                     return <MUITextField
                         value={cell.getValue()}
-                        disabled={data?.isApproved}
+                        disabled={data.disable['DocumentLine']}
                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
-                        endAdornment
+                        endAdornment={!data.disable['DocumentLine']}
                         onClick={handlerAddItem}
                     />;
                 },
@@ -87,13 +87,13 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
             {
                 accessorKey: "ItemName",
                 header: "Description",
-                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={cell.getValue()} />
+                Cell: ({ cell }: any) => <MUITextField disabled={data.disable['DocumentLine']} value={cell.getValue()} />
             },
 
             {
                 accessorKey: "ItemGroup",
                 header: "Item Group",
-                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={itemGroupRepo.find(cell.getValue())?.GroupName} />
+                Cell: ({ cell }: any) => <MUITextField disabled={data.disable['DocumentLine']} value={itemGroupRepo.find(cell.getValue())?.GroupName} />
             },
             {
                 accessorKey: "Quantity",
@@ -105,7 +105,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                         type="number"
                         name="Quantity"
                         error={(cell.getValue() as number) <= 0}
-                        disabled={data?.isApproved}
+                        disabled={data.disable['DocumentLine']}
                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
                     />;
                 },
@@ -118,7 +118,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                         startAdornment={'USD'}
                         type="number"
                         name="UnitPrice"
-                        disabled={data?.isApproved}
+                        disabled={data.disable['DocumentLine']}
                         error={(cell.getValue() as number) <= 0}
                         defaultValue={cell.getValue()}
                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'UnitPrice')}
@@ -131,7 +131,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => {
                     return <MUITextField
                         startAdornment={'%'}
-                        disabled={data?.isApproved}
+                        disabled={data.disable['DocumentLine']}
                         value={Formular.findToTal(cell.row.original.Quantity, cell.row.original.UnitPrice)}
                     />;
                 },
@@ -139,7 +139,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
             {
                 accessorKey: "UomGroupCode",
                 header: "UoM Group",
-                Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+                Cell: ({ cell }: any) => <MUITextField disabled={data.disable['DocumentLine']} value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
             },
             {
                 accessorKey: "UomCode",
@@ -148,7 +148,8 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                     <UOMTextField
                         key={cell.getValue()}
                         value={cell.getValue()}
-                        onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UomCode')}
+                        onChange={!data.disable['DocumentLine'] ? (event) => handlerChangeInput(event, cell?.row?.original, 'UomCode') : undefined}
+                        disabled={data.disable['DocumentLine']}
                         data={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
                 ),
             },
@@ -158,6 +159,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => (
                     <MUITextField
                         type="number"
+                        disabled={data.disable['DocumentLine']}
                         value={cell.getValue()}
                     />
                 ),
@@ -197,7 +199,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                         defaultValue={cell.getValue() ? currencyFormat(cell.getValue()) : null}
                         startAdornment={'USD'}
                         type="number"
-                        disabled={data?.isApproved}
+                        disabled={data.disable['DocumentLine']}
                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'PlannedAmountLC')}
                     />;
                 },
@@ -208,7 +210,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => {
                     return <MUITextField
                         defaultValue={cell.getValue()}
-                        disabled={data?.isApproved}
+                        disabled={data.disable['DocumentLine']}
                         onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'LineDiscount')}
                     />;
                 },
@@ -230,7 +232,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 Cell: ({ cell }: any) => {
                     return <MUITextField
                         value={cell.getValue()}
-                        disabled={data?.isApproved}
+                        disabled={data.disable['DocumentLine']}
                         onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'ShppingType')}
                     />;
                 },

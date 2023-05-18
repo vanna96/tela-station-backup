@@ -113,7 +113,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
             handlerOpenVendor={() => {
               this.handlerOpenVendor('supplier');
             }}
-            handlerChange={(key, value) => this.handlerChange(key, value)}
+            handlerChange={this.handlerChange}
             handlerOpenProject={() => this.handlerOpenProject()}
           />
 

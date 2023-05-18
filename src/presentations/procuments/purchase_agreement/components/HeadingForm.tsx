@@ -148,7 +148,7 @@ export default function HeadingForm({ handlerOpenVendor, data, handlerChange, ha
                                 Terminate Date
                             </label>
                             <div className="">
-                                <MUIDatePicker value={data?.TerminateDate ?? null} disabled={!data?.Status?.includes('T')} onChange={(e: any) => handlerChange('TerminateDate', e)} name="TerminateDate" />
+                                <MUIDatePicker value={data?.TerminateDate ?? null} disabled={data?.disable['TerminateDate']} onChange={(e: any) => handlerChange('TerminateDate', e)} name="TerminateDate" />
                             </div>
                         </div>
                     </div>

@@ -79,15 +79,16 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
 
           return <MUITextField
-            value={cell.getValue()}
+            defaultValue={cell.getValue()}
+            key={cell.getValue()}
             name="ItemCode"
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
+            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
             endAdornment
             disabled={
-              data?.DocumentStatus === "bost_Close" ? true  : false
+              data?.DocumentStatus === "bost_Close" ? true : false
             }
-            
-            onClick={ handlerAddItem}
+
+            onClick={handlerAddItem}
           />;
         },
       },
@@ -290,8 +291,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
         Cell: ({ cell }: any) => {
           // return ;
           return <MUITextField
-            value={cell.getValue()}
-            name="ItemDescription"
+            defaultValue={cell.getValue()}
             key={cell.getValue()}
             disabled={
               data?.DocumentStatus === "bost_Close" ? true : false
