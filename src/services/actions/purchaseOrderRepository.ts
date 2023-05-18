@@ -24,7 +24,7 @@ export default class PurchaseOrderRepository extends Repository<PurchaseOrder> {
   }
 
   async find<T>(id: any): Promise<any> {
-    const purchaseOrder = await request('GET', `${this.url}(${id})`).then((res: any) => new PurchaseOrder(res.data))
+    const purchaseOrder = await request('GET', `${this.url?.replace('?$top=10', '')}(${id})`).then((res: any) => new PurchaseOrder(res.data))
       .catch((e: Error) => {
         throw new Error(e.message)
       })

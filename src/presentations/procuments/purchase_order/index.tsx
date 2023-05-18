@@ -97,7 +97,9 @@ export default function PurchaseOrderLists() {
                         }}>
                             <VisibilityIcon fontSize="small" className="text-gray-600 " />
                         </button>
-                        <button title="back">
+                        <button title="back" onClick={() => {
+                            route('/procument/purchase-order/' + cell.row.original.DocEntry + '/edit', { state: cell.row.original })
+                        }}>
                             <EditIcon fontSize="small" className="text-blue-400" />
                         </button>
                     </div>

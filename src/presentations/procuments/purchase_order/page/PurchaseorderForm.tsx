@@ -22,6 +22,7 @@ class PurchaseOrderForm extends CoreFormDocument {
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
     this.handlerChangeItems = this.handlerChangeItems.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
+    this.onInit = this.onInit.bind(this);
   }
 
   componentDidMount(): void {
@@ -31,30 +32,7 @@ class PurchaseOrderForm extends CoreFormDocument {
       setTimeout(() => this.setState({ ...this.state, loading: false }), 500);
     }
 
-    if (this.props.edit) {
-      if (this.props.location.state) {
-        const routeState = this.props.location.state;
-        console.log(routeState)
-        setTimeout(
-          () =>
-            this.setState({
-              ...this.props.location.state,
-              isApproved: routeState?.status === "A",
-              loading: false,
-            }),
-          500
-        );
-      } else {
-        new PurchaseOrderRepository()
-          .find(this.props.match.params.id)
-          .then((res: any) => {
-            this.setState({ ...res, loading: false });
-          })
-          .catch((e: Error) => {
-            this.setState({ message: e.message });
-          });
-      }
-    }
+    this.onInit();
 
     DocumentSerieRepository.getDocumentSeries(
       PurchaseOrderRepository.documentSerie
@@ -76,6 +54,25 @@ class PurchaseOrderForm extends CoreFormDocument {
     }
   }
 
+  async onInit() {
+    if (this.props.edit) {
+      const { id } = this.props.match.params;
+      let state: any = this.props.query.find('po-id-' + id);
+      let disables: any = {};
+
+      if (!state) {
+        await new PurchaseOrderRepository().find(id).then(async (res: any) => {
+          state = res;
+          this.props.query.set('po-id-' + id, res);
+        });
+      }
+
+      disables['DocumentLine'] = state?.Status === 'Close' || state?.Status === 'Cancel';
+      this.setState({ ...state, disable: disables, loading: false });
+    }
+
+  }
+
   handlerRemoveItem(code: string) {
     let items = [...this.state.Items ?? []];
     const index = items.findIndex((e: any) => e?.ItemCode === code);
@@ -92,12 +89,13 @@ class PurchaseOrderForm extends CoreFormDocument {
     await new PurchaseOrderRepository().post(payloads, this.props?.edit, id).then((res: any) => {
       const purchaseOrder = new PurchaseOrder(res?.data)
       this.props.history.replace(this.props.location.pathname?.replace('create', purchaseOrder.DocEntry), purchaseOrder);
+      this.props.query.set('po-id-' + id, purchaseOrder);
       this.dialog.current?.success("Create Successfully.");
     }).catch((e: any) => {
       if (e instanceof UpdateDataSuccess) {
         this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.DocumentStatus === 'A' });
         this.dialog.current?.success(e.message);
-        // const query = this.props.query.query as QueryClient;
+        this.props.query.set('po-id-' + id, new PurchaseOrder(this.state));
         return;
       }
       this.dialog.current?.error(e.message);

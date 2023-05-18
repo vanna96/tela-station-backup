@@ -78,8 +78,9 @@ export default function ContentForm({
             <MUITextField
               value={cell.getValue()}
               // onChange={(event) => handlerChangeInput(event, cell?.row?.original, "ItemCode")}
-              endAdornment
+              endAdornment={!data?.disable['DocumentLine'] && !edit}
               onClick={() => handlerAddItem()}
+
               disabled={data.DocumentStatus === "bost_Close" ? true : false}
             />
           );
@@ -345,22 +346,6 @@ export default function ContentForm({
   const [colVisibility, setColVisibility] = React.useState<
     Record<string, boolean>
   >({ Total: false, ItemsGroupName: false, UoMGroupName: false });
-
-  // const docTotal: number = React.useMemo(() => {
-  //   let total = data?.Items.reduce((prev: number, cur: any) => {
-  //     return prev + parseFloat(cur?.LineTotal);
-  //   }, 0);
-
-  //   return total;
-  // }, [data?.Items]);
-
-  // const docTaxTotal: number = React.useMemo(() => {
-  //   let total = data?.Items.reduce((prev: number, cur: any) => {
-  //     return prev + ((parseFloat(cur?.VatRate ?? 1) * parseFloat(cur?.LineTotal ?? 1)) / 100);
-  //   }, 0);
-
-  //   return total;
-  // }, [data?.Items]);
 
   const [docTotal, docTaxTotal] = useDocumentTotalHook(data?.Items);
 

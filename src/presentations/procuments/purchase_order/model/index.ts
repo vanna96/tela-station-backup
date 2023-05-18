@@ -46,7 +46,7 @@ export default class PurchaseOrder extends MasterDocumentModel {
     Currency: string;
     DocumentStatus: string;
     Project: string;
-  DocumentLines: any;
+    DocumentLines: any;
 
 
     constructor(json: any) {
@@ -162,6 +162,7 @@ export class PurchaseOrderLine extends LineDocumentModel {
     BlanketAgreementNumber?: string | undefined;
     DiscountPercent?: string;
     RequriedDate?: string;
+    VatRate?: number;
 
     constructor(json: any) {
         super();
@@ -177,7 +178,8 @@ export class PurchaseOrderLine extends LineDocumentModel {
         this.DiscountPercent = json['DiscountPercent'];
         this.AccountNo = json['AccountCode'];
         this.LineTotal = json['LineTotal'];
-        this.BlanketAgreementNumber = json['BlanketAgreementNumber']
+        this.BlanketAgreementNumber = json['BlanketAgreementNumber'];
+        this.VatRate = json['TaxPercentagePerRow'];
         this.AccountNameD = new GLAccountRepository().find(json["AccountCode"])?.Name
     }
 

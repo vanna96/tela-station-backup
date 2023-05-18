@@ -6,7 +6,6 @@ import { currencyDetailFormat, currencyFormat } from "@/utilies";
 import Modal from "@/components/modal/Modal";
 import PreviewAttachment from "@/components/attachment/PreviewAttachment";
 import { CircularProgress } from "@mui/material";
-import PurchaseOrderRepository from "@/services/actions/purchaseOrderRepository";
 import OwnerRepository from "@/services/actions/ownerRepository";
 import PaymentTermTypeRepository from "@/services/actions/paymentTermTypeRepository";
 import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
@@ -18,6 +17,7 @@ import PurchaseOrder from "../model";
 import MaterialReactTable from "material-react-table";
 import BuyerRepository from "@/services/actions/buyerRepository";
 import { isItemType } from "@/constants";
+import PurchaseOrderRepository from "../repository";
 
 class PurchaseOrderDetail extends Component<any, any> {
   constructor(props: any) {
@@ -37,40 +37,21 @@ class PurchaseOrderDetail extends Component<any, any> {
 
   initData() {
     const { id } = this.props.match.params;
-    const data = this.props.location.state as PurchaseOrder;
-    
-  
-    console.log(data);
-
-    if (data) {
-      setTimeout(() => {
-        let PurchaseOrder = data;
-        PurchaseOrder as PurchaseOrder;
-        if (PurchaseOrder.ContactPersonCode) {
-          new BusinessPartnerRepository()
-            .findContactEmployee(PurchaseOrder.CardCode!)
-            .then((res: BusinessPartner) => {
-              PurchaseOrder.ContactPersonList = res.contactEmployee ?? [];
-              this.setState({ ...PurchaseOrder, loading: false });
-            });
-        } else {
-          this.setState({ ...PurchaseOrder, loading: false });
-        }
-      }, 500);
+    const data = this.props.query.find('po-id-' + id);
+    if (!data) {
+      new PurchaseOrderRepository().find(id).then(async (res: any) => {
+        this.props.query.set('po-id-' + id, res);
+        this.setState({ ...res, loading: false });
+      }).catch((e: Error) => {
+        this.setState({ isError: true, message: e.message });
+      })
     } else {
-      new PurchaseOrderRepository()
-        .find(id)
-        .then((res: any) => {
-          this.setState({ ...res, loading: false });
-        })
-        .catch((e: Error) => {
-          this.setState({ isError: true, message: e.message });
-        });
+      this.setState({ ...data, loading: false });
     }
   }
 
   render() {
-    
+
     return (
       <div className="w-full h-full flex flex-col p-4 gap-4">
         <DocumentHeaderComponent data={this.state} />
@@ -207,7 +188,7 @@ function Content(props: any) {
       {
         accessorKey: "UnitPrice",
         header: "Info Price",
-        Cell: ({ cell }: any) =>  currencyDetailFormat(cell.getValue()),
+        Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
       },
       {
         accessorKey: "DiscountPercent",
@@ -222,7 +203,7 @@ function Content(props: any) {
       {
         accessorKey: "LineTotal",
         header: "Total (LC)",
-        Cell: ({ cell }: any) =>  currencyDetailFormat(cell.getValue()),
+        Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
       },
       {
         accessorKey: "UomCode",
@@ -312,7 +293,7 @@ function Content(props: any) {
             Total Before Discount
           </span>
           <span className="w-8/12 font-medium text-sm">
-            : {subTotal?.toFixed(2)}
+            : {currencyFormat(subTotal)}
           </span>
         </div>
         <div className="flex gap-2">
@@ -323,14 +304,14 @@ function Content(props: any) {
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Tax</span>
-          <span className="w-8/12 font-medium text-sm">: {data?.VatSum?.toFixed(2)}</span>
+          <span className="w-8/12 font-medium text-sm">: {currencyFormat(data?.VatSum)}</span>
         </div>
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">
             Total Payment Due
           </span>
           <span className="w-8/12 font-medium text-sm">
-            : {data?.DocTotalSys?.toFixed(2)}
+            : {currencyFormat(data?.DocTotalSys)}
           </span>
         </div>
         <div className="flex gap-2">
