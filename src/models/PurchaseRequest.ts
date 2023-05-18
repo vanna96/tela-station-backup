@@ -1,6 +1,7 @@
 import shortid from "shortid";
 import { LineDocumentModel, MasterDocumentModel } from "./Model";
 import { isItemType } from "@/constants";
+import GLAccountRepository from "@/services/actions/GLAccountRepository";
 
 
 export default class PurchaseRequest extends MasterDocumentModel {
@@ -135,7 +136,7 @@ export default class PurchaseRequest extends MasterDocumentModel {
       DocCurrency: this.DocCurrency,
       DocRate: this.DocRate,
       Comments: this.Comments,
-      DocTotalSys: this.DocTotalSys,
+      // DocTotalSys: this.DocTotalSys,
       DiscountPercent: this.DiscountPercent,
       Rounding: this.Rounding,
       Address2: this.Address2,
@@ -189,7 +190,7 @@ export class PurchaseRequestDocumentLine extends LineDocumentModel {
     this.ShipDate = json["ShipDate"];
     this.AccountCode = json["AccountCode"];
     this.AccountNo = json["AccountNo"] ?? json["AccountCode"];
-    this.AccountName = json["AccountName"];
+    this.AccountName = new GLAccountRepository().find(json["AccountCode"])?.Name
     this.LineTotal = json["LineTotal"];
     this.LineVendor = json["LineVendor"];
     this.TaxRate = json["Rate"];

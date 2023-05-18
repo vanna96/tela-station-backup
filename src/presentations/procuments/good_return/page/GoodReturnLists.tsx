@@ -39,16 +39,21 @@ export default function GoodReturnLists() {
       },
       {
         accessorKey: "DocumentStatus",
-        header: "Document Type",
+        header: "Status",
         visible: true,
         type: 'string',
+        Cell: ({ cell }: any) => (
+          <>
+            {(cell.getValue())?.replace("bost_","")}
+          </>
+        ),
       },
-      {
-        accessorKey: "DocType",
-        header: "Document Type",
-        visible: true,
-        type: 'string',
-      },
+      // {
+      //   accessorKey: "DocumentType",
+      //   header: "Doc. Type",
+      //   visible: false,
+      //   type: 'string',
+      // },
       {
         accessorKey: "DocDate",
         header: "Posting Date ",
@@ -125,6 +130,12 @@ export default function GoodReturnLists() {
     staleTime: Infinity,
     retry: 1,
   });
+
+  const queryFn = () => {
+    return new GoodReturnRepository().get(`?$top=${pagination.pageSize}&$skip=${(pagination.pageIndex) * pagination.pageSize}${filter}${sortBy !== '' ? '&$orderby=' + sortBy : ''}`);
+  };
+  
+  console.log(queryFn); // Log the queryFn
 
 
   const handlerRefresh = React.useCallback(() => {

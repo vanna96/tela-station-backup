@@ -9,7 +9,7 @@ import FormCard from "@/components/card/FormCard";
 import MUISelect from "@/components/selectbox/MUISelect";
 import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "../../../../components/input/AccountTextField";
-import BuyerSelect from "@/components/selectbox/Buyer";
+import BuyerSelect from "@/components/selectbox/buyer";
 import VatGroupTextField from "@/components/input/VatGroupTextField";
 import UOMTextField from "@/components/input/UOMTextField";
 import { getUOMGroupByCode } from "@/helpers";

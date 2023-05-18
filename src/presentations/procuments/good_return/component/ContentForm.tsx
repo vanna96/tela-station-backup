@@ -1,59 +1,52 @@
+
+
 import React from "react";
 import MaterialReactTable from "material-react-table";
-import { Button } from "@mui/material";
+import { Button, Checkbox, TextField } from "@mui/material";
+import MUITextField from "../../../../components/input/MUITextField";
 import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineSetting } from "react-icons/ai";
-import ShippingType from "@/components/selectbox/ShippingType";
 import { currencyFormat } from "@/utilies";
 import FormCard from "@/components/card/FormCard";
 import Formular from "@/utilies/formular";
 import MUISelect from "@/components/selectbox/MUISelect";
-import TextField from "@mui/material/TextField";
-import MUITextField from "@/components/input/MUITextField";
 import Owner from "@/components/selectbox/Owner";
-import AccountTextField from "@/components/input/AccountTextField";
-import MUIDatePicker from "@/components/input/MUIDatePicker";
-import { documentStatusList, documentType, isItemType } from "@/constants";
-import ItemGroupRepository from "@/services/actions/itemGroupRepository";
-import UnitOfMeasurementGroupRepository from "@/services/actions/unitOfMeasurementGroupRepository";
-import { getUOMGroupByCode } from "@/helpers";
-import UOMTextField from "@/components/input/UOMTextField";
-import BuyerSelect from "@/components/selectbox/Buyer";
+import AccountTextField from "../../../../components/input/AccountTextField";
+import VatGroup from "../../../../components/selectbox/VatGroup";
+import BuyerSelect from "@/components/selectbox/buyer";
 import VatGroupTextField from "@/components/input/VatGroupTextField";
+import UOMTextField from "@/components/input/UOMTextField";
+import { getUOMGroupByCode } from "@/helpers";
+import { documentType, isItemType } from "@/constants";
 
-
-interface ContentFormProps {
+export interface ContentFormProps {
+  handlerAddItem: () => void;
+  handlerChangeItem: (record: any) => void;
+  handlerRemoveItem: (record: string) => void;
   handlerChange: (key: string, value: any) => void;
-  handlerAddItem: () => void,
-  handlerChangeItem: (record: any) => void,
-  handlerRemoveItem: (record: string) => void,
-  data: any,
-  edit?: boolean
+  handlerOpenGLAccount?: () => void;
+  data: any;
+  edit: boolean;
 }
 
-
-export default function ContentForm({ data, handlerChangeItem, handlerChange, edit, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
-  const [tableKey, setTableKey] = React.useState(Date.now())
-
-  const itemGroupRepo = new ItemGroupRepository();
-  const uomGroupRepo = new UnitOfMeasurementGroupRepository();
-
-  // const handlerChangeInput = (event: any, row: any, field: any) => {
-  //   // if (data?.isApproved) return;
-
-  //   let value = event.target.value;
-  //   handlerChangeItem({ value: value, record: row, field })
-  // }
+export default function ContentForm({
+  data,
+  handlerChangeItem,
+  handlerAddItem,
+  handlerRemoveItem,
+  handlerChange,
+  edit,
+  handlerOpenGLAccount,
+}: ContentFormProps) {
+  const [tableKey, setTableKey] = React.useState(Date.now());
 
   const handlerChangeInput = (event: any, row: any, field: any) => {
-    handlerChangeItem({ value: event.target.value, record: row, field });
+    handlerChangeItem({ value: event.target.value ?? event, record: row, field });
   };
 
   const handlerRemoveRow = (row: any) => {
-    if (data?.isApproved) return;
-
     handlerRemoveItem(row.ItemCode);
-  }
+  };
 
   const itemColumns = React.useMemo(
     () => [
@@ -61,7 +54,6 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
         accessorKey: "Action",
         header: "",
         size: 40,
-        pin: true,
         enableResizing: false,
         Cell: ({ cell }: any) => {
           return (
@@ -82,155 +74,66 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
         header: "Item No", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           // return ;
-          return <MUITextField
-            disabled={data.DocumentStatus === "bost_Close" ?? false}
-            value={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
-            endAdornment
-            onClick={handlerAddItem}
-          />;
+          return (
+            <MUITextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
+              value={cell.getValue()}
+              // onChange={(event) => handlerChangeInput(event, cell?.row?.original, "ItemCode")}
+              endAdornment
+              onClick={() => handlerAddItem()}
+            />
+          );
         },
       },
 
       {
         accessorKey: "ItemName",
         header: "Description",
-        Cell: ({ cell }: any) => <MUITextField
-          disabled={data.DocumentStatus === "bost_Close" ?? false}
-          value={cell.getValue()} />
-      },
-
-      {
-        accessorKey: "ItemGroup",
-        header: "Item Group",
-        Cell: ({ cell }: any) => <MUITextField
-          disabled={data.DocumentStatus === "bost_Close" ?? false}
-          value={itemGroupRepo.find(cell.getValue())?.GroupName} />
-      },
-
-      {
-        accessorKey: "Quantity",
-        header: "Quantity",
         Cell: ({ cell }: any) => {
-          return <MUITextField
-            type="number"
-            disabled={data.DocumentStatus === "bost_Close" ?? false}
-            name="Quantity"
-            error={(cell.getValue() as number) <= 0}
-            defaultValue={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Quantity')}
-          />;
-        },
-      },
-      {
-        accessorKey: "Price",
-        header: "Unit Price",
-        Cell: ({ cell }: any) => {
-          return <MUITextField
-            startAdornment={'USD'}
-            type="number"
-            disabled={data.DocumentStatus === "bost_Close" ?? false}
-            name="Price"
-            error={(cell.getValue() as number) <= 0}
-            defaultValue={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Price')}
-          />;
-        },
-      },
-      {
-        accessorKey: "DiscountPercent",
-        header: "Discount %",
-        Cell: ({ cell }: any) => {
-          return <MUITextField
-            disabled={data.DocumentStatus === "bost_Close" ?? false}
-            startAdornment={'%'}
-            type="number"
-            name="DiscountPercent"
-            defaultValue={cell.getValue()}
-            onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'DiscountPercent')}
-          />;
-        },
-      },
-      {
-        accessorKey: "LineTotal",
-        header: "Total",
-        Cell: ({ cell }: any) => {
-          return <MUITextField
-            disabled={data.DocumentStatus === "bost_Close" ?? false}
-            startAdornment={'USD'}
-            value={Formular.findLineTotal(cell.row.original.Quantity, cell.row.original.Price, cell.row.original.DiscountPercent)}
-          />;
-        },
-      },
-      {
-        accessorKey: "UomGroupCode",
-        header: "UoM Group",
-        Cell: ({ cell }: any) => <MUITextField value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
-      },
-      {
-        accessorKey: "UomCode",
-        header: "UoM Code",
-        Cell: ({ cell }: any) => (
-          <UOMTextField
-            // disabled={data.DocumentStatus === "bost_Close" ?? false}
-            key={cell.getValue()}
-            value={cell.getValue()}
-            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UomCode')}
-            data={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
-        ),
-      },
-      {
-        accessorKey: "UnitsOfMeasurement",
-        header: "Item Per Units",
-        Cell: ({ cell }: any) => (
-          <MUITextField
-            type="number"
-            disabled={data.DocumentStatus === "bost_Close" ?? false}
-            value={cell.getValue()}
-          />
-        ),
-      },
-    ],
-    []
-  );
-
-
-
-  const serviceColumns = React.useMemo(
-    () => [
-      {
-        accessorKey: "Action",
-        header: "",
-        size: 40,
-        enableResizing: false,
-        Cell: ({ cell }: any) => {
-          // return ;
-          return (
-            <Button
-              size="small"
-              color="error"
-              onClick={() => handlerRemoveRow(cell.row.original)}
-            >
-              <AiOutlineDelete />
-            </Button>
-          );
-        },
-      },
-      {
-        accessorKey: "ItemName",
-        header: "Descriptions", //uses the default width from defaultColumn prop
-        Cell: ({ cell }: any) => {
-          // return ;
           return (
             <MUITextField
               disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
-              name="ItemName"
-              onChange={(event) =>
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "Quantity",
+        header: "Quantity",
+        Cell: ({ cell }: any) => {
+          console.log(cell.getValue())
+          return (
+            <MUITextField
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
+              defaultValue={cell.getValue()}
+              key={cell?.row?.original?.ItemCode + "_q" + cell.getValue()}
+              type="number"
+              error={(cell.getValue() as number) <= 0}
+              // disabled={edit}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "Quantity")
+              }
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "DiscountPercent",
+        header: "Discount",
+        Cell: ({ cell }: any) => {
+          return (
+            <MUITextField
+              defaultValue={cell.getValue()}
+              key={cell?.row?.original?.ItemCode + "_d" + cell.getValue()}
+              startAdornment={"%"}
+              type="number"
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
+              onBlur={(event) =>
                 handlerChangeInput(
                   event,
                   cell?.row?.original,
-                  "ItemName"
+                  "DiscountPercent"
                 )
               }
             />
@@ -238,66 +141,20 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
         },
       },
       {
-        accessorKey: "RequiredDate",
-        header: "Required Date",
+        accessorKey: "UnitPrice",
+        header: "Unit Price",
         Cell: ({ cell }: any) => {
           return (
-            <MUIDatePicker
-              value={cell.getValue() ?? null}
-              name="RequiredDate"
+            <MUITextField
               disabled={data.DocumentStatus === "bost_Close" ?? false}
-              onChange={(event) =>
-                handlerChangeInput(
-                  { target: { value: event } },
-                  cell?.row?.original,
-                  "RequiredDate"
-                )
+              defaultValue={cell.getValue()}
+              key={cell?.row?.original?.ItemCode + "_u" + cell.getValue()}
+              startAdornment={"$"}
+              onBlur={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "UnitPrice")
               }
             />
           );
-        },
-      },
-      {
-        accessorKey: "ShipDate",
-        header: "Quoted Date", //uses the default width from defaultColumn prop
-        Cell: ({ cell }: any) => {
-          return (
-            <MUIDatePicker
-              disabled={data.DocumentStatus === "bost_Close" ?? false}
-              value={cell.getValue()}
-              onChange={(event) =>
-                handlerChangeInput(
-                  { target: { value: event } },
-                  cell?.row?.original,
-                  "ShipDate"
-                )
-              }
-            />
-          );
-        },
-      },
-      {
-        accessorKey: "AccountCode",
-        header: "G/L Account", //uses the default width from defaultColumn prop
-        Cell: ({ cell }: any) => {
-          console.log(cell.getValue());
-          return (
-            <AccountTextField
-              value={cell.getValue()}
-              // disabled={data.DocumentStatus === "bost_Close" ?? false}
-              name="AccountNo"
-              onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "AccountCode")
-              }
-            />
-          );
-        },
-      },
-      {
-        accessorKey: "AccountName",
-        header: "	G/L Account Name", //uses the default width from defaultColumn prop
-        Cell: ({ cell }: any) => {
-          return <MUITextField value={cell.getValue()} />;
         },
       },
       {
@@ -306,7 +163,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
         Cell: ({ cell }: any) => {
           return (
             <VatGroupTextField
-              // disabled={data.DocumentStatus === "bost_Close" ?? false}
+              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
               onChange={(event) =>
                 handlerChangeInput(
@@ -322,26 +179,136 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
       },
       {
         accessorKey: "LineTotal",
-        header: "Total LC", //uses the default width from defaultColumn prop
+        header: "Total",
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
               disabled={data.DocumentStatus === "bost_Close" ?? false}
+              startAdornment={"$"}
               value={cell.getValue()}
-              onChange={(event: any) =>
-                handlerChangeInput(event, cell?.row?.original, "LineTotal")
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "UomGroupCode",
+        header: "UoM Group",
+        Cell: ({ cell }: any) => <MUITextField disabled={data?.isApproved} value={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+      },
+      {
+        accessorKey: "UomCode",
+        header: "UoM Code",
+        Cell: ({ cell }: any) => (
+          <UOMTextField
+            // key={cell.getValue()}
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
+            value={cell.getValue()}
+            onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'UomCode')}
+            data={getUOMGroupByCode(cell.row.original.ItemCode)?.Code} />
+        ),
+      },
+      {
+        accessorKey: "UnitsOfMeasurement",
+        header: "Item Per Units",
+        Cell: ({ cell }: any) => (
+          <MUITextField
+            disabled={data.DocumentStatus === "bost_Close" ?? false}
+            type="number"
+            value={cell.getValue()}
+          />
+        ),
+      },
+    ],
+    []
+  );
+
+  const serviceColumns = React.useMemo(
+    () => [
+      {
+        accessorKey: "Action",
+        header: "",
+        size: 40,
+        enableResizing: false,
+        Cell: ({ cell }: any) => {
+          return (
+            <div role="button" className="flex justify-center items-center">
+              <button
+                type="button"
+                className="border border-gray-200 p-1 rounded-sm"
+                onClick={() => handlerRemoveRow(cell.row.original)}
+              >
+                <AiOutlineDelete />
+              </button>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "ItemName",
+        header: "Descriptions", //uses the default width from defaultColumn prop
+        Cell: ({ cell }: any) => {
+          // return ;
+          return (
+            <MUITextField
+              key={cell.getValue()}
+              defaultValue={cell.getValue()}
+              onBlur={(event) => handlerChangeInput(event, cell?.row?.original, "ItemName")}
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "AccountNo",
+        header: "G/L Account", //uses the default width from defaultColumn prop
+        Cell: ({ cell }: any) => {
+          return (
+            <AccountTextField
+              name="AccountNo"
+              value={cell.getValue()}
+              onChange={(event) =>
+                handlerChangeInput(event, cell?.row?.original, "AccountNo")
               }
             />
           );
         },
       },
       {
+        accessorKey: "AccountName",
+        header: "G/L Account Name", //uses the default width from defaultColumn prop
+        Cell: ({ cell }: any) => {
+          return <MUITextField value={cell.getValue()} />;
+        },
+      },
+      {
+        accessorKey: "VatGroup",
+        header: "Tax Code",
+        Cell: ({ cell }: any) => {
+          return (
+            <VatGroupTextField
+              value={cell.getValue()}
+              onChange={(event) => handlerChangeInput(event, cell.row.original, 'VatGroup')}
+              type="InputTax"
+            />
+          );
+        },
+      },
+      {
+        accessorKey: "LineTotal",
+        header: "Total (LC)", //uses the default width from defaultColumn prop
+        Cell: ({ cell }: any) => {
+          return <MUITextField defaultValue={cell.getValue()} onBlur={(event) => handlerChangeInput(
+            event,
+            cell?.row?.original,
+            "LineTotal"
+          )} />;
+        },
+      },
+      {
         accessorKey: "BlanketAgreementNumber",
-        header: "BlanketAgreementNumber", //uses the default width from defaultColumn prop
+        header: "	Blanket Agreement No.", //uses the default width from defaultColumn prop
         Cell: ({ cell }: any) => {
           return (
             <MUITextField
-              disabled={data.DocumentStatus === "bost_Close" ?? false}
               value={cell.getValue()}
               onChange={(event: any) =>
                 handlerChangeInput(
@@ -358,46 +325,63 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
     []
   );
 
-  const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, });
+  const [colVisibility, setColVisibility] = React.useState<
+    Record<string, boolean>
+  >({ Total: false, ItemsGroupName: false, UoMGroupName: false });
 
-  const blankItem = {
-    ItemCode: ''
-  };
+  const docTotal: number = React.useMemo(() => {
+    let total = data?.Items.reduce((prev: number, cur: any) => {
+      return prev + parseFloat(cur?.LineTotal);
+    }, 0);
+
+    return total;
+  }, [data?.Items]);
+
+  const docTaxTotal: number = React.useMemo(() => {
+    let total = data?.Items.reduce((prev: number, cur: any) => {
+      return prev + ((parseFloat(cur?.VatRate ?? 1) * parseFloat(cur?.LineTotal ?? 1)) / 100);
+    }, 0);
+
+    return total;
+  }, [data?.Items]);
+
+
+  console.log(data?.Items)
+
   return (
-    <FormCard title="Content" >
+    <FormCard title="Content">
       <div className="col-span-2 data-table">
-        <div className="flex flex-col my-5">
-          <div className="grid grid-cols-4">
-            <div>
-              <label
-                htmlFor=" Item/ServiceType"
-                className="text-gray-500 text-[14px]"
-              >
-                Item/Service Type
-              </label>
-              <div className="">
-                <MUISelect
-                  items={documentType}
-                  aliaslabel="label"
-                  aliasvalue="value"
-                  name="DocType"
-                  disabled={edit}
-                  value={data.DocType}
-                  onChange={(e) => handlerChange("DocType", e.target.value)}
-                />
-              </div>
-            </div>
+        <div className="my-4 w-[30%]">
+          <label
+            htmlFor="AgreementMethod"
+            className="text-gray-500 text-[14px]"
+          >
+            Item/Service Type
+          </label>
+          <div className="">
+            <MUISelect
+              disabled
+              items={documentType}
+              aliaslabel="label"
+              aliasvalue="value"
+              name="DocType"
+              value={data.DocType}
+              onChange={(e) => handlerChange("DocType", e.target.value)}
+            />
           </div>
         </div>
+
         <MaterialReactTable
           key={tableKey}
-          columns={data?.DocType === 'dDocument_Service' ? serviceColumns : itemColumns}
-          data={[...data?.Items, blankItem] ?? []}
+          // columns={itemColumns}
+          columns={isItemType(data?.DocType) ? itemColumns : serviceColumns}
+          data={[...data.Items, { ItemCode: '' }]}
           enableStickyHeader={true}
           enableColumnActions={false}
           enableColumnFilters={false}
           enablePagination={false}
           enableSorting={false}
+          enableBottomToolbar={false}
           enableTopToolbar={false}
           enableColumnResizing={true}
           enableColumnFilterModes={false}
@@ -407,21 +391,18 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
           enableGlobalFilter={false}
           enableHiding={true}
           onColumnVisibilityChange={setColVisibility}
-          enableStickyFooter
           initialState={{
             density: "compact",
             columnVisibility: colVisibility,
           }}
           state={{
-            columnVisibility: colVisibility
+            columnVisibility: colVisibility,
           }}
           icons={{
-            ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />
+            ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />,
           }}
-
         />
       </div>
-
       <div className="flex flex-col gap-3">
         <div className="flex justify-between">
           <div className="w-[48%] gap-3">
@@ -429,9 +410,8 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
               Buyer
             </label>
             <BuyerSelect
-              onChange={(e) => handlerChange("SalesPersonCode", e.target.value)}
               value={data?.SalesPersonCode}
-              name="SalesPersonCode"
+              onChange={(e) => handlerChange("SalesPersonCode", e.target.value)}
             />
           </div>
           <div className="w-[48%]">
@@ -450,33 +430,30 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
             Remarks
           </label>
           <div className="">
-
             <TextField
               size="small"
               multiline
-              rows={2}
+              rows={4}
               fullWidth
               name="Comments"
               className="w-full "
-              value={data?.Comments}
               onChange={(e) => handlerChange("Comments", e.target.value)}
+              value={data?.Comments}
             />
+
           </div>
         </div>
       </div>
-      {/* {data?.DocumentStatus === "bost_Open" ? ( */}
       <div className="flex flex-col gap-3">
         <div className="w-[100%] gap-3">
           <MUITextField
-            disabled={edit}
             label="Total Before Discount:"
-            value={currencyFormat(data?.DocTotalBeforeDiscount)}
+            value={currencyFormat(docTotal)}
           />
         </div>
-        <div className="flex justify-between gap-5">
+        <div className="flex justify-between">
           <div className="w-[48%] gap-3">
             <MUITextField
-              disabled={data?.DocumentStatus === "bost_Close" ?? false}
               label="Discount:"
               startAdornment={"%"}
               value={data?.DocDiscountPercent}
@@ -488,17 +465,29 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
           <div className="w-[48%] gap-3 mt-5">
             <MUITextField
               label=""
-              startAdornment={data?.Currency ?? "AUD"}
+              startAdornment={data?.currency ?? "AUD"}
               value={data?.DocDiscountPrice}
-              disabled={data?.DocumentStatus === "bost_Close" ?? false}
               onChange={(e) =>
                 handlerChange("DocDiscountPrice", e.target.value)
               }
             />
           </div>
-          <div className="flex justify-between">
-            <div className="w-[100%] gap-3">
-              <MUITextField disabled={edit} label="Fright:" value={""} />
+        </div>
+        <div className="flex justify-between">
+          <div className="w-[48%] gap-3">
+            <MUITextField label="Fright:" value={""} />
+          </div>
+
+          <div className="w-[48%] gap-3 mt-5">
+            <div className="flex items-center gap-1 text-sm">
+              <Checkbox
+                name="Rounding"
+                checked={data.Rounding}
+                onChange={(e) => handlerChange("Rounding", !data.Rounding)}
+              />
+              <label htmlFor="Rounding" className="text-gray-500 text-[14px]">
+                Rounding
+              </label>
             </div>
           </div>
         </div>
@@ -506,16 +495,14 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
           <div className="w-[48%] gap-3">
             <MUITextField
               label="Tax:"
-              disabled={edit}
-              value={currencyFormat(data?.DocTaxTotal)}
+              value={currencyFormat(docTaxTotal)}
             />
           </div>
 
           <div className="w-[48%] gap-3">
             <MUITextField
-              disabled={data?.DocumentStatus === "bost_Close" ?? false}
               label="Total Credit:"
-              value={currencyFormat(data?.DocTotal)}
+              value={currencyFormat(docTaxTotal + docTotal)}
             />
           </div>
         </div>
@@ -523,3 +510,4 @@ export default function ContentForm({ data, handlerChangeItem, handlerChange, ed
     </FormCard>
   );
 }
+

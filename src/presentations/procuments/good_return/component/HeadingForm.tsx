@@ -85,10 +85,10 @@ export default function HeadingForm({
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <MUITextField
-                  name="DocCurrency"
-                  value={data.DocCurrency}
-                  onChange={(e) => handlerChange("DocCurrency", e.target.value)}
-                  disabled={edit}
+                  disabled
+                  name="Currency"
+                  value={data.Currency}
+                  onChange={(e) => handlerChange("Currency", e.target.value)}
                 />
                 <div></div>
               </div>

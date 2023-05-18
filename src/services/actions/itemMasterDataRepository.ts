@@ -11,7 +11,7 @@ export default class ItemMasterDataRepository extends Repository<ItemMasterData>
     }
     
     async get<T>(query?: string): Promise<T[]> {
-        const response: any = await request('GET', this.url).then((res: any) => {
+        const response: any = await request('GET', this.url + query).then((res: any) => {
             const data = res?.data?.value?.map((e: any) => new ItemMasterData(e));
             return data;
         }).catch((e) => {
@@ -56,4 +56,16 @@ export default class ItemMasterDataRepository extends Repository<ItemMasterData>
         throw new Error('Method not implemented.');
     }
 
+    async documentTotal<T>(query?: string): Promise<number> {
+        const response: any = await request("GET", this.url + "/$count" + query)
+          .then(async (res: any) => {
+            return res.data;
+          })
+          .catch((e: Error) => {
+            throw new Error(e.message);
+          });
+    
+        return response;
+      }
+    
 }

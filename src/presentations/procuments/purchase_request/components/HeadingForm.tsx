@@ -68,8 +68,8 @@ export default function HeadingForm({
               <div className="mt-1">
                 <DepartmentSelect
                   name="RequesterDepartment"
-                  value={data.Department}
-                  onChange={(e) => handlerChange("Department", e.target.value)}
+                  value={edit ? data?.RequesterDepartment : data.Department}
+                  onChange={edit ? (e) => handlerChange("RequesterDepartment", e.target.value): (e) => handlerChange("Department", e.target.value)}
                 />
               </div>
             </div>
@@ -82,8 +82,8 @@ export default function HeadingForm({
               <div className="">
                 <BranchSelect
                   name="Branch"
-                  value={data.Branch}
-                  onChange={(e) => handlerChange("Branch", e.target.value)}
+                  value={edit ? data?.RequesterBranch : data.Branch}
+                  onChange={edit ? (e) => handlerChange("RequesterBranch", e.target.value) : (e) => handlerChange("Branch", e.target.value)}
                 />
               </div>
             </div>
@@ -91,7 +91,9 @@ export default function HeadingForm({
             <div className="flex flex-col gap-1 text-sm">
               <MUITextField
                 label="Email"
-                value={data?.Email}
+                disabled={edit}
+                value={edit ? data?.RequesterEmail : data?.Email}
+                onChange={edit ? (e) => handlerChange("RequesterEmail", e.target.value) : (e) => handlerChange("Email", e.target.value)}
                 name="RequesterEmail"
               />
             </div>

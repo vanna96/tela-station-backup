@@ -62,6 +62,7 @@ class GoodReturnDetail extends Component<any, any> {
           this.setState({ ...procData, loading: false })
         }
       }, 500)
+
     } else {
       new GoodReturnRepository().find(id).then(async (res: any) => {
         // const lines = await this.props.query.getItems(res.items);
@@ -73,6 +74,7 @@ class GoodReturnDetail extends Component<any, any> {
       })
     }
   }
+
 
 
   render() {
@@ -193,7 +195,7 @@ function Content(props: any) {
       Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
     },
     {
-      accessorKey: "Price",
+      accessorKey: "UnitPrice",
       header: "Unit Price",
       Cell: ({ cell }: any) => currencyFormat(cell.getValue()),
     },
@@ -212,21 +214,21 @@ function Content(props: any) {
       header: "Total (LC)",
       Cell: ({ cell }: any) => currencyDetailFormat(cell.getValue()),
     },
-    {
-      accessorKey: "UoMGroup",
-      header: "UoM Group",
-      Cell: ({ cell }: any) => getUOMGroupByCode(cell.row.original.ItemCode)?.Code,
-    },
+    // {
+    //   accessorKey: "UoMGroup",
+    //   header: "UoM Group",
+    //   Cell: ({ cell }: any) => getUOMGroupByCode(cell.row.original.ItemCode)?.Code,
+    // },
     {
       accessorKey: "UomCode",
       header: "UoM Group",
       Cell: ({ cell }: any) => cell.getValue(),
     },
-    {
-      accessorKey: "UnitsOfMeasurement",
-      header: "Item Per Units",
-      Cell: ({ cell }: any) => cell.getValue(),
-    },
+    // {
+    //   accessorKey: "UnitsOfMeasurement",
+    //   header: "Item Per Units",
+    //   Cell: ({ cell }: any) => cell.getValue(),
+    // },
   ], [data]);
 
   const serviceColumns = React.useMemo(
@@ -314,11 +316,11 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findTotalBeforeDiscount(data?.Items)) ?? ""}</span>
+        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(Formular.findTotalBeforeDiscount(data?.Items))}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.docDiscountPercent || "N/A"}{data?.DocDiscountPrice}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.DiscountPercent || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
@@ -329,7 +331,7 @@ function Content(props: any) {
         <span className='w-8/12 font-medium text-sm'>:{data?.VatSum}</span>
       </div>
       <div className='flex gap-2'>
-        <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
+        <span className='w-4/12 text-gray-500 text-sm'>Total Credit</span>
         <span className='w-8/12 font-medium text-sm'>:{data?.DocTotalSys} </span>
       </div>
       {/* <div className='flex gap-2'>
@@ -358,7 +360,7 @@ function Account(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Methods</span> <span className='col-span-2 font-medium'>: {data?.PaymentMethod || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Central Bank Ind.</span> <span className='col-span-2 font-medium'>: {data?.CentralBankIndicator || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Installments</span> <span className='col-span-2 font-medium'>: {data?.NumberOfInstallments || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalculate Due Date</span> <span className='col-span-2 font-medium'>: {data?.StartFrom || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalculate Due Date</span> <span className='col-span-2 font-medium'>: {data?.StartFrom?.replace("pdt_","") || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cash Discount Date Offset</span> <span className='col-span-2 font-medium'>: {data?.CashDiscountDateOffset || "N/A"}</span></div>
     </div>
     <div className='flex flex-col gap-2'>

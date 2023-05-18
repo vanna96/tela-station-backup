@@ -37,7 +37,7 @@ class PurchaseRequestDetail extends Component<any, any> {
   initData() {
     const { id } = this.props.match.params;
     const data = this.props.location.state as PurchaseRequest;
-
+console.log(data)
     if (data) {
       setTimeout(() => this.setState({ ...data, loading: false }), 500);
     } else {
@@ -243,7 +243,7 @@ function Content(props: any) {
         header: "G/L Account",
       },
       {
-        accessorKey: "AccountNameD",
+        accessorKey: "AccountName",
         header: "G/L Account Name",
       },
       {
@@ -263,7 +263,7 @@ function Content(props: any) {
   return (
     <div className="data-table  border-none p-0 mt-3">
       <MaterialReactTable
-        columns={data?.DocType === "I" ? itemColumn : serviceColumns}
+        columns={data?.DocType === "dDocument_Items" ? itemColumn : serviceColumns}
         data={data?.Items ?? []}
         enableHiding={true}
         initialState={{ density: "compact" }}
@@ -290,31 +290,30 @@ function Content(props: any) {
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Owner</span>
             <span className="col-span-2 font-medium">
-              {/* : {data.documentowner} */}
-              : {(new OwnerRepository().find(data.owner)?.name) || "N/A"}
+              : {(new OwnerRepository()?.find(data?.Owner)?.name) ?? "N/A"}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Remark</span>
-            <span className="col-span-2 font-medium">: {data?.comments ?? "N/A"}</span>
+            <span className="col-span-2 font-medium">: {data?.Comments ?? "N/A"}</span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Total Before Discount</span>
             <span className="col-span-2 font-medium">
-              : {currencyFormat(Formular.findItemTotal(data?.items)) ?? ""}
+              : {currencyFormat(Formular.findTotalBeforeDiscount(data?.Items)) ?? ""}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Freight</span>
-            <span className="col-span-2 font-medium">: {data.Freight}</span>
+            <span className="col-span-2 font-medium">: {data.Freight ?? "N/A"}</span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Tax</span>
-            <span className="col-span-2 font-medium">: {currencyFormat(data.vatSumSys)}</span>
+            <span className="col-span-2 font-medium">: {currencyFormat(data.VatSumSys)}</span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="text-gray-500">Total Payment Due</span>
-            <span className="col-span-2 font-medium">: {currencyFormat(data.docTotalSys)}</span>
+            <span className="col-span-2 font-medium">: {currencyFormat(data.DocTotalSys)}</span>
           </div>
         </div>
       </div>

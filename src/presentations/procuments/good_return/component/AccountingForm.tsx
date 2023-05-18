@@ -28,12 +28,12 @@ export default function AccountingForm({
     <FormCard title="ACCOUNTING">
       <div className="flex flex-col gap-3 mt-2">
         <div>
-          <MUITextField
-            label="Journal Remark"
-            value={("Good Return - " ?? data?.CardCode) || "N/A"}
-            name="JournalMemo"
-            onChange={(e) => handlerChange("JournalMemo", e.target.value)}
-          />
+        <MUITextField
+          label="Journal Remarks"
+          key={data?.CardCode + "_remark"}
+          defaultValue={`Good Return Request - ${data?.CardCode ?? ""}`}
+          onBlur={(e) => handlerChange("JournalMemo", e.target.value)}
+        />
         </div>
         {data?.documentStatus === "bost_Open" ? (
           <>
