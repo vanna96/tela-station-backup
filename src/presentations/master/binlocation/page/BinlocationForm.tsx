@@ -122,7 +122,7 @@ class BinlocationForm extends Component<any, any>{
     this.setState(temps)
   }
 
-  FormRender = () => {
+  render = () => {
     return <>
       <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
         {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
