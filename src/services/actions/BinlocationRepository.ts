@@ -9,7 +9,7 @@ export default class BinlocationRepository extends Repository<Binlocation> {
 
 
   async get<T>(query?: string): Promise<T[]> {
-    const response: any = await request('GET', this.url).then((res: any) => {
+    const response: any = await request('GET', this.url+query).then((res: any) => {
       const data = res?.data?.value?.map((e: any) => new Binlocation(e));
       return data;
     }).catch((e: Error) => {
