@@ -1,21 +1,20 @@
 import React from "react";
 import MaterialReactTable from "material-react-table";
-import { Button, Checkbox, TextField } from "@mui/material";
+import { Checkbox, TextField } from "@mui/material";
 import MUITextField from "../../../../components/input/MUITextField";
 import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineSetting } from "react-icons/ai";
 import { currencyFormat } from "@/utilies";
 import FormCard from "@/components/card/FormCard";
-import Formular from "@/utilies/formular";
 import MUISelect from "@/components/selectbox/MUISelect";
 import Owner from "@/components/selectbox/Owner";
 import AccountTextField from "../../../../components/input/AccountTextField";
-import VatGroup from "../../../../components/selectbox/VatGroup";
-import BuyerSelect from "@/components/selectbox/buyer";
+import BuyerSelect from "@/components/selectbox/Buyer";
 import VatGroupTextField from "@/components/input/VatGroupTextField";
 import UOMTextField from "@/components/input/UOMTextField";
 import { getUOMGroupByCode } from "@/helpers";
 import { documentType, isItemType } from "@/constants";
+import { useDocumentTotalHook } from "@/hook";
 
 export interface ContentFormProps {
   handlerAddItem: () => void;
@@ -34,7 +33,6 @@ export default function ContentForm({
   handlerRemoveItem,
   handlerChange,
   edit,
-  handlerOpenGLAccount,
 }: ContentFormProps) {
   const [tableKey, setTableKey] = React.useState(Date.now());
 
@@ -256,10 +254,7 @@ export default function ContentForm({
             <AccountTextField
               name="AccountNo"
               value={cell.getValue()}
-              onChange={(event) =>
-                handlerChangeInput(event, cell?.row?.original, "AccountNo")
-              }
-            />
+              onChange={(event) => handlerChangeInput(event, cell?.row?.original, "AccountNo")} />
           );
         },
       },
@@ -320,22 +315,23 @@ export default function ContentForm({
     Record<string, boolean>
   >({ Total: false, ItemsGroupName: false, UoMGroupName: false });
 
-  const docTotal: number = React.useMemo(() => {
-    let total = data?.Items.reduce((prev: number, cur: any) => {
-      return prev + parseFloat(cur?.LineTotal);
-    }, 0);
+  // const docTotal: number = React.useMemo(() => {
+  //   let total = data?.Items.reduce((prev: number, cur: any) => {
+  //     return prev + parseFloat(cur?.LineTotal);
+  //   }, 0);
 
-    return total;
-  }, [data?.Items]);
+  //   return total;
+  // }, [data?.Items]);
 
-  const docTaxTotal: number = React.useMemo(() => {
-    let total = data?.Items.reduce((prev: number, cur: any) => {
-      return prev + ((parseFloat(cur?.VatRate ?? 1) * parseFloat(cur?.LineTotal ?? 1)) / 100);
-    }, 0);
+  // const docTaxTotal: number = React.useMemo(() => {
+  //   let total = data?.Items.reduce((prev: number, cur: any) => {
+  //     return prev + ((parseFloat(cur?.VatRate ?? 1) * parseFloat(cur?.LineTotal ?? 1)) / 100);
+  //   }, 0);
 
-    return total;
-  }, [data?.Items]);
+  //   return total;
+  // }, [data?.Items]);
 
+  const [docTotal, docTaxTotal] = useDocumentTotalHook(data?.Items);
 
   console.log(data?.Items)
 
@@ -512,3 +508,5 @@ export default function ContentForm({
     </FormCard>
   );
 }
+
+

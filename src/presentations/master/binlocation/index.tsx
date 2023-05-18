@@ -44,7 +44,7 @@ export default function BinlocationLists() {
         header: "Status",
         visible: true,
         type: 'string',
-       
+
       },
       {
         accessorKey: "id",
@@ -78,7 +78,7 @@ export default function BinlocationLists() {
     pageSize: 10,
   });
   const masterCount = useQuery({
-    queryKey: ['bl-count'], queryFn: () => new BinlocationRepository().documentTotal(`?$select=absEntry${filter}`),
+    queryKey: ['bl-count'], queryFn: () => new BinlocationRepository().documentTotal(`?$select=AbsEntry${filter}`),
     staleTime: Infinity
   })
 
@@ -118,8 +118,6 @@ export default function BinlocationLists() {
 
 
   const handlerSearch = (value: string) => {
-    // const qurey = value.replace('CardCode', 'BPCode').replace('CardName', 'BPName');
-    // setFilter(qurey);
     setPagination({
       pageIndex: 0,
       pageSize: 10,

@@ -9,7 +9,8 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   server: {
     port: 8080,
-    // host: '192.168.1.120 '
+    // host: 'localhost'
+    // host: '192.168.1.120'
   },
   resolve: {
     alias: [

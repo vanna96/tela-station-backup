@@ -8,10 +8,10 @@ interface VatGroupTextField {
     onChange: (businessPartner: any) => void
     name?: any,
     type: VatCategory,
-    disabled:boolean
+    disabled?: boolean
 }
 
-const VatGroupTextField: FC<VatGroupTextField> = ({ value, onChange, name, type,disabled }: VatGroupTextField) => {
+const VatGroupTextField: FC<VatGroupTextField> = ({ value, onChange, name, type, disabled }: VatGroupTextField) => {
     const [open, setOpen] = React.useState<boolean>(false)
 
     const handlerConfirm = (businessPartner: any) => {

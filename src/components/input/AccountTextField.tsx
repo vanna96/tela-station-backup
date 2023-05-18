@@ -8,7 +8,7 @@ interface AccountTextField {
     value: any,
     onChange: (account: any) => void
     name: any,
-    disabled:boolean
+    disabled?: boolean
 }
 
 const AccountTextField: FC<AccountTextField> = ({ value, onChange, name, disabled }: AccountTextField) => {
