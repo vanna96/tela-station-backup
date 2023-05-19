@@ -22,6 +22,7 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
     queryFn: () => new DimensionRepository().get(),
     staleTime: Infinity,
   });
+console.log(data);
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
@@ -49,7 +50,7 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
         header: "Active",
         Cell: ({ cell }: any) => (
           <>
-            <span className={cell.getValue() === "tYES" ? "bg-green-50 border border-green-400 rounded-sm text-green-400 py-[4px] px-[7px] text-xs" : "bg-red-50 border border-red-400 rounded-sm text-red-400 py-[4px] px-[7px] text-xs"}>
+            <span className={cell.getValue() === "YES" ? "bg-green-50 border border-green-400 rounded-sm text-green-400 py-[4px] px-[7px] text-xs" : "bg-red-50 border border-red-400 rounded-sm text-red-400 py-[4px] px-[7px] text-xs"}>
               {cell.getValue().replace("t","")}
             </span>
           </>
