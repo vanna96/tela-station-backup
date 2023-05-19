@@ -5,14 +5,17 @@ import Checkbox from '@mui/material/Checkbox';
 import React from 'react';
 import { SelectChangeEvent, TextField } from '@mui/material';
 import ItemGroupSelectSelect from '@/components/selectbox/ItemGroupselect';
+import ItemsModal from '@/components/modal/itemsModal';
+import UOMSelect from '@/components/selectbox/UnitofMeasurment';
 export interface IGeneralFormProps {
   data: any,
   handlerChange: (key: string, value: any) => void,
   edit?: boolean,
+  handleOpenItems: () => void,
 }
 
 
-export default function General({ data, handlerChange, edit }: IGeneralFormProps) {
+export default function General({ data, handlerChange, edit, handleOpenItems }: IGeneralFormProps) {
   //---------------------------1----------------------------
   const [show1, setShow1] = React.useState<boolean>(false);
   const [show2, setShow2] = React.useState<boolean>(false);
@@ -226,6 +229,8 @@ export default function General({ data, handlerChange, edit }: IGeneralFormProps
                   value={data?.specificItem ?? ''}
                   onChange={(e) => handlerChange('specificItem', e.target.value)}
                   name="SpecificItem"
+                  endAdornment={true}
+                  onClick={handleOpenItems}
                 />
               </>
             )}
@@ -242,9 +247,9 @@ export default function General({ data, handlerChange, edit }: IGeneralFormProps
             )}
             {show3 && (
               <>
-      <label htmlFor="" className='text-sm text-slate-600'>Item Group</label>
+                <label htmlFor="" className='text-sm text-slate-600'>Item Group</label>
                 <ItemGroupSelectSelect
-               
+
                   value={data?.specificItemGroup ?? ''}
                   onChange={(e) => handlerChange('specificItemGroup', e.target.value)}
                   name="SpecificItemGroup"
@@ -298,12 +303,16 @@ export default function General({ data, handlerChange, edit }: IGeneralFormProps
             )}
             {Ushow3 && (
               <>
-                <MUITextField
-                  label="UoM Group"
-                  value={data?.specificUoMGroup ?? ''}
-                  onChange={(e) => handlerChange('specificUoMGroup', e.target.value)}
-                  name="SpecificUoMGroup"
-                />
+                <div className='flex flex-col gap-1 text-sm'>
+                  <label htmlFor='PayTermsGrpCode' className='text-gray-500 text-[14px]'>UoM Group</label>
+                  <div className=''>
+                    <UOMSelect
+                      value={data?.specificUoMGroup ?? ''}
+                      onChange={(e) => handlerChange('specificUoMGroup', e.target.value)}
+                      name="SpecificUoMGroup"
+                    />
+                  </div>
+                </div>
               </>
             )}
             {Ushow4 && (
@@ -318,8 +327,8 @@ export default function General({ data, handlerChange, edit }: IGeneralFormProps
               </>
             )}
           </div>
-  
-   
+
+
         </div>
         <div className='grid grid-cols-1'>
           <div>
@@ -335,6 +344,8 @@ export default function General({ data, handlerChange, edit }: IGeneralFormProps
             }
           </div>
         </div>
+
+
       </div>
     </FormCard>
   )

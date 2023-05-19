@@ -3,8 +3,6 @@ import { withRouter } from '@/routes/withRouter';
 import { LoadingButton } from '@mui/lab';
 import AttachmentForm from '@/components/attachment';
 import DocumentSerieRepository from '@/services/actions/documentSerie';
-import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
-import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
 import GLAccount from '@/models/GLAccount';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import { UpdateDataSuccess } from '@/utilies/ClientError';

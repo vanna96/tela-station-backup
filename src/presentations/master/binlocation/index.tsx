@@ -38,6 +38,7 @@ export default function BinlocationLists() {
         // size: 200, //increase the width of this column
         visible: true,
         type: 'string',
+        
       },
       {
         accessorKey: "inactive",

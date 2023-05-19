@@ -8,7 +8,6 @@ import Warehouses from '@/models/Warehouses';
 import HeadingForm from '../component/HeadingForm';
 import General from '../component/General';
 import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify';
-import { documentType } from '@/constants';
 import React, { Component } from 'react';
 import FormMessageModal from '@/components/modal/FormMessageModal';
 
