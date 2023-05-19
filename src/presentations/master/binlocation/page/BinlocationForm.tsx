@@ -4,7 +4,7 @@ import { LoadingButton } from '@mui/lab';
 import DocumentSerieRepository from '@/services/actions/documentSerie';
 import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
 import GLAccount from '@/models/GLAccount';
-import { CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material';
 import { UpdateDataSuccess } from '../../../../utilies/ClientError';
 import PurchaseAgreement from '../../../../models/PurchaseAgreement';
 import { QueryClient, useMutation } from 'react-query';
@@ -143,6 +143,14 @@ class BinlocationForm extends Component<any, BinlocationType>{
             }
             bodyClassName={() => "text-sm font-white font-med block p-3"}
           />
+
+          <FormMessageModal ref={this.dialog} />
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={this.state.isSubmitting}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
           <HeadingForm
             data={this.state}
             edit={this.props?.edit}

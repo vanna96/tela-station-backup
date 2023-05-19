@@ -22,7 +22,6 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
     queryFn: () => new DimensionRepository().get(),
     staleTime: Infinity,
   });
-console.log(data);
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
