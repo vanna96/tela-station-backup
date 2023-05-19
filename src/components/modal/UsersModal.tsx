@@ -50,7 +50,7 @@ const UsersModal: FC<UserModalProps> = ({ open, onClose }) => {
       disableTitle={true}
       disableFooter={true}
     >
-      <div className="data-table" >
+      <div className="data-table text-inherit" >
         <MaterialReactTable
           columns={columns}
           data={data ?? []}

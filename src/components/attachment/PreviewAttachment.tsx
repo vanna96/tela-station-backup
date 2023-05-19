@@ -46,7 +46,7 @@ const PreviewAttachment: FC<PreviewAttachmentProps> = ({ attachmentEntry }: Prev
     const [image, setImage] = React.useState<any>(null);
     const [previewImage, setPreviewImage] = React.useState(false);
 
-    return <div className="data-table border-none p-0 mt-3">
+    return <div className="data-table text-inherit border-none p-0 mt-3">
         <Modal disableShadow open={previewImage} pannelClass='bg-transparent' disableTitle={true} title={''} onClose={() => setPreviewImage(false)} disableFooter={true} widthClass='w-[30rem]'>
             <img src={image} />
         </Modal>

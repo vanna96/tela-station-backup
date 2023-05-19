@@ -80,7 +80,7 @@ class SupplierDetail extends Component<any, any> {
         <Modal
           open={this.state.isError}
           title="Oop"
-          onClose={() => {}}
+          onClose={() => { }}
           onOk={() => console.log(this.props.history.goBack())}
         >
           <span>{this.state?.message}</span>
@@ -453,7 +453,7 @@ function ContactPerson(props: any) {
   console.log(data);
 
   return (
-    <div className="data-table  border-none p-0 mt-3">
+    <div className="data-table text-inherit  border-none p-0 mt-3">
       <MaterialReactTable
         columns={itemColumn}
         data={data?.contactEmployees ?? []}
@@ -555,7 +555,7 @@ function Address(props: any) {
   console.log(data);
 
   return (
-    <div className="data-table  border-none p-0 mt-3">
+    <div className="data-table text-inherit  border-none p-0 mt-3">
       <MaterialReactTable
         columns={itemColumn}
         data={data.bPAddresses ?? []}

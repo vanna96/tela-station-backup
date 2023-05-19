@@ -9,7 +9,7 @@ interface MainContainer {
 export default function MainContainer({ title, children }: MainContainer) {
     return (
         <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className='w-full h-full overflow-auto  p-8 flex flex-col gap-4 rounded-lg px-12 xl:px-8 relative'>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className='w-full h-full overflow-auto  p-4 flex flex-col gap-4 rounded-lg relative'>
                 <div className=''>
                     <h1 className='text-xl xl:text-base font-extrabold'>{title}</h1>
                     <hr className='my-4' />

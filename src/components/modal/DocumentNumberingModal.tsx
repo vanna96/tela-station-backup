@@ -1,4 +1,4 @@
-import React, { FC ,memo} from 'react'
+import React, { FC, memo } from 'react'
 import Modal from './Modal';
 import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
@@ -47,7 +47,7 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
         header: "Detail",
         Cell: (record: any) => (
           <span className=' p-0 text-[22px] text-neutral-500 rounded-sm' onClick={() => fetchSeries(record)}>
-            <AiOutlineExpandAlt/>
+            <AiOutlineExpandAlt />
           </span>
         ),
       },
@@ -83,17 +83,17 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
   );
 
 
-  const fetchSeries = async (record:any) => {
+  const fetchSeries = async (record: any) => {
     setOpenSeries(true)
     // console.log(record)
-    setSeries({ title: record?.row?.original?.ObjectName,isLoading:true, data: [] });
-    const payload:any = {
+    setSeries({ title: record?.row?.original?.ObjectName, isLoading: true, data: [] });
+    const payload: any = {
       DocumentTypeParams: {
         Document: record?.row?.original.ObjectCode,
         DocumentSubType: record?.row?.original.DocSubType
       }
     };
-    const { data }:any = await request('POST', '/SeriesService_GetDocumentSeries', payload);
+    const { data }: any = await request('POST', '/SeriesService_GetDocumentSeries', payload);
 
     let reponseData = [];
     if (data) {
@@ -115,7 +115,7 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
       disableFooter={true}
     >
       <>
-        <div className="data-table" >
+        <div className="data-table text-inherit" >
           <MaterialReactTable
             columns={columns}
             data={data ?? []}

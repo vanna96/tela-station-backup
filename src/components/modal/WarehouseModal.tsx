@@ -40,27 +40,27 @@ const WarehouseModal: FC<WarehouseModalProps> = ({ open, onClose, onOk }) => {
         ],
         []
     );
-      
-      const handlerConfirm = () => {
+
+    const handlerConfirm = () => {
         const keys = Object.keys(rowSelection);
         // console.log(keys)
         const selectItems = keys.map((key: string) => {
-          const wh = data.find((element: any) => (element?.WarehouseCode) === (key));
-          if (wh) {
-            return {
-              warehouseCode: wh?.WarehouseCode,
-              warehouseName: wh?.WarehouseName,
-              key: `${key}`
-              
-            };
-          }
-          console.log(wh)
-          return null;
+            const wh = data.find((element: any) => (element?.WarehouseCode) === (key));
+            if (wh) {
+                return {
+                    warehouseCode: wh?.WarehouseCode,
+                    warehouseName: wh?.WarehouseName,
+                    key: `${key}`
+
+                };
+            }
+            console.log(wh)
+            return null;
         }).filter(Boolean);
         console.log(selectItems);
         onOk(selectItems);
-      };
-      
+    };
+
 
 
     return (
@@ -72,7 +72,7 @@ const WarehouseModal: FC<WarehouseModalProps> = ({ open, onClose, onOk }) => {
             disableTitle={true}
             onOk={handlerConfirm}
         >
-            <div className="data-table" >
+            <div className="data-table text-inherit" >
                 <MaterialReactTable
                     columns={columns}
                     data={data ?? []}

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import { FormControl, InputBasePropsSizeOverrides, OutlinedInput, TextField } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
@@ -6,6 +6,7 @@ import { FiCopy } from "react-icons/fi";
 import { IoFilterCircleOutline } from "react-icons/io5";
 import { Interface } from "readline";
 import { OverridableStringUnion } from '@mui/types';
+import { ThemeContext } from "@/contexts";
 
 interface MUITextFieldProps {
     error?: boolean,
@@ -27,12 +28,14 @@ interface MUITextFieldProps {
 }
 
 
-const MUITextField: FC<MUITextFieldProps> = (
-    { error, label, name, size, onChange, onClick, value, defaultValue, onBlur, disabled, startAdornment, type, endAdornment = false, required = false, placeholder, className }: MUITextFieldProps) => {
+function MUITextField({ error, label, name, size, onChange, onClick, value, defaultValue, onBlur, disabled, startAdornment, type, endAdornment = false, required = false, placeholder, className }: MUITextFieldProps) {
+
+    const { theme } = React.useContext(ThemeContext);
+
     return <>
         <FormControl fullWidth error={error}>
             <div className="flex flex-col gap-1 text-sm">
-                <label htmlFor={label} className={`text-gray-500 text-[14px] xl:text-[13px] ${error ? 'text-red-700' : ''} `}>
+                <label htmlFor={label} className={`text-inherit text-[14px] xl:text-[13px] ${error ? 'text-red-700' : ''} `}>
                     {label}
                 </label>
                 <div className="text-field">
@@ -40,7 +43,7 @@ const MUITextField: FC<MUITextFieldProps> = (
                         // {...props}
                         size={size}
                         fullWidth
-                        className={`w-full text-field pr-0 ${disabled ? 'bg-gray-100' : ''} ${className ?? ''}`}
+                        className={`w-full ${theme === 'light' ? '' : 'bg-slate-600 text-white'} text-field pr-0 ${disabled ? 'bg-gray-100' : ''} ${className ?? ''}`}
                         name={name}
                         value={value}
                         onChange={onChange}
@@ -51,14 +54,15 @@ const MUITextField: FC<MUITextFieldProps> = (
                         placeholder={placeholder}
                         required={required}
                         startAdornment={startAdornment ? <span className="text-[13px] px-2 pr-4 mr-3 bg-gray-100 overflow-hidden border-r ">{startAdornment}</span> : null}
+
                         endAdornment={endAdornment ?
-                            <InputAdornment position="end">
+                            <InputAdornment position="end" className="text-white">
                                 <IconButton
                                     // aria-label="toggle password visibility"
                                     // edge="end"
                                     onClick={onClick}
                                 >
-                                    <FiCopy className="text-lg" />
+                                    <FiCopy className="text-lg text-white" />
                                 </IconButton>
                             </InputAdornment>
                             : null
@@ -69,48 +73,5 @@ const MUITextField: FC<MUITextFieldProps> = (
         </FormControl>
     </>
 }
-
-
-// function MUITextField(props) {
-//     const { error, label, name, size, onChange, onClick, value, defaultValue, onBlur, disabled, startAdornment, type } = props;
-
-//     return <>
-//         <FormControl fullWidth error={error}>
-//             <div className="flex flex-col gap-1 text-sm">
-//                 <label htmlFor={label} className={`text-gray-500 text-[14px] xl:text-[13px] ${error ? 'text-red-700' : ''} `}>
-//                     {label}
-//                 </label>
-//                 <div className="text-field">
-//                     <OutlinedInput
-//                         // {...props}
-//                         size={size ?? "small"}
-//                         fullWidth
-//                         className={`w-full text-field pr-0 ${disabled ? 'bg-gray-100' : ''}`}
-//                         name={name}
-//                         defaultValue={defaultValue}
-//                         value={value}
-//                         onChange={onChange}
-//                         onBlur={onBlur}
-//                         disabled={disabled}
-//                         type={type}
-//                         startAdornment={startAdornment ? <span className="text-[13px] px-2 pr-4 mr-3 bg-gray-100 overflow-hidden border-r ">{startAdornment}</span> : null}
-//                         endAdornment={onClick ?
-//                             <InputAdornment position="end">
-//                                 <IconButton
-//                                     // aria-label="toggle password visibility"
-//                                     // edge="end"
-//                                     onClick={onClick}
-//                                 >
-//                                     <FiCopy className="text-lg" />
-//                                 </IconButton>
-//                             </InputAdornment>
-//                             : null
-//                         }
-//                     />
-//                 </div>
-//             </div>
-//         </FormControl>
-//     </>
-// }
 
 export default MUITextField;

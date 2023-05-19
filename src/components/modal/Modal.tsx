@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { IoClose } from "react-icons/io5";
+import { ThemeContext } from '@/contexts';
 type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 interface ModalProps {
@@ -24,6 +25,9 @@ interface ModalProps {
 }
 
 const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false, onOk, titleClass, pannelClass, disableShadow, renderTitle }) => {
+
+    const { theme } = React.useContext(ThemeContext);
+
     return (
         <Transition appear show={open} as={Fragment}>
             <Dialog as="div" className="relative z-[100] " onClose={onClose}>
@@ -40,7 +44,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                 </Transition.Child>
 
                 <div className="fixed inset-0 overflow-y-auto w-full ">
-                    <div className="flex min-h-full items-center justify-center p-4 text-center ">
+                    <div className="flex min-h-full items-center justify-center  text-center ">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -50,7 +54,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className={`${widthClass ?? 'max-w-md'} ${heightClass ?? ''}  ${pannelClass ?? ''} ${disableShadow ? '' : 'shadow-xl'} relative transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle  transition-all`}>
+                            <Dialog.Panel className={`${widthClass ?? 'max-w-md'} ${heightClass ?? ''}  ${pannelClass ?? ''} ${disableShadow ? '' : 'shadow-xl'} relative transform overflow-hidden rounded-lg ${theme === 'light' ? 'bg-white' : 'bg-slate-600'} py-1 px-5 text-left align-middle  transition-all`}>
                                 {!disableTitle ? <Dialog.Title
                                     as="h3"
                                     className="w-full flex justify-between items-center text-lg font-medium leading-6 text-gray-900"
@@ -59,7 +63,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                                     {disableClose ? <div role='button' className='text-xl hover:bg-gray-200 rounded'><IoClose /></div> : null}
 
                                 </Dialog.Title> : null}
-                                <div className=" my-4">
+                                <div className={`my-4 text-inherit`}>
                                     {children}
                                 </div>
 

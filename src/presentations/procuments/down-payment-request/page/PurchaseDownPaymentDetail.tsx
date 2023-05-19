@@ -1,7 +1,5 @@
 import { withRouter } from '@/routes/withRouter';
 import React, { Component, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
-import PurchaseAgreement from '../../../../models/PurchaseAgreement';
 import EditIcon from "@mui/icons-material/Edit";
 import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
 import Taps from '@/components/button/Taps';
@@ -46,28 +44,16 @@ class PurchaseDownPaymentDetail extends Component<any, any> {
 
   initData() {
     const { id } = this.props.match.params;
-    const data = this.props.location.state as PurchaseDownPayment;
-    console.log(data);
-
-    if (data) {
-      setTimeout(() => {
-        let purchaseDownPayment = data;
-        purchaseDownPayment as PurchaseDownPayment;
-        if (purchaseDownPayment.ContactPersonCode) {
-          new BusinessPartnerRepository().findContactEmployee(purchaseDownPayment.CardCode!).then((res: BusinessPartner) => {
-            purchaseDownPayment.ContactPersonList = res.contactEmployee || [];
-            this.setState({ ...purchaseDownPayment, loading: false })
-          })
-        } else {
-          this.setState({ ...purchaseDownPayment, loading: false })
-        }
-      }, 500)
-    } else {
-      new PurchaseDownPaymentRepository().find(id).then((res: any) => {
+    const data = this.props.query.find('down-payment-request-id-' + id);
+    if (!data) {
+      new PurchaseDownPaymentRepository().find(id).then(async (res: any) => {
+        this.props.query.set('down-payment-request-id-' + id, res);
         this.setState({ ...res, loading: false });
       }).catch((e: Error) => {
         this.setState({ isError: true, message: e.message });
       })
+    } else {
+      this.setState({ ...data, loading: false });
     }
   }
 
@@ -266,7 +252,7 @@ function Content(props: any) {
     [data]
   );
 
-  return <div className="data-table  border-none p-0 mt-3">
+  return <div className="data-table text-inherit  border-none p-0 mt-3">
     <MaterialReactTable
       columns={data?.DocType === 'dDocument_Items' ? itemColumn : serviceColumns}
       data={data?.Items || []}
@@ -303,7 +289,7 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Before Discount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.DocTotalBeforeDiscount || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(data?.DocTotalBeforeDiscount) || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Freight</span>
@@ -311,11 +297,11 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Tax</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.VatSum}</span>
+        <span className='w-8/12 font-medium text-sm'>:{currencyFormat(data?.VatSum)}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Total Payment Due</span>
-        <span className='w-8/12 font-medium text-sm'>:{data?.DocTotalSys} </span>
+        <span className='w-8/12 font-medium text-sm'>:{currencyFormat(data?.DocTotalSys)} </span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Remark</span>
@@ -323,11 +309,11 @@ function Content(props: any) {
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Applied Amount</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?. Applied|| "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {data?.Applied || "N/A"}</span>
       </div>
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Balance Due</span>
-        <span className='w-8/12 font-medium text-sm'>: {data?.DocTotalSys || "N/A"}</span>
+        <span className='w-8/12 font-medium text-sm'>: {currencyFormat(data?.DocTotalSys) || "N/A"}</span>
       </div>
     </div>
   </div>

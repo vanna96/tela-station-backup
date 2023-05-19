@@ -7,6 +7,10 @@ import BusinessPartnerRepository from '@/services/actions/bussinessPartnerReposi
 import { currencyFormat } from '../../utilies/index';
 import BusinessPartner from '../../models/BusinessParter';
 import { useMemo } from 'react';
+import { ThemeContext } from '@/contexts';
+import MUITextField from '../input/MUITextField';
+import { OutlinedInput } from '@mui/material';
+import { HiSearch } from 'react-icons/hi';
 
 export type VendorModalType = 'supplier' | 'customer' | null;
 
@@ -19,19 +23,22 @@ interface VendorModalProps {
 
 
 const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
+
+  const { theme } = React.useContext(ThemeContext);
+  const [search, setSearch] = React.useState('');
+
+
+  const [globalFilter, setGlobalFilter] = React.useState('');
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
   const { data, isLoading }: any = useQuery({
     queryKey: ["venders_" + type],
     queryFn: () => new BusinessPartnerRepository().get(`&$filter=CardType eq 'c${type?.charAt(0).toUpperCase()}${type?.slice(1)}'`),
     staleTime: Infinity,
   });
-
-  // console.log(data)
-
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: 8,
-  });
-
 
   const [rowSelection, setRowSelection] = React.useState({});
   const columns = React.useMemo(
@@ -59,41 +66,59 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
     []
   );
 
-  // console.log(type)
+  const items = useMemo(() => data?.filter((e: any) => e?.CardType?.slice(1)?.toLowerCase() === type), [data, type]);
+  const handlerSearch = (event: any) => setGlobalFilter(event.target.value);
 
-  const items = useMemo(() => data?.filter((e: any) => e?.CardType?.slice(1)?.toLowerCase() === type), [data, type])
-  
+
 
   return (
     <Modal
       open={open}
       onClose={onClose}
-      widthClass='w-[70%]'
+      widthClass='w-[70vw]'
+      heightClass='h-[80vh]'
       title='Items'
       disableTitle={true}
       disableFooter={true}
     >
-      <div className="data-table" >
+      <div className={`data-grid ${theme === 'light' ? '' : 'text-white'}`}>
+        <div className='w-full grid grid-cols-3 p-2'>
+          <h2 className='font-bold'>Business Partners</h2>
+          <div></div>
+          <OutlinedInput
+            size='small'
+            onChange={handlerSearch}
+            className='text-sm'
+            sx={{ fontSize: '14px', backgroundColor: theme === 'light' ? '' : '#64748b' }}
+            placeholder='Search...'
+            endAdornment={<HiSearch className='text-2xl' />}
+          />
+        </div>
+        <hr />
         <MaterialReactTable
           columns={columns}
           data={items ?? []}
           enableStickyHeader={true}
           enableStickyFooter={true}
           enablePagination={true}
-          enableTopToolbar={true}
+          // enableTopToolbar={true}
           enableDensityToggle={false}
           initialState={{ density: "compact" }}
+          onGlobalFilterChange={setGlobalFilter}
+
           // enableRowSelection={true}
           onPaginationChange={setPagination}
           // onRowSelectionChange={setRowSelection}
+          enableColumnActions={false}
           getRowId={(row: any) => row.ItemCode}
           enableSelectAll={false}
           enableFullScreenToggle={false}
           enableColumnVirtualization={false}
           enableMultiRowSelection={false}
           positionToolbarAlertBanner="none"
+
           muiTablePaginationProps={{
-            rowsPerPageOptions: [5, 8, 15],
+            rowsPerPageOptions: [5, 10, 15],
             showFirstButton: false,
             showLastButton: false,
           }}
@@ -101,20 +126,17 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
             // onClick: row.getToggleSelectedHandler(),
             onClick: () => {
               onOk(new BusinessPartner(row.original, 0));
-              onClose()
             },
             sx: { cursor: 'pointer' },
           })}
           state={
             {
+              globalFilter,
               isLoading,
               pagination: pagination,
               rowSelection
             }
           }
-          renderTopToolbarCustomActions={({ table }) => {
-            return <h2 className=" text-lg font-bold">Vendor</h2>
-          }}
         />
       </div>
     </Modal>

@@ -230,7 +230,7 @@ function Content(props: any) {
 
   ], [data]);
 
-  return <div className="data-table  border-none p-0 mt-3">
+  return <div className="data-table text-inherit  border-none p-0 mt-3">
     <MaterialReactTable
       columns={itemColumn}
       data={data?.items || []}
@@ -262,7 +262,7 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Pick and Pack Remark</span>
         <span className="w-8/12 font-medium text-sm">
-        : {data?.pickAndPackRemarks ?? "N/A"}
+          : {data?.pickAndPackRemarks ?? "N/A"}
         </span>
       </div>
       <div className='flex gap-2'>

@@ -6,6 +6,7 @@ import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { FormControl } from "@mui/material";
 import dayjs from "dayjs";
 import moment from "moment";
+import { ThemeContext } from "@/contexts";
 
 interface MUIDatePickerProps {
   error?: boolean,
@@ -19,6 +20,8 @@ interface MUIDatePickerProps {
 const MUIDatePicker: React.FC<MUIDatePickerProps> = (props: MUIDatePickerProps) => {
   const { error, value, name, onChange, disabled, addOnDay } = props;
 
+  const { theme } = React.useContext(ThemeContext);
+
 
   const dateVal = React.useMemo(() => {
     if (value === null) return null;
@@ -29,16 +32,16 @@ const MUIDatePicker: React.FC<MUIDatePickerProps> = (props: MUIDatePickerProps) 
     }
 
     return value;
-  }, [value, addOnDay])
+  }, [value, addOnDay]);
 
   return (
-    <div className={`date-picker ${error ? 'date-picker-error' : ''}`}>
+    <div className={`date-picker ${error ? 'date-picker-error' : ''} `}>
       <LocalizationProvider dateAdapter={AdapterDayjs} >
         <DesktopDatePicker
           inputFormat="DD-MM-YYYY"
           value={dateVal}
           disabled={disabled}
-          className={disabled ? 'bg-gray-100' : ''}
+          className={`${theme === 'light' ? '' : 'bg-slate-600'} ${disabled ? 'bg-gray-100' : ''}`}
           onChange={(e: any, inputVal: any) => {
             onChange(dayjs(e).format('YYYY-MM-DD'))
           }}

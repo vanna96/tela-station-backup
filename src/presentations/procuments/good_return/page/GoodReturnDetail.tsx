@@ -278,7 +278,7 @@ function Content(props: any) {
     ],
     [data]
   );
-  return <div className="data-table  border-none p-0 mt-3">
+  return <div className="data-table text-inherit  border-none p-0 mt-3">
     <MaterialReactTable
       columns={data?.DocType === 'dDocument_Items' ? itemColumn : serviceColumns}
       data={data?.Items ?? []}
@@ -360,7 +360,7 @@ function Account(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Payment Methods</span> <span className='col-span-2 font-medium'>: {data?.PaymentMethod || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Central Bank Ind.</span> <span className='col-span-2 font-medium'>: {data?.CentralBankIndicator || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Installments</span> <span className='col-span-2 font-medium'>: {data?.NumberOfInstallments || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalculate Due Date</span> <span className='col-span-2 font-medium'>: {data?.StartFrom?.replace("pdt_","") || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Manually Recalculate Due Date</span> <span className='col-span-2 font-medium'>: {data?.StartFrom?.replace("pdt_", "") || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Cash Discount Date Offset</span> <span className='col-span-2 font-medium'>: {data?.CashDiscountDateOffset || "N/A"}</span></div>
     </div>
     <div className='flex flex-col gap-2'>

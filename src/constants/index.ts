@@ -34,8 +34,6 @@ export const getValueDocumentStatusProcument = (status: string | undefined): str
     switch (status) {
         case 'bost_Close':
             return 'C';
-        case 'bost_Close':
-            return 'O';
         default:
             return 'O';
     }

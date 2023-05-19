@@ -9,6 +9,7 @@ import ColumnSearch from './ColumnSearch';
 import { BsSortDown } from 'react-icons/bs';
 import MenuCompoment from "@/components/data_table/MenuComponent";
 import DataTableColumnFilter from './DataTableColumnFilter';
+import { ThemeContext } from '@/contexts';
 
 interface DataTableProps {
     columns: any[],
@@ -25,6 +26,8 @@ interface DataTableProps {
 export default function DataTable(props: DataTableProps) {
     const search = React.createRef<ColumnSearch>();
     const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({});
+
+    const { theme } = React.useContext(ThemeContext);
 
     React.useEffect(() => {
         const cols: any = {};
@@ -43,7 +46,7 @@ export default function DataTable(props: DataTableProps) {
 
 
     return (
-        <div className="rounded-lg shadow-sm border p-4 flex flex-col gap-3">
+        <div className={` rounded-lg shadow-sm  p-4 flex flex-col gap-3 ${theme === 'light' ? 'bg-white border' : 'bg-slate-700 border-grey-600'}`}>
             <div className="flex justify-between">
                 <div className="flex gap-2 items-center">
                     {/* <MUITextField placeholder="Search ..." /> */}

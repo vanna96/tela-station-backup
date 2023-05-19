@@ -55,7 +55,7 @@ const VatGroupModal: FC<VatGroupProps> = ({ open, onClose, onOk, type }) => {
       disableTitle={true}
       disableFooter={true}
     >
-      <div className="data-table" >
+      <div className="data-table text-inherit" >
         <MaterialReactTable
           columns={columns}
           data={items ?? []}

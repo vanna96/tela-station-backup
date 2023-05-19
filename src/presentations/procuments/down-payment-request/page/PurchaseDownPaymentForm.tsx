@@ -31,7 +31,7 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
 
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
-    // this.handlerAddItem = this.handlerAddItem.bind(this);
+    this.onInit = this.onInit.bind(this);
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
 
@@ -44,22 +44,30 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
         this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber, isLoadingSerie: false })
       });
     } else {
-      if (this.props.location.state) {
-        const routeState = this.props.location.state;
-        setTimeout(() => this.setState({ ...this.props.location.state }), 500)
-      } else {
-        new PurchaseDownPaymentRepository().find(this.props.match.params.id).then((res: any) => {
-          this.setState({ ...res, loading: false });
-        }).catch((e: Error) => {
-          this.setState({ message: e.message });
-        })
-      }
+      this.onInit();
     }
 
     // Get Series Lists
     DocumentSerieRepository.getDocumentSeries(purchaseQoutationRepository?.documentSerie).then((res: any) => {
       this.setState({ ...this.state, SerieLists: res, })
     });
+
+  }
+
+  async onInit() {
+    if (this.props.edit) {
+      const { id } = this.props.match.params;
+      let state: any = this.props.query.find('pa-id-' + id);
+      let disables: any = {};
+
+      if (!state) {
+        await new PurchaseDownPaymentRepository().find(id).then(async (res: any) => {
+          state = res;
+          this.props.query.set('down-payment-request-id-' + id, res);
+        });
+      }
+      this.setState({ ...state, disable: disables, loading: false });
+    }
 
   }
 
@@ -71,33 +79,7 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     this.setState({ ...this.state, Items: items })
   }
 
-  handlerAddItem({ value, record, field }: any) {
-    let items = [...(this.state.Items ?? [])];
-    let item = this.state.Items?.find(
-      (e: any) => e?.ItemCode === record?.ItemCode
-    );
 
-    if (field === "accountCode") {
-      const account = value as GLAccount;
-      item[field] = account.code;
-      item["accountName"] = account.name;
-    } else {
-      item[field] = value;
-    }
-
-    if (field === 'quantity' || field === 'unitPrice' || field === 'discountPercent') {
-      const total = Formular.findLineTotal(item['quantity'], item['unitPrice'], item['discountPercent']);
-      item['lineTotal'] = total;
-    }
-
-    if (field === 'purchaseVatGroup')
-      item['vatRate'] = new VatGroupRepository().find(value)?.vatRate;
-
-    const index = items.findIndex((e: any) => e?.ItemCode === record.itemCode);
-    if (index > 0) items[index] = item;
-
-    this.setState({ ...this.state, Items: items, DocTotal: Formular.findTotalBeforeDiscount(items) });
-  }
   async handlerSubmit(event: any) {
     event.preventDefault();
 
@@ -108,12 +90,14 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
       const purchaseDownPayment = new PurchaseDownPayment(res?.data)
 
       this.props.history.replace(this.props.location.pathname?.replace('create', purchaseDownPayment.Id), purchaseDownPayment);
+      this.props.query.set('down-payment-request-id-' + id, purchaseDownPayment);
       this.dialog.current?.success("Create Successfully.");
     }).catch((e: any) => {
       if (e instanceof UpdateDataSuccess) {
         this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state, isSubmitting: false, isApproved: this.state.DocumentStatus === 'A' });
         this.dialog.current?.success(e.message);
-        // const query = this.props.query.query as QueryClient;
+        this.props.query.set('down-payment-request-id-' + id, new PurchaseDownPayment(this.state));
+
         return;
       }
       this.dialog.current?.error(e.message);
@@ -125,7 +109,6 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
 
 
   FormRender = () => {
-
     return <>
       <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
         {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>

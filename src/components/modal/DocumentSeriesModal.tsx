@@ -1,4 +1,4 @@
-import React, { FC,memo } from 'react'
+import React, { FC, memo } from 'react'
 import Modal from './Modal';
 import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
@@ -19,8 +19,8 @@ interface DocumentNumberingModalProps {
 }
 
 
-const DocumentSeriesModal: FC<DocumentNumberingModalProps> = (props) => { 
-  const { open, onClose, series,isLoading } = props
+const DocumentSeriesModal: FC<DocumentNumberingModalProps> = (props) => {
+  const { open, onClose, series, isLoading } = props
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 8,
@@ -76,7 +76,7 @@ const DocumentSeriesModal: FC<DocumentNumberingModalProps> = (props) => {
     []
   );
 
-console.log(series?.data)
+  console.log(series?.data)
 
   return (
     <Modal
@@ -87,7 +87,7 @@ console.log(series?.data)
       disableTitle={true}
       disableFooter={true}
     >
-      <div className="data-table" >
+      <div className="data-table text-inherit" >
         <MaterialReactTable
           columns={columns}
           data={series?.data ?? {}}
@@ -115,7 +115,7 @@ console.log(series?.data)
           })}
           state={
             {
-             isLoading: isLoading,
+              isLoading: isLoading,
               pagination: pagination,
               rowSelection
             }

@@ -251,7 +251,7 @@ function Content(props: any) {
   );
 
   return (
-    <div className="data-table  border-none p-0 mt-3">
+    <div className="data-table text-inherit  border-none p-0 mt-3">
       <MaterialReactTable
         columns={isItemType(data?.DocType) ? itemColumn : serviceColumns}
         data={data?.Items ?? []}

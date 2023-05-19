@@ -61,7 +61,7 @@ const UoMListModal: FC<UoMListModalProps> = ({ open, onClose, onOk, data }) => {
       disableTitle={true}
       disableFooter={true}
     >
-      <div className="data-table" >
+      <div className="data-table text-inherit" >
         <MaterialReactTable
           columns={columns}
           data={items ?? []}

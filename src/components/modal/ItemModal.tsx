@@ -163,7 +163,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
             onOk={handlerConfirm}
 
         >
-            <div className="data-table" >
+            <div className="data-table text-inherit" >
                 <MaterialReactTable
                     columns={columns}
                     data={items ?? []}

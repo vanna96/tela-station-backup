@@ -62,7 +62,7 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
       disableTitle={true}
       disableFooter={true}
     >
-      <div className="data-table" >
+      <div className="data-table text-inherit" >
         <MaterialReactTable
           columns={columns}
           data={data ?? []}

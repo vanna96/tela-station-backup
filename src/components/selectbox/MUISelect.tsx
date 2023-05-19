@@ -7,6 +7,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from '@mui/material/CircularProgress';
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
 import shortid from 'shortid'
+import { ThemeContext } from "@/contexts";
 
 interface MUISelectProps<T = unknown> {
   error?: boolean,
@@ -20,12 +21,16 @@ interface MUISelectProps<T = unknown> {
   aliasvalue?: string | undefined,
   aliaslabel?: string | undefined,
   onChange?: SelectInputProps<T>['onChange'],
-  name?: string | undefined
+  name?: string | undefined,
+  label?: string;
 }
 
 
 
-const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, value, defaultValue, className, aliasvalue, aliaslabel, onChange, name }: MUISelectProps) => {
+const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, value, defaultValue, className, aliasvalue, aliaslabel, onChange, name, label }: MUISelectProps) => {
+
+  const { theme } = React.useContext(ThemeContext);
+
   if (loading)
     return <div className="text-field">
       <OutlinedInput
@@ -45,11 +50,14 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
 
   return (
     <FormControl error={error} fullWidth>
-      <div className="w-full mui-select">
+      <div className="w-full mui-select bg-inherit">
+        <label htmlFor={label} className={`text-inherit text-[14px] xl:text-[13px] ${error ? 'text-red-700' : ''} `}>
+          {label}
+        </label>
         <Select
           value={value === -1 ? '-1' : (value ?? '')}
           defaultValue={defaultValue ?? ''}
-          className={`w-full ${className} ${disabled ? 'bg-gray-100' : ''}`}
+          className={`w-full ${className} ${theme === 'light' ? '' : 'bg-slate-600'} ${disabled ? 'bg-gray-100' : ''} `}
           name={name}
           onChange={onChange}
           disabled={disabled}

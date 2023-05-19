@@ -179,7 +179,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
     render() {
         return (
-            <>
+            <div className='grow flex flex-col'>
                 <ItemModal open={this.state.isOpenItem} onClose={() => this.handlerCloseItem()} type='purchase' onOk={this.handlerConfirmItem} />
                 <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type={this.state.vendorType} />
                 <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
@@ -205,49 +205,14 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                     <CircularProgress color="inherit" />
                 </Backdrop>
 
-                <div className=' flex flex-col  w-full h-full p-4 relative'>
+                <div className='flex flex-col w-full  grow '>
                     <DocumentHeaderComponent data={this.state} />
-                    {/* <div className=" rounded-lg px-6 py-4 flex items-center justify-between sticky top-3 gap-3  border-b bg-white shadow-sm xl:text-sm font-bold z-20">
-                        <div className="flex gap-3 items-center">
-                            <BackButton />
-                            <div>Purchase Agreement</div>
-                        </div>
-
-                        <div className="px-3 flex items-center gap-3">
-                            <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiOutlineDocumentAdd className="" /></div>
-                            <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiOutlineEye className="" /></div>
-                            <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiChevronDoubleLeft className="" /></div>
-                            <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiChevronLeft className="" /></div>
-                            <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiChevronRight className="" /></div>
-                            <div role="button" className=" hover:bg-gray-200 rounded-lg p-2 px-3 text-base border hover:text-blue-500"><HiChevronDoubleRight className="" /></div>
-                        </div>
-
-                        <div role="button"
-                            onClick={() => this.handlerCollapse()}
-                            className={`hover:border absolute left-[45%] -bottom-4 p-[8px] bg-white hover:bg-gray-200 border shadow rounded-full text-xl text-gray-600 transition-all transform duration-200 delay-100 ${this.state.collapse ? 'rotate-0' : 'rotate-180'}`}> <HiOutlineChevronDown />
-                        </div>
-                    </div> */}
-
-                    {/* <div className={`w-full p-3 flex justify-between gap-3 stick ${this.state.collapse ? '' : 'hidden'} transition-transform  delay-100 duration-200  my-3 rounded-lg xl:text-sm font-bold bg-white shadow-sm border z-10`}>
-                        <div></div>
-                        <div className="flex items-center">
-                            <div role='button' className={`p-2 px-4 flex flex-col ${false ? 'border-b-[3px] border-blue-500' : ''}`}
-                            >
-                                <span className="">General</span>
-                            </div>
-                            <div role='button' className={`p-2 px-4 flex flex-col ${false ? 'border-b-[3px] border-blue-500' : ''}`}>Content</div>
-                            <div role='button' className={`p-2 px-4 flex flex-col ${false ? 'border-b-[3px] border-blue-500' : ''}`}>Attachment</div>
-                        </div>
-                    </div> */}
-
-                    <div className={`grow mt-4 flex flex-col gap-4 w-full ${this.state.collapse ? '' : 'mt-4'}`}>
+                    <div className={`grow mt-4 flex flex-col p-4 gap-4 w-full ${this.state.collapse ? '' : 'mt-4'}`}>
                         <this.FormRender />
                         <div className='mt-4'></div>
                     </div>
-
-
                 </div>
-            </>
+            </div>
         );
     }
 
@@ -274,7 +239,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
     // handler vendor 
     protected handlerConfirmVendor(record: BusinessPartner) {
-        console.log(record);
         this.setState({
             ...this.state,
             CardCode: record.cardCode,
@@ -286,7 +250,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             Phone: record.phone,
             PaymentTermType: record.paymentTermTypeCode,
             PaymentMethod: record.paymentMethod,
-            isOpenProject: false,
             isOpenVendor: false,
             Currency: record.currency,
             PriceLists: record.priceLists,
@@ -302,7 +265,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     }
 
     private handlerCloseVendor() {
-        // this.setState({ ...this.state, isOpenVendor: false })
+        this.setState({ ...this.state, isOpenVendor: false })
     }
 
     // List Account modal

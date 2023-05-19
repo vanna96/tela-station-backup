@@ -89,7 +89,7 @@ class RouteMasterDetails extends Component<any, any> {
         <Modal
           open={this.state.isError}
           title="Oop"
-          onClose={() => {}}
+          onClose={() => { }}
           onOk={() => console.log(this.props.history.goBack())}
         >
           <span>{this.state?.message}</span>
@@ -121,10 +121,10 @@ class RouteMasterDetails extends Component<any, any> {
                     : {(this.state.u_RMBASEST) || "N/A"}
                   </span>
                 </div>
-               
+
               </div>
               <div className="flex flex-col gap-1">
-               
+
                 <div className="flex gap-2">
                   <span className="w-4/12 text-gray-500">Create Date</span>
                   <span className="w-8/12 font-medium">
@@ -138,7 +138,7 @@ class RouteMasterDetails extends Component<any, any> {
                   </span>
                 </div>
 
-                
+
               </div>
             </div>
             {/* <div className="grow flex flex-col gap-3 p-6 shadow-sm rounded-lg bg-white">
@@ -174,7 +174,7 @@ function Content(props: any) {
         accessorKey: "itemDescription",
         header: "Descriptions",
       },
-     
+
       {
         accessorKey: "quantity",
         header: "Quantity",
@@ -215,7 +215,7 @@ function Content(props: any) {
   );
 
   return (
-    <div className="data-table  border-none p-0 mt-3">
+    <div className="data-table text-inherit  border-none p-0 mt-3">
       <MaterialReactTable
         columns={itemColumn}
         data={data?.items || []}

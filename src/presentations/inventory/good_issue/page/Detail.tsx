@@ -103,7 +103,7 @@ class GoodIssueDetails extends Component<any, any> {
         <Modal
           open={this.state.isError}
           title="Oop"
-          onClose={() => {}}
+          onClose={() => { }}
           onOk={() => console.log(this.props.history.goBack())}
         >
           <span>{this.state?.message}</span>
@@ -179,7 +179,7 @@ function Content(props: any) {
         accessorKey: "itemDescription",
         header: "Descriptions",
       },
-     
+
       {
         accessorKey: "quantity",
         header: "Quantity",
@@ -220,7 +220,7 @@ function Content(props: any) {
   );
 
   return (
-    <div className="data-table  border-none p-0 mt-3">
+    <div className="data-table text-inherit  border-none p-0 mt-3">
       <MaterialReactTable
         columns={itemColumn}
         data={data?.items || []}
@@ -245,8 +245,8 @@ function Content(props: any) {
         }
       />
       <div className="flex flex-col gap-3">
-        
-       
+
+
         <div className="flex gap-2">
           <span className="w-4/12 text-gray-500 text-sm">Journal Remarks</span>
           <span className="w-8/12 font-medium text-sm">

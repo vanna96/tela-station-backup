@@ -13,7 +13,7 @@ interface BranhModalProps {
 }
 
 
-const BranchModal: FC<BranhModalProps> = ({ open, onClose}) => {
+const BranchModal: FC<BranhModalProps> = ({ open, onClose }) => {
   const { data, isLoading }: any = useQuery({
     queryKey: ["branch"],
     queryFn: () => new BranchRepository().get(),
@@ -56,7 +56,7 @@ const BranchModal: FC<BranhModalProps> = ({ open, onClose}) => {
       disableTitle={true}
       disableFooter={true}
     >
-      <div className="data-table" >
+      <div className="data-table text-inherit" >
         <MaterialReactTable
           columns={columns}
           data={data ?? []}

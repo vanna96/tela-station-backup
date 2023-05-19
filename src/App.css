@@ -50,6 +50,13 @@ div.data-grid > div > div > table > tbody > tr {
   color: inherit;
 }
 
+div.data-table > div > div > table,
+div.data-table > div > div > table > thead > tr,
+div.data-table > div > div > table > tbody > tr {
+  background-color: inherit;
+  color: inherit;
+}
+
 div.data-grid > div > div > table > thead > tr > th,
 div.data-grid > div > div > table > tbody > tr > td {
   color: inherit;
@@ -205,6 +212,13 @@ button {
   color: rgba(0, 0, 0, 0.26) !important;
 }
 
-.MuiPaper-root {
-  color: inherit;
+.MuiPaper-root,
+.css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root,
+.MuiInputBase-root,
+.MuiInputAdornment-root,
+.MuiToolbar-root,
+.MuiBox-root,
+.css-cveggr-MuiListItemIcon-root {
+  color: inherit !important;
+  /* background-color: inherit !important; */
 }
