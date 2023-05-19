@@ -52,6 +52,7 @@ const BranchModal: FC<BranhModalProps> = ({ open, onClose}) => {
       open={open}
       onClose={onClose}
       widthClass='w-[50rem]'
+
       title='List Of Projects'
       disableTitle={true}
       disableFooter={true}

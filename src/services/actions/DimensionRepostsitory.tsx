@@ -18,15 +18,7 @@ export default class DimensionRepository extends Repository<Dimension> {
       return JSON.parse(dimension);
     }
 
-    const dimension = await request('GET', this.url).then((res: any) => res?.data?.value?.map((e:any) => {
-      return {
-          key: e?.DimensionCode,
-          DimensionCode: e?.DimensionCode,
-          DimensionName: e?.DimensionName,
-          IsActive: e?.IsActive?.slice(1),
-          DimensionDescription: e?.DimensionDescription,
-      }
-    }));
+    const dimension = await request('GET', this.url).then((res: any) => res?.data?.value);
     const enc = Encryption.encrypt(this.key, JSON.stringify(dimension));
     localStorage.setItem(this.key, enc);
 

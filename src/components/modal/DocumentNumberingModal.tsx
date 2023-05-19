@@ -109,7 +109,7 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
     <Modal
       open={open}
       onClose={onClose}
-      widthClass='w-[75rem]'
+      widthClass='w-[60rem]'
       title='List Of Projects'
       disableTitle={true}
       disableFooter={true}

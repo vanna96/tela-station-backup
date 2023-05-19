@@ -23,7 +23,7 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     super(props)
     this.state = {
       ...this.state,
-      loading: true,
+      // loading: true,
       DocDate: new Date().toISOString(),
       DocDueDate: new Date().toISOString(),
       TaxDate: new Date().toISOString(),
@@ -46,7 +46,7 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     } else {
       if (this.props.location.state) {
         const routeState = this.props.location.state;
-        setTimeout(() => this.setState({ ...this.props.location.state }), 500)
+        setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
       } else {
         new PurchaseDownPaymentRepository().find(this.props.match.params.id).then((res: any) => {
           this.setState({ ...res, loading: false });
@@ -57,12 +57,11 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     }
 
     // Get Series Lists
-    DocumentSerieRepository.getDocumentSeries(purchaseQoutationRepository?.documentSerie).then((res: any) => {
+    DocumentSerieRepository.getDocumentSeries(PurchaseDownPaymentRepository?.documentSerie).then((res: any) => {
       this.setState({ ...this.state, SerieLists: res, })
     });
 
   }
-
 
   handlerRemoveItem(code: string) {
     let items = [...this.state.Items ?? []];

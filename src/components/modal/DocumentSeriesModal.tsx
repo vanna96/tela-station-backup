@@ -63,6 +63,11 @@ const DocumentSeriesModal: FC<DocumentNumberingModalProps> = (props) => {
       {
         accessorKey: 'GroupCode',
         header: 'Group',
+        Cell: ({ cell }: any) => (
+          <>
+            {cell.getValue()?.replace('sg_', '')}
+          </>
+        ),
       },
       {
         accessorKey: 'PeriodIndicator',

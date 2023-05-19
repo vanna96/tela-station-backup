@@ -45,7 +45,7 @@ const UsersModal: FC<UserModalProps> = ({ open, onClose }) => {
     <Modal
       open={open}
       onClose={onClose}
-      widthClass='w-[40rem]'
+      widthClass='w-[50rem]'
       title='List Of Projects'
       disableTitle={true}
       disableFooter={true}

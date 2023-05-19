@@ -65,15 +65,20 @@ export default function WarehoseLists() {
         enableColumnActions: false,
         enableColumnFilters: false,
         enableColumnOrdering: false,
+        enableSorting: false,
+        minSize: 100, //min size enforced during resizing
+        maxSize: 100, //max size enforced during resizing
         header: "Action", //uses the default width from defaultColumn prop
         Cell: (cell: any) => (
           <div className="flex gap-4">
             <button onClick={() => {
-              route('/master-data/warehouse/' + cell.row.original.id, { state: cell.row.original })
+              route('/master-data/warehouse/' + cell.row.original.id, { state: cell.row.original, replace: true })
             }}>
               <VisibilityIcon fontSize="small" className="text-gray-600 " />
             </button>
-            <button>
+            <button title="back"
+              onClick={() => route('/master-data/warehouse/' + cell.row.original.id + '/edit', { state: cell.row.original, replace: true })}
+            >
               <EditIcon fontSize="small" className="text-blue-400" />
             </button>
           </div>

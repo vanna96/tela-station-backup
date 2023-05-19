@@ -26,14 +26,25 @@ const contextClass: any = {
   default: "bg-indigo-600",
   dark: "bg-white-600 font-gray-300",
 };
+export interface BinlocationType {
+  loading: boolean;
+  showDialogMessage: boolean;
+  message: string;
+  isSubmitting: boolean;
+  title: string
+}
 
-class BinlocationForm extends Component<any, any>{
+class BinlocationForm extends Component<any, BinlocationType>{
 
   constructor(props: any) {
     super(props)
     this.state = {
       ...this.state,
-    } as any;
+      loading: true,
+      showDialogMessage: false,
+      isSubmitting: false
+
+    };
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
   dialog = React.createRef<FormMessageModal>();
@@ -41,14 +52,12 @@ class BinlocationForm extends Component<any, any>{
   componentDidMount(): void {
 
     if (!this.props?.edit) {
-      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
-    }
+      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500);
 
-    if (this.props.edit) {
+    } else {
       if (this.props.location.state) {
         const routeState = this.props.location.state;
-
-        setTimeout(() => this.setState({ ...this.props.location.state }), 500)
+        setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
       } else {
         new BinlocationRepository().find(this.props.match.params.id).then((res: any) => {
           this.setState({ ...res, loading: false });
@@ -57,7 +66,9 @@ class BinlocationForm extends Component<any, any>{
         })
       }
     }
+
   }
+
 
 
 
