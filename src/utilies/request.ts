@@ -26,8 +26,6 @@ axiosInstance.interceptors.response.use(
 
 
 const request = async (method: string, url: string, data?: any, responseType?: ResponseType, headers?: any) => {
-
-
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             try {
@@ -49,10 +47,12 @@ const request = async (method: string, url: string, data?: any, responseType?: R
                         resolve({ data: response.data, headers: response.headers });
                     })
                     .catch((e) => {
+                        console.log(e);
+
                         if (!(e instanceof AxiosError)) {
 
                             if (window.location.pathname !== "/login" && e?.status !== 204) {
-                                // window.location.href = '/login';
+                                window.location.href = '/login';
                             }
                             else if (e?.status === 204) {
                                 reject(new UpdateDataSuccess('Update Successfully'));

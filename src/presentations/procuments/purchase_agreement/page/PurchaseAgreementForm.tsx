@@ -1,3 +1,4 @@
+import React from 'react';
 import CoreFormDocument from '@/components/core/CoreFormDocument';
 import GeneralForm from "../components/GeneralForm";
 import HeadingForm from "../components/HeadingForm";
@@ -10,9 +11,12 @@ import PurchaseAgreementRepository from '../../../../services/actions/purchaseAg
 import { CircularProgress } from '@mui/material';
 import { UpdateDataSuccess } from '../../../../utilies/ClientError';
 import PurchaseAgreement from '../../../../models/PurchaseAgreement';
-
+import MenuButton from '@/components/button/MenuButton';
 
 class PurchaseAgreementForm extends CoreFormDocument {
+    generalRef: React.RefObject<HTMLDivElement>;
+    contentRef: React.RefObject<HTMLDivElement>;
+    attachmentRef: React.RefObject<HTMLDivElement>;
 
     constructor(props: any) {
         super(props)
@@ -27,13 +31,15 @@ class PurchaseAgreementForm extends CoreFormDocument {
             SigningDate: null,
             EndDate: null,
             loading: true,
-
-
         } as any;
 
         this.onInit = this.onInit.bind(this);
         this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
         this.handlerSubmit = this.handlerSubmit.bind(this);
+        this.handlerChangeMenu = this.handlerChangeMenu.bind(this);
+        this.generalRef = React.createRef<HTMLDivElement>();
+        this.contentRef = React.createRef<HTMLDivElement>();
+        this.attachmentRef = React.createRef<HTMLDivElement>();
     }
 
     componentDidMount(): void {
@@ -114,10 +120,24 @@ class PurchaseAgreementForm extends CoreFormDocument {
         });
     }
 
+    handlerChangeMenu(ref: React.RefObject<HTMLDivElement>, index: number) {
+        const element = ref.current;
+        this.setState({ ...this.state, tapIndex: index })
+        element?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    HeaderTaps = () => {
+        return <>
+            <MenuButton active={this.state.tapIndex === 0} onClick={() => this.handlerChangeMenu(this.generalRef, 0)}>General</MenuButton>
+            <MenuButton active={this.state.tapIndex === 1} onClick={() => this.handlerChangeMenu(this.contentRef, 1)}>Content</MenuButton>
+            <MenuButton active={this.state.tapIndex === 2} onClick={() => this.handlerChangeMenu(this.attachmentRef, 2)}>Attachment</MenuButton>
+        </>
+    }
 
     FormRender = () => {
         return <>
-            <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
+            <div ref={this.generalRef}></div>
+            <form id='formData' onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
                 {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
                     <HeadingForm
                         data={this.state}
@@ -128,22 +148,28 @@ class PurchaseAgreementForm extends CoreFormDocument {
                         handlerChange={(key, value) => this.handlerChange(key, value)}
                         handlerOpenProject={() => this.handlerOpenProject()}
                     />
-                    <GeneralForm
-                        data={this.state}
-                        edit={this.props?.edit}
-                        handlerChange={(key, value) => {
-                            this.handlerChange(key, value);
-                        }}
-                    />
+                    <div ref={this.contentRef}>
+                        <GeneralForm
+                            data={this.state}
+                            edit={this.props?.edit}
+                            handlerChange={(key, value) => {
+                                this.handlerChange(key, value);
+                            }}
+                        />
+                    </div>
 
-                    <ContentForm
-                        data={this.state}
-                        handlerAddItem={() => this.handlerOpenItem()}
-                        handlerRemoveItem={this.handlerRemoveItem}
-                        handlerChangeItem={this.handlerChangeItems}
-                    />
+                    <div >
+                        <ContentForm
+                            data={this.state}
+                            handlerAddItem={() => this.handlerOpenItem()}
+                            handlerRemoveItem={this.handlerRemoveItem}
+                            handlerChangeItem={this.handlerChangeItems}
+                        />
+                    </div>
 
-                    <AttachmentForm />
+                    <div ref={this.attachmentRef}>
+                        <AttachmentForm />
+                    </div>
 
                     <div className="sticky w-full bottom-4  mt-2">
                         <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">

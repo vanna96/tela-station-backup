@@ -94,7 +94,8 @@ export interface CoreFormDocumentState {
     AgreementMethod: string;
     Address: string | null;
     Address2: string | null;
-    disable: {}
+    disable: {},
+    tapIndex: number;
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
@@ -161,7 +162,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             AgreementMethod: 'I',
             Address: null,
             Address2: null,
-            disable: {}
+            disable: {},
+            tapIndex: 0,
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -176,6 +178,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     }
 
     abstract FormRender(): JSX.Element;
+
+    abstract HeaderTaps(): JSX.Element;
 
     render() {
         return (
@@ -206,8 +210,8 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 </Backdrop>
 
                 <div className='flex flex-col w-full  grow '>
-                    <DocumentHeaderComponent data={this.state} />
-                    <div className={`grow mt-4 flex flex-col p-4 gap-4 w-full ${this.state.collapse ? '' : 'mt-4'}`}>
+                    <DocumentHeaderComponent data={this.state} menuTabs={<this.HeaderTaps />} />
+                    <div className={`grow  flex flex-col px-4 py-3 gap-2 w-full `}>
                         <this.FormRender />
                         <div className='mt-4'></div>
                     </div>

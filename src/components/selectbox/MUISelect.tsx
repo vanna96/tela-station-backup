@@ -61,6 +61,14 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
           name={name}
           onChange={onChange}
           disabled={disabled}
+          MenuProps={{
+            MenuListProps: {
+              style: {
+                backgroundColor: theme === 'light' ? '' : '#475569',
+                color: theme === 'light' ? '' : '#fff',
+              }
+            }
+          }}
         >
           {items ? (
             items?.map((e) => {
@@ -78,7 +86,7 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
           )}
         </Select>
       </div>
-    </FormControl>
+    </FormControl >
   );
 }
 

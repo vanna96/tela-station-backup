@@ -4,7 +4,7 @@ import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import SideBar from './SideBar';
 import { useCookies } from 'react-cookie';
 import { ThemeContext, useThemeContext } from '@/contexts';
-import { Backdrop, Button, CircularProgress, Menu, MenuItem } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Menu, MenuItem, OutlinedInput } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { HiMenu } from 'react-icons/hi';
 import { MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md';
@@ -23,7 +23,7 @@ export default function App() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    if (!cookies.sessionId) return <Navigate to={"/login"} />
+    // if (!cookies.sessionId) return <Navigate to={"/login"} />
     const [collapse, setCollapse] = React.useState(true)
     const [loading, setLoading] = React.useState(false)
     const { theme, setTheme } = useContext(ThemeContext);
@@ -39,7 +39,7 @@ export default function App() {
 
 
     const goBack = () => {
-        if (location.pathname !== '/') navigate(-1)
+        if (location.pathname !== '/') navigate(-1);
     };
 
     const signOut = () => {
@@ -49,7 +49,6 @@ export default function App() {
             navigate('/login')
         }, 800)
     }
-
 
     return (
 
@@ -108,6 +107,7 @@ export default function App() {
 function AccountMenu(props: any) {
 
     const { theme } = React.useContext(ThemeContext);
+    const [cookies] = useCookies(['user']);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -203,17 +203,21 @@ function AccountMenu(props: any) {
                 </MenuItem>
             </Menu>
 
-            <MyProfileModal ref={myProfile} />
+            <MyProfileModal ref={myProfile} user={cookies.user} />
         </React.Fragment>
     );
 }
 
-import { TbUser } from "react-icons/tb";
+import CurrentUser from '@/presentations/login/model/CurrenctUser';
+
 interface MyProfileModalProps {
     ref?: React.RefObject<MyProfileModal>,
+    user: CurrentUser
 }
 
 class MyProfileModal extends React.Component<MyProfileModalProps, any> {
+
+    static contextType = ThemeContext;
 
     constructor(props: any) {
         super(props);
@@ -236,21 +240,30 @@ class MyProfileModal extends React.Component<MyProfileModalProps, any> {
 
 
     render() {
+        const { theme }: any = this.context;
+
         return (
             <>
                 <Modal
-                    open={true}
-                    widthClass='w-[40vw]'
-                    heightClass='h-[60vh]'
+                    widthClass='w-[25rem]'
+                    heightClass='h-[50vh]'
                     title=''
-                    // open={this.state.open}
+                    open={this.state.open}
                     onClose={this.onClose}
+                    disableFooter={true}
                 >
-                    <div className='w-full h-fulltext-white flex flex-col gap-2'>
-                        <div className='bg-pink-100'>
-                            <TbUser />
+                    <div className={`w-full h-full ${theme === 'light' ? '' : 'text-white'} flex flex-col gap-2 p-10`}>
+                        <div className='flex justify-center items-center mb-4'>
+                            <Avatar sx={{ width: 120, height: 120, backgroundColor: '#64748b' }}></Avatar>
                         </div>
-                        <div className='col-span-2'></div>
+
+                        <div className='w-[15rem] mx-auto text-[16px] flex flex-col gap-1 justify-start items-start'>
+
+                            <div className=''>Username : {this.props?.user?.UserName}</div>
+                            <div className=''>Email : {this.props?.user?.Email}</div>
+                            <div className=''>Branch : {this.props?.user?.Branch}</div>
+                            <div className=''>Department : {this.props?.user?.Department}</div>
+                        </div>
                     </div>
 
                 </Modal>

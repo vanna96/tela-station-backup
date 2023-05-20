@@ -1,12 +1,11 @@
-
-import { ThemContextProps, ThemeContext } from '@/contexts';
 import * as React from 'react';
+import { ThemContextProps, ThemeContext } from '@/contexts';
 import { IoChevronForwardSharp } from 'react-icons/io5';
 
 export interface FormCardProps {
     title: string,
     children?: React.ReactNode,
-
+    ref?: React.RefObject<FormCard>,
 }
 
 export default class FormCard extends React.Component<FormCardProps> {

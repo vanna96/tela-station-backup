@@ -222,3 +222,20 @@ button {
   color: inherit !important;
   /* background-color: inherit !important; */
 }
+
+/* ul {
+  background-color: inherit;
+} */
+/* 
+ */
+
+/* .css-bkrceb-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+  background-color: #1976d2 !important;
+} */
+
+button {
+  color: inherit !important;
+}
+.css-19wwevd-MuiTypography-root-MuiDayPicker-weekDayLabel {
+  color: inherit !important;
+}

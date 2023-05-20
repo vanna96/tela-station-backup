@@ -12,12 +12,13 @@ export interface IGeneralFormProps {
     data: any,
     handlerChange: (key: string, value: any) => void,
     edit?: boolean,
+    ref?: React.RefObject<FormCard>,
 }
 
-export default function GeneralForm({ data, handlerChange, edit }: IGeneralFormProps) {
+export default function GeneralForm({ data, handlerChange, edit, ref }: IGeneralFormProps) {
 
     return (
-        <FormCard title='General'>
+        <FormCard title='General' ref={ref}>
             <div className='flex flex-col gap-2'>
                 <div className='grid grid-cols-1 gap-3'>
                     <div className='flex flex-col gap-1 text-sm'>
