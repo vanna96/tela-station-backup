@@ -6,8 +6,6 @@ import request from "@/utilies/request";
 import { useQuery } from "react-query";
 import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
-import OwnerRepository from "@/services/actions/ownerRepository";
-import FactoringIndicatorRepository from "@/services/actions/FactoringIndicatorRepository";
 import ItemGroupRepository from "@/services/actions/itemGroupRepository";
 
 

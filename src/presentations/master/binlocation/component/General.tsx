@@ -7,6 +7,7 @@ import { SelectChangeEvent, TextField } from '@mui/material';
 import ItemGroupSelectSelect from '@/components/selectbox/ItemGroupselect';
 import ItemsModal from '@/components/modal/itemsModal';
 import UOMSelect from '@/components/selectbox/UnitofMeasurment';
+import Binlocation from '@/models/Binlocation';
 export interface IGeneralFormProps {
   data: any,
   handlerChange: (key: string, value: any) => void,
@@ -17,34 +18,34 @@ export interface IGeneralFormProps {
 
 export default function General({ data, handlerChange, edit, handleOpenItems }: IGeneralFormProps) {
   //---------------------------1----------------------------
-  const [show1, setShow1] = React.useState<boolean>(false);
-  const [show2, setShow2] = React.useState<boolean>(false);
-  const [show3, setShow3] = React.useState<boolean>(false);
-  const [show4, setShow4] = React.useState<boolean>(false);
+  const [show1, setShow1] = React.useState<boolean>(data?.restrictedItemType === 'briSpecificItem');
+  const [show2, setShow2] = React.useState<boolean>(data?.restrictedItemType === 'briSingleItemOnly');
+  const [show3, setShow3] = React.useState<boolean>(data?.restrictedItemType === 'briSpecificItemGroup');
+  const [show4, setShow4] = React.useState<boolean>(data?.restrictedItemType === 'SingleItemGrouponly');
   //---------------------------2----------------------------
-  const [bShow, setBShow] = React.useState<boolean>(false);
+  const [bShow, setBShow] = React.useState<boolean>(data?.batchRestrictions === 'brbSingleBatch');
   //---------------------------------------------------------
-  const [Ushow1, setUShow1] = React.useState<boolean>(false);
-  const [Ushow2, setUShow2] = React.useState<boolean>(false);
-  const [Ushow3, setUShow3] = React.useState<boolean>(false);
-  const [Ushow4, setUShow4] = React.useState<boolean>(false);
+  const [Ushow1, setUShow1] = React.useState<boolean>(data?.restrictedUoMType === 'bruSpecificUoM');
+  const [Ushow2, setUShow2] = React.useState<boolean>(data?.restrictedUoMType === 'bruSingleUoMOnly');
+  const [Ushow3, setUShow3] = React.useState<boolean>(data?.restrictedUoMType === 'bruSpecificUoMGroup');
+  const [Ushow4, setUShow4] = React.useState<boolean>(data?.restrictedUoMType === 'bruSingleUoMGrouponly');
   //------------------------3---------------------------------
-  const [Tshow, setTShow] = React.useState<boolean>(false);
-  const [Tshow1, setTShow1] = React.useState<boolean>(false);
+  const [Tshow, setTShow] = React.useState<boolean>(data?.restrictedTransType === 'brtAllTrans' || data?.restrictedTransType === 'brtNoRestrictions' || data?.restrictedTransType === '2' || data?.restrictedTransType === 'brtAllExceptInventoryTrans');
+  const [Tshow1, setTShow1] = React.useState<boolean>(data?.restrictedTransType === '3');
 
   const handleSelectChange = (event: SelectChangeEvent<any>) => {
     const key = 'restrictedItemType';
     const value = event.target.value;
-    const selectedValue1 = event.target.value as number;
-    const selectedValue2 = event.target.value as number;
-    const selectedValue3 = event.target.value as number;
-    const selectedValue4 = event.target.value as number;
+    const selectedValue1 = event.target.value as string;
+    const selectedValue2 = event.target.value as string;
+    const selectedValue3 = event.target.value as string;
+    const selectedValue4 = event.target.value as string;
 
     // ------------------------------------------------
-    setShow1(selectedValue1 === 1);
-    setShow2(selectedValue2 === 2);
-    setShow3(selectedValue3 === 3);
-    setShow4(selectedValue4 === 4);
+    setShow1(selectedValue1 === "briSpecificItem");
+    setShow2(selectedValue2 === "briSingleItemOnly");
+    setShow3(selectedValue3 === "briSpecificItemGroup");
+    setShow4(selectedValue4 === "SingleItemGrouponly");
 
     //-------------------------------------------------
     handlerChange('restrictedItemType', selectedValue1);
@@ -58,7 +59,7 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
     const value = event.target.value;
     const selectedValue = event.target.value as string;
     // ------------------------------------------------
-    setBShow(selectedValue === "Y");
+    setBShow(selectedValue === "brbSingleBatch");
     //-------------------------------------------------
     handlerChange('batchRestrictions', selectedValue);
     handlerChange(key, value);
@@ -66,16 +67,16 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
   const handleSelectChangeU = (event: SelectChangeEvent<any>) => {
     const key = 'restrictedUoMType';
     const value = event.target.value;
-    const selectedValue1 = event.target.value as number;
-    const selectedValue2 = event.target.value as number;
-    const selectedValue3 = event.target.value as number;
-    const selectedValue4 = event.target.value as number;
+    const selectedValue1 = event.target.value as string;
+    const selectedValue2 = event.target.value as string;
+    const selectedValue3 = event.target.value as string;
+    const selectedValue4 = event.target.value as string;
 
     // ------------------------------------------------
-    setUShow1(selectedValue1 === 1);
-    setUShow2(selectedValue2 === 2);
-    setUShow3(selectedValue3 === 3);
-    setUShow4(selectedValue4 === 4);
+    setUShow1(selectedValue1 === "bruSpecificUoM");
+    setUShow2(selectedValue2 === "bruSingleUoMOnly");
+    setUShow3(selectedValue3 === "bruSpecificUoMGroup");
+    setUShow4(selectedValue4 === "bruSingleUoMGrouponly");
 
     //-------------------------------------------------
     handlerChange('restrictedUoMType', selectedValue1);
@@ -87,18 +88,20 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
   const handleSelectChangeT = (event: SelectChangeEvent<any>) => {
     const key = 'restrictedTransType';
     const value = event.target.value;
-    const selectedValue = event.target.value as number;
-    const selectedValue1 = event.target.value as number;
+    const selectedValue = event.target.value as string;
+    const selectedValue1 = event.target.value as string;
 
     // ------------------------------------------------
-    setTShow(selectedValue === 1 || selectedValue === 2 || selectedValue === 3 || selectedValue === 4);
-    setTShow1(selectedValue === 0);
+    setTShow(selectedValue === "brtAllTrans" || selectedValue === "brtNoRestrictions" || selectedValue === "2" || selectedValue === "brtAllExceptInventoryTrans");
+    setTShow1(selectedValue === "3");
 
     //-------------------------------------------------
     handlerChange('restrictedTransType', selectedValue);
     handlerChange('restrictedTransType', selectedValue1);
     handlerChange(key, value);
   };
+  console.log(data);
+  
   return (
     <FormCard title='General'>
       <h1>
@@ -138,7 +141,6 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
         </div>
         <div className="grid grid-cols-2 gap-3">
           <MUITextField label="Maximun Quantity:" onChange={(e) => handlerChange('maximumQty', e.target.value)} value={data?.maximumQty} name="MaximumQty" />
-          <MUITextField label="Item Group:" onChange={(e) => handlerChange('specificItemGroup', e.target.value)} value={data?.specificItemGroup} name="SpecificItemGroup" />
           <MUITextField label="Item Quantity:" disabled onChange={(e) => handlerChange('maximunWeigt', e.target.value)} value={data?.cardCode} name="" />
           <MUITextField label="No. of Batches/Serials:" disabled value={data?.cardName} name="" />
         </div>
@@ -151,16 +153,16 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
             </label>
             <MUISelect
               items={[
-                { value: 0, name: "None" },
-                { value: 1, name: "Specific Item" },
-                { value: 2, name: "Single Item Only" },
-                { value: 3, name: "Specific Item Group" },
-                { value: 4, name: "Single Item Group only" },
+                { value: "briNone", name: "None" },
+                { value: "briSpecificItem", name: "Specific Item" },
+                { value: "briSingleItemOnly", name: "Single Item Only" },
+                { value: "briSpecificItemGroup", name: "Specific Item Group" },
+                { value: "briSingleItemGrouponly", name: "Single Item Group Only" },
               ]}
               aliaslabel='name'
               aliasvalue='value'
               onChange={handleSelectChange}
-              value={data?.restrictedItemType ?? 0}
+              value={data?.restrictedItemType ?? "briNone"}
               name="RestrictedItemType"
             />
 
@@ -172,12 +174,12 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
             </label>
             <MUISelect
               items={[
-                { value: "N", name: "None" },
-                { value: "Y", name: "Single batch" },
+                { value: "brbNoRestrictions", name: "None" },
+                { value: "brbSingleBatch", name: "Single Batch" },
               ]}
               aliaslabel='name'
               aliasvalue='value'
-              onChange={handleSelectChangeB} value={data?.batchRestrictions ?? "N"} name="BatchRestrictions" />
+              onChange={handleSelectChangeB} value={data?.batchRestrictions ?? "brbNoRestrictions"} name="BatchRestrictions" />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -187,16 +189,16 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
             </label>
             <MUISelect
               items={[
-                { value: 0, name: "None" },
-                { value: 1, name: "Specific UoM" },
-                { value: 2, name: "Single UoM Only" },
-                { value: 3, name: "Specific UoM Group" },
-                { value: 4, name: "Single UoM Group only" },
+                { value: "bruNone", name: "None" },
+                { value: "bruSpecificUoM", name: "Specific UoM" },
+                { value: "bruSingleUoMOnly", name: "Single UoM Only" },
+                { value: "bruSpecificUoMGroup", name: "Specific UoM Group" },
+                { value: "bruSingleUoMGrouponly", name: "Single UoM Group only" },
               ]}
               aliaslabel='name'
               aliasvalue='value'
               onChange={handleSelectChangeU}
-              value={data?.restrictedUoMType ?? 0} name="RestrictedUoMType" />
+              value={data?.restrictedUoMType ?? "bruNone"} name="RestrictedUoMType" />
 
           </div>
           <div>
@@ -205,17 +207,17 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
             </label>
             <MUISelect
               items={[
-                { value: 0, name: "None" },
-                { value: 1, name: "All transaction" },
-                { value: 2, name: "Inbount Transactions" },
-                { value: 3, name: "Outbound Transactions" },
-                { value: 4, name: "All Except Inventory Transfer and Counting Transactions" },
+                { value: "brtNoRestrictions", name: "None" },
+                { value: "brtAllTrans", name: "All transaction" },
+                { value: "2", name: "Inbount Transactions" },
+                { value: "3", name: "Outbound Transactions" },
+                { value: "brtAllExceptInventoryTrans", name: "All Except Inventory Transfer and Counting Transactions" },
               ]}
               aliaslabel='name'
               aliasvalue='value'
               onChange={handleSelectChangeT}
               name="RestrictedTransType"
-              value={data?.restrictedTransType ?? 0}
+              value={data?.restrictedTransType ?? "brtNoRestrictions"}
             />
           </div>
           <div>
