@@ -34,6 +34,7 @@ const BranchModal: FC<BranhModalProps> = ({ open, onClose}) => {
       {
         accessorKey: "Code",
         header: "Branch Code",
+        size:50
       },
       {
         accessorKey: "Name",
@@ -51,7 +52,7 @@ const BranchModal: FC<BranhModalProps> = ({ open, onClose}) => {
     <Modal
       open={open}
       onClose={onClose}
-      widthClass='w-[50rem]'
+      widthClass='w-[40rem]'
 
       title='List Of Projects'
       disableTitle={true}

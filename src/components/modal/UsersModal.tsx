@@ -32,10 +32,12 @@ const UsersModal: FC<UserModalProps> = ({ open, onClose }) => {
       {
         accessorKey: "UserCode",
         header: "User Code",
+
       },
       {
         accessorKey: "UserName",
         header: "User Name",
+ 
       },
     ],
     []
@@ -45,7 +47,7 @@ const UsersModal: FC<UserModalProps> = ({ open, onClose }) => {
     <Modal
       open={open}
       onClose={onClose}
-      widthClass='w-[50rem]'
+      widthClass='w-[40rem]'
       title='List Of Projects'
       disableTitle={true}
       disableFooter={true}
