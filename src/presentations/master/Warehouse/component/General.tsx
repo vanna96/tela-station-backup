@@ -3,7 +3,7 @@ import MUITextField from '@/components/input/MUITextField';
 import CitySelect from '@/components/selectbox/City';
 import CountrySelect from '@/components/selectbox/Country';
 import { Checkbox, SelectChangeEvent } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 export interface IGeneralProps {
   data: any,
   handlerChange: (key: string, value: any) => void
@@ -28,6 +28,7 @@ export default function General({ data, handlerChange, edit }: IGeneralProps) {
     handlerChange(key, value) 
 
   };
+  
   return (
     <FormCard title='General'>
       <div className="flex flex-col gap-2 py-3">
