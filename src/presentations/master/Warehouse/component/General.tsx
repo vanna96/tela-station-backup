@@ -65,6 +65,7 @@ export default function General({ data, handlerChange, edit }: IGeneralProps) {
               onChange={(e) => handlerChange('state', e.target.value)}
               name="State"
               country={bShow?.country}
+              key={data?.state}
             />
           </div>
           {/* <MUITextField label="State:" value={data?.state} onChange={(e) => handlerChange('state', e.target.value)} name="State" /> */}
@@ -83,7 +84,7 @@ export default function General({ data, handlerChange, edit }: IGeneralProps) {
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Country/Region</label>
             <CountrySelect
-              value={data?.country} onChange={handleSelectChangeB} name="Country"
+              value={data?.country} key={data?.country} onChange={handleSelectChangeB} name="Country"
             />
           </div>
           <MUITextField label="Federal Tax ID:" value={data?.federalTaxID} onChange={(e) => handlerChange('federalTaxID', e.target.value)} name="FederalTaxID" />

@@ -11,6 +11,7 @@ import { BsTag } from 'react-icons/bs';
 import DocumentNumberingRepository from '@/services/actions/DocumentNumberingRepository';
 import request from '@/utilies/request';
 import shortid from 'shortid';
+import { Checkbox } from '@mui/material';
 interface DocumentNumberingModalProps {
   open: boolean,
   onClose: () => void,
@@ -76,6 +77,17 @@ const DocumentSeriesModal: FC<DocumentNumberingModalProps> = (props) => {
       {
         accessorKey: 'PeriodIndicator',
         header: 'Period Ind.',
+      },
+      {
+        accessorKey: 'Loked',
+        header: 'Locked',
+        Cell: ({ cell }: any) => (
+          <span>
+            <Checkbox
+            disabled
+            />
+          </span>
+        ),
       },
     ],
     []

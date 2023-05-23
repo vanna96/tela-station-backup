@@ -8,6 +8,7 @@ import ItemGroupSelectSelect from '@/components/selectbox/ItemGroupselect';
 import ItemsModal from '@/components/modal/itemsModal';
 import UOMSelect from '@/components/selectbox/UnitofMeasurment';
 import Binlocation from '@/models/Binlocation';
+import Remark from '../../employee/components/Remark';
 export interface IGeneralFormProps {
   data: any,
   handlerChange: (key: string, value: any) => void,
@@ -92,7 +93,7 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
     const selectedValue1 = event.target.value as string;
 
     // ------------------------------------------------
-    setTShow(selectedValue === "brtAllTrans" || selectedValue === "brtNoRestrictions" || selectedValue === "2" || selectedValue === "brtAllExceptInventoryTrans");
+    setTShow(selectedValue === "3" ||selectedValue === "brtAllTrans" || selectedValue === "2" || selectedValue === "brtAllExceptInventoryTrans");
     setTShow1(selectedValue === "3");
 
     //-------------------------------------------------
@@ -221,7 +222,7 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
             />
           </div>
           <div>
-            <MUITextField label="Lastb Update On:" disabled={true} value={data?.c} name="" />
+            <MUITextField label="Last Update On:" disabled={true} value={data?.c} name="" />
           </div>
           <div className=' h-[55px]'>
             {show1 && (
@@ -286,11 +287,21 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
           <div>
             {Ushow1 && (
               <>
-                <MUITextField
+                {/* <MUITextField
                   label="UoM"
                   value={data?.field1 ?? ''}
                   onChange={(e) => handlerChange('field1', e.target.value)}
-                />
+                /> */}
+                <div className='flex flex-col gap-1 text-sm'>
+                  <label htmlFor='PayTermsGrpCode' className='text-gray-500 text-[14px]'>UoM</label>
+                  <div className=''>
+                    <UOMSelect
+                      value={data?.specificUoMGroup ?? ''}
+                      onChange={(e) => handlerChange('specificUoMGroup', e.target.value)}
+                      name="SpecificUoMGroup"
+                    />
+                  </div>
+                </div>
               </>
             )}
             {Ushow2 && (
@@ -341,6 +352,7 @@ export default function General({ data, handlerChange, edit, handleOpenItems }: 
                   value={data?.restrictionReason ?? ''}
                   onChange={(e) => handlerChange('restrictionReason', e.target.value)}
                 />
+     
               </div>
             )
             }
