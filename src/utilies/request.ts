@@ -26,6 +26,9 @@ axiosInstance.interceptors.response.use(
 
 
 const request = async (method: string, url: string, data?: any, responseType?: ResponseType, headers?: any) => {
+
+    return [];
+
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             try {

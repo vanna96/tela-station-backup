@@ -133,7 +133,7 @@ export default function AttachmentForm() {
                         enablePagination={false}
                         enableSorting={false}
                         enableBottomToolbar={false}
-                        enableTopToolbar={true}
+                        enableTopToolbar={false}
                         enableColumnResizing={true}
                         enableColumnFilterModes={false}
                         enableDensityToggle={false}
@@ -144,16 +144,6 @@ export default function AttachmentForm() {
                         initialState={{
                             columnVisibility: { FreeText: false, AttachmentDate: false },
                             density: "compact",
-                        }}
-                        renderTopToolbarCustomActions={({ table }) => {
-                            return <div className="flex gap-2 mb-6 pt-2 justify-center items-center">
-                                <div className="flex items-center justify-center w-full">
-                                    <label className="text-xs  border text-blue-500 rounded border-blue-500 p-1 px-2" role='button' onChange={handlerAttachment}>
-                                        <span>Add Attachment</span>
-                                        <input id="dropzone-file" type="file" className="hidden" multiple={true} accept="application/msword,application/vnd.ms-excel,application/vnd.ms-powerpoint,text/plain,application/pdf,image/*" />
-                                    </label>
-                                </div>
-                            </div>
                         }}
                     />
                 </div>

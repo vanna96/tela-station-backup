@@ -164,6 +164,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
                             handlerAddItem={() => this.handlerOpenItem()}
                             handlerRemoveItem={this.handlerRemoveItem}
                             handlerChangeItem={this.handlerChangeItems}
+                            onChange={this.handlerChangeItemByCode}
                         />
                     </div>
 

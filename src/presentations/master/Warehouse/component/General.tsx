@@ -12,8 +12,8 @@ export interface IGeneralProps {
 
 export default function General({ data, handlerChange, edit }: IGeneralProps) {
   const [bShow, setBShow] = React.useState<any>({});
-  
-  const handleSelectChangeB = (event:any) => {
+
+  const handleSelectChangeB = (event: any) => {
     const key = 'country';
     const value = event.target.value as string;
     // const selectedValue = event.target.value as string;
@@ -25,7 +25,7 @@ export default function General({ data, handlerChange, edit }: IGeneralProps) {
     }
     setBShow(emp);
     //-------------------------------------------------
-    handlerChange(key, value) 
+    handlerChange(key, value)
 
   };
   return (
@@ -58,12 +58,13 @@ export default function General({ data, handlerChange, edit }: IGeneralProps) {
           <MUITextField label="County:" value={data?.county} onChange={(e) => handlerChange('county', e.target.value)} name="County" />
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">State</label>
-            
+
             <CitySelect
               value={data?.state}
               onChange={(e) => handlerChange('state', e.target.value)}
               name="State"
               country={bShow?.country}
+              key={bShow?.country}
             />
           </div>
           {/* <MUITextField label="State:" value={data?.state} onChange={(e) => handlerChange('state', e.target.value)} name="State" /> */}

@@ -433,6 +433,9 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />
           }}
 
+          renderBottomToolbar={({ table }) => (
+            <div>adasd</div>
+          )}
         />
       </div>
 

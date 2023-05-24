@@ -174,6 +174,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.handlerChangeItems = this.handlerChangeItems.bind(this);
         this.handlerDeleteItem = this.handlerDeleteItem.bind(this);
         this.handlerChange = this.handlerChange.bind(this);
+        this.handlerChangeItemByCode = this.handlerChangeItemByCode.bind(this);
 
     }
 
@@ -507,5 +508,17 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         const index = items.findIndex((e: any) => e?.ItemCode === code);
         items.splice(index, 1)
         this.setState({ ...this.state, Items: items })
+    }
+
+    protected handlerChangeItemByCode(value: any) {
+        const items: any[] = [...this.state.Items ?? []];
+        const index = items.findIndex((e: any) => e?.ItemCode === value?.ItemCode);
+
+
+
+        if (index >= 0) {
+            items[index] = value;
+            this.setState({ ...this.state, Items: items });
+        }
     }
 }

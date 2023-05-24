@@ -9,7 +9,7 @@ export const useDocumentTotalHook = (items: any[]) => {
 
     const docTaxTotal: number = React.useMemo(() => {
         let total = items.reduce((prev: number, cur: any) => {
-            console.log(cur?.VatRate);
+
             return prev + ((parseFloat(cur?.VatRate ?? 0) * parseFloat(cur?.LineTotal ?? 1)) / 100);
         }, 0);
 

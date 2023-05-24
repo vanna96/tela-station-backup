@@ -25,10 +25,12 @@ interface MUITextFieldProps {
     required?: boolean,
     placeholder?: string,
     className?: string,
+    readonly?: boolean
+    endIcon?: React.ReactNode
 }
 
 
-function MUITextField({ error, label, name, size, onChange, onClick, value, defaultValue, onBlur, disabled, startAdornment, type, endAdornment = false, required = false, placeholder, className }: MUITextFieldProps) {
+function MUITextField({ error, label, name, size, onChange, onClick, value, defaultValue, onBlur, disabled, startAdornment, type, endAdornment = false, required = false, placeholder, className, readonly, endIcon }: MUITextFieldProps) {
 
     const { theme } = React.useContext(ThemeContext);
 
@@ -42,6 +44,7 @@ function MUITextField({ error, label, name, size, onChange, onClick, value, defa
                     <OutlinedInput
                         // {...props}
                         size={size}
+                        readOnly={readonly}
                         fullWidth
                         className={`w-full ${theme === 'light' ? '' : 'bg-slate-600 text-white'} text-field pr-0 ${disabled ? 'bg-gray-100' : ''} ${className ?? ''}`}
                         name={name}
@@ -53,16 +56,18 @@ function MUITextField({ error, label, name, size, onChange, onClick, value, defa
                         type={type}
                         placeholder={placeholder}
                         required={required}
-                        startAdornment={startAdornment ? <span className="text-[13px] px-2 pr-4 mr-3 bg-gray-100 overflow-hidden border-r ">{startAdornment}</span> : null}
-
+                        startAdornment={startAdornment ? <span className={`text-[13px] px-2 pr-4 mr-3 ${theme === 'light' ? 'bg-gray-100 text-black' : 'bg-slate-600 text-white'}  overflow-hidden border-r `}>{startAdornment}</span> : null}
+                        sx={{
+                            border: '1px solod red'
+                        }}
                         endAdornment={endAdornment ?
-                            <InputAdornment position="end" className="text-white">
+                            <InputAdornment position="end" className="">
                                 <IconButton
                                     // aria-label="toggle password visibility"
                                     // edge="end"
                                     onClick={onClick}
                                 >
-                                    <FiCopy className="text-lg text-white" />
+                                    {endIcon ? endIcon : <FiCopy className="text-lg text-white" />}
                                 </IconButton>
                             </InputAdornment>
                             : null
