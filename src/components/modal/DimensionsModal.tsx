@@ -36,13 +36,14 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
     () => [
       {
         accessorKey: "DimensionCode",
-        header: "Branch Code",
-        size: 20,
+        header: "Code",
+        size:25,
 
       },
       {
         accessorKey: "DimensionName",
-        header: "Branch Name",
+        header: "Name",
+        size:25
       },
       {
         accessorKey: "IsActive",
@@ -54,6 +55,7 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
             </span>
           </>
         ),
+        size:25
       },
       {
         accessorKey: "DimensionDescription",
@@ -67,7 +69,6 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
       widthClass='w-[50rem]'
-      heightClass='h-[27.5rem]'
       title='List Of Projects'
       disableTitle={true}
       disableFooter={true}

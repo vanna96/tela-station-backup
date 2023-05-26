@@ -35,7 +35,8 @@ class WarehouseForm extends Component<any, WareHouseType> {
       ...this.state,
       loading: true,
       showDialogMessage: false,
-      isSubmitting:false
+      isSubmitting: false,
+      
     }
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
