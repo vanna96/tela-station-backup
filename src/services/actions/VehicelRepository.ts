@@ -14,9 +14,18 @@ export default class VehicelRepository extends Repository<Vehicel> {
   urlPost: string = 'script/test/VEH00'
 
   async get<T>(query?: string): Promise<T[]> {
-    const response: any = await request('GET', this.url).then((res: any) => {
+    const response: any = await request('GET', this.url+query).then((res: any) => {
       const data = res?.data?.value?.map((e: any) => new Vehicel(e));
       return data;
+    }).catch((e: Error) => {
+      throw new Error(e.message);
+    });
+
+    return response;
+  }
+  async documentTotal<T>(query?: string): Promise<number> {
+    const response: any = await request('GET', this.url + '/$count' + query).then(async (res: any) => {
+      return res.data;
     }).catch((e: Error) => {
       throw new Error(e.message);
     });

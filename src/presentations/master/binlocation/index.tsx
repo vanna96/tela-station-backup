@@ -88,7 +88,7 @@ export default function BinlocationLists() {
     pageSize: 10,
   });
   const masterCount = useQuery({
-    queryKey: ['bl-count'], queryFn: () => new BinlocationRepository().documentTotal(`?$select=AbsEntry${filter}`),
+    queryKey: ['bl-count'], queryFn: () => new BinlocationRepository().documentTotal(`?$select=absEntry${filter}`),
     staleTime: Infinity
   })
 
