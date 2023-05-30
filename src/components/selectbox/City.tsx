@@ -18,9 +18,10 @@ interface CityProps<T = unknown> {
 
 function CitySelect(props: CityProps) {
   const { data, isLoading }: any = useQuery({ queryKey: ['city'], queryFn: () => new cityRepository().get(), staleTime: Infinity })
-  const items = useMemo(() =>
-    data?.filter((e: any) => e?.Country === props?.country)?.map((e: any) => ({ label: e?.Name + "(" + e?.Code + ")", value: e?.Code })),
-    [data, props?.country])
+  
+  const items = data?.filter((e: any) => e?.Country === props?.country)?.map((e: any) => ({ label: e?.Name + "(" + e?.Code + ")", value: e?.Code }))
+  
+  
   return <MUISelect
     {...props}
     items={items ?? []}
