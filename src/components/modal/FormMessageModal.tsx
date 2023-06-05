@@ -13,7 +13,7 @@ interface FormMessageModalProps {
 
 class FormMessageModal extends React.Component<FormMessageModalProps> {
     // Your component implementation...
-    state = { open: false, message: '', title: '', isError: false }
+    state = { open: false, message: '', title: '', isError: false, }
 
     handlerOpen() {
         console.log('worked')
@@ -28,11 +28,11 @@ class FormMessageModal extends React.Component<FormMessageModalProps> {
         })
     }
 
-    error(message: string) {
+    error(message: string, title?: string) {
         this.setState({
             open: true,
             isError: true,
-            title: 'Invalid',
+            title: title ?? 'Invalid',
             message: message,
         })
     }
@@ -67,7 +67,7 @@ class FormMessageModal extends React.Component<FormMessageModalProps> {
                                 <Dialog.Panel className={`w-[28rem] shadow-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle  transition-all`}>
                                     <Dialog.Title
                                         as="h3"
-                                        className={`w-full flex  items-center gap-2 text-lg font-medium leading-6 ${this.state.isError ? 'text-red-500' : 'text-green-500'}`}
+                                        className={`w-full flex  items-center gap-2 text-base font-medium leading-6 ${this.state.isError ? 'text-red-500' : 'text-green-500'}`}
                                     >
                                         {this.state.isError ? <BsExclamationCircle /> : <BsCheckCircle />} <span>{this.state.title}</span>
 
@@ -106,6 +106,7 @@ class FormMessageModal extends React.Component<FormMessageModalProps> {
 }
 
 export default FormMessageModal;
+
 
 
 

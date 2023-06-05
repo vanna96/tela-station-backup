@@ -25,9 +25,6 @@ interface VendorModalProps {
 const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
 
   const { theme } = React.useContext(ThemeContext);
-  const [search, setSearch] = React.useState('');
-
-
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
@@ -82,9 +79,8 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
       disableFooter={true}
     >
       <div className={`data-grid ${theme === 'light' ? '' : 'text-white'}`}>
-        <div className='w-full grid grid-cols-3 p-2'>
+        <div className='w-full flex justify-between items-center p-4 pt-6'>
           <h2 className='font-bold'>Business Partners</h2>
-          <div></div>
           <OutlinedInput
             size='small'
             onChange={handlerSearch}
@@ -101,14 +97,10 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
           enableStickyHeader={true}
           enableStickyFooter={true}
           enablePagination={true}
-          // enableTopToolbar={true}
           enableDensityToggle={false}
           initialState={{ density: "compact" }}
           onGlobalFilterChange={setGlobalFilter}
-
-          // enableRowSelection={true}
           onPaginationChange={setPagination}
-          // onRowSelectionChange={setRowSelection}
           enableColumnActions={false}
           getRowId={(row: any) => row.ItemCode}
           enableSelectAll={false}
@@ -116,14 +108,12 @@ const VendorModal: FC<VendorModalProps> = ({ open, onClose, onOk, type }) => {
           enableColumnVirtualization={false}
           enableMultiRowSelection={false}
           positionToolbarAlertBanner="none"
-
           muiTablePaginationProps={{
             rowsPerPageOptions: [5, 10, 15],
             showFirstButton: false,
             showLastButton: false,
           }}
           muiTableBodyRowProps={({ row }) => ({
-            // onClick: row.getToggleSelectedHandler(),
             onClick: () => {
               onOk(new BusinessPartner(row.original, 0));
             },

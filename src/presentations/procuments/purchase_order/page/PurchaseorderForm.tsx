@@ -13,6 +13,9 @@ import PurchaseOrder from "../model";
 
 
 class PurchaseOrderForm extends CoreFormDocument {
+  HeaderTaps(): JSX.Element {
+    throw new Error("Method not implemented.");
+  }
   constructor(props: any) {
     super(props);
     this.state = {

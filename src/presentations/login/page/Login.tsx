@@ -38,14 +38,15 @@ export default function Login() {
   const onSubmit = async () => {
     try {
       setLoading(true)
-      const auth = new AuthLogin('SBODemoAU', 'manager', 'manager');
+      const auth = new AuthLogin('TMCT', 'manager', 'Admin@123');
       const response: any = await request('POST', '/Login', auth.toJson());
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
       const user = await GetCurrentUserRepository.post();
-      setCookie("user", user, { maxAge: 2000 });
+      setCookie("user",user, { maxAge: 2000 });
       await fetchAllDate()
       navigate("/");
     } catch (e: any) {
+      console.log(e);
       setMessage(e?.message)
     } finally {
       setLoading(false)

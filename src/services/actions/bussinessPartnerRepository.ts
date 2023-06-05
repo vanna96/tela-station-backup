@@ -30,6 +30,8 @@ export default class BusinessPartnerRepository extends Repository<BusinessPartne
         "EmailAddress",
         "Phone1",
         "PriceListNum",
+        "DefaultCurrency",
+        "BPCurrenciesCollection",
     ];
 
     async get<BusinessPartner>(query?: string | undefined): Promise<BusinessPartner[]> {

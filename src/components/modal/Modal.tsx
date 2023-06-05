@@ -55,7 +55,6 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                             leave="ease-in duration-200"
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
-
                         >
                             <Dialog.Panel className={`${widthClass ?? 'max-w-md'} ${heightClass ?? ''}  ${pannelClass ?? ''} ${disableShadow ? '' : 'shadow-xl'} flex flex-col relative transform overflow-hidden rounded-lg ${theme === 'light' ? 'bg-white' : 'bg-slate-600'} py-1 px-5 text-left align-middle  transition-all`}>
                                 {!disableTitle ? <Dialog.Title
@@ -67,7 +66,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                                     {topToolAction}
                                 </Dialog.Title> : null}
 
-                                <div className={` grow text-inherit overflow-auto ${contentClass}`}>
+                                <div className={`grow text-inherit  ${contentClass ?? 'overflow-auto'} `}>
                                     {children}
                                 </div>
 

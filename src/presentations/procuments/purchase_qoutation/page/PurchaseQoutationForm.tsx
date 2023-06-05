@@ -1,6 +1,6 @@
 import CoreFormDocument from '@/components/core/CoreFormDocument';
 import PurchaseAgreement from '../../../../models/PurchaseAgreement';
-import GeneralForm from '../../purchase_agreement/components/GeneralForm';
+import GeneralForm from '../../purchase_agreement/components/LogisticForm';
 import HeadingForm from '../componnent/HeadingForm';
 import { withRouter } from '@/routes/withRouter';
 import ContentForm from '../componnent/Content';

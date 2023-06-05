@@ -59,3 +59,4 @@ export const agreementMethodLists = [
     { value: 'G', label: 'General' },
     { value: 'S', label: 'Specific' }
 ]
+

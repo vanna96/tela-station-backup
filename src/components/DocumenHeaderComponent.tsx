@@ -14,12 +14,12 @@ interface DocumentHeaderComponentProps {
     onLastPage?: () => void,
     onPreviousPage?: () => void,
     onNextPage?: () => void,
-    menuTabs: JSX.Element,
+    menuTabs: JSX.Element | React.ReactNode,
 }
 
 
 const DocumentHeaderComponent: React.FC<DocumentHeaderComponentProps> = (props: DocumentHeaderComponentProps) => {
-    const [collapse, setCollapse] = React.useState<boolean>(false);
+    const [collapse, setCollapse] = React.useState<boolean>(true);
     const [section, setSection] = React.useState<number>(0);
     const { theme } = React.useContext(ThemeContext);
 
@@ -49,7 +49,7 @@ const DocumentHeaderComponent: React.FC<DocumentHeaderComponentProps> = (props: 
     const handlerClickMenu = (value: number) => setSection(value);
 
 
-    return <div className={`w-full flex flex-col ${!collapse ? 'gap-3' : ''} justify-between items-center  sticky top-0 border-y ${theme === 'light' ? 'bg-white border-y-gray-200 shadow-sm' : 'bg-slate-700 border-y-gray-600 shadow-lg'} z-50 px-4  `} >
+    return <div className={`w-full flex flex-col rounded ${!collapse ? 'gap-3' : ''} justify-between items-center  sticky top-0 border-y ${theme === 'light' ? 'bg-white border-y-gray-200 shadow-lg' : 'bg-slate-700 border-y-gray-600 shadow-lg'} z-50 px-4  `} >
         <div className={`w-full flex justify-between px-6 ${!collapse ? 'border-b  py-2' : 'pt-2'} ${theme === 'light' ? 'border-b-gray-200' : 'border-b-gray-600'} z-50 px-0`}>
             <div className='flex gap-2 items-center'>
                 <h1 className='text-md font-bold capitalize'>{location.pathname.split('/')[2].replace('-', ' ')} - {props?.data?.DocNum}</h1>
@@ -61,17 +61,17 @@ const DocumentHeaderComponent: React.FC<DocumentHeaderComponentProps> = (props: 
         <div className={`w-full  grid grid-cols-2 gap-2 px-6 py-1  rounded ${!collapse ? '' : 'hidden'}`}>
             <div className="w-full text-[14px] flex gap-8">
                 <div className="flex flex-col gap-2">
-                    <span>Vendor</span>
+                    <span className="text-[#656565] text-[12px]">Vendor</span>
                     <span className="font-bold">{props?.data?.CardCode}</span>
                     <span className="font-bold">{props?.data?.CardName}</span>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <span>Total Payment Due</span>
+                    <span className="text-[#656565] text-[12px]">Total Payment Due</span>
                     <span className="font-bold">AUD {2000}</span>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <span>Status</span>
-                    <span className="font-bold text-green-500">Open</span>
+                    <span className="text-[#656565] text-[12px]">Status</span>
+                    <span className="font-bold text-green-500 uppercase">Open</span>
                 </div>
             </div>
         </div>
@@ -84,7 +84,7 @@ const DocumentHeaderComponent: React.FC<DocumentHeaderComponentProps> = (props: 
                 <div
                     title="btn-collapse"
                     role="button"
-                    className={`flex items-center justify-center w-8 h-8 rounded-md p-2 ${theme === 'light' ? 'bg-white border' : 'bg-slate-600'} `}
+                    className={`flex items-center justify-center w-8 h-8 shadow-md drop-shadow-sm rounded-md p-2 ${theme === 'light' ? 'bg-white border' : 'bg-slate-600'} `}
                     onClick={handlerCollapse}
                 >
                     {!collapse ? <IoIosArrowUp /> : <IoIosArrowDown />}

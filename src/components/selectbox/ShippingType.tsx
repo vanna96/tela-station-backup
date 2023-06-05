@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import InitializeData from "@/services/actions";
 import { SelectInputProps } from "@mui/material/Select/SelectInput";
 import ShippingTypeRepository from "@/services/actions/shippingTypeRepository";
+import { Label } from "@headlessui/react/dist/components/label/label";
 
 interface ShippingTypeProps<T = unknown> {
     name?: string,
@@ -11,6 +12,7 @@ interface ShippingTypeProps<T = unknown> {
     value?: any,
     onChange?: SelectInputProps<T>['onChange'],
     disabled?: boolean,
+    label?: string,
 }
 
 
@@ -29,6 +31,7 @@ function ShippingType(props: ShippingTypeProps) {
         aliasvalue="Code"
         loading={isLoading}
         items={data}
+        label={props.label}
     />
 }
 

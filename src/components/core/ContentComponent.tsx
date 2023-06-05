@@ -4,59 +4,87 @@ import { Button, Checkbox, IconButton, TextField } from "@mui/material";
 import { AiOutlineSetting } from "react-icons/ai";
 import { currencyFormat } from "@/utilies";
 import FormCard from "@/components/card/FormCard";
-import UnitOfMeasurementGroupRepository from "@/services/actions/unitOfMeasurementGroupRepository";
 import { TbSettings } from "react-icons/tb";
 import { ThemeContext } from "@/contexts";
 import Modal from "@/components/modal/Modal";
 import MUISelect from "@/components/selectbox/MUISelect";
 import { useDocumentTotalHook } from "@/hook";
-import shortid from "shortid";
 import { BiSearch } from "react-icons/bi";
 import MUITextField from "../input/MUITextField";
+import shortid from "shortid";
 
 interface ContentComponentProps {
-    data: any,
-    onChange: (record: any) => void,
-    columns: any[]
+    items: any[],
+    onChange: (key: any, value: any) => void,
+    columns: any[],
+    type?: String,
+    labelType?: String,
+    typeLists?: any[],
+    onRemoveChange: (record: any[]) => void,
 }
 
 
 export default function ContentComponent(props: ContentComponentProps) {
     const { theme } = React.useContext(ThemeContext);
-    const updateRef = React.createRef<ContentTableColumn>();
     const columnRef = React.createRef<ContentTableSelectColumn>();
-
+    const [discount, setDiscount] = React.useState(0);
 
     const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({});
     const blankItem = { ItemCode: '' };
-    const [rowSelection, setRowSelection] = React.useState({});
+    const [rowSelection, setRowSelection] = React.useState<any>({});
 
     const handlerRemove = () => {
-        let temps: any[] = [];
-        Object.values(rowSelection).forEach((e: any, index: number) => {
-            // if (e) temps.push(data?.Items[index]);
+        if (props.onRemoveChange === undefined) return;
+
+        let temps: any[] = [...props.items];
+        Object.keys(rowSelection).forEach((index: any) => {
+            const item = props.items[index];
+            const indexWhere = temps.findIndex((e) => e?.ItemCode === item?.ItemCode);
+
+            if (indexWhere >= 0)
+                temps.splice(indexWhere, 1);
         });
+        setRowSelection({});
+        props.onRemoveChange(temps);
     }
 
-    const [docTotal, docTaxTotal] = useDocumentTotalHook([]);
-
+    const [docTotal, docTaxTotal] = useDocumentTotalHook(props.items ?? [], discount);
 
     React.useEffect(() => {
         const cols: any = {};
         props.columns.forEach((e: any) => {
             cols[e?.accessorKey] = e?.visible;
         })
-        setColVisibility(cols);
+        setColVisibility({ ...cols, ...colVisibility });
     }, [props.columns])
 
+    const columns = useMemo(() => props.columns, [colVisibility]);
 
-    const columns = useMemo(() => props.columns, [colVisibility, updateRef])
+
+    const onChange = (key: string, value: any) => {
+        if (key === 'DocDiscount') {
+            setDiscount(value.target.value);
+        }
+        props.onChange(key, value?.target?.value);
+    }
+
+
+    const onCheckRow = (event: any, index: number) => {
+        const rowSelects: any = { ...rowSelection };
+        rowSelects[index] = true;
+
+        if (!event.target.checked) {
+            delete rowSelects[index];
+        }
+
+        setRowSelection(rowSelects);
+    }
 
     return (
         <FormCard
             title="Content"
             action={<div className="flex ">
-                <Button size="small"><span className="capitalize">Copy</span></Button>
+                <Button size="small"><span className="capitalize ">Copy</span></Button>
                 <Button size="small"><span className="capitalize">Paste</span></Button>
                 <Button size="small"><span className="capitalize" onClick={handlerRemove}>Remove</span></Button>
                 {/* <IconButton><TbCopy /></IconButton> */}
@@ -66,25 +94,61 @@ export default function ContentComponent(props: ContentComponentProps) {
         >
             <div className="col-span-2 grid grid-cols-3 md:grid-cols-1 gap-4 mt-4 ">
                 <div className="flex gap-4 items-start">
-                    <label htmlFor="currency" className="text-[13px] flex pt-1">Currency</label>
+                    <label htmlFor="currency" className="text-[13px] flex pt-1 text-[#656565]">Currency</label>
                     <MUISelect value="L" items={[{ value: 'L', name: 'Local Currency' }]} aliaslabel="name" aliasvalue="value" />
                 </div>
                 <div className="col-span-2 grid grid-cols-3 gap-3 text-[13px]">
-                    <label htmlFor="currency" className="col-span-2 md:col-span-1 flex items-center justify-end md:justify-start">Item / Service Type :</label>
+                    <label htmlFor="currency" className="col-span-2 md:col-span-1 flex items-center justify-end md:justify-start text-[#656565]">{props.labelType ?? 'Item / Service Type'} :</label>
                     <div className="md:col-span-2">
-                        <MUISelect value="I" items={[{ value: 'I', name: 'Items' }, { value: 'S', name: 'Services' }]} aliaslabel="name" aliasvalue="value" />
+                        <MUISelect
+                            value={props.type ?? 'I'}
+                            items={props.typeLists ?? [
+                                { value: 'I', name: 'Items' },
+                                { value: 'S', name: 'Services' }
+                            ]}
+                            aliaslabel="name"
+                            aliasvalue="value"
+                            onChange={(event) => onChange('DocType', event)}
+                        />
                     </div>
-                    <label htmlFor="currency" className="col-span-2 md:col-span-1 flex items-center justify-end md:justify-start">Price Mode :</label>
+                    <label htmlFor="currency" className="col-span-2 md:col-span-1 flex items-center justify-end md:justify-start text-[#656565]">Price Mode :</label>
                     <div className="md:col-span-2">
-                        <MUISelect value="G" disabled items={[{ value: 'G', name: 'Gross Price' }, { value: 'N', name: 'Net Price' }]} aliaslabel="name" aliasvalue="value" />
+                        <MUISelect
+                            value="G"
+                            disabled
+                            items={[
+                                { value: 'G', name: 'Gross Price' },
+                                { value: 'N', name: 'Net Price' }
+                            ]}
+                            aliaslabel="name"
+                            aliasvalue="value"
+                        />
                     </div>
                 </div>
             </div>
             <div className="col-span-2 data-table border-t">
                 <MaterialReactTable
-                    // columns={itemColumns}
-                    columns={columns}
-                    data={[...props.data?.Items, blankItem] ?? []}
+                    columns={[
+                        {
+                            accessorKey: 'id',
+                            size: 30,
+                            minSize: 30,
+                            maxSize: 30,
+                            enableResizing: false,
+                            Cell: (cell) => <Checkbox checked={cell.row.index in rowSelection} size="small" onChange={(event) => onCheckRow(event, cell.row.index)} />
+                        },
+                        // {
+                        //     accessorKey: 'row',
+                        //     header: 'No',
+                        //     minSize: 30,
+                        //     maxSize: 30,
+                        //     enableResizing: false,
+                        //     Cell: (cell) => <span className="w-full text-center">{cell.row.index + 1}</span>
+                        // },
+
+                        ...columns
+                    ]}
+                    data={[...props?.items, blankItem] ?? []}
                     enableStickyHeader={true}
                     enableColumnActions={false}
                     enableColumnFilters={false}
@@ -101,16 +165,17 @@ export default function ContentComponent(props: ContentComponentProps) {
                     enablePinning={true}
                     onColumnVisibilityChange={setColVisibility}
                     enableStickyFooter={false}
-                    enableRowSelection={true}
-                    onRowSelectionChange={setRowSelection}
-                    rowNumberMode="original" //default
-                    enableSelectAll={true}
-                    enableRowNumbers={true}
+                    // enableRowSelection={true}
+                    // onRowSelectionChange={setRowSelection}
+                    // rowNumberMode="original" //default
+                    // enableSelectAll={true}
+                    // enableRowNumbers={true}
                     enableMultiRowSelection={true}
                     initialState={{
                         density: "compact",
                         columnVisibility: colVisibility,
                         rowSelection,
+
                         // columnPinning: { left: ['Action', 'ItemCode'] }
                     }}
                     state={{
@@ -170,8 +235,8 @@ export default function ContentComponent(props: ContentComponentProps) {
                         <MUITextField placeholder="0.00" type="text" value={currencyFormat(docTotal)} readonly startAdornment={'AUD'} />
                         <span className="flex items-center pt-1">Discount</span>
                         <div className="grid grid-cols-2 gap-2">
-                            <MUITextField placeholder="0.00" type="number" startAdornment={'%'} />
-                            <span className="w-full text-[13px] flex items-center pt-1 justify-end">AUD 0.00</span>
+                            <MUITextField placeholder="0.00" type="number" startAdornment={'%'} onChange={(event) => onChange('DocDiscount', event)} />
+                            <span className="w-full text-[13px] flex items-center pt-1 justify-end">AUD {parseFloat(currencyFormat(docTotal - (docTotal * discount) / 100)).toFixed(2)}</span>
                         </div>
                         <span className="flex items-center pt-1">Freight</span>
                         <span className="text-right pt-1">AUD 0.00</span>
@@ -190,7 +255,6 @@ export default function ContentComponent(props: ContentComponentProps) {
                 </div>
             </div>
 
-            {/* <ContentTableColumn ref={updateRef} onSave={onChange} columns={itemColumns} /> */}
             <ContentTableSelectColumn ref={columnRef} columns={props.columns} visibles={colVisibility} onSave={(value) => {
                 setColVisibility(value)
             }} />
@@ -198,95 +262,6 @@ export default function ContentComponent(props: ContentComponentProps) {
     );
 }
 
-
-
-interface ContentTableColumnProps {
-    ref?: React.RefObject<ContentTableColumn | undefined>,
-    onSave?: (value: any) => void,
-    columns: any[],
-}
-
-class ContentTableColumn extends React.Component<ContentTableColumnProps, any>  {
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            open: false
-        } as any
-
-        this.onOpen = this.onOpen.bind(this);
-        this.onClose = this.onClose.bind(this);
-        this.onSave = this.onSave.bind(this);
-        this.handChange = this.handChange.bind(this);
-        this.handlerClick = this.handlerClick.bind(this);
-    }
-
-
-    onOpen(data?: any) {
-        this.setState({ open: true, ...data });
-    }
-
-    onClose() {
-        this.setState({ open: false })
-    }
-
-    onSave() {
-        if (this.props.onSave) {
-            const temps: any = { ...this.state };
-            delete temps.open;
-            this.props.onSave(temps);
-        }
-
-        this.setState({ open: false })
-    }
-
-
-    handChange(event: any, field: string, cal = false) {
-        const temps = { ...this.state };
-        temps[field] = event.target.value;
-
-        if (cal) {
-            temps['LineTotal'] = parseFloat(temps['Quantity'] ?? 0) * (parseFloat(temps['UnitPrice']) ?? 0);
-        }
-
-        this.setState({ ...temps });
-    }
-
-    private handlerClick(accessorKey: string) {
-        if (accessorKey === 'ItemCode') {
-
-        }
-    }
-
-
-    render() {
-        return (
-            <Modal
-                title={`Item - ${this.state?.ItemCode ?? ''}`}
-                titleClass="pt-3 px-4 font-bold w-full"
-                open={this.state.open}
-                widthClass="w-[80vw]"
-                heightClass="h-[90vh]"
-                onClose={this.onClose}
-                onOk={this.onSave}
-                okLabel="Save"
-            >
-                <>
-                    <div className="w-full"></div>
-                    <div className="grid grid-cols-4 md:grid-cols-1 gap-3 px-4">
-                        {this.props.columns.map((e) => <MUITextField
-                            key={shortid.generate()}
-                            label={e?.header}
-                            value={this.state[e?.accessorKey]}
-                            endAdornment={e?.accessorKey?.includes('ItemCode')}
-                            onClick={() => this.handlerClick(e?.accessorKey)}
-                        />)}
-                    </div>
-                </>
-            </Modal>
-        )
-    }
-}
 
 interface ContentTableSelectColumnProps {
     ref?: React.RefObject<ContentTableSelectColumn | undefined>,
@@ -315,11 +290,10 @@ class ContentTableSelectColumn extends React.Component<ContentTableSelectColumnP
 
 
     componentDidMount(): void {
-        this.setState({ ...this.state, visibles: { ...this.props.visibles } });
     }
 
     onOpen(data?: any) {
-        this.setState({ open: true, ...data });
+        this.setState({ open: true, visibles: { ...this.props.visibles } });
     }
 
     onClose() {
@@ -342,7 +316,6 @@ class ContentTableSelectColumn extends React.Component<ContentTableSelectColumnP
     handlerChangeColVisibility(event: any, field: string) {
         const visibles = { ...this.state.visibles };
         visibles[field] = event.target.checked;
-        console.log(visibles);
         this.setState({ ...this.state, visibles: { ...this.props.visibles, ...visibles } });
     }
 
@@ -350,7 +323,7 @@ class ContentTableSelectColumn extends React.Component<ContentTableSelectColumnP
         return (
             <Modal
                 title={`Columns Setting`}
-                titleClass="pt-3 px-2 font-bold w-full "
+                titleClass="pt-3 px-2 font-bold w-full"
                 open={this.state.open}
                 widthClass="w-[40rem]"
                 heightClass="h-[80vh]"
@@ -358,7 +331,7 @@ class ContentTableSelectColumn extends React.Component<ContentTableSelectColumnP
                 onOk={this.onSave}
                 okLabel="Save"
             >
-                <div className="px-3">
+                <div className="w-full h-full flex flex-col ">
                     <div className="flex justify-between sticky top-0 bg-white py-2 z-10 border-b">
                         <div className="flex">
                             <div> <Checkbox size="small" className="mt-2" defaultChecked={this.state.showChecks} onChange={(e) => this.setState({ ...this.state, showChecks: !this.state.showChecks })} /></div>
@@ -368,8 +341,8 @@ class ContentTableSelectColumn extends React.Component<ContentTableSelectColumnP
                             <MUITextField placeholder="Search Column..." onChange={this.handChange} endAdornment endIcon={<BiSearch className="text-sm" />} />
                         </div>
                     </div>
-                    <ul className=" h-full text-[14px] grid grid-cols-1 mt-3 ">
-                        {this.props.columns.filter((val) => val.header.toLowerCase().includes(this.state.searchColumn.toLowerCase())).map((e, index: number) => <li key={`${e?.accessorKey}`} className={`border-b`}>
+                    <ul className=" text-[14px] grid grid-cols-1 mt-3 ">
+                        {this.props.columns.filter((val) => val.header.toLowerCase().includes(this.state.searchColumn.toLowerCase())).map((e, index: number) => <li key={shortid.generate()} className={`border-b`}>
                             <Checkbox checked={this.state.visibles[e?.accessorKey] ?? false} onChange={(event) => this.handlerChangeColVisibility(event, e?.accessorKey)} size="small" />  <span>{e?.header} </span>
                         </li>)}
                     </ul>

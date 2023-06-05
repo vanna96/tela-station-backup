@@ -21,6 +21,7 @@ import ItemGroupRepository from '@/services/actions/itemGroupRepository';
 import { getUOMGroupByCode } from '@/helpers';
 import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import { useQuery } from 'react-query';
+import MenuButton from '@/components/button/MenuButton';
 
 
 class PurchaseAgreementDetail extends Component<any, any> {
@@ -56,8 +57,15 @@ class PurchaseAgreementDetail extends Component<any, any> {
 
     render() {
         return (
-            <div className='w-full h-full flex flex-col p-4 gap-4'>
-                <DocumentHeaderComponent data={this.state} />
+            <div className='w-full h-full flex flex-col  gap-4'>
+                <DocumentHeaderComponent data={this.state} menuTabs={[
+                    <>
+                        <MenuButton active={this.state.tapIndex === 0} onClick={() => { }}>General</MenuButton>
+                        <MenuButton active={this.state.tapIndex === 1} onClick={() => { }}>Logistic</MenuButton>
+                        <MenuButton active={this.state.tapIndex === 2} onClick={() => { }}>Content</MenuButton>
+                        <MenuButton active={this.state.tapIndex === 3} onClick={() => { }}>Attachment</MenuButton>
+                    </>
+                ]} />
 
                 <Modal open={this.state.isError} title='Oop' onClose={() => { }} onOk={() => console.log(this.props.history.goBack())}>
                     <span>
@@ -68,8 +76,8 @@ class PurchaseAgreementDetail extends Component<any, any> {
                 {this.state.loading ? <div className='grow flex justify-center items-center'>
                     <CircularProgress />
                 </div> :
-                    (<>
-                        <div className='grid grid-cols-2 sm:grid-cols-1 gap-2 w-full shadow-sm rounded-lg bg-white text-[12px] p-6'>
+                    (<div className='w-full h-full px-4 flex flex-col gap-2'>
+                        {/* <div className='grid grid-cols-2 sm:grid-cols-1 gap-2 w-full shadow-sm rounded-lg bg-white text-[12px] p-6'>
                             <div className='flex flex-col gap-1'>
                                 <div className='flex gap-2'>
                                     <span className='w-4/12 text-gray-500'>Vendor Code</span>
@@ -114,17 +122,18 @@ class PurchaseAgreementDetail extends Component<any, any> {
 
 
                             </div>
-                        </div>
-                        <div className='grow flex flex-col gap-3 p-6 shadow-sm rounded-lg bg-white'>
-                            <Taps
+                        </div> */}
+                        <div className='grow flex flex-col gap-3 p-6 rounded-lg shadow-lg border bg-white'>
+                            <General data={this.state} />
+                            {/* <Taps
                                 items={['General', 'Content', 'Attachment']}
                             >
                                 <General data={this.state} />
                                 <Content data={this.state} />
                                 <PreviewAttachment attachmentEntry={this.state.AttachmentEntry} />
-                            </Taps>
+                            </Taps> */}
                         </div>
-                    </>)
+                    </div>)
 
                 }
 

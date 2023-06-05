@@ -24,7 +24,7 @@ export default function SideBar(props: any) {
     const { theme } = useContext(ThemeContext);
 
     return (
-        <aside className={`${props?.collapse ? 'min-w-[18rem] 2xl:min-w-[14rem] xl:min-w-[13rem] p-2 px-4 xl:px-2' : 'w-[4rem] px-2'} border-r ${theme === 'light' ? 'bg-white text-[#a8a6a6]' : 'bg-slate-700 text-white border-r-gray-800'}  shadow-lg transition-min-width duration-300 flex flex-col   py-8 relative z-20`}>
+        <aside className={`${props?.collapse ? 'min-w-[18rem] 2xl:min-w-[14rem] xl:min-w-[13rem] p-2 px-4 xl:px-2' : 'w-[4rem] px-2'} border-r ${theme === 'light' ? 'bg-white text-[#a8a6a6]' : 'bg-slate-700 text-white border-r-gray-800'}  shadow-xl transition-min-width duration-300 flex flex-col   py-8 relative z-20`}>
             <h1 className='text-2xl 2xl:text-xl xl:text-lg font-bold uppercase text-center whitespace-nowrap overflow-hidden text-inherit  '>SAP</h1>
 
             {/* <div role='button' onClick={() => setCollapse(!collapse)} className={`p-[0.6rem] border ${theme === 'light' ? 'border-white' : 'border-gray-700'} rounded-full absolute bg-inherit shadow z-50 -right-[18px]`}><IoChevronForwardSharp className={`${collapse ? '' : 'rotate-180'} duration-300 `} /></div> */}

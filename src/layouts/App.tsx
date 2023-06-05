@@ -23,8 +23,9 @@ export default function App() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // if (!cookies.sessionId) return <Navigate to={"/login"} />
-    const [collapse, setCollapse] = React.useState(true)
+    if (!cookies.sessionId) return <Navigate to={"/login"} />
+
+    const [collapse, setCollapse] = React.useState(localStorage.getItem('menu_collapse') === 'true');
     const [loading, setLoading] = React.useState(false)
     const { theme, setTheme } = useContext(ThemeContext);
 
@@ -44,10 +45,19 @@ export default function App() {
 
     const signOut = () => {
         setLoading(true);
+        localStorage.clear();
+        sessionStorage.removeItem('REACT_QUERY_OFFLINE_CACHE');
         setTimeout(() => {
             setLoading(true);
-            navigate('/login')
+
+            navigate('/login');
         }, 800)
+    }
+
+    const collapseChange = () => {
+        const val = !collapse;
+        setCollapse(val);
+        localStorage.setItem('menu_collapse', val.toString());
     }
 
     return (
@@ -66,7 +76,7 @@ export default function App() {
                     <div className={`sticky z-50 top-0 px-2 pr-4 py-1 w-full shadow flex justify-between items-center ${theme === 'light' ? 'bg-white ' : 'bg-slate-700 '}`}>
                         <div>
                             <IconButton color="primary" aria-label="menu" component="label"
-                                onClick={() => setCollapse(!collapse)}
+                                onClick={collapseChange}
                             >
                                 <HiMenu />
                             </IconButton>

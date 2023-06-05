@@ -2,12 +2,6 @@ import React from "react";
 
 export type ThemContextProps = 'light' | 'dark';
 
-// export const ThemeContext = React.createContext('light');
-
-// const themeColor = (value: ThemContextProps) => {
-//     switch
-// }
-
 
 type ThemeContextProp = {
     theme: ThemContextProps;

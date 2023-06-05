@@ -2,12 +2,6 @@ hr {
   margin: 10px 0px;
 }
 
-/* .item-box {
-  width: calc(15rem - 2rem);
-  border: 0.2px solid rgba(212, 212, 212, 0.404);
-  padding: 20px;
-} */
-
 div.data-table .css-80pr5n-MuiPaper-root {
   padding: 0rem 1.5rem;
   border-radius: 0px;
@@ -139,6 +133,12 @@ div.text-field > label {
   padding-left: 0px;
 }
 
+.text-field > div > input {
+  /* padding: 0px 12px; */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 span.MuiLinearProgress-root {
   display: none;
 }
@@ -155,13 +155,13 @@ span.MuiLinearProgress-root {
   font-size: 15px;
 }
 
-.date-picker-error > div > div {
+/* .date-picker-error > div > div {
   border: 0.8px solid red;
-}
+} */
 
-.date-picker-error > div > div > div > button > svg {
+/* .date-picker-error > div > div > div > button > svg {
   color: rgba(212, 5, 5, 0.815);
-}
+} */
 
 .date-picker > div > div > div > button > svg {
   font-size: 20px;

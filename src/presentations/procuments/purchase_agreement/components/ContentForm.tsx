@@ -1,51 +1,33 @@
-import React, { useCallback } from "react";
-import { IoChevronForwardSharp } from "react-icons/io5";
-import MaterialReactTable from "material-react-table";
-import { Button, Checkbox, IconButton, TextField } from "@mui/material";
+import React from "react";
 import MUITextField from '../../../../components/input/MUITextField'
-import { AiOutlineDelete } from "react-icons/ai";
-import { AiOutlineSetting } from "react-icons/ai";
-import ShippingType from "@/components/selectbox/ShippingType";
 import { currencyFormat } from "@/utilies";
-import ItemModal from "@/components/modal/ItemModal";
-import FormCard from "@/components/card/FormCard";
-import Formular from "@/utilies/formular";
-import AccountTextField from '../../../../components/input/AccountTextField';
-import ProjectionTextField from "@/components/input/ProjectionTextField";
 import ItemGroupRepository from '../../../../services/actions/itemGroupRepository';
-import UnitOfMeasurementRepository from '../../../../services/actions/unitOfMeasurementRepository';
-import UOMTextField from "@/components/input/UOMTextField";
-import UnitOfMeasurementGroupRepository from "@/services/actions/unitOfMeasurementGroupRepository";
-import { getUOMGroupByCode } from "@/helpers";
 import MUIDatePicker from "@/components/input/MUIDatePicker";
-import { TbColumns, TbCopy, TbEdit, TbSettings } from "react-icons/tb";
-import { ThemeContext } from "@/contexts";
-import { MdDeleteOutline } from "react-icons/md";
-import Modal from "@/components/modal/Modal";
-import MUISelect from "@/components/selectbox/MUISelect";
-import { useDocumentTotalHook } from "@/hook";
-import shortid from "shortid";
-import { BiSearch } from "react-icons/bi";
+import { TbEdit } from "react-icons/tb";
 import ContentComponent from "@/components/core/ContentComponent";
+import { PurchaseAgreementItemModal } from "./PurchaseAgreementItemModal";
+import { PurchaseAgreementServiceModal } from "./PurchaseAgreementServiceModal";
+import { Alert, Collapse, IconButton } from "@mui/material";
+import { MdOutlineClose } from "react-icons/md";
 
 interface ContentFormProps {
     handlerAddItem: () => void,
     handlerChangeItem: (record: any) => void,
-    handlerRemoveItem: (record: string) => void,
+    handlerRemoveItem: (record: any[]) => void,
     data: any,
-    onChange: (record: any) => void
+    onChange: (key: any, value: any) => void,
+    onChangeItemByCode: (record: any) => void,
 }
 
-
-export default function ContentForm({ data, handlerChangeItem, handlerAddItem, handlerRemoveItem, onChange }: ContentFormProps) {
-    const [tableKey, setTableKey] = React.useState(Date.now())
-    const { theme } = React.useContext(ThemeContext);
-
-    const updateRef = React.createRef<ContentTableColumn>();
-    const columnRef = React.createRef<ContentTableSelectColumn>();
-
+export default function ContentForm({ data, handlerChangeItem, handlerAddItem, handlerRemoveItem, onChange, onChangeItemByCode }: ContentFormProps) {
+    const updateRef = React.createRef<PurchaseAgreementItemModal>();
+    const serviceModalRef = React.createRef<PurchaseAgreementServiceModal>();
     const itemGroupRepo = new ItemGroupRepository();
-    const uomGroupRepo = new UnitOfMeasurementGroupRepository();
+    const [collapseError, setCollapseError] = React.useState(false);
+
+    React.useEffect(() => {
+        setCollapseError('Items' in data?.error);
+    }, [data?.error])
 
     const handlerChangeInput = (event: any, row: any, field: any) => {
         if (data?.isApproved) return;
@@ -54,23 +36,17 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
         handlerChangeItem({ value: value, record: row, field })
     }
 
-    const handlerRemoveRow = (row: any) => {
-        if (data?.isApproved) return;
-        handlerRemoveItem(row.ItemCode);
-    }
 
     const itemColumns = React.useMemo(
         () => [
             {
                 accessorKey: "ItemCode",
+                Header: (header: any) => <label>Item No <span className="text-red-500">*</span></label>,
                 header: "Item No", //uses the default width from defaultColumn prop
                 visible: true,
                 Cell: ({ cell }: any) => {
-
-                    // if (Object.keys(cell.row.original).length === 1)
-                    //     return <div className={`${theme === 'light' ? '' : 'bg-slate-500'} rounded`}>
-                    //         <Button onClick={handlerAddItem} variant="text" className="w-full" size="small"><span className="capitalize">Add Row</span></Button>
-                    //     </div>;
+                    if (!cell.row.original?.ItemCode)
+                        return <div role="button" className="px-4 py-2 text-inherit rounded hover:bg-gray-200 border shadow-inner" onClick={handlerAddItem}>Add Row</div>
 
                     return <MUITextField
                         value={cell.getValue()}
@@ -95,7 +71,6 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 visible: true,
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
-
                     return cell.getValue();
                     // return <MUITextField readonly={true} disabled={data.disable['DocumentLine']} value={cell.getValue()} />;
                 }
@@ -109,6 +84,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
             {
                 accessorKey: "Quantity",
                 header: "Quantity",
+                Header: (header: any) => <label>Quantity <span className="text-red-500">*</span></label>,
                 size: 80,
                 visible: true,
                 Cell: ({ cell }: any) => {
@@ -129,6 +105,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "UnitPrice",
                 header: "Unit Price",
                 visible: true,
+                Header: (header: any) => <label>Unit Price <span className="text-red-500">*</span></label>,
                 size: 80,
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
@@ -266,53 +243,50 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
     const serviceColumns = React.useMemo(
         () => [
             {
-                accessorKey: "Action",
-                header: "",
-                size: 40,
-                pin: true,
-                enableResizing: false,
-                Cell: ({ cell }: any) => {
-                    return (
-                        <div role="button" className="flex justify-center items-center">
-                            <button
-                                type="button"
-                                className="border border-gray-200 p-1 rounded-sm"
-                                onClick={() => handlerRemoveRow(cell.row.original)}
-                            >
-                                <AiOutlineDelete />
-                            </button>
-                        </div>
-                    );
-                },
-            },
-            {
-                accessorKey: "PlannedAmountLC",
+                accessorKey: "UnitPrice",
                 header: "Planned Amount (LC)", //uses the default width from defaultColumn prop
+                visible: true,
+                Header: (header: any) => <label>Planned Amount (LC) <span className="text-red-500">*</span></label>,
                 Cell: ({ cell }: any) => {
+                    if (!cell.row.original?.ItemCode)
+                        return <div role="button" className="px-4 py-2 text-inherit rounded hover:bg-gray-200 border shadow-inner" onClick={handlerAddItem}>Add Row</div>
+
                     return <MUITextField
-                        defaultValue={cell.getValue() ? currencyFormat(cell.getValue()) : null}
+                        key={"unitPrice_" + cell.getValue()}
+                        defaultValue={currencyFormat(cell.getValue())}
                         startAdornment={'USD'}
-                        type="number"
+                        type="text"
                         disabled={data.disable['DocumentLine']}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'PlannedAmountLC')}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'LineTotal')}
+                        endAdornment
+                        onClick={() => serviceModalRef.current?.onOpen(cell.row.original)}
+                        endIcon={cell.getValue() === '' ? null : <TbEdit className="text-lg" />}
                     />;
                 },
             },
+
             {
-                accessorKey: "LineDiscount",
+                accessorKey: "Discount",
                 header: "Line Discount", //uses the default width from defaultColumn prop
+                visible: true,
                 Cell: ({ cell }: any) => {
+                    if (!cell.row.original?.ItemCode) return null;
+
                     return <MUITextField
+                        key={"discount_" + cell.getValue()}
                         defaultValue={cell.getValue()}
                         disabled={data.disable['DocumentLine']}
-                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'LineDiscount')}
+                        onBlur={(event) => handlerChangeInput(event, cell?.row?.original, 'Discount')}
                     />;
                 },
             },
             {
-                accessorKey: "OpenAmount",
+                accessorKey: "OpenAmountLC",
                 header: "Open Amount (LC)", //uses the default width from defaultColumn prop
+                visible: true,
                 Cell: ({ cell }: any) => {
+                    if (!cell.row.original?.ItemCode) return null;
+
                     return <MUITextField
                         startAdornment={'USD'}
                         value={cell.row?.original?.UnitPrice}
@@ -323,373 +297,75 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
             {
                 accessorKey: "FreeText",
                 header: "Free Text", //uses the default width from defaultColumn prop
+                visible: true,
                 Cell: ({ cell }: any) => {
+                    if (!cell.row.original?.ItemCode) return null;
+
                     return <MUITextField
-                        value={cell.getValue()}
+                        key={"freeText_" + cell.getValue()}
+                        defaultValue={cell.getValue()}
                         disabled={data.disable['DocumentLine']}
-                        onChange={(event: any) => handlerChangeInput(event, cell?.row?.original, 'ShppingType')}
+                        onBlur={(event: any) => handlerChangeInput(event, cell?.row?.original, 'FreeText')}
                     />;
                 },
             },
             {
                 accessorKey: "PortionOfReturns",
+                visible: false,
                 header: "Portion Of Returns %", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
+                    if (!cell.row.original?.ItemCode) return null;
+
                     return <MUITextField type="number" value={cell.getValue()} onChange={(value) => handlerChangeInput(value, cell?.row?.original, 'PortionOfReturns')} />;
                 },
             },
             {
                 accessorKey: "EndOfWarranty",
+                visible: false,
                 header: "End Of Warranty", //uses the default width from defaultColumn prop
                 Cell: ({ cell }: any) => {
+                    if (!cell.row.original?.ItemCode) return null;
                     return <MUIDatePicker value={cell.getValue() ?? null} onChange={(value) => handlerChangeInput(value, cell?.row?.original, 'EndOfWarranty')} />;
                 },
             },
         ],
-        []
+        [serviceModalRef]
     );
 
-    const [colVisibility, setColVisibility] = React.useState<Record<string, boolean>>({ Total: false, ItemsGroupName: false, UoMGroupName: false, });
-    const blankItem = { ItemCode: '' };
-    const [rowSelection, setRowSelection] = React.useState({});
 
-    const handlerRemove = () => {
-        let temps: any[] = [];
-        Object.values(rowSelection).forEach((e: any, index: number) => {
-            if (e) temps.push(data?.Items[index]);
-        });
-    }
+    const onUpdateByItem = (item: any) => onChangeItemByCode(item);
+    const onClose = React.useCallback(() => setCollapseError(false), []);
 
-    const [docTotal, docTaxTotal] = useDocumentTotalHook(data?.Items);
-
-    return <ContentComponent columns={itemColumns} data={data} onChange={(value) => { }} />
-
-    // return (
-    //     <FormCard
-    //         title="Content"
-    //         action={<div className="flex ">
-    //             <Button size="small"><span className="capitalize">Copy</span></Button>
-    //             <Button size="small"><span className="capitalize">Paste</span></Button>
-    //             <Button size="small"><span className="capitalize" onClick={handlerRemove}>Remove</span></Button>
-    //             {/* <IconButton><TbCopy /></IconButton> */}
-    //             {/* <IconButton><MdDeleteOutline /></IconButton> */}
-    //             <IconButton onClick={() => columnRef.current?.onOpen()}><TbSettings /></IconButton>
-    //         </div>}
-    //     >
-    //         <div className="col-span-2 grid grid-cols-3 md:grid-cols-1 gap-4 mt-4 ">
-    //             <div className="flex gap-4 items-start">
-    //                 <label htmlFor="currency" className="text-[13px] flex pt-1">Currency</label>
-    //                 <MUISelect value="L" items={[{ value: 'L', name: 'Local Currency' }]} aliaslabel="name" aliasvalue="value" />
-    //             </div>
-    //             <div className="col-span-2 grid grid-cols-3 gap-3 text-[13px]">
-    //                 <label htmlFor="currency" className="col-span-2 md:col-span-1 flex items-center justify-end md:justify-start">Item / Service Type :</label>
-    //                 <div className="md:col-span-2">
-    //                     <MUISelect value="I" items={[{ value: 'I', name: 'Items' }, { value: 'S', name: 'Services' }]} aliaslabel="name" aliasvalue="value" />
-    //                 </div>
-    //                 <label htmlFor="currency" className="col-span-2 md:col-span-1 flex items-center justify-end md:justify-start">Price Mode :</label>
-    //                 <div className="md:col-span-2">
-    //                     <MUISelect value="G" disabled items={[{ value: 'G', name: 'Gross Price' }, { value: 'N', name: 'Net Price' }]} aliaslabel="name" aliasvalue="value" />
-    //                 </div>
-    //             </div>
-    //         </div>
-    //         <div className="col-span-2 data-table border-t">
-    //             <MaterialReactTable
-    //                 key={tableKey}
-    //                 // columns={itemColumns}
-    //                 columns={data?.AgreementMethod === 'M' ? serviceColumns : itemColumns}
-    //                 data={[...data?.Items, blankItem] ?? []}
-    //                 enableStickyHeader={true}
-    //                 enableColumnActions={false}
-    //                 enableColumnFilters={false}
-    //                 enablePagination={false}
-    //                 enableSorting={false}
-    //                 enableTopToolbar={false}
-    //                 enableColumnResizing={true}
-    //                 enableColumnFilterModes={false}
-    //                 enableDensityToggle={false}
-    //                 enableFilters={false}
-    //                 enableFullScreenToggle={false}
-    //                 enableGlobalFilter={false}
-    //                 enableHiding={true}
-    //                 enablePinning={true}
-    //                 onColumnVisibilityChange={setColVisibility}
-    //                 enableStickyFooter={false}
-    //                 enableRowSelection={true}
-    //                 onRowSelectionChange={setRowSelection}
-    //                 rowNumberMode="original" //default
-    //                 enableSelectAll={true}
-    //                 enableRowNumbers={true}
-    //                 enableMultiRowSelection={true}
-    //                 initialState={{
-    //                     density: "compact",
-    //                     columnVisibility: colVisibility,
-    //                     rowSelection,
-    //                     // columnPinning: { left: ['Action', 'ItemCode'] }
-    //                 }}
-    //                 state={{
-    //                     columnVisibility: colVisibility,
-    //                     rowSelection,
-    //                 }}
-    //                 muiTableBodyRowProps={({ row }) => ({
-    //                     sx: { cursor: 'pointer' },
-    //                 })}
-    //                 icons={{
-    //                     ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />
-    //                 }}
-    //                 muiTableHeadCellProps={{
-    //                     sx: {
-    //                         backgroundColor: theme === 'light' ? '' : '#334155'
-    //                     }
-    //                 }}
-    //                 muiTableBodyCellProps={{
-    //                     sx: {
-    //                         backgroundColor: theme === 'light' ? '' : '#364455 !important',
-    //                     }
-    //                 }}
-    //                 muiTableContainerProps={{
-    //                     sx: {
-    //                         backgroundColor: theme === 'light' ? '' : '#334155'
-    //                     }
-    //                 }}
-    //                 muiTableBodyProps={{
-    //                     sx: {
-    //                         '& tr:nth-of-type(odd)': {
-    //                             backgroundColor: theme === 'light' ? '' : '#2C3847 !important',
-    //                         },
-    //                         ':hover': {
-    //                             backgroundColor: theme === 'light' ? '' : '#334155'
-    //                         }
-    //                     },
-    //                 }}
-    //                 muiBottomToolbarProps={
-    //                     {
-    //                         sx: {
-    //                             display: 'none',
-    //                             backgroundColor: theme === 'light' ? '' : '#334155 !important',
-    //                         }
-    //                     }
-    //                 }
-
-    //                 enableTableFooter={false}
-    //             />
-
-    //             <div className="w-full flex justify-between">
-    //                 <div className="text-right"></div>
-    //                 <div className="grid grid-cols-2 gap-1 text-[13px] w-[26rem] text-gray-600">
-    //                     <p className="text-lg text-gray-800 font-semibold">Total Summary</p>
-    //                     <span></span>
-    //                     <div className="col-span-2 my-1 border-b"></div>
-    //                     <span className="flex items-center pt-1">Total Before Discount { }</span>
-    //                     <MUITextField placeholder="0.00" type="text" value={currencyFormat(docTotal)} readonly startAdornment={'AUD'} />
-    //                     <span className="flex items-center pt-1">Discount</span>
-    //                     <div className="grid grid-cols-2 gap-2">
-    //                         <MUITextField placeholder="0.00" type="number" startAdornment={'%'} />
-    //                         <span className="w-full text-[13px] flex items-center pt-1 justify-end">AUD 0.00</span>
-    //                     </div>
-    //                     <span className="flex items-center pt-1">Freight</span>
-    //                     <span className="text-right pt-1">AUD 0.00</span>
-    //                     {/* <MUITextField placeholder="0.00" type="number" startAdornment={'AUD'} /> */}
-    //                     <span className="flex items-center pt-1">Rounding</span>
-    //                     <div className="grid grid-cols-2 gap-1">
-    //                         <div> <Checkbox size="small" /></div>
-    //                         <span className="flex items-center justify-end pt-1">AUD 0.00</span>
-    //                     </div>
-    //                     <span className="flex items-center pt-1">Tax</span>
-    //                     <MUITextField placeholder="0.00" type="text" value={currencyFormat(docTaxTotal)} startAdornment={'AUD'} readonly />
-    //                     <span className="flex items-center pt-1">Total Payment Due</span>
-    //                     <MUITextField placeholder="0.00" type="text" startAdornment={'AUD'} key={currencyFormat(docTotal + docTaxTotal)} defaultValue={currencyFormat(docTotal + docTaxTotal)} />
-
-    //                 </div>
-    //             </div>
-    //         </div>
-
-    //         <ContentTableColumn ref={updateRef} onSave={onChange} columns={itemColumns} />
-    //         <ContentTableSelectColumn ref={columnRef} columns={itemColumns} />
-    //     </FormCard>
-    // );
-}
-
-
-
-interface ContentTableColumnProps {
-    ref?: React.RefObject<ContentTableColumn | undefined>,
-    onSave?: (value: any) => void,
-    columns: any[],
-}
-
-class ContentTableColumn extends React.Component<ContentTableColumnProps, any>  {
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            open: false
-        } as any
-
-        this.onOpen = this.onOpen.bind(this);
-        this.onClose = this.onClose.bind(this);
-        this.onSave = this.onSave.bind(this);
-        this.handChange = this.handChange.bind(this);
-        this.handlerClick = this.handlerClick.bind(this);
-    }
-
-
-    onOpen(data?: any) {
-        this.setState({ open: true, ...data });
-    }
-
-    onClose() {
-        this.setState({ open: false })
-    }
-
-    onSave() {
-        if (this.props.onSave) {
-            const temps: any = { ...this.state };
-            delete temps.open;
-            this.props.onSave(temps);
-        }
-
-        this.setState({ open: false })
-    }
-
-
-    handChange(event: any, field: string, cal = false) {
-        const temps = { ...this.state };
-        temps[field] = event.target.value;
-
-        if (cal) {
-            temps['LineTotal'] = parseFloat(temps['Quantity'] ?? 0) * (parseFloat(temps['UnitPrice']) ?? 0);
-        }
-
-        this.setState({ ...temps });
-    }
-
-    private handlerClick(accessorKey: string) {
-        if (accessorKey === 'ItemCode') {
-
-        }
-    }
-
-
-    render() {
-        return (
-            <Modal
-                title={`Item - ${this.state?.ItemCode ?? ''}`}
-                titleClass="pt-3 px-4 font-bold w-full"
-                open={this.state.open}
-                widthClass="w-[80vw]"
-                heightClass="h-[90vh]"
-                onClose={this.onClose}
-                onOk={this.onSave}
-                okLabel="Save"
+    return <>
+        {/* {('Items' in data?.error && data?.Items?.length === 0) && <div className="p-2 px-4 text-sm w-full text-white bg-red-400 rounded mb-2"> Items is missing and must at least one record!</div>} */}
+        <Collapse in={collapseError}>
+            <Alert
+                className="mb-3"
+                severity="error"
+                action={
+                    <IconButton
+                        aria-label="close"
+                        color="inherit"
+                        size="small"
+                        onClick={onClose}
+                    >
+                        <MdOutlineClose fontSize="inherit" />
+                    </IconButton>
+                }
             >
-                <>
-                    <div className="w-full"></div>
-                    <div className="grid grid-cols-4 md:grid-cols-1 gap-3 px-4">
-                        {this.props.columns.map((e) => <MUITextField
-                            key={shortid.generate()}
-                            label={e?.header}
-                            value={this.state[e?.accessorKey]}
-                            endAdornment={e?.accessorKey?.includes('ItemCode')}
-                            onClick={() => this.handlerClick(e?.accessorKey)}
-                        />)}
-
-                        {/* <MUITextField label="Item Code" endAdornment defaultValue={this.state.ItemCode} />
-                        <MUITextField label="Item Description" defaultValue={this.state.ItemName} />
-                        <MUITextField label="Quantity" value={this.state.Quantity} onChange={(event) => this.handChange(event, 'Quantity', true)} />
-                        <MUITextField label="Unit Price" value={this.state.UnitPrice} onChange={(event) => this.handChange(event, 'UnitPrice', true)} />
-                        <MUITextField label="Price After Discount" value={this.state.LineTotal} />
-                        <MUITextField label="Tax Code" defaultValue={this.state.VatGroup} />
-                        <MUITextField label="Gross Price" defaultValue={this.state.UnitPrice} />
-                        <MUITextField label="Total" value={this.state.LineTotal} />
-                        <MUITextField label="Item Group" defaultValue={this.state.ItemGroup} />
-                        <MUITextField label="UOM Code" defaultValue={this.state.UomCode} />
-                        <MUITextField label="Item Per Unit" defaultValue={this.state.UnitsOfMeasurement} /> */}
-                    </div>
-                </>
-            </Modal>
-        )
-    }
+                {data?.error['Items']}
+            </Alert>
+        </Collapse>
+        <ContentComponent
+            columns={data?.DocType === 'amItem' ? itemColumns : serviceColumns}
+            items={data?.Items ?? []}
+            onChange={onChange}
+            labelType={'Agreement Method'}
+            type={data?.DocType ?? 'amItem'}
+            typeLists={[{ name: 'Item Method', value: 'amItem' }, { name: 'Monetary Method', value: 'amMonetary' }]}
+            onRemoveChange={handlerRemoveItem}
+        />
+        <PurchaseAgreementItemModal ref={updateRef} onSave={onUpdateByItem} columns={itemColumns} />
+        <PurchaseAgreementServiceModal ref={serviceModalRef} onSave={onUpdateByItem} />
+    </>
 }
-
-interface ContentTableSelectColumnProps {
-    ref?: React.RefObject<ContentTableSelectColumn | undefined>,
-    onSave?: (value: any) => void,
-    columns: any[],
-}
-
-class ContentTableSelectColumn extends React.Component<ContentTableSelectColumnProps, any>  {
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            open: false,
-            searchColumn: '',
-            showChecks: false,
-        } as any
-
-        this.onOpen = this.onOpen.bind(this);
-        this.onClose = this.onClose.bind(this);
-        this.onSave = this.onSave.bind(this);
-        this.handChange = this.handChange.bind(this);
-    }
-
-
-    componentDidMount(): void {
-    }
-
-    onOpen(data?: any) {
-        this.setState({ open: true, ...data });
-    }
-
-    onClose() {
-        this.setState({ open: false })
-    }
-
-    onSave() {
-        if (this.props.onSave) {
-            const temps: any = { ...this.state };
-            delete temps.open;
-            this.props.onSave(temps);
-        }
-
-        this.setState({ open: false })
-    }
-
-
-    handChange(event: any) {
-        this.setState({ ...this.state, searchColumn: event.target.value })
-    }
-
-    render() {
-        return (
-            <Modal
-                title={`Columns Setting`}
-                titleClass="pt-3 px-2 font-bold w-full "
-                open={this.state.open}
-                widthClass="w-[40rem]"
-                heightClass="h-[80vh]"
-                onClose={this.onClose}
-                onOk={this.onSave}
-                okLabel="Save"
-            >
-                <div className="px-3">
-                    <div className="flex justify-between sticky top-0 bg-white py-2 z-10 border-b">
-                        <div className="flex">
-                            <div> <Checkbox size="small" className="mt-2" defaultChecked={this.state.showChecks} onChange={(e) => this.setState({ ...this.state, showChecks: !this.state.showChecks })} /></div>
-                            <label htmlFor="showAll" className="flex items-center text-[13px]">Show Selected</label>
-                        </div>
-                        <div className="flex w-[15rem] items-center">
-                            <MUITextField placeholder="Search Column..." onChange={this.handChange} endAdornment endIcon={<BiSearch className="text-sm" />} />
-                        </div>
-                    </div>
-                    <ul className=" h-full text-[14px] grid grid-cols-1 mt-3 ">
-                        {this.props.columns.filter((val) => val.visible).filter((val) => val.header.toLowerCase().includes(this.state.searchColumn.toLowerCase())).map((e, index: number) => <li className={`border-b`}>
-                            <Checkbox defaultChecked={e?.visible} size="small" />  <span>{e?.header}</span>
-                        </li>)}
-                    </ul>
-                </div>
-            </Modal>
-        )
-    }
-}
-

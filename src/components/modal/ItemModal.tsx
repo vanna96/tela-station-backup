@@ -14,6 +14,8 @@ import ItemGroupRepository from '@/services/actions/itemGroupRepository';
 import UnitOfMeasurementRepository from '@/services/actions/unitOfMeasurementRepository';
 import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
+import MUITextField from '../input/MUITextField';
+import { BiSearch } from 'react-icons/bi';
 
 type ItemType = 'purchase' | 'sale' | 'inventory';
 
@@ -26,6 +28,7 @@ interface ItemModalProps {
 
 
 const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
+    const [globalFilter, setGlobalFilter] = React.useState('');
 
     const { data, isLoading }: any = useQuery({
         queryKey: ["items"],
@@ -41,7 +44,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
 
     const [pagination, setPagination] = React.useState({
         pageIndex: 0,
-        pageSize: 8,
+        pageSize: 10,
     });
     const [rowSelection, setRowSelection] = React.useState({});
 
@@ -146,61 +149,68 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 UnitsOfMeasurement: uomGroup?.UoMGroupDefinitionCollection.find((e: any) => e?.AlternateUoM === uomGroup?.BaseUoM)?.BaseQuantity,
             })
         });
-
-        console.log(selectItems)
         onOk(selectItems)
     }
 
+    const handlerSearch = (event: any) => setGlobalFilter(event.target.value);
 
     return (
         <Modal
             open={open}
+            titleClass='Items'
             onClose={onClose}
-            widthClass='w-[70%]'
+            widthClass='w-[70%] md:w-[90%]'
             heightClass='h-[85vh]'
-            title='Items'
+
             disableTitle={true}
             onOk={handlerConfirm}
-
         >
-            <div className="data-table text-inherit" >
-                <MaterialReactTable
-                    columns={columns}
-                    data={items ?? []}
-                    enableStickyHeader={true}
-                    enableStickyFooter={true}
-                    enablePagination={true}
-                    enableTopToolbar={true}
-                    enableDensityToggle={false}
-                    initialState={{ density: "compact" }}
-                    enableRowSelection={true}
-                    onPaginationChange={setPagination}
-                    onRowSelectionChange={setRowSelection}
-                    getRowId={(row: any) => row.ItemCode}
-                    enableSelectAll={true}
-                    enableFullScreenToggle={false}
-                    enableColumnVirtualization={false}
-                    positionToolbarAlertBanner="bottom"
-                    muiTablePaginationProps={{
-                        rowsPerPageOptions: [5, 8, 15],
-                        showFirstButton: false,
-                        showLastButton: false,
-                    }}
-                    muiTableBodyRowProps={({ row }) => ({
-                        onClick: row.getToggleSelectedHandler(),
-                        sx: { cursor: 'pointer' },
-                    })}
-                    state={
-                        {
-                            isLoading,
-                            pagination: pagination,
-                            rowSelection
+            <div className='w-full h-full flex flex-col gap-2'>
+                <div className='flex justify-between items-center py-4'>
+                    <div className='font-bold uppercase text-gray-400'>Items</div>
+                    <div className='flex items-center'>
+                        <MUITextField className='p-4' placeholder='Search' onChange={handlerSearch} endAdornment endIcon={<BiSearch className='text-base' />} />
+                    </div>
+                </div>
+                <div className=" data-table text-inherit grow overflow-auto border-t" >
+                    <MaterialReactTable
+                        columns={columns}
+                        data={items ?? []}
+                        enableStickyHeader={true}
+                        enableStickyFooter={true}
+                        enablePagination={true}
+                        enableTopToolbar={false}
+                        enableDensityToggle={false}
+                        initialState={{ density: "compact" }}
+                        enableRowSelection={true}
+                        onGlobalFilterChange={setGlobalFilter}
+                        onPaginationChange={setPagination}
+                        onRowSelectionChange={setRowSelection}
+                        enableHiding={false}
+                        getRowId={(row: any) => row.ItemCode}
+                        enableSelectAll={false}
+                        enableFullScreenToggle={false}
+                        enableColumnVirtualization={false}
+                        positionToolbarAlertBanner="none"
+                        muiTablePaginationProps={{
+                            rowsPerPageOptions: [10, 15, 20],
+                            showFirstButton: false,
+                            showLastButton: false,
+                        }}
+                        muiTableBodyRowProps={({ row }) => ({
+                            onClick: row.getToggleSelectedHandler(),
+                            sx: { cursor: 'pointer' },
+                        })}
+                        state={
+                            {
+                                globalFilter,
+                                isLoading,
+                                pagination: pagination,
+                                rowSelection
+                            }
                         }
-                    }
-                    renderTopToolbarCustomActions={({ table }) => {
-                        return <h2 className=" text-lg font-bold">Items</h2>
-                    }}
-                />
+                    />
+                </div>
             </div>
         </Modal>
     )

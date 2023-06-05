@@ -91,10 +91,10 @@ export interface CoreFormDocumentState {
     DocTaxTotal: number | any,
     Rounded: boolean,
     DocType: string,
-    AgreementMethod: string;
     Address: string | null;
     Address2: string | null;
-    disable: {},
+    disable: any,
+    error: any,
     tapIndex: number;
 }
 
@@ -159,11 +159,11 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             DocDiscountPrice: 0,
             Rounded: false,
             DocType: 'dDocument_Items',
-            AgreementMethod: 'I',
             Address: null,
             Address2: null,
             disable: {},
             tapIndex: 0,
+            error: {},
         }
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
@@ -181,6 +181,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
     abstract FormRender(): JSX.Element;
 
     abstract HeaderTaps(): JSX.Element;
+
 
     render() {
         return (
@@ -232,10 +233,9 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
     protected handlerConfirmItem(data: any[]) {
         let oldItems = [...this.state.Items ?? []];
-
         // Filter out items that already exist in the state
         const newItems = data.filter((newItem) => !oldItems.find((e) => e?.ItemCode === newItem.ItemCode));
-        this.setState({ ...this.state, isOpenItem: false, Items: [...oldItems, ...newItems] });
+        this.setState({ ...this.state, isOpenItem: false, error: {}, Items: [...oldItems, ...newItems] });
     }
 
     private handlerCloseItem() {
@@ -323,11 +323,14 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let DocDiscountPercent = this.state.DocDiscountPercent;
         let DocTotalBeforeDiscount = this.state.DocTotalBeforeDiscount;
 
+        if (key in this.state.error) {
+            temps['error'] = {};
+        }
+
         switch (key) {
             case 'Status':
                 temps['disable'] = { ...temps['disable'], TerminateDate: !(value === 'T') };
                 break;
-            case 'AgreementMethod':
             case 'DocType':
                 temps['Items'] = [];
                 break;
@@ -439,14 +442,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         let items: any[] = [...this.state.Items ?? []];
         let item: any = {};
 
-        if (this.state.AgreementMethod === 'M' && !record?.ItemCode) {
-            item['ItemCode'] = shortid.generate();
-            item[field] = value;
-            items.push(item);
-            this.setState({ ...this.state, Items: items });
-            return;
-        }
-
         if (this.state.DocType === documentType[1].value && !record?.ItemCode) {
             item['ItemCode'] = shortid.generate();
             item[field] = value;
@@ -491,12 +486,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
         if (field === 'Quantity' || field === 'UnitPrice' || field === 'DiscountPercent' || field?.includes('Vat') || field === 'LineTotal') {
             items[index]['LineTotal'] = Formular.findLineTotal(items[index]['Quantity'], items[index]['UnitPrice'], items[index]['DiscountPercent']);
-            // 
-            // DocTotalBeforeDiscount = items.reduce((prev, current) => prev + parseFloat(current.LineTotal), 0);
-            // let total = DocTotalBeforeDiscount - this.state.DocDiscountPrice;
-            // DocTaxTotal = items.reduce((prev, cur) => prev + (cur?.VatRate ?? 0), 0);
-            // DocTaxTotal = (total * DocTaxTotal / 100);
-            // DocTotal = total + DocTaxTotal;
         }
 
 
@@ -514,11 +503,9 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         const items: any[] = [...this.state.Items ?? []];
         const index = items.findIndex((e: any) => e?.ItemCode === value?.ItemCode);
 
-
-
         if (index >= 0) {
             items[index] = value;
-            this.setState({ ...this.state, Items: items });
+            this.setState({ ...this.state, error: {}, Items: items });
         }
     }
 }
