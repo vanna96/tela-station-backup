@@ -21,7 +21,7 @@ import Formular from '@/utilies/formular';
 import DocumentHeaderComponent from '../DocumenHeaderComponent';
 import shortid from 'shortid';
 import { documentType } from '@/constants';
-
+import PopCover from '../pop/Pop.jsx'
 const contextClass: any = {
     success: "bg-blue-600",
     error: "bg-red-600",
@@ -162,6 +162,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             Address: null,
             Address2: null,
         }
+console.log(this.state);
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
         this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
@@ -196,13 +197,9 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 </Modal>
 
                 <FormMessageModal ref={this.dialog} />
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                <PopCover
                     open={this.state.isSubmitting}
-                >
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-
+                />
                 <div className=' flex flex-col  w-full h-full p-4 relative'>
                     <DocumentHeaderComponent data={this.state} />
                     {/* <div className=" rounded-lg px-6 py-4 flex items-center justify-between sticky top-3 gap-3  border-b bg-white shadow-sm xl:text-sm font-bold z-20">
@@ -524,6 +521,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
 
         this.setState({ ...this.state, Items: items, DocTotalBeforeDiscount, DocTaxTotal, DocTotal })
     }
+
     protected handlerDeleteItem(code: string) {
         let items = [...this.state.Items ?? []];
         const index = items.findIndex((e: any) => e?.ItemCode === code);
@@ -531,3 +529,5 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.setState({ ...this.state, Items: items })
     }
 }
+
+

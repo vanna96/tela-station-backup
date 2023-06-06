@@ -152,6 +152,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
             </div>
           </div>
         </>}
+        
       </form>
     </>
   }

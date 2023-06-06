@@ -4,6 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import SideBar from './SideBar';
 import { useCookies } from 'react-cookie';
 import { ThemeContext, useThemeContext } from '@/contexts';
+import { CircularProgress } from '@mui/material';
 
 export default function App() {
     const [cookies] = useCookies(["sessionId"]);
@@ -15,7 +16,9 @@ export default function App() {
     return (
         <div className={`h-full w-full flex gap-0 transition-all duration-300 ${theme === 'light' ? '' : 'bg-slate-700 text-white'}`}>
             <SideBar />
-            <div className='grow ml-2 rounded-lg  overflow-auto'>
+
+            <div className='grow ml-2  rounded-lg relative  overflow-auto'>
+               
                 <Outlet />
             </div>
         </div>

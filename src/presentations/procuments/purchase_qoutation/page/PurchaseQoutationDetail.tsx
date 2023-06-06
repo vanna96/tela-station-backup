@@ -12,9 +12,6 @@ import { AttachmentLine } from '../../../../models/Attachment';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { CircularProgress } from '@mui/material';
-import BackButton from '@/components/button/BackButton';
-import PurchaseAgreementRepository from '../../../../services/actions/purchaseQoutationRepository';
-import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
 import PurchaseQoutation from '@/models/PurchaseQoutation';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
 import OwnerRepository from '@/services/actions/ownerRepository';
@@ -25,13 +22,7 @@ import BuyerRepository from '@/services/actions/buyerRepository';
 import BusinessPartnerRepository from '@/services/actions/bussinessPartnerRepository';
 import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
 import { getUOMGroupByCode } from '@/helpers';
-import { isItemType } from '@/constants';
 import moment from 'moment';
-import { useQuery } from 'react-query';
-import ChartOfAccount from '@/models/ChartOfAccount';
-import ChartOfAccountRepository from '@/services/actions/ChartOfaccountRepository';
-import shortid from 'shortid';
-import { log } from 'console';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -324,7 +315,7 @@ function Content(props: any) {
 
   return <div className="data-table  border-none p-0 mt-3">
     <MaterialReactTable
-      columns={data?.DocType === "I" ? itemColumn : serviceColumns}
+      columns={data?.DocType === "dDocument_Items" ? itemColumn : serviceColumns}
       data={data?.Items || []}
       enableHiding={true}
       initialState={{ density: "compact" }}
