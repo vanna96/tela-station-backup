@@ -10,10 +10,13 @@ import { BsClipboardData } from "react-icons/bs";
 import { AiOutlineSetting } from 'react-icons/ai';
 import { ThemeContext, useThemeContext } from '@/contexts';
 import { bgColor } from '@/assets';
+import { useToggleStateContext, useToggleStateContextUpdate } from '@/contexts/toggleStateContext';
 
 
 export default function SideBar(props: any) {
-    const [collapse, setCollapse] = useState(true)
+    // const [collapse, setCollapse] = useState(true)
+    const collapse = useToggleStateContext()
+    const setCollapse = useToggleStateContextUpdate()
     const navigate = useNavigate();
 
     const goTo = (route: string) => {
