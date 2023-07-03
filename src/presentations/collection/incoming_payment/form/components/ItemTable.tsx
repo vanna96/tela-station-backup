@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@mui/material";
 export const ItemTable = () => {
-  const { form, setForm, loading, bussinessPartner, Edit }: any =
+  const { form, setForm, loading, bussinessPartner, Edit, isFetching }: any =
     useContext(FormOrderContext);
 
   let amountDue = form?.paymentMeans?.reduce(
@@ -51,7 +51,7 @@ export const ItemTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loading ? (
+            {loading || isFetching ? (
               <TableRow>
                 <TableCell colSpan={10}>
                   <div className="text-center">
@@ -61,76 +61,24 @@ export const ItemTable = () => {
               </TableRow>
             ) : (
               form?.items?.map((row: any, index: number) => {
-                const exchangeRate = row?.DocRate === 0 ? 1 : row?.DocRate;
-                let amount = parseFloat(row?.DocTotal || 0);
-                
                 return (
                   <TableRow key={index}>
-                    {/* <TableCell>
-                      <Checkbox
-                        size="small"
-                        checked={row?.checked || false}
-                        inputProps={{ "aria-label": "controlled" }}
-                        onChange={() => {
-                          const items = form?.items
-                            ?.map((i: any) => {
-                              if (i.DocEntry !== row.DocEntry) return i;
-                              return {
-                                ...i,
-                                checked: !(row?.checked || false),
-                              };
-                            })
-                            ?.map((item: any) => {
-                              if (!item.checked || amountDue <= 0)
-                                return {
-                                  ...item,
-                                  TotalPayment: 0,
-                                };
-                              const isItemAUD = item?.DocCurrency === "AUD";
-                              const payment =
-                                parseFloat(item?.DocTotal) -
-                                (parseFloat(item?.DiscountPercent) / 100) *
-                                  parseFloat(item?.DocTotal);
-                              amountDue = amountDue - payment;
-                              if (amountDue >= 0)
-                                return {
-                                  ...item,
-                                  TotalPayment: isItemAUD
-                                    ? payment
-                                    : payment * (item?.DocRate || 0),
-                                };
-                              return {
-                                ...item,
-                                TotalPayment: isItemAUD
-                                  ? payment + amountDue
-                                  : (payment + amountDue) *
-                                    (item?.DocRate || 0),
-                              };
-                            });
-
-                          setForm({
-                            ...form,
-                            items,
-                          });
-                        }}
-                      />
-                    </TableCell> */}
                     <TableCell>{row.DocNum}</TableCell>
                     <TableCell>{row.DocDate?.split("T")[0]}</TableCell>
                     <TableCell>{row?.OverDueDays || 0}</TableCell>
                     <TableCell>
                       {row?.DocCurrency}{" "}
-                      {numberWithCommas((amount * exchangeRate).toFixed(2))}
+                      {numberWithCommas((row?.DocTotal || 0))}
                     </TableCell>
                     <TableCell>
-                      {row?.DocCurrency} {numberWithCommas(row?.BalanceDue)}
+                      {row?.DocCurrency} {numberWithCommas(row?.BalanceDue || 0)}
                     </TableCell>
                     <TableCell></TableCell>
                     <TableCell>
                       <input
                         type="number"
                         className="form-control h-[25px]"
-                        value={parseFloat(row?.DiscountPercent || 0).toFixed(2)}
+                        value={parseFloat(row?.DiscountPercent || 0)}
                         readOnly={Edit ? true : false}
                         onChange={(e: any) => {
                           const items = form?.items
@@ -154,9 +102,9 @@ export const ItemTable = () => {
                                 };
                               const isItemAUD = item?.DocCurrency === "AUD";
                               const payment =
-                                parseFloat(item?.DocTotal) -
+                                parseFloat(item?.BalanceDue) -
                                 (parseFloat(item?.DiscountPercent) / 100) *
-                                  parseFloat(item?.DocTotal);
+                                  parseFloat(item?.BalanceDue);
                               amountDue = amountDue - payment;
                               if (amountDue >= 0)
                                 return {
@@ -188,7 +136,7 @@ export const ItemTable = () => {
                         type="number"
                         className="form-control h-[25px]"
                         readOnly={Edit ? true : false}
-                        value={parseFloat(row?.TotalPayment).toFixed(2)}
+                        value={parseFloat(row?.TotalPayment)}
                         onChange={(e: any) => {
                           const rows = form?.items?.map((i: any) => {
                             if (i.DocEntry !== row.DocEntry) return i;

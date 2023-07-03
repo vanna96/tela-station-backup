@@ -1,4 +1,4 @@
-import { formatDate } from "@/helper/helper";
+import { formatDate, getLocalCacheData } from "@/helper/helper";
 import request from "@/utilies/request";
 import { createContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -50,6 +50,10 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
         discount: e.DiscountPercent,
         taxCode: e.VatGroup,
         uomCode: e.UoMCode,
+        uoMEntry: e.UoMEntry,
+        UoMGroupEntry: Item?.find(
+          ({ ItemCode }: any) => ItemCode === e.ItemCode
+        )?.UoMGroupEntry,
         rate: e.PriceAfterVAT,
         Code: e.AccountCode,
         description: e.ItemDescription,
@@ -58,6 +62,33 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
     }),
     documentLines: [],
     series_type: Edit?.Series || 5,
+  });
+
+  const { data: UnitOfMeasurementGroups } = useQuery({
+    queryKey: ["unit_measurement_groups"],
+    queryFn: async () => {
+      const res =
+        getLocalCacheData({ key: "UnitOfMeasurementGroups" }) ||
+        request(
+          "GET",
+          `/UnitOfMeasurementGroups?$select=Name,AbsEntry,Code,UoMGroupDefinitionCollection`
+        )
+          .then((res: any) => res?.data?.value)
+          .catch((error) => console.log(error));
+      return res;
+    },
+  });
+
+  const { data: UnitOfMeasurements } = useQuery({
+    queryKey: ["unit_of_measurement"],
+    queryFn: async () => {
+      const res =
+        getLocalCacheData({ key: "UnitOfMeasurements" }) ||
+        request("GET", `/UnitOfMeasurements`)
+          .then((res: any) => res?.data?.value)
+          .catch((error) => console.log(error));
+      return res;
+    },
   });
 
   const { data: documentNumber }: any = useQuery(
@@ -108,11 +139,13 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
   const { data: shippingType }: any = useQuery(
     ["shipping_type"],
     async () => {
-      const res = await request("GET", `/ShippingTypes?$orderby=Name`)
-        .then((res: any) => res?.data)
-        .catch((e) => {
-          throw new Error(e);
-        });
+      const res =
+        getLocalCacheData({ key: "shipping_types" }) ||
+        (await request("GET", `/ShippingTypes?$orderby=Name`)
+          .then((res: any) => res?.data)
+          .catch((e) => {
+            throw new Error(e);
+          }));
 
       return res;
     },
@@ -132,9 +165,11 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
   const { data: PaymentTermsTypes } = useQuery({
     queryKey: "payment_terms_types",
     queryFn: async () => {
-      const res = request("GET", "/PaymentTermsTypes")
-        .then((res: any) => res?.data?.value)
-        .catch((error) => console.log(error));
+      const res =
+        getLocalCacheData({ key: "paymentTermTypes" }) ||
+        request("GET", "/PaymentTermsTypes")
+          .then((res: any) => res?.data?.value)
+          .catch((error) => console.log(error));
       return res;
     },
   });
@@ -177,12 +212,14 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
   const { data: TaxCode } = useQuery({
     queryKey: ["tax_code"],
     queryFn: async () => {
-      const res = request(
-        "GET",
-        `/VatGroups?$select=Category,Inactive , Name, Code, EU, VatGroups_Lines &$filter=Category eq 'bovcOutputTax' and Inactive eq 'tNO' &$orderby=Name asc`
-      )
-        .then((res: any) => res?.data?.value)
-        .catch((error) => console.log(error));
+      const res =
+        getLocalCacheData({ key: "vatGroup" }) ||
+        request(
+          "GET",
+          `/VatGroups?$select=Category,Inactive , Name, Code, EU, VatGroups_Lines &$filter=Category eq 'bovcOutputTax' and Inactive eq 'tNO' &$orderby=Name asc`
+        )
+          .then((res: any) => res?.data?.value)
+          .catch((error) => console.log(error));
       return res;
     },
     enabled: form?.cardCode ? true : false,
@@ -267,6 +304,8 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
           Item,
           ContentService,
           Edit,
+          UnitOfMeasurementGroups,
+          UnitOfMeasurements,
         }}
       >
         {children}

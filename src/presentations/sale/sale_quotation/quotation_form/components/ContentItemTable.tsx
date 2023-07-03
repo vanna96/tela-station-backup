@@ -16,8 +16,13 @@ export const ContentItemTable = ({
   contentType,
   Edit,
 }: ContentItemTableProps) => {
-  const { formContent, setFormContent, TaxCode }: any =
-    useContext(ContactContext);
+  const {
+    formContent,
+    setFormContent,
+    TaxCode,
+    UnitOfMeasurementGroups,
+    UnitOfMeasurements,
+  }: any = useContext(ContactContext);
   const { formGeneral }: any = useContext(GeneralContact);
   const [open, setOpen] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -241,12 +246,37 @@ export const ContentItemTable = ({
                   })}
                 </td>
                 <td className="px-2">
-                  {inputFormControl({
-                    className: "2xl:w-[100px]",
-                    value: res.uomCode,
-                    onChange: (e: any) =>
-                      handleUpdateRow(index, res, { uomCode: e.target.value }),
-                  })}
+                  <Select
+                    className="form-control h-[25px] w-full"
+                    onChange={(e) => {
+                      const uomCode = UnitOfMeasurements?.find(
+                        ({ AbsEntry }: any) => AbsEntry === e.target.value
+                      )?.Code;
+                      handleUpdateRow(index, res, {
+                        uomCode: uomCode,
+                        uoMEntry: e.target.value,
+                      });
+                    }}
+                    value={res?.uoMEntry || res?.UoMGroupEntry}
+                    sx={{ border: "0px solid black", padding: 0 }}
+                  >
+                    {UnitOfMeasurementGroups?.find(
+                      ({ AbsEntry }: any) => AbsEntry === res?.UoMGroupEntry
+                    )?.UoMGroupDefinitionCollection?.map(
+                      (i: any, index: number) => {
+                        return (
+                          <MenuItem key={index} value={i?.AlternateUoM}>
+                            {
+                              UnitOfMeasurements?.find(
+                                ({ AbsEntry }: any) =>
+                                  AbsEntry === i?.AlternateUoM
+                              )?.Name
+                            }
+                          </MenuItem>
+                        );
+                      }
+                    )}
+                  </Select>
                 </td>
               </tr>
             );

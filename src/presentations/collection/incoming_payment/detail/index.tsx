@@ -136,52 +136,17 @@ export default function Detail() {
   const { data: customerInvoice } = useQuery({
     queryKey: ["customer_invoice", data?.CardCode],
     queryFn: async () => {
+      const userType =
+        (data?.DocType?.replace("r", "") || "Customer") === "Supplier"
+          ? `Biz_InComingPayTest_A_P_B1SLQuery`
+          : `Biz_InComingPayTest_A_R_B1SLQuery`;
       const invoices = await request(
         "GET",
-        `Invoices?$filter=CardCode eq '${data?.CardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
+        `view.svc/${userType}?$filter=BPCode eq '${data?.CardCode}' or CardParent eq '${data?.CardCode}'`
       )
-        .then((res: any) =>
-          res?.data?.value.map((invoice: any) => {
-            return {
-              ...invoice,
-              documentType: "IN",
-              invoiceType: "it_Invoice",
-            };
-          })
-        )
+        .then((res: any) => res?.data?.value)
         .catch((err: any) => console.log(err));
-
-      const creditMemos = await request(
-        "GET",
-        `CreditNotes?$filter=CardCode eq '${data?.CardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
-      )
-        .then((res: any) =>
-          res?.data?.value?.map((memo: any) => {
-            return {
-              ...memo,
-              documentType: "CN",
-              invoiceType: "it_CredItnote",
-            };
-          })
-        )
-        .catch((err: any) => console.log(err));
-
-      const downPayments = await request(
-        "GET",
-        `DownPayments?$filter=CardCode eq '${data?.CardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
-      )
-        .then((res: any) =>
-          res?.data?.value?.map((payment: any) => {
-            return {
-              ...payment,
-              documentType: "DT",
-              invoiceType: "it_DownPayment",
-            };
-          })
-        )
-        .catch((err: any) => console.log(err));
-
-      return [...invoices, ...creditMemos, ...downPayments];
+      return invoices;
     },
     enabled: data ? true : false,
   });

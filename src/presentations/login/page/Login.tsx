@@ -30,6 +30,8 @@ import MUITextField from '@/components/input/MUITextField';
 import sapLog from '../../../assets/sap_logo.png'
 import { Collapse } from '@mui/material';
 import { BASE_BG_COLOR } from '@/configs';
+import ChartOfAccountsRepository from '@/services/actions/ChartOfAccountsRepository';
+import ProjectRepository from '@/services/actions/projectRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'user']);
@@ -90,10 +92,15 @@ export default function Login() {
       await new WarehouseRepository().get(),
       await new DistributionRuleRepository().get(),
       await new PriceListRepository().get(),
-      await new UsersRepository().get(),
+      // await new UsersRepository().get(),
       await new DistributionRuleRepository().get,
       await new CustomsGroupRepository().get(),
-      await new ManufacturerRepository().get()
+      await new ManufacturerRepository().get(),
+
+      // vanna new modified
+      await new ChartOfAccountsRepository().get(),
+      await new ProjectRepository().get()
+      
     ]);
   }
 

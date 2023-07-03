@@ -406,6 +406,7 @@ const getItem = (items: any) =>
       DiscountPercent: item.discount,
       VatGroup: item.SalesVATGroup || item.taxCode || null,
       UoMCode: item.uomCode || null,
+      UoMEntry: item.uoMEntry || null,
       AccountCode: item.Code || null,
     };
   });
