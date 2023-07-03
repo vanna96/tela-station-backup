@@ -90,10 +90,11 @@ export const TotalPayment = ({ Edit }: TotalPaymentProps) => {
         DiscountPercent: item.discount,
         VatGroup: item.SalesVATGroup || item.taxCode || null,
         UoMCode: item.uomCode || null,
+        UoMEntry: item.uoMEntry || null,
         AccountCode: item.Code || null,
       };
     });
-
+    
     if (saving) return;
 
     if (!DocumentLines) {

@@ -101,56 +101,39 @@ export const ContentsTab = ({ data, customerInvoice }: ContentsTabProps) => {
 
           <tbody>
             {data?.PaymentInvoices?.map((e: any, index: number) => {
-              const existInvoice = customerInvoice?.find(
-                ({ DocEntry, DocumentStatus }: any) =>
-                  DocEntry === e.DocEntry && DocumentStatus === "bost_Open"
+              const find = customerInvoice?.find(
+                ({ DocEntry }: any) => DocEntry === e.DocEntry
               );
-
-              const ClosedInvoice = customerInvoice?.find(
-                ({ DocEntry, DocumentStatus }: any) =>
-                  DocEntry === e.DocEntry && DocumentStatus === "bost_Close"
-              );
-
-              const exchangeRate = e?.DocRate === 0 ? 1 : e?.DocRate;
-
-              const currency =
-                existInvoice?.DocCurrency ||
-                ClosedInvoice?.DocCurrency ||
-                e?.DocCurrency;
-
+              const currency = find?.DocCurrency || e?.DocCurrency;
               return (
                 <tr key={shortid.generate()} className="text-sm border">
                   <td className="p-2">{index + 1}</td>
-                  <td className="p-2">
-                    {existInvoice?.DocNum || ClosedInvoice?.DocNum || e?.DocNum}
-                  </td>
+                  <td className="p-2">{find?.DocumentNo || e?.DocNum}</td>
                   <td className="p-2">{data?.DocDate?.split("T")[0]}</td>
                   <td className="p-2">
                     {currency}{" "}
                     {numberWithCommas(
-                      (
-                        (existInvoice?.DocTotal ||
-                          ClosedInvoice?.DocTotal ||
-                          0) * exchangeRate
-                      ).toFixed(2)
+                      (find?.DocTotalFC || find?.DocTotal || 0).toFixed(2)
                     )}
                   </td>
                   <td className="p-2">
                     {currency}{" "}
                     {numberWithCommas(
-                      (
-                        (parseFloat(
-                          existInvoice?.DocTotal || ClosedInvoice?.DocTotal || 0
-                        ) - existInvoice?.PaidToDate || 0) * exchangeRate
+                      parseFloat(
+                        find?.DocBalance || find?.BalanceDue || 0
                       ).toFixed(2)
                     )}
                   </td>
-                  <td className="p-2">{e?.DiscountPercent || 0}</td>
                   <td className="p-2"></td>
+                  <td className="p-2">{e?.DiscountPercent || 0}</td>
                   <td className="p-2">
-                    {numberWithCommas(
-                      (e?.AppliedFC || e?.AppliedSys).toFixed(2)
-                    )}
+                    {find?.DocTotal < 0
+                      ? -numberWithCommas(
+                          (e?.AppliedFC || e?.AppliedSys).toFixed(2)
+                        )
+                      : numberWithCommas(
+                          (e?.AppliedFC || e?.AppliedSys).toFixed(2)
+                        )}
                   </td>
                 </tr>
               );

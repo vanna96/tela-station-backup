@@ -20,10 +20,11 @@ export default function General() {
     Projects,
     bussinessPartner,
     Vendor,
+    currency,
   }: any = useContext(FormOrderContext);
   const type = form?.useType || "Customer";
 
-  const data = (type === "Vendor" ? Vendor : customers)?.value?.map(
+  const data = (type === "Supplier" ? Vendor : customers)?.value?.map(
     (option: any) => {
       return {
         value: option.CardCode,
@@ -173,9 +174,15 @@ export default function General() {
                   readOnly={Edit ? true : false}
                   className="form-control h-[25px]"
                   onChange={(e: any) => {
+                    const rate =
+                      currency?.find(
+                        ({ Currency }: any) => Currency === e.target.value
+                      )?.Rate || 0;
+
                     setForm({
                       ...form,
                       paymenyMeansCurrency: e.target.value,
+                      paymenyMeansExchangeRate: rate,
                     });
                   }}
                   value={
@@ -226,9 +233,15 @@ export default function General() {
                     readOnly={Edit ? true : false}
                     className="form-control h-[25px]"
                     onChange={(e: any) => {
+                      const rate =
+                        currency?.find(
+                          ({ Currency }: any) => Currency === e.target.value
+                        )?.Rate || 0;
+
                       setForm({
                         ...form,
                         paymenyMeansCurrency: e.target.value,
+                        paymenyMeansExchangeRate: rate,
                       });
                     }}
                     value={
@@ -311,9 +324,9 @@ export default function General() {
                 disabled={Edit || false}
               />
               <FormControlLabel
-                value="Vendor"
+                value="Supplier"
                 control={<Radio />}
-                label="Vendor"
+                label="Supplier"
                 disabled={Edit || false}
               />
               <FormControlLabel

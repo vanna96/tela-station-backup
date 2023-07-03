@@ -51,6 +51,7 @@ export const ModalPaymentMeans = ({ openModal, setOpenModal }: any) => {
     "AUD";
 
   const handleClickOk = () => {
+    if (Edit) return setOpenModal(false);
     const isAUD = currency === "AUD";
     let totalAmountDue = amountMeansRefs?.reduce(
       (accumulator: any, object: any) => {
@@ -69,39 +70,34 @@ export const ModalPaymentMeans = ({ openModal, setOpenModal }: any) => {
       totalAmountDue =
         totalAmountDue / parseFloat(form?.paymenyMeansExchangeRate || 0) || 0;
 
-    const items = form?.items?.map((item: any) => {
+    const items = form?.items.map((item: any) => {
       const isItemAUD = item?.DocCurrency === "AUD";
-      const payment =
-        parseFloat(item?.DocTotal) -
-        (parseFloat(item?.DiscountPercent) / 100) * parseFloat(item?.DocTotal) -
-        parseFloat(item?.PaidToDate || 0);
-
-      // !item.checked ||
-      if (totalAmountDue <= 0 || item?.documentType === "CN") {
-        const isCN = item?.documentType === "CN";
-        // if (isCN) totalAmountDue += item?.TotalPayment;
+      if (item?.DocBalance < 0 || totalAmountDue <= 0)
         return {
           ...item,
-          TotalPayment: isCN ? item?.TotalPayment : 0,
+          TotalPayment: 0,
         };
-      }
+
+      const payment =
+        parseFloat(item?.DocBalance) -
+        (parseFloat(item?.DiscountPercent) / 100) *
+          parseFloat(item?.DocBalance);
 
       totalAmountDue = totalAmountDue - payment;
-
       if (totalAmountDue >= 0)
         return {
           ...item,
-          TotalPayment: isItemAUD ? payment : payment * (item?.DocRate || 0),
+          TotalPayment: isItemAUD ? (payment).toFixed(2) : (payment * (item?.DocRate || 0)).toFixed(2),
         };
 
       return {
         ...item,
         TotalPayment: isItemAUD
-          ? payment + totalAmountDue
-          : (payment + totalAmountDue) * (item?.DocRate || 0),
+          ? (payment + totalAmountDue).toFixed(2)
+          : ((payment + totalAmountDue) * (item?.DocRate || 0)).toFixed(2),
       };
     });
-    
+
     setForm({ ...form, paymentMeans: amountMeansRefs, items });
     setOpenModal(false);
   };
@@ -223,13 +219,13 @@ export const ModalPaymentMeans = ({ openModal, setOpenModal }: any) => {
                   <b>Total Paid ({currency})</b>
                   <input
                     readOnly
-                    value={amountMeansRefs
-                      ?.reduce(
+                    value={(
+                      amountMeansRefs?.reduce(
                         (accumulator: any, object: any) =>
                           accumulator + parseFloat(object.amount),
                         0
-                      )
-                      .toFixed(2)}
+                      ) || 0
+                    ).toFixed(2)}
                     className="form-control h-[25px] mb-4"
                   />
                 </div>

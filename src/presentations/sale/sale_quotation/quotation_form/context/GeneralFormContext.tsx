@@ -1,4 +1,4 @@
-import { formatDate } from "@/helper/helper";
+import { formatDate, getLocalCacheData } from "@/helper/helper";
 import request from "@/utilies/request";
 import { createContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -84,7 +84,7 @@ export const GeneralProvider = ({ children, Edit }: GeneralProps) => {
   const { data: shippingType }: any = useQuery(
     ["shipping_type"],
     async () => {
-      const res = await request("GET", `/ShippingTypes?$orderby=Name`)
+      const res = getLocalCacheData({ key: "shipping_types" }) || await request("GET", `/ShippingTypes?$orderby=Name`)
         .then((res: any) => res?.data)
         .catch((e) => {
           throw new Error(e);

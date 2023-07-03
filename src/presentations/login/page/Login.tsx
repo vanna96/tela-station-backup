@@ -25,6 +25,8 @@ import CustomsGroupRepository from '@/services/actions/customsGroupRepository';
 import ManufacturerRepository from '@/services/actions/manufacturerRepository';
 import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import GetCurrentUserRepository from '../repository/getCurrencyUserRepository';
+import ChartOfAccountsRepository from '@/services/actions/ChartOfAccountsRepository';
+import ProjectRepository from '@/services/actions/projectRepository';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'user']);
@@ -71,10 +73,15 @@ export default function Login() {
       await new WarehouseRepository().get(),
       await new DistributionRuleRepository().get(),
       await new PriceListRepository().get(),
-      await new UsersRepository().get(),
+      // await new UsersRepository().get(),
       await new DistributionRuleRepository().get,
       await new CustomsGroupRepository().get(),
-      await new ManufacturerRepository().get()
+      await new ManufacturerRepository().get(),
+
+      // vanna new modified
+      await new ChartOfAccountsRepository().get(),
+      await new ProjectRepository().get()
+      
     ]);
   }
 

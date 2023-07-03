@@ -1,7 +1,7 @@
 import { formatDate } from "@/helper/helper";
 import request from "@/utilies/request";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { FormOrderContext } from "../context/FormOrderContext";
@@ -110,9 +110,9 @@ export const TotalPayment = () => {
       form?.useType !== "Account"
         ? getItem(
             form?.items?.filter(
-              ({ TotalPayment, documentType }: any) =>
+              ({ TotalPayment, DocTotal }: any) =>
                 parseFloat(TotalPayment || 0) > 0 ||
-                (documentType === "CN" && parseFloat(TotalPayment || 0) !== 0)
+                (DocTotal < 0 && parseFloat(TotalPayment || 0) !== 0)
             ) || []
           )
         : [];
@@ -165,8 +165,6 @@ export const TotalPayment = () => {
       AttachmentEntry,
     };
 
-    console.log(payload);
-
     const res: any = await request("POST", "/IncomingPayments", payload)
       .then(() => {
         toast.success("IncomingPayment created successfully!", {
@@ -185,6 +183,14 @@ export const TotalPayment = () => {
       if (res?.status) return route("/banking/incoming-payments");
     }, 2000);
   };
+
+  useEffect(() => {
+    if (currency !== "AUD" && form?.paymenyMeansExchangeRate <= 0) {
+      toast.error("Please update exchange rate!", {
+        duration: 3000,
+      });
+    }
+  }, [currency]);
 
   return (
     <>
@@ -297,14 +303,18 @@ export const TotalPayment = () => {
         )}
       </div>
       <div className="mt-10 space-x-2 text-right">
-        <LoadingButton
-          loading={saving}
-          variant="outlined"
-          onClick={handleSubmitForm}
-          size="small"
-        >
-          {Edit ? <span>Update</span> : <span>Add & New</span>}
-        </LoadingButton>
+        {currency !== "AUD" && form?.paymenyMeansExchangeRate <= 0 ? (
+          ""
+        ) : (
+          <LoadingButton
+            loading={saving}
+            variant="outlined"
+            onClick={handleSubmitForm}
+            size="small"
+          >
+            {Edit ? <span>Update</span> : <span>Add & New</span>}
+          </LoadingButton>
+        )}
         <Button
           size="small"
           variant="outlined"
@@ -372,7 +382,7 @@ const getItem = (items: any) =>
           ? parseFloat(Math.abs(item.TotalPayment).toString()).toFixed(2)
           : 0,
       DiscountPercent: item?.DiscountPercent || 0,
-      InvoiceType: item?.invoiceType,
+      InvoiceType: item?.InvoiceType,
     };
   });
 

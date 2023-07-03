@@ -44,9 +44,6 @@ export default function General() {
     ];
   }
 
-  console.log(formGeneral);
-  
-
   return (
     <>
       <ModalBusinessPartner

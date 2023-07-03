@@ -1,4 +1,4 @@
-import { diffDays, formatDate } from "@/helper/helper";
+import { diffDays, formatDate, getLocalCacheData } from "@/helper/helper";
 import request from "@/utilies/request";
 import { createContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
@@ -10,12 +10,14 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
   const { data: ContentService } = useQuery({
     queryKey: ["content_service"],
     queryFn: async () => {
-      const res = request(
-        "GET",
-        `/ChartOfAccounts?$select=Code,Name,Balance,AccountType&$filter=ActiveAccount eq 'tYES'`
-      )
-        .then((res: any) => res?.data?.value)
-        .catch((error) => console.log(error));
+      const res =
+        // getLocalCacheData({ key: "ChartOfAccounts" }) ||
+        request(
+          "GET",
+          `/ChartOfAccounts?$select=Code,Name,Balance,AccountType&$filter=ActiveAccount eq 'tYES'`
+        )
+          .then((res: any) => res?.data?.value)
+          .catch((error) => console.log(error));
       return res;
     },
   });
@@ -130,6 +132,25 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
     }
   );
 
+  const date = new Date();
+  const { data: currency }: any = useQuery(
+    ["currency", formatDate(date)],
+    async () => {
+      const res = await request(
+        "GET",
+        `/view.svc/Biz_ExchangeRateB1SLQuery?$filter=RateDate eq '${formatDate(
+          date
+        )}'`
+      )
+        .then((res: any) => res?.data?.value)
+        .catch((e) => {
+          throw new Error(e);
+        });
+
+      return res;
+    }
+  );
+
   const { data: customers } = useQuery({
     queryKey: "quotation_customer",
     queryFn: async () => {
@@ -168,55 +189,159 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
     { enabled: form?.cardCode ? true : false }
   );
 
-  const { data: customerInvoice, isLoading: loading } = useQuery({
+  // const {
+  //   data: customerInvoice,
+  //   isLoading: loading,
+  //   isFetching,
+  // } = useQuery({
+  //   queryKey: ["customer_invoice", form?.cardCode],
+  //   queryFn: async () => {
+  //     const useType = form?.useType || "Customer";
+  //     if (useType === "Customer") {
+  //       // A/R
+  //       const invoices = await request(
+  //         "GET",
+  //         `Invoices?$filter=CardCode eq '${form?.cardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
+  //       )
+  //         .then((res: any) =>
+  //           res?.data?.value.map((invoice: any) => {
+  //             const BalanceDue =
+  //               (invoice?.DocTotal - invoice?.PaidToDate) *
+  //               (invoice?.DocRate || 1);
+  //             return {
+  //               ...invoice,
+  //               BalanceDue: BalanceDue,
+  //               documentType: "IN",
+  //               invoiceType: "it_Invoice",
+  //             };
+  //           })
+  //         )
+  //         .catch((err: any) => console.log(err));
+
+  //       const creditMemos = await request(
+  //         "GET",
+  //         `CreditNotes?$filter=CardCode eq '${form?.cardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
+  //       )
+  //         .then((res: any) =>
+  //           res?.data?.value?.map((memo: any) => {
+  //             const BalanceDue =
+  //               (memo?.DocTotal - memo?.PaidToDate) * (memo?.DocRate || 1);
+  //             return {
+  //               ...memo,
+  //               documentType: "CN",
+  //               invoiceType: "it_CredItnote",
+  //               BalanceDue: -BalanceDue,
+  //               DocTotal: -memo?.DocTotal,
+  //             };
+  //           })
+  //         )
+  //         .catch((err: any) => console.log(err));
+
+  //       const downPayments = await request(
+  //         "GET",
+  //         `DownPayments?$filter=CardCode eq '${form?.cardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
+  //       )
+  //         .then((res: any) =>
+  //           res?.data?.value?.map((payment: any) => {
+  //             const BalanceDue =
+  //               (payment?.DocTotal - payment?.PaidToDate) *
+  //               (payment?.DocRate || 1);
+  //             return {
+  //               ...payment,
+  //               documentType: "DT",
+  //               invoiceType: "it_DownPayment",
+  //               BalanceDue: BalanceDue,
+  //             };
+  //           })
+  //         )
+  //         .catch((err: any) => console.log(err));
+
+  //       return [...invoices, ...creditMemos, ...downPayments];
+  //     }
+
+  //     // A/P
+  //     const invoices = await request(
+  //       "GET",
+  //       `PurchaseInvoices?$filter=CardCode eq '${form?.cardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
+  //     )
+  //       .then((res: any) =>
+  //         res?.data?.value.map((invoice: any) => {
+  //           const BalanceDue =
+  //             (invoice?.DocTotal - invoice?.PaidToDate) *
+  //             (invoice?.DocRate || 1);
+  //           return {
+  //             ...invoice,
+  //             documentType: "PU",
+  //             invoiceType: "it_PurchaseInvoice",
+  //             BalanceDue: -BalanceDue,
+  //             DocTotal: -invoice?.DocTotal,
+  //           };
+  //         })
+  //       )
+  //       .catch((err: any) => console.log(err));
+
+  //     const creditMemos = await request(
+  //       "GET",
+  //       `PurchaseCreditNotes?$filter=CardCode eq '${form?.cardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
+  //     )
+  //       .then((res: any) =>
+  //         res?.data?.value?.map((memo: any) => {
+  //           const BalanceDue =
+  //             (memo?.DocTotal - memo?.PaidToDate) * (memo?.DocRate || 1);
+  //           return {
+  //             ...memo,
+  //             documentType: "PC",
+  //             invoiceType: "it_PurchaseCredItnote",
+  //             BalanceDue: BalanceDue,
+  //           };
+  //         })
+  //       )
+  //       .catch((err: any) => console.log(err));
+
+  //     const downPayments = await request(
+  //       "GET",
+  //       `PurchaseDownPayments?$filter=CardCode eq '${form?.cardCode}' and DownPaymentType eq 'dptInvoice'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
+  //     )
+  //       .then((res: any) =>
+  //         res?.data?.value?.map((payment: any) => {
+  //           const BalanceDue =
+  //             (payment?.DocTotal - payment?.PaidToDate) *
+  //             (payment?.DocRate || 1);
+  //           return {
+  //             ...payment,
+  //             documentType: "DT",
+  //             invoiceType: "it_PurchaseDownPayment",
+  //             BalanceDue: -BalanceDue,
+  //             DocTotal: -payment?.DocTotal,
+  //           };
+  //         })
+  //       )
+  //       .catch((err: any) => console.log(err));
+  //     return [...invoices, ...creditMemos, ...downPayments];
+  //   },
+  //   enabled: bussinessPartner ? true : false,
+  //   cacheTime: 0,
+  //   staleTime: 0,
+  // });
+
+  const {
+    data: customerInvoice,
+    isLoading: loading,
+    isFetching,
+  } = useQuery({
     queryKey: ["customer_invoice", form?.cardCode],
     queryFn: async () => {
+      const userType =
+        form?.useType === "Supplier"
+          ? `Biz_InComingPayTest_A_P_B1SLQuery`
+          : `Biz_InComingPayTest_A_R_B1SLQuery`;
       const invoices = await request(
         "GET",
-        `Invoices?$filter=CardCode eq '${form?.cardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
+        `view.svc/${userType}?$filter=BPCode eq '${form?.cardCode}' or CardParent eq '${form?.cardCode}'`
       )
-        .then((res: any) =>
-          res?.data?.value.map((invoice: any) => {
-            return {
-              ...invoice,
-              documentType: "IN",
-              invoiceType: "it_Invoice",
-            };
-          })
-        )
+        .then((res: any) => res?.data?.value)
         .catch((err: any) => console.log(err));
-
-      const creditMemos = await request(
-        "GET",
-        `CreditNotes?$filter=CardCode eq '${form?.cardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
-      )
-        .then((res: any) =>
-          res?.data?.value?.map((memo: any) => {
-            return {
-              ...memo,
-              documentType: "CN",
-              invoiceType: "it_CredItnote",
-            };
-          })
-        )
-        .catch((err: any) => console.log(err));
-
-      const downPayments = await request(
-        "GET",
-        `DownPayments?$filter=CardCode eq '${form?.cardCode}'&$select=DocNum,DocumentStatus,DocCurrency,DocRate,DocTotal,DiscountPercent,DocDueDate,DocDate,DocEntry,PaidToDate`
-      )
-        .then((res: any) =>
-          res?.data?.value?.map((payment: any) => {
-            return {
-              ...payment,
-              documentType: "DT",
-              invoiceType: "it_DownPayment",
-            };
-          })
-        )
-        .catch((err: any) => console.log(err));
-
-      return [...invoices, ...creditMemos, ...downPayments];
+      return invoices;
     },
     enabled: bussinessPartner ? true : false,
     cacheTime: 0,
@@ -226,9 +351,11 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
   const { data: Projects } = useQuery({
     queryKey: "projects",
     queryFn: async () => {
-      const res = request("GET", "/Projects")
-        .then((res: any) => res?.data?.value)
-        .catch((error) => console.log(error));
+      const res =
+        getLocalCacheData({ key: "projects" }) ||
+        request("GET", "/Projects")
+          .then((res: any) => res?.data?.value)
+          .catch((error) => console.log(error));
       return res;
     },
   });
@@ -236,9 +363,11 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
   const { data: PaymentTermsTypes } = useQuery({
     queryKey: "payment_terms_types",
     queryFn: async () => {
-      const res = request("GET", "/PaymentTermsTypes")
-        .then((res: any) => res?.data?.value)
-        .catch((error) => console.log(error));
+      const res =
+        getLocalCacheData({ key: "paymentTermTypes" }) ||
+        request("GET", "/PaymentTermsTypes")
+          .then((res: any) => res?.data?.value)
+          .catch((error) => console.log(error));
       return res;
     },
   });
@@ -246,12 +375,14 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
   const { data: TaxCode } = useQuery({
     queryKey: ["tax_code"],
     queryFn: async () => {
-      const res = request(
-        "GET",
-        `/VatGroups?$select=Category,Inactive , Name, Code, EU, VatGroups_Lines &$filter=Category eq 'bovcOutputTax' and Inactive eq 'tNO' &$orderby=Name asc`
-      )
-        .then((res: any) => res?.data?.value)
-        .catch((error) => console.log(error));
+      const res =
+        getLocalCacheData({ key: "vatGroup" }) ||
+        request(
+          "GET",
+          `/VatGroups?$select=Category,Inactive , Name, Code, EU, VatGroups_Lines &$filter=Category eq 'bovcOutputTax' and Inactive eq 'tNO' &$orderby=Name asc`
+        )
+          .then((res: any) => res?.data?.value)
+          .catch((error) => console.log(error));
       return res;
     },
   });
@@ -289,66 +420,53 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
           ? useType === "Account"
             ? null
             : Edit?.PaymentInvoices?.map((i: any) => {
-                const existInvoice = customerInvoice?.find(
-                  ({ DocEntry, DocumentStatus }: any) =>
-                    DocEntry === i.DocEntry && DocumentStatus === "bost_Open"
+                const find = customerInvoice?.find(
+                  ({ DocEntry, DocumentNo }: any) =>
+                    DocumentNo === i.DocEntry || DocEntry === i.DocEntry
                 );
-
-                const ClosedInvoice = customerInvoice?.find(
-                  ({ DocEntry, DocumentStatus }: any) =>
-                    DocEntry === i.DocEntry && DocumentStatus === "bost_Close"
-                );
-
-                const rate = i?.DocRate || 1;
-                let addOn = 0;
-                const balanceDue =
-                  (existInvoice?.DocTotal || ClosedInvoice?.DocTotal || 0) -
-                  (existInvoice?.PaidToDate || ClosedInvoice?.PaidToDate || 0);
-
                 return {
                   checked: true,
                   ...i,
-                  DocDate:
-                    existInvoice?.DocDate ||
-                    ClosedInvoice?.DocDate ||
-                    i?.DocDate,
-                  DocCurrency:
-                    existInvoice?.DocCurrency ||
-                    ClosedInvoice?.DocCurrency ||
-                    i?.DocCurrency,
-                  DocTotal:
-                    existInvoice?.DocTotal || ClosedInvoice?.DocTotal || 0,
-                  PaidToDate:
-                    existInvoice?.PaidToDate || ClosedInvoice?.PaidToDate || 0,
+                  DocDate: find?.DueDate || i?.DocDate,
+                  DocCurrency: find?.FCCurrency || i?.DocCurrency || "AUD",
+                  DocTotal: find?.DocTotalFC || find?.DocTotal,
+                  // TotalPayment:
+                  //   find?.DocTotal < 0
+                  //     ? -(i?.AppliedFC || i?.AppliedSys)
+                  //     : i?.AppliedFC || i?.AppliedSys,
                   TotalPayment: i?.AppliedFC || i?.AppliedSys,
-                  BalanceDue: balanceDue * rate + addOn,
-                  DocNum:
-                    existInvoice?.DocNum || ClosedInvoice?.DocNum || i?.DocNum,
-                  OverDueDays: diffDays(
-                    existInvoice?.DocDueDate || ClosedInvoice?.DocDueDate,
-                    Edit?.DocDate
-                  ),
+                  BalanceDue: find?.DocBalanceFC || find?.DocBalance,
+                  DocNum: find?.DocumentNo || i?.DocNum,
+                  documentType: find?.TransTypeName || i?.documentType,
+                  OverDueDays: diffDays(find?.DueDate || Edit?.DocDate),
                 };
               })
           : customerInvoice
-              ?.filter(
-                ({ DocumentStatus }: any) => DocumentStatus === "bost_Open"
-              )
+              ?.filter(({ DocStatus }: any) => DocStatus === "O")
               ?.map((i: any) => {
+                let discount = 0;
+                if (i?.PaymentTerm) {
+                  const paymentTerm = i.PaymentTerm.split(",");
+                  var d = new Date(i?.TaxDate);
+                  d.setDate(d.getDate() + parseInt(paymentTerm[0].toString()));
+                  if (new Date() <= new Date(d)) discount = paymentTerm[1];
+                }
+
                 return {
                   ...i,
-                  DiscountPercent: i?.DiscountPercent || 0,
-                  OverDueDays: diffDays(i.DocDueDate),
-                  DocTotal:
-                    i?.documentType === "CN" ? -i?.DocTotal : i?.DocTotal,
-                  BalanceDue:
-                    i?.documentType === "CN"
-                      ? -(i?.DocTotal - i?.PaidToDate) * (i?.DocRate || 1)
-                      : (i?.DocTotal - i?.PaidToDate) * (i?.DocRate || 1),
+                  DocCurrency: i?.FCCurrency || "AUD",
+                  DocRate: (i?.FCCurrency || "AUD") === "AUD" ? 1 : i?.DocRate,
+                  DocNum: i?.DocumentNo,
+                  documentType: i?.TransTypeName,
+                  DocDate: i?.TaxDate,
+                  DiscountPercent: discount,
+                  DocTotal: (i?.DocTotalFC || i?.DocTotal).toFixed(2),
+                  BalanceDue: (i?.DocBalanceFC || i?.DocBalance).toFixed(2),
                 };
               })
               ?.sort(
-                (a, b) => parseInt(b.OverDueDays) - parseInt(a.OverDueDays)
+                (a: any, b: any) =>
+                  parseInt(b.OverDueDays) - parseInt(a.OverDueDays)
               ),
       });
     }
@@ -370,6 +488,8 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
           customerInvoice,
           Vendor,
           loading,
+          isFetching,
+          currency,
         }}
       >
         {children}

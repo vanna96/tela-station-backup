@@ -1,3 +1,4 @@
+import Encryption from "@/utilies/encryption";
 import moment from "moment";
 
 export const numberWithCommas = (value: any) => {
@@ -26,5 +27,13 @@ export const diffDays = (startDate: any, endDate?: any) => {
     (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
       Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
       (1000 * 60 * 60 * 24)
+  );
+};
+
+export const getLocalCacheData = ({ key }: any) => {
+  const data = localStorage.getItem("UnitOfMeasurementGroups");
+  if (!data) return data;
+  return Promise.all(
+    JSON.parse(Encryption.decrypt(key, localStorage.getItem(key) || ""))
   );
 };

@@ -2,6 +2,7 @@ import request from "@/utilies/request";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { GeneralContact } from "./GeneralFormContext";
+import { getLocalCacheData } from "@/helper/helper";
 
 type GeneralProps = { children: any; Contact?: any };
 
@@ -26,7 +27,7 @@ export const ContactProvider = ({ children, Contact }: GeneralProps) => {
   const { data: TaxCode } = useQuery({
     queryKey: ["tax_code"],
     queryFn: async () => {
-      const res = request(
+      const res = getLocalCacheData({ key: "vatGroup" }) || request(
         "GET",
         `/VatGroups?$select=Category,Inactive , Name, Code, EU, VatGroups_Lines &$filter=Category eq 'bovcOutputTax' and Inactive eq 'tNO' &$orderby=Name asc`
       )
@@ -54,10 +55,20 @@ export const ContactProvider = ({ children, Contact }: GeneralProps) => {
   const { data: UnitOfMeasurementGroups } = useQuery({
     queryKey: ["unit_measurement_groups"],
     queryFn: async () => {
-      const res = request(
+      const res = getLocalCacheData({ key: "UnitOfMeasurementGroups" }) || request(
         "GET",
-        `/UnitOfMeasurementGroups?$select=Name,AbsEntry,Code`
+        `/UnitOfMeasurementGroups?$select=Name,AbsEntry,Code,UoMGroupDefinitionCollection`
       )
+        .then((res: any) => res?.data?.value)
+        .catch((error) => console.log(error));
+      return res;
+    },
+  });
+
+  const { data: UnitOfMeasurements } = useQuery({
+    queryKey: ["unit_of_measurement"],
+    queryFn: async () => {
+      const res = request("GET", `/UnitOfMeasurements`)
         .then((res: any) => res?.data?.value)
         .catch((error) => console.log(error));
       return res;
@@ -66,9 +77,9 @@ export const ContactProvider = ({ children, Contact }: GeneralProps) => {
 
   useEffect(() => {
     // edit
-    let data;
+    let dataEdit;
     if (Contact) {
-      data = {
+      dataEdit = {
         itemServiceType:
           Contact?.DocType === "dDocument_Items" ? "Item" : "Service",
         remark: Contact?.Comments || null,
@@ -88,6 +99,10 @@ export const ContactProvider = ({ children, Contact }: GeneralProps) => {
             discount: e.DiscountPercent,
             taxCode: e.VatGroup,
             uomCode: e.UoMCode,
+            uoMEntry: e.UoMEntry,
+            UoMGroupEntry: data?.find(
+              ({ ItemCode }: any) => ItemCode === e.ItemCode
+            )?.UoMGroupEntry,
             rate: e.PriceAfterVAT,
             Code: e.AccountCode,
             description: e.ItemDescription,
@@ -96,14 +111,14 @@ export const ContactProvider = ({ children, Contact }: GeneralProps) => {
         }),
       };
     } else {
-      data = {
+      dataEdit = {
         itemServiceType: "Item",
         totalDiscount: 0,
         totalDiscountValue: 0,
         roundingValue: 0,
       };
     }
-    setFormContent(data);
+    setFormContent(dataEdit);
   }, []);
 
   return (
@@ -115,6 +130,7 @@ export const ContactProvider = ({ children, Contact }: GeneralProps) => {
         UnitOfMeasurementGroups,
         formContent,
         setFormContent,
+        UnitOfMeasurements,
       }}
     >
       {children}
