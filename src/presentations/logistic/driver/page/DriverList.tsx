@@ -12,6 +12,7 @@ export default function DriverList() {
     const route = useNavigate();
 
     const { data, isLoading }: any = useQuery({ queryKey: ['driver'], queryFn: () => new DriverRepository().get() })
+console.log(data);
 
     const columns = React.useMemo(
         () => [

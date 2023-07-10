@@ -138,6 +138,7 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
           <Content
             edit={this.props?.edit}
             data={this.state}
+            setData={this.setState}
             handlerAddItem={() => this.handlerOpenItem()}
             handlerRemoveItem={this.handlerRemoveItem}
             handlerChangeItem={this.handlerChangeItems}

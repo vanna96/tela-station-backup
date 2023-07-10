@@ -162,7 +162,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             Address: null,
             Address2: null,
         }
-console.log(this.state);
+        console.log(this.state);
 
         this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
         this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
@@ -516,9 +516,6 @@ console.log(this.state);
             DocTaxTotal = (total * DocTaxTotal / 100);
             DocTotal = total + DocTaxTotal;
         }
-
-
-
         this.setState({ ...this.state, Items: items, DocTotalBeforeDiscount, DocTaxTotal, DocTotal })
     }
 

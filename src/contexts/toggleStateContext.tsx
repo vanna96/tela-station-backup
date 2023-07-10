@@ -1,23 +1,23 @@
-import { createContext, useContext, useState } from "react";
 
+import React from "react";
 
-const ToggleState = createContext();
-const SetToggleState = createContext();
+export type ThemContextProps = boolean;
 
-export function useToggleStateContext() {
-  return useContext(ToggleState);
-}
-export function useToggleStateContextUpdate() {
-  return useContext(SetToggleState);
-}
-export function ToggleStateContextProvider({ children }:any) {
-  
-  const [stateToggle, setStateToggle] = useState(true);
-  return (
-    <ToggleState.Provider value={stateToggle}>
-      <SetToggleState.Provider value={setStateToggle}>
-        {children}
-      </SetToggleState.Provider>
-    </ToggleState.Provider>
-  )
-}
+type ThemeContextProp = {
+  collapse: ThemContextProps;
+  setCollapse: (value: ThemContextProps) => void;
+};
+
+export const CollaseContext = React.createContext<ThemeContextProp>({
+  collapse: false,
+  setCollapse: () => undefined,
+});
+
+export const useCollaseContext = () => {
+  const [collapse, setCollapse] = React.useState<ThemContextProps>(true);
+  const contextValue: ThemeContextProp = {
+    collapse,
+    setCollapse,
+  };
+  return contextValue;
+};

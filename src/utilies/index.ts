@@ -28,8 +28,7 @@ export const discountFormat = (value: any) => {
   if (!value) return 0;
 
   if (typeof value === "number")
-    return value + " %" 
-
+    return value + "%" 
   return parseFloat(value);
 }
 

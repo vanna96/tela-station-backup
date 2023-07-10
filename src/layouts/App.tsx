@@ -4,7 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import SideBar from './SideBar';
 import { useCookies } from 'react-cookie';
 import { ThemeContext, useThemeContext } from '@/contexts';
-import { CircularProgress } from '@mui/material';
+import TemporaryDrawer from './RightBar';
 
 export default function App() {
     const [cookies] = useCookies(["sessionId"]);
@@ -18,7 +18,7 @@ export default function App() {
             <SideBar />
 
             <div className='grow ml-2  rounded-lg relative  overflow-auto'>
-               
+             
                 <Outlet />
             </div>
         </div>

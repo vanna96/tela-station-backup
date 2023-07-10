@@ -33,12 +33,12 @@ export default function Login() {
   const navigate = useNavigate();
 
   const username = React.useRef("manager");
-  const password = React.useRef("manager");
+  const password = React.useRef("Admin@123");
 
   const onSubmit = async () => {
     try {
       setLoading(true)
-      const auth = new AuthLogin('SBODemoAU', 'manager', 'manager');
+      const auth = new AuthLogin('TMCT', 'manager', 'Admin@123');
       const response: any = await request('POST', '/Login', auth.toJson());
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
       const user = await GetCurrentUserRepository.post();

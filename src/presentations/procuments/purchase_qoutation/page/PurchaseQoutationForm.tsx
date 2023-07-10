@@ -26,15 +26,16 @@ class PurchaseQoutationForm extends CoreFormDocument {
 
   constructor(props: any) {
     super(props)
-    this.state = {
+ 
+   this.state = {
       ...this.state,
       loading: true,
-      docDate: new Date().toISOString(),
-      docDueDate: new Date().toISOString(),
-      taxDate: new Date().toISOString(),
-      requriedDate: null,
+      DocDate: new Date().toISOString(),
+      DocDueDate: new Date().toISOString(),
+      TaxDate: new Date().toISOString(),
+      RequriedDate: null,
+      ShipDate: null
     } as any;
-
 
     this.handlerRemoveItem = this.handlerRemoveItem.bind(this);
     // this.handlerAddItem = this.handlerAddItem.bind(this);
@@ -105,7 +106,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
   FormRender = () => {
 
     return <>
-      <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
+      <form onSubmit={this.handlerSubmit} className=' h-full w-full flex flex-col gap-4'>
         {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
           <HeadingForm
             data={this.state}
@@ -152,7 +153,7 @@ class PurchaseQoutationForm extends CoreFormDocument {
             </div>
           </div>
         </>}
-        
+
       </form>
     </>
   }

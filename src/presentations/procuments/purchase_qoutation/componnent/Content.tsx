@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import MaterialReactTable from "material-react-table";
 import { Button } from "@mui/material";
@@ -38,13 +38,21 @@ interface ContentFormProps {
 
 export default function ContentForm({ edit, data, handlerChangeItem, handlerChange, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
   const [tableKey, setTableKey] = React.useState(Date.now())
-
+  const [dataItems, setDataItems] = useState([...data?.Items])
   const handlerChangeInput = (event: any, row: any, field: any) => {
     handlerChangeItem({ value: event.target.value, record: row, field })
     console.log(handlerChangeItem({ value: event.target.value, record: row, field }));
 
   }
-
+  const handlePasteBtnClick = async () => {
+    const clipboardData = await navigator?.clipboard?.readText(); 
+    try {
+      const parsedData = JSON.parse(clipboardData); 
+       setDataItems((prevDataItems:any) => [...prevDataItems, ...parsedData]);
+    } catch (error) {
+      console.error(error); 
+    }
+  };
   const handlerRemoveRow = (row: any) => {
     handlerRemoveItem(row.ItemCode);
   }
@@ -84,10 +92,10 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             onChange={(event) => handlerChangeInput(event, cell?.row?.original, 'ItemCode')}
             endAdornment
             disabled={
-              data?.DocumentStatus === "bost_Close" ? true  : false
+              data?.DocumentStatus === "bost_Close" ? true : false
             }
-            
-            onClick={ handlerAddItem}
+
+            onClick={handlerAddItem}
           />;
         },
       },
@@ -424,7 +432,7 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
   const blankItem = {
     ItemCode: ''
   };
-
+  console.log(data);
   return (
     <FormCard title="Content" >
       <div className="col-span-2 data-table">
@@ -448,11 +456,12 @@ export default function ContentForm({ edit, data, handlerChangeItem, handlerChan
             </div>
           </div>
         </div>
+        <Button onClick={() => handlePasteBtnClick()}>Paste Data</Button>
         <MaterialReactTable
           key={tableKey}
           // columns={itemColumns}
           columns={data?.DocType === "dDocument_Service" ? serviceColumns : itemColumns}
-          data={[...data?.Items, blankItem] ?? []}
+          data={[...dataItems, blankItem] ?? []}
           enableStickyHeader={true}
           enableColumnActions={false}
           enableColumnFilters={false}

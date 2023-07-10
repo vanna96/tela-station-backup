@@ -29,11 +29,11 @@ export default function SystemInitializeMasterPage() {
   return (
     <>
       <MainContainer title='Inventory'>
-        <ItemCard title='Branch' icon={<AiOutlineSolution />} onClick={previewBranch} />
-        <ItemCard title='Dimension' icon={<AiOutlineFileSync />} onClick={previewDimension} />
-        <ItemCard title='Document Numbering' icon={<AiOutlineFileExclamation />} onClick={previewDoc} />
-        <ItemCard title='User Licensing' icon={<AiOutlineFileText />} />
-        <ItemCard title='User Master Data' icon={<AiOutlineFileText />} onClick={previewUser} />
+        <ItemCard amount={0} title='Branch' icon={<AiOutlineSolution />} onClick={previewBranch} />
+        <ItemCard amount={0} title='Dimension' icon={<AiOutlineFileSync />} onClick={previewDimension} />
+        <ItemCard amount={0} title='Document Numbering' icon={<AiOutlineFileExclamation />} onClick={previewDoc} />
+        <ItemCard amount={0} title='User Licensing' icon={<AiOutlineFileText />} />
+        <ItemCard amount={0} title='User Master Data' icon={<AiOutlineFileText />} onClick={previewUser} />
         {/* -------------------------------Modal---------------------------------- */}
         <BranchModal open={openBranch} onClose={closeBranch} />
         <DimensionModal open={openDimension} onClose={closeDimension} />

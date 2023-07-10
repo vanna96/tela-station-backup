@@ -9,6 +9,7 @@ import ColumnSearch from './ColumnSearch';
 import { BsSortDown } from 'react-icons/bs';
 import MenuCompoment from "@/components/data_table/MenuComponent";
 import DataTableColumnFilter from './DataTableColumnFilter';
+import TemporaryDrawer from '@/layouts/RightBar';
 
 interface DataTableProps {
     columns: any[],
@@ -57,12 +58,16 @@ export default function DataTable(props: DataTableProps) {
                     />
                 </div>
                 <div className="flex justify-end gap-2 items-center text-[13px]">
+                    <span><TemporaryDrawer /></span>
                     <Button size="small" variant="text"
                         onClick={props.handlerRefresh}
                     >
+                      
                         <span className="text-lg mr-2"><HiRefresh /></span>
                         <span className="capitalize text-sm">Refresh</span>
+                       
                     </Button>
+                    
                     <MenuCompoment
                         title={<div className="flex gap-2">
                             <span className="text-lg"><BsSortDown /></span> <span className="text-[13px] capitalize">Sort By</span>

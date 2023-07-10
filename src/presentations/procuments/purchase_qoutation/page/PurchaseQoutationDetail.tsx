@@ -1,5 +1,5 @@
 import { withRouter } from '@/routes/withRouter';
-import React, { Component, useEffect } from 'react'
+import React, { Component, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import PurchaseAgreement from '../../../../models/PurchaseAgreement';
 import EditIcon from "@mui/icons-material/Edit";
@@ -11,7 +11,7 @@ import { currencyDetailFormat, currencyFormat, dateFormat, discountFormat, fileT
 import { AttachmentLine } from '../../../../models/Attachment';
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
-import { CircularProgress } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import PurchaseQoutation from '@/models/PurchaseQoutation';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
 import OwnerRepository from '@/services/actions/ownerRepository';
@@ -23,6 +23,12 @@ import BusinessPartnerRepository from '@/services/actions/bussinessPartnerReposi
 import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
 import { getUOMGroupByCode } from '@/helpers';
 import moment from 'moment';
+import ItemModal from '@/components/modal/ItemModal';
+import VendorModal from '@/components/modal/VendorModal';
+import Test from '../componnent/test';
+import ClipboardModal from '@/components/modal/ClipboardModal';
+import SnackBrar from '@/components/pop/SnackBrar';
+import FormMessageModal from '@/components/modal/FormMessageModal';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -73,7 +79,7 @@ class PurchaseQoutationDetail extends Component<any, any> {
   }
 
   render() {
- 
+
 
     return (
       <div className='w-full h-full flex flex-col p-4 gap-4'>
@@ -167,25 +173,36 @@ export default withRouter(PurchaseQoutationDetail);
 function Content(props: any) {
 
   const { data } = props;
-  const subTotal = data.Items?.reduce((accumulator: any, currentLine: any) => {
+  const [dataCopy, setDataCopy] = useState<boolean>(false)
+  const [dataCopySuccess, setDataCopySuccess] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false)
+
+
+
+  const handleCopyBtnClick = async () => {
+    const queryOpts: any = { name: 'clipboard-read'};
+    const permissionStatus = await navigator.permissions.query(queryOpts);
+    navigator?.clipboard?.writeText(JSON.stringify(data?.Items));
+    if (permissionStatus.state === "granted") {
+      setDataCopy(false)
+      setDataCopySuccess(true)
+      setOpen(true)
+    } else {
+      setDataCopy(true)
+      setDataCopySuccess(false)
+      setOpen(false)
+    }
+    navigator.clipboard.readText().then((res) => {
+      console.log(res)
+    })
+  };
+
+
+  const subTotal = data?.Items?.reduce((accumulator: any, currentLine: any) => {
     return accumulator + currentLine.LineTotal;
   }, 0);
-  // const { data: chartData, isLoading }: any = useQuery({ queryKey: ['chartOfAccount'], queryFn: () => new ChartOfAccountRepository().get(), staleTime: Infinity })
-  // let test = chartData;
+
   
-  //   data?.Items?.map((e:any, index:any) => {
-  //     const matchingAccount = test?.find(
-  //       (account:any) => account.Code === e.AccountCode
-  //     );
-  //     const accountName = matchingAccount
-  //       ? matchingAccount.Name
-  //       : e.AccountName;
-  //     return {
-  //       key: shortid.generate(),
-  //       accountName: accountName
-  //     }
-  //   })
-  console.log(data)
   const itemColumn = useMemo(() => [
     {
       accessorKey: "ItemCode",
@@ -197,7 +214,7 @@ function Content(props: any) {
     {
       accessorKey: "ItemDescription",
       header: "Descriptions",
-    
+
     },
     {
       accessorKey: "RequiredDate",
@@ -227,7 +244,7 @@ function Content(props: any) {
       header: "Quoted Quantity",
       enableClickToCopy: true,
     },
- 
+
     {
       accessorKey: "UnitPrice",
       header: "Unit Price",
@@ -312,11 +329,16 @@ function Content(props: any) {
     ],
     [data]
   );
-
+  // let dialog = React.createRef<FormMessageModal>();
   return <div className="data-table  border-none p-0 mt-3">
+    {dataCopy ? <ClipboardModal open={dataCopy} setDataCopy={setDataCopy} /> : null}
+    {dataCopySuccess ? <SnackBrar open={open} setOpen={ setOpen} /> : null}
+    <Button onClick={() => handleCopyBtnClick()}>Copy Data</Button>
+
     <MaterialReactTable
+
       columns={data?.DocType === "dDocument_Items" ? itemColumn : serviceColumns}
-      data={data?.Items || []}
+      data={data?.Items ?? []}
       enableHiding={true}
       initialState={{ density: "compact" }}
       enableDensityToggle={false}
@@ -339,7 +361,7 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Buyer</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new BuyerRepository().find(data.SalesPersonCode)?.name || "N/A"}
+          : {new BuyerRepository().find(data?.SalesPersonCode)?.name || "N/A"}
         </span>
       </div>
       <div className='flex gap-2'>
@@ -374,7 +396,9 @@ function Content(props: any) {
 }
 function Account(props: any) {
   const { data }: any = props;
-
+  const test = useRef(null)
+  console.log(test.current);
+  
   return <div className='grow w-full grid grid-cols-2 gap-2 text-sm py-2'>
     <div className='flex flex-col gap-2'>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Jounral Remark</span> <span className='col-span-2 font-medium'>: {data.JournalMemo?.replace('at', '') || "N/A"}</span></div>
@@ -391,7 +415,7 @@ function Account(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Federal Tax ID</span> <span className='col-span-2 font-medium'>: {data.FederalTaxID || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Order Number</span> <span className='col-span-2 font-medium'>: {data.ImportFileNum || "N/A"}</span></div>
     </div>
-
+    <input ref={ test} />
   </div>
 }
 
