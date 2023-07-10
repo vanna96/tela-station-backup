@@ -36,8 +36,8 @@
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",
     "@types/node": "^18.15.3",
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
     "@types/react-scroll": "^1.8.7",
     "@types/shortid": "^0.0.29",
     "@vitejs/plugin-react": "^3.1.0",
