@@ -28,7 +28,7 @@ export const ContactProvider = ({ children, Contact }: GeneralProps) => {
     queryKey: ["tax_code"],
     queryFn: async () => {
       const res =
-        // getLocalCacheData({ key: "vatGroup" }) ||
+        getLocalCacheData({ key: "vatGroup" }) ||
         request(
           "GET",
           `/VatGroups?$select=Category,Inactive , Name, Code, EU, VatGroups_Lines &$filter=Category eq 'bovcOutputTax' and Inactive eq 'tNO' &$orderby=Name asc`
@@ -58,7 +58,7 @@ export const ContactProvider = ({ children, Contact }: GeneralProps) => {
     queryKey: ["unit_measurement_groups"],
     queryFn: async () => {
       const res =
-        // getLocalCacheData({ key: "UnitOfMeasurementGroups" }) ||
+        getLocalCacheData({ key: "UnitOfMeasurementGroups" }) ||
         request(
           "GET",
           `/UnitOfMeasurementGroups?$select=Name,AbsEntry,Code,UoMGroupDefinitionCollection`

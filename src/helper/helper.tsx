@@ -30,9 +30,10 @@ export const diffDays = (startDate: any, endDate?: any) => {
   )
 }
 
-export const getLocalCacheData = ({ key }: any) => {
+export const getLocalCacheData = ({ key, async = true }: { key: string; async?: boolean }) => {
   const data = localStorage.getItem(key)
   if (!data) return data
   const json = JSON.parse(Encryption.decrypt(key, data))
-  return Promise.all(JSON.parse(json))
+  if(async) return Promise.all(JSON.parse(json));
+  return JSON.parse(json);
 }
