@@ -1,25 +1,28 @@
 import FormCard from '@/components/card/FormCard';
 import MUIDatePicker from '@/components/input/MUIDatePicker';
 import MUITextField from '@/components/input/MUITextField';
+import VendorTextField from '@/components/input/VendorTextField';
 import MUISelect from '@/components/selectbox/MUISelect';
 import { ContactEmployee } from '@/models/BusinessParter';
 import TextField from '@mui/material/TextField';
 
 export interface IGeneralFormProps {
-    handlerOpenVendor: () => void,
     handlerChange: (key: string, value: any) => void;
     data: any,
     handlerOpenProject?: () => void,
     edit?: boolean
 }
 
-export default function GeneralForm({ handlerOpenVendor, data, handlerChange, handlerOpenProject, edit }: IGeneralFormProps) {
+export default function GeneralForm({ data, handlerChange, handlerOpenProject, edit }: IGeneralFormProps) {
+
+
+
     return (
         <>
             <FormCard title='Information'>
                 <div className="flex flex-col gap-2">
                     <div className="grid grid-cols-2 gap-3">
-                        <MUITextField key={data?.CardCode} error={'CardCode' in data?.error} helperText={data?.error?.CardCode} required label="Vendor Code" autoComplete='off' defaultValue={data?.CardCode} disabled={edit} name="BPCode" onClick={handlerOpenVendor} endAdornment={!edit} />
+                        <VendorTextField vtype={'supplier'} onChange={(vendor) => handlerChange('vendor', vendor)} key={data?.CardCode} error={'CardCode' in data?.error} helpertext={data?.error?.CardCode} required label="Vendor Code" autoComplete='off' defaultValue={data?.CardCode} disabled={edit} name="BPCode" endAdornment={!edit} />
                         <MUITextField required label="Vendor Name" value={data?.CardName} disabled={edit} name="BPName" />
                     </div>
 
@@ -96,7 +99,7 @@ export default function GeneralForm({ handlerOpenVendor, data, handlerChange, ha
                                 End Date <span className='text-red-500'>*</span>
                             </label>
                             <div className="">
-                                <MUIDatePicker required error={'EndDate' in data?.error} helperText={data?.error['EndDate']} disabled={edit && (data?.Status?.includes('A'))} value={data.EndDate ?? null} onChange={(e: any) => handlerChange('EndDate', e)} />
+                                <MUIDatePicker required error={'EndDate' in data?.error} helpertext={data?.error['EndDate']} disabled={edit && (data?.Status?.includes('A'))} value={data.EndDate ?? null} onChange={(e: any) => handlerChange('EndDate', e)} />
                             </div>
                         </div>
                     </div>

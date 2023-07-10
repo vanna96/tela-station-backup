@@ -55,9 +55,9 @@ const request = async (
 
             if (!(e instanceof AxiosError)) {
               if (window.location.pathname !== "/login" && e?.status !== 204) {
-                window.location.href = "/login"
+                // window.location.href = "/login"
               } else if (e?.status === 204) {
-                reject(new UpdateDataSuccess("Update Successfully"))
+                resolve("Update Successfully")
               } else {
                 reject(new Error("Internal Server Error"))
               }
@@ -70,7 +70,7 @@ const request = async (
             }
 
             if (e?.status === 401 && window.location.pathname !== "/login") {
-              window.location.href = "/login"
+              // window.location.href = "/login"
               return
             }
 
@@ -82,7 +82,7 @@ const request = async (
             reject(new Error(error ?? "Invalid request"))
           })
       } catch (e) {
-        // window.location.href = '/login';
+       
       }
     }, 1000)
   })

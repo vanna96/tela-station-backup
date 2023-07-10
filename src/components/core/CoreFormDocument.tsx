@@ -1,37 +1,18 @@
-import ItemModal from '@/components/modal/ItemModal';
 import React from 'react'
 import VendorModal from '../modal/VendorModal';
-import ProjectModal from '../modal/ProjectModal';
 import BusinessPartner from '../../models/BusinessParter';
 import Project from '@/models/Project';
-import { Backdrop, CircularProgress } from '@mui/material';
-import Modal from '../modal/Modal';
-import { ToastContainer, TypeOptions, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import DistributionRuleModal from '../modal/DistributionRuleModal';
+import { Backdrop } from '@mui/material';
 import { VendorModalType } from '../modal/VendorModal';
 import FormMessageModal from '../modal/FormMessageModal';
-import RequesterEmployeeModal from '../modal/RequesterEmployeeModal';
 import EmployeesInfo from '@/models/EmployeesInfo';
 import Users from '../../models/User';
-import RequesterModal from '../modal/RequesterModal';
-import VatGroupRepository from '@/services/actions/VatGroupRepository';
-import GLAccount from '@/models/GLAccount';
 import Formular from '@/utilies/formular';
 import DocumentHeaderComponent from '../DocumenHeaderComponent';
 import shortid from 'shortid';
 import { documentType } from '@/constants';
-
-const contextClass: any = {
-    success: "bg-blue-600",
-    error: "bg-red-600",
-    info: "bg-gray-600",
-    warning: "bg-orange-400",
-    default: "bg-indigo-600",
-    dark: "bg-white-600 font-gray-300",
-};
-
-type ModelDialog = 'success' | 'error'
+import LoadingProgress from '../LoadingProgress';
+import { ItemModalComponent } from '../modal/ItemComponentModal';
 
 export interface CoreFormDocumentState {
     collapse: boolean,
@@ -48,7 +29,6 @@ export interface CoreFormDocumentState {
     Email?: string | undefined | null,
     Owner?: any,
     Buyer?: any,
-    // shippingType?: number | any | null,
     PaymentTermType?: string | undefined | null,
     PaymentMethod?: string | undefined | null,
     Currency?: string | undefined | null,
@@ -99,8 +79,8 @@ export interface CoreFormDocumentState {
 }
 
 export default abstract class CoreFormDocument extends React.Component<any, CoreFormDocumentState> {
-
     dialog = React.createRef<FormMessageModal>();
+    protected itemModalRef = React.createRef<ItemModalComponent>();
 
     protected constructor(props: any) {
         super(props);
@@ -166,49 +146,28 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             error: {},
         }
 
-        this.handlerConfirmVendor = this.handlerConfirmVendor.bind(this)
         this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
-        this.handlerConfirmDistribution = this.handlerConfirmDistribution.bind(this)
-        this.handlerConfirmRequestEmployee = this.handlerConfirmRequestEmployee.bind(this)
-        this.handlerConfirmRequester = this.handlerConfirmRequester.bind(this);
         this.handlerChangeItems = this.handlerChangeItems.bind(this);
-        this.handlerDeleteItem = this.handlerDeleteItem.bind(this);
         this.handlerChange = this.handlerChange.bind(this);
         this.handlerChangeItemByCode = this.handlerChangeItemByCode.bind(this);
 
     }
 
+
     abstract FormRender(): JSX.Element;
 
     abstract HeaderTaps(): JSX.Element;
 
-
     render() {
         return (
             <div className='grow flex flex-col'>
-                <ItemModal open={this.state.isOpenItem} onClose={() => this.handlerCloseItem()} type='purchase' onOk={this.handlerConfirmItem} />
-                <VendorModal open={this.state.isOpenVendor} onOk={this.handlerConfirmVendor} onClose={() => this.handlerCloseVendor()} type={this.state.vendorType} />
-                <ProjectModal open={this.state.isOpenProject} onClose={() => this.handlerCloseProject()} onOk={(project) => this.handlerConfirmProject(project)} />
-                <DistributionRuleModal open={this.state.showDistribution} onClose={() => { }} inWhichNum={this.state.inWhichDimension} onOk={this.handlerConfirmDistribution} />
-                <RequesterEmployeeModal open={this.state.isOpenRequesterEmployee} onOk={this.handlerConfirmRequestEmployee} onClose={() => { }} />
-                <RequesterModal open={this.state.isOpenRequester} onOk={this.handlerConfirmRequester} onClose={() => { }} />
-
-                <ToastContainer
-                    toastClassName={({ type }: any) => contextClass[type || "default"] +
-                        " relative flex p-1 min-h-6 rounded-md justify-between overflow-hidden cursor-pointer"
-                    }
-                    bodyClassName={() => "text-sm font-white font-med block p-3"}
-                />
-                <Modal title={this.state.title} open={this.state.showDialogMessage} onClose={() => { }} onOk={() => { }} widthClass='w-[30rem]' >
-                    <span className='text-sm'>{this.state.message}</span>
-                </Modal>
-
                 <FormMessageModal ref={this.dialog} />
+                <ItemModalComponent ref={this.itemModalRef} type={'purchase'} onOk={this.handlerConfirmItem}  />
                 <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    sx={{ color: '#fff', backgroundColor: "rgb(251 251 251 / 60%)", zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={this.state.isSubmitting}
                 >
-                    <CircularProgress color="inherit" />
+                    <LoadingProgress />
                 </Backdrop>
 
                 <div className='flex flex-col w-full  grow '>
@@ -227,92 +186,10 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         this.setState({ ...this.state, collapse: !this.state.collapse })
     }
 
-    protected handlerOpenItem() {
-        this.setState({ ...this.state, isOpenItem: true })
-    }
-
     protected handlerConfirmItem(data: any[]) {
         let oldItems = [...this.state.Items ?? []];
-        // Filter out items that already exist in the state
-        const newItems = data.filter((newItem) => !oldItems.find((e) => e?.ItemCode === newItem.ItemCode));
+        const newItems = data.filter((newItem) => !oldItems.find((e) => e?.ItemCode === newItem.ItemCode));   // Filter out items that already exist in the state
         this.setState({ ...this.state, isOpenItem: false, error: {}, Items: [...oldItems, ...newItems] });
-    }
-
-    private handlerCloseItem() {
-        // this.setState({ ...this.state, isOpenItem: false })
-    }
-
-    // handler vendor 
-    protected handlerConfirmVendor(record: BusinessPartner) {
-        this.setState({
-            ...this.state,
-            CardCode: record.cardCode,
-            CardName: record.cardName,
-            ContactPersonCode: record.contactEmployee!.length > 0 ? record.contactEmployee![0].id : undefined,
-            ContactPersonList: record.contactEmployee ?? [],
-            ShippingType: record?.shippingType,
-            Email: record.email,
-            Phone: record.phone,
-            PaymentTermType: record.paymentTermTypeCode,
-            PaymentMethod: record.paymentMethod,
-            isOpenVendor: false,
-            Currency: record.currency,
-            PriceLists: record.priceLists,
-            SalesPersonCode: record.salePersonCode,
-            Address2: record.getShipTo(),
-            Address: record.getBillToAddress(),
-            Owner: record?.owner ?? null,
-        });
-    }
-
-    protected handlerOpenVendor(type: VendorModalType) {
-        this.setState({ ...this.state, isOpenVendor: true, vendorType: type })
-    }
-
-    private handlerCloseVendor() {
-        this.setState({ ...this.state, isOpenVendor: false })
-    }
-
-    // List Account modal
-    protected handlerOpenAccount() {
-        this.setState({ ...this.state, isOpenAccount: true })
-    }
-
-    private handlerCloseAccount() {
-        this.setState({ ...this.state, isOpenAccount: false })
-    }
-
-    // List Project modal
-    protected handlerOpenProject() {
-        this.setState({ ...this.state, isOpenProject: true })
-    }
-
-    private handlerCloseProject() {
-        // this.setState({ ...this.state, isOpenProject: false })
-    }
-
-    protected handlerConfirmProject(record: Project) {
-        this.setState({
-            ...this.state,
-            Project: record.code,
-            isOpenProject: false,
-        });
-    }
-
-    protected showDistribution(dimension: number) {
-
-        this.setState({
-            ...this.state,
-            showDistribution: true,
-            inWhichDimension: dimension
-        });
-    }
-
-    protected handlerConfirmDistribution(distribution: any) {
-        this.setState({
-            ...this.state,
-            showDistribution: false,
-        });
     }
 
     protected handlerChange(key: string, value: any) {
@@ -328,6 +205,25 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         }
 
         switch (key) {
+            case 'vendor':
+                const vendor = value as BusinessPartner;
+                temps['CardCode'] = vendor.cardCode;
+                temps['CardName'] = vendor.cardName;
+                temps['ContactPersonCode'] = vendor.contactEmployee!.length > 0 ? vendor.contactEmployee![0].id : undefined;
+                temps['ContactPersonList'] = vendor.contactEmployee ?? [];
+                temps['ShippingType'] = vendor?.shippingType;
+                temps['Email'] = vendor.email;
+                temps['Phone'] = vendor.phone;
+                temps['PaymentTermType'] = vendor.paymentTermTypeCode;
+                temps['PaymentMethod'] = vendor.paymentMethod;
+                temps['isOpenVendor'] = false;
+                temps['Currency'] = vendor.currency;
+                temps['PriceLists'] = vendor.priceLists;
+                temps['SalesPersonCode'] = vendor.salePersonCode;
+                temps['Address2'] = vendor.getShipTo();
+                temps['Address'] = vendor.getBillToAddress();
+                temps['Owner'] = vendor?.owner ?? null;
+                break;
             case 'Status':
                 temps['disable'] = { ...temps['disable'], TerminateDate: !(value === 'T') };
                 break;
@@ -371,72 +267,6 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         temps['DocTotal'] = total + temps['DocTaxTotal'];
         return temps;
     }
-
-
-    protected toast(message: string, type: TypeOptions) {
-        toast(message, {
-            position: 'top-right',
-            type: type,
-            theme: 'colored',
-            icon: false,
-        })
-    }
-
-
-    protected showMessage(title: string, message: string) {
-        this.setState({
-            ...this.state,
-            title: title,
-            message: message,
-            showDialogMessage: true,
-            isSubmitting: false,
-        })
-    }
-
-    protected handlerCloseDialogMessage(cb?: Function) {
-        this.setState({
-            ...this.state,
-            showDialogMessage: false,
-        });
-
-        if (cb) {
-            cb();
-        }
-    }
-
-    protected handlerOpenRequester() {
-        this.setState({ ... this.state, isOpenRequester: true })
-    }
-
-    protected handlerConfirmRequestEmployee(record: EmployeesInfo) {
-        this.setState({
-            ...this.state,
-            isOpenRequesterEmployee: false,
-            CardCode: record.id,
-            CardName: record.name,
-            Branch: record.branch,
-            Department: record.department,
-            Email: record.email,
-        });
-    }
-
-
-    protected handlerOpenRequesterEmployee() {
-        this.setState({ ... this.state, isOpenRequesterEmployee: true })
-    }
-
-    protected handlerConfirmRequester(record: Users) {
-        this.setState({
-            ...this.state,
-            isOpenRequester: false,
-            CardCode: record.code,
-            CardName: record.name,
-            Branch: record.branch,
-            Department: record.department,
-            Email: record.email,
-        });
-    }
-
 
     protected handlerChangeItems({ value, record, field }: any) {
         let items: any[] = [...this.state.Items ?? []];
@@ -488,15 +318,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             items[index]['LineTotal'] = Formular.findLineTotal(items[index]['Quantity'], items[index]['UnitPrice'], items[index]['DiscountPercent']);
         }
 
-
-
         this.setState({ ...this.state, Items: items, DocTotalBeforeDiscount, DocTaxTotal, DocTotal })
-    }
-    protected handlerDeleteItem(code: string) {
-        let items = [...this.state.Items ?? []];
-        const index = items.findIndex((e: any) => e?.ItemCode === code);
-        items.splice(index, 1)
-        this.setState({ ...this.state, Items: items })
     }
 
     protected handlerChangeItemByCode(value: any) {

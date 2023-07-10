@@ -3,6 +3,9 @@ import React, { FC, RefObject } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { BsCheckCircle, BsExclamationCircle } from "react-icons/bs";
+import { HiDocumentCheck } from 'react-icons/hi2';
+import { Button } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 interface FormMessageModalProps {
@@ -12,19 +15,15 @@ interface FormMessageModalProps {
 
 
 class FormMessageModal extends React.Component<FormMessageModalProps> {
-    // Your component implementation...
-    state = { open: false, message: '', title: '', isError: false, }
+    state = { open: false, message: '', title: '', isError: false, id: null }
 
-    handlerOpen() {
-        console.log('worked')
-    }
-
-    success(message: string) {
+    success(message: string, id: number) {
         this.setState({
             open: true,
             isError: false,
             title: 'Success',
             message: message,
+            id: id,
         })
     }
 
@@ -37,10 +36,14 @@ class FormMessageModal extends React.Component<FormMessageModalProps> {
         })
     }
 
+    onClose() {
+        this.setState({ open: false });
+    }
+
     render() {
         return (
             <Transition appear show={this.state.open} as={Fragment}>
-                <Dialog as="div" className="relative z-[100] " onClose={() => { }}>
+                <Dialog as="div" className="relative z-[100] " onClose={this.onClose}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -64,36 +67,43 @@ class FormMessageModal extends React.Component<FormMessageModalProps> {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className={`w-[28rem] shadow-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle  transition-all`}>
+                                <Dialog.Panel className={`w-[28rem] shadow-lg transform overflow-hidden rounded-2xl bg-white text-left align-middle  transition-all`}>
                                     <Dialog.Title
                                         as="h3"
-                                        className={`w-full flex  items-center gap-2 text-base font-medium leading-6 ${this.state.isError ? 'text-red-500' : 'text-green-500'}`}
+                                        className={`px-6 shadow py-3 w-full  flex  items-center gap-2 text-lg font-base leading-6 ${this.state.isError ? 'text-red-500' : 'text-green-500'}`}
                                     >
-                                        {this.state.isError ? <BsExclamationCircle /> : <BsCheckCircle />} <span>{this.state.title}</span>
-
+                                        {this.state.isError ? <BsExclamationCircle /> : <HiDocumentCheck className='text-lg' />} <span>{this.state.title}</span>
                                     </Dialog.Title>
-                                    <hr />
-                                    <div className="text-sm my-4">
-                                        {this.state.message}
-                                    </div>
+                                    <div className='px-6 pt-3 pb-4 border border-t'>
+                                        <div className="text-sm text-gray-600 my-4">
+                                            {this.state.message}
+                                        </div>
 
-                                    <div className="mt-4 flex gap-2 justify-end">
-                                        {this.state.isError ?
-                                            <button
-                                                type="button"
-                                                className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-2 py-1 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                                onClick={() => this.setState({ open: false })}
-                                            >
-                                                Close
-                                            </button> : <button
-                                                type="button"
-                                                className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-2 py-1 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                                onClick={() => this.handlerOpen()}
-                                            >
-                                                View Detail
-                                            </button>}
+                                        <div className="mt-4 flex gap-2 justify-end border-t pt-4">
+                                            {this.state.isError ?
+                                                <Button
+                                                    variant='contained'
+                                                    disableElevation
+                                                    size='small'
+                                                    sx={{
+                                                        backgroundColor: this.state.isError ? '#f87171' : '#60a5fa',
+                                                        ':hover': {
+                                                            backgroundColor: this.state.isError ? '#ef4444' : '#3b82f6',
+                                                        }
+                                                    }}
+
+                                                    onClick={() => this.setState({ open: false })}
+                                                >
+                                                    <span className='capitalize text-white text-xs'>Close</span>
+                                                </Button> :
+                                                <>
+                                                    <ReplaceRouteButton isError={this.state.isError} flag={1} id={this.state.id}>View Detail</ReplaceRouteButton>
+                                                    <ReplaceRouteButton isError={this.state.isError} flag={0}>Back To Lists</ReplaceRouteButton>
+                                                </>
+                                            }
 
 
+                                        </div>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>
@@ -106,6 +116,37 @@ class FormMessageModal extends React.Component<FormMessageModalProps> {
 }
 
 export default FormMessageModal;
+
+
+const ReplaceRouteButton = (props: any) => {
+    const route = useNavigate();
+    const history = useLocation();
+
+    const navigateTo = () => {
+        if (props.flag === 0) {
+            route(-1);
+            return;
+        }
+
+        route(history.pathname.replace('create', "") + props?.id);
+    }
+
+
+    return <Button
+        variant='contained'
+        disableElevation
+        size='small'
+        sx={{
+            backgroundColor: props.isError ? '#f87171' : '#60a5fa',
+            ':hover': {
+                backgroundColor: props.isError ? '#ef4444' : '#3b82f6',
+            }
+        }}
+        onClick={navigateTo}
+    >
+        <span className='capitalize text-white text-[12px]'>{props?.children}</span>
+    </Button>
+}
 
 
 

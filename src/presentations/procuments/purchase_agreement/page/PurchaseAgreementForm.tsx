@@ -14,6 +14,8 @@ import PurchaseAgreement from '../../../../models/PurchaseAgreement';
 import MenuButton from '@/components/button/MenuButton';
 import shortid from 'shortid';
 import { FormValidateException } from '@/utilies/error';
+import LoadingProgress from '@/components/LoadingProgress';
+import { ItemType } from '@/components/modal/ItemComponentModal';
 
 class PurchaseAgreementForm extends CoreFormDocument {
     constructor(props: any) {
@@ -44,59 +46,70 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
     componentDidMount(): void {
         if (!this.props?.edit) {
-            setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
+            // setTimeout(() => this.setState({ ...this.state, loading: false, }), 800);
         }
 
-        this.onInit();
 
-        Promise.allSettled([
-            DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie),
-            DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie),
-        ]).then((result) => {
-            if (result[0].status === 'rejected') {
-                this.dialog.current?.error("To generate this document, first define the numbering series in the Administrator module.", "Document Numbering");
-                return;
-            }
-
-            const state = { ...this.state };
-            const Series: any = result[1];
-            state['isLoadingSerie'] = false;
-            state['SerieLists'] = result[0].value;
-            if (!this.props.edit) {
-                state['Series'] = Series.value?.Series;
-                state['DocNum'] = Series.value?.NextNumber;
-            }
-            this.setState(state)
-        })
+        this.setState({loading: false})
+        // this.onInit();
     }
 
     async onInit() {
+        let state = { ...this.state };
+        let seriesList: any = this.props.query.find('pa-series');
+        let defaultSeries: any = this.props.query.find('pa-default-series');
+
+        if (!seriesList) {
+            seriesList = await DocumentSerieRepository.getDocumentSeries(PurchaseAgreementRepository.documentSerie);
+            this.props.query.set('pa-series', seriesList)
+        }
+
+        if (!defaultSeries) {
+            defaultSeries = await DocumentSerieRepository.getDefaultDocumentSerie(PurchaseAgreementRepository.documentSerie);
+            this.props.query.set('pa-default-series', defaultSeries);
+        }
+
+        state['isLoadingSerie'] = false;
+
+        if (!this.props.edit) {
+            state['SerieLists'] = seriesList;
+            state['Series'] = defaultSeries.Series;
+            state['DocNum'] = defaultSeries.NextNumber;
+        }
+
         if (this.props.edit) {
             const { id } = this.props.match.params;
-            let state: any = this.props.query.find('pa-id-' + id);
+            let data: any = this.props.query.find('pa-id-' + id);
             let disables: any = {};
 
-            if (!state) {
+            if (!data) {
                 await new PurchaseAgreementRepository().find(id).then(async (res: any) => {
-                    state = res;
+                    data = res;
                     this.props.query.set('pa-id-' + id, res);
                 });
             }
-            state['Status'] = state['Status'] === 'O' ? 'F' : state['Status'];
-            disables['StartDate'] = state?.Status?.includes('A') || state?.Status?.includes('T');
-            disables['EndDate'] = state?.Status?.includes('A') || state?.Status?.includes('T');
-            disables['PaymentMethod'] = state?.Status?.includes('A') || state?.Status?.includes('T');
-            disables['PaymentMethod'] = state?.Status?.includes('A') || state?.Status?.includes('T');
-            disables['ShippingType'] = state?.Status?.includes('A') || state?.Status?.includes('T');
-            disables['PaymentTermType'] = state?.Status?.includes('A') || state?.Status?.includes('T');
-            disables['Status'] = state?.Status?.includes('T');
-            disables['AgreementType'] = state?.Status?.includes('A') || state?.Status?.includes('T');
-            disables['Projects'] = state?.Status?.includes('A') || state?.Status?.includes('T');
+
+
+            data['Status'] = data?.Status === 'O' ? 'F' : data?.Status;
+            disables['StartDate'] = data?.Status?.includes('A') || data?.Status?.includes('T');
+            disables['EndDate'] = data?.Status?.includes('A') || data?.Status?.includes('T');
+            disables['PaymentMethod'] = data?.Status?.includes('A') || data?.Status?.includes('T');
+            disables['PaymentMethod'] = data?.Status?.includes('A') || data?.Status?.includes('T');
+            disables['ShippingType'] = data?.Status?.includes('A') || data?.Status?.includes('T');
+            disables['PaymentTermType'] = data?.Status?.includes('A') || data?.Status?.includes('T');
+            disables['Status'] = data?.Status?.includes('T');
+            disables['AgreementType'] = data?.Status?.includes('A') || data?.Status?.includes('T');
+            disables['Projects'] = data?.Status?.includes('A') || data?.Status?.includes('T');
             disables['TerminateDate'] = true;
-            disables['DocumentLine'] = state?.Status?.includes('A') || state?.Status?.includes('T');
-            this.setState({ ...state, disable: disables, loading: false });
+            disables['DocumentLine'] = data?.Status?.includes('A') || data?.Status?.includes('T');
+            state = { ...state, ...data, disable: disables, loading: false };
+            // this.setState({ ...state, disable: disables, loading: false });
         }
 
+        // 
+        state.loading = false;
+        // await new Promise((resolve) => setTimeout(() => resolve(''), 800))
+        this.setState(state)
     }
 
     handlerRemoveItem(code: string) {
@@ -117,35 +130,34 @@ class PurchaseAgreementForm extends CoreFormDocument {
 
             const { id } = this.props?.match?.params;
 
-            if (!this.state.CardCode) {
+            const payloads = new PurchaseAgreement(this.state);
+
+            if (!payloads.CardCode) {
                 data['error'] = { "CardCode": "Vendor is Required!" }
                 throw new FormValidateException('Vendor is Required!', 0);
             }
 
 
-            if (!data?.EndDate) {
+            if (!payloads?.EndDate) {
                 data['error'] = { "EndDate": "End date is Required!" }
                 throw new FormValidateException('End date is Required!', 0);
             }
 
-            if (!data?.Items || data?.Items?.length === 0) {
+            if (!payloads?.Items || payloads?.Items?.length === 0) {
                 data['error'] = { "Items": "Items is missing and must at least one record!" }
                 throw new FormValidateException('Items is missing', 2);
             }
 
-            const payloads = new PurchaseAgreement(this.state).toJson(this.props?.edit);
-
-
             await new PurchaseAgreementRepository().post(this.state, this.props?.edit, id).then((res: any) => {
                 const purchaseAgreement = new PurchaseAgreement(res?.data)
-                this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.DocEntry), purchaseAgreement);
-                this.dialog.current?.success("Create Successfully.");
+                // this.props.history.replace(this.props.location.pathname?.replace('create', purchaseAgreement.DocEntry), purchaseAgreement);
+                this.dialog.current?.success("Create Successfully.", purchaseAgreement.DocEntry);
             }).catch((e: any) => {
                 if (e instanceof UpdateDataSuccess) {
                     const agreement = new PurchaseAgreement(this.state);
                     this.props.query.set('pa-id-' + id, agreement);
                     this.props.history.replace(this.props.location.pathname?.replace('/edit', ''), { ...this.state });
-                    this.dialog.current?.success(e.message);
+                    // this.dialog.current?.success(e.message);
                     return;
                 }
                 this.dialog.current?.error(e.message);
@@ -155,6 +167,8 @@ class PurchaseAgreementForm extends CoreFormDocument {
         } catch (error: any) {
             if (error instanceof FormValidateException) {
                 this.setState({ ...data, isSubmitting: false, tapIndex: error.tap });
+                console.log(error);
+                this.dialog.current?.error(error.message, 'Invalid');
                 return;
             }
 
@@ -164,9 +178,7 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
     async handlerChangeMenu(index: number) {
-        this.setState({ ...this.state, loading: true });
-        await new Promise((resolve) => setTimeout(() => resolve(''), 500));
-        this.setState({ ...this.state, loading: false, tapIndex: index });
+        this.setState({ ...this.state, tapIndex: index });
 
     }
 
@@ -180,28 +192,26 @@ class PurchaseAgreementForm extends CoreFormDocument {
     }
 
     hanndAddNewItem() {
-        if (this.state?.DocType === 'amItem') {
-            this.handlerOpenItem()
-            return;
-        }
+        this.itemModalRef.current?.onOpen();
+        // if (this.state?.DocType === 'amItem') {
+        //     return;
+        // }
 
-        const items = [...this.state.Items ?? [], { ItemCode: shortid.generate(), UnitPrice: 0, Quantity: 1 }];
-        this.setState({ ...this.state, Items: items });
+        // const items = [...this.state.Items ?? [], { ItemCode: shortid.generate(), UnitPrice: 0, Quantity: 1 }];
+        // this.setState({ ...this.state, Items: items, });
     }
+
+
 
     FormRender = () => {
         return <>
             <form id='formData' onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4 relative'>
-                {this.state.loading ? <div className='h-full w-full flex items-center justify-center'><CircularProgress /></div> : <>
+                {this.state.loading ? <div className='w-full h-full flex item-center justify-center'><LoadingProgress /></div> : <>
                     <div className='grow'>
                         {this.state.tapIndex === 0 && <GeneralForm
                             data={this.state}
                             edit={this.props?.edit}
-                            handlerOpenVendor={() => {
-                                this.handlerOpenVendor('supplier');
-                            }}
                             handlerChange={(key, value) => this.handlerChange(key, value)}
-                            handlerOpenProject={() => this.handlerOpenProject()}
                         />}
 
                         {
@@ -234,19 +244,21 @@ class PurchaseAgreementForm extends CoreFormDocument {
                         }
                     </div>
 
-                    <div className="sticky w-full bottom-4  mt-2 ">
-                        <div className="backdrop-blur-sm bg-white p-2 rounded-lg shadow-lg z-[1000] flex justify-between gap-3 border drop-shadow-sm">
-                            <div className="flex ">
-                                <LoadingButton size="small" sx={{ height: '25px' }} variant="contained" disableElevation><span className="px-3 text-[11px] py-1 text-white">Copy To</span></LoadingButton>
-                            </div>
-                            <div className="flex items-center">
-                                <LoadingButton type="submit" sx={{ height: '25px' }} className='bg-white' loading={false} size="small" variant="contained" disableElevation>
-                                    <span className="px-6 text-[11px] py-4 text-white">Save </span>
-                                </LoadingButton>
-                            </div>
+
+                </>}
+
+                <div className="sticky w-full bottom-4  mt-2 ">
+                    <div className="backdrop-blur-sm bg-white p-2 rounded-lg shadow-lg z-[1000] flex justify-between gap-3 border drop-shadow-sm">
+                        <div className="flex ">
+                            <LoadingButton size="small" sx={{ height: '25px' }} variant="contained" disableElevation><span className="px-3 text-[11px] py-1 text-white">Copy To</span></LoadingButton>
+                        </div>
+                        <div className="flex items-center">
+                            <LoadingButton type="submit" sx={{ height: '25px' }} className='bg-white' loading={false} size="small" variant="contained" disableElevation>
+                                <span className="px-6 text-[11px] py-4 text-white">Save </span>
+                            </LoadingButton>
                         </div>
                     </div>
-                </>}
+                </div>
             </form>
         </>
     }

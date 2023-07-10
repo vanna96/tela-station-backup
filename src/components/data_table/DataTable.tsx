@@ -48,7 +48,8 @@ export default function DataTable(props: DataTableProps) {
     return (
         <div className={` rounded-lg shadow-sm  p-4 flex flex-col gap-3 ${theme === 'light' ? 'bg-white border' : 'bg-slate-700 border-grey-600'}`}>
             <div className="flex justify-between">
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-4 items-center justify-center">
+                    <h3 className="text-base">Purchase Agreement</h3>
                     {/* <MUITextField placeholder="Search ..." /> */}
                     <DataTableColumnFilter
                         handlerClearFilter={props.handlerRefresh}

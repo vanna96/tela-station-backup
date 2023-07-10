@@ -1,5 +1,5 @@
 export abstract class FormError {
-  protected message: string
+  public message: string
 
   constructor(message: string) {
     this.message = message

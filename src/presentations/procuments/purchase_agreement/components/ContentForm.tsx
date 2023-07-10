@@ -9,6 +9,7 @@ import { PurchaseAgreementItemModal } from "./PurchaseAgreementItemModal";
 import { PurchaseAgreementServiceModal } from "./PurchaseAgreementServiceModal";
 import { Alert, Collapse, IconButton } from "@mui/material";
 import { MdOutlineClose } from "react-icons/md";
+import { ItemModalComponent } from "@/components/modal/ItemComponentModal";
 
 interface ContentFormProps {
     handlerAddItem: () => void,
@@ -45,8 +46,8 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 header: "Item No", //uses the default width from defaultColumn prop
                 visible: true,
                 Cell: ({ cell }: any) => {
-                    if (!cell.row.original?.ItemCode)
-                        return <div role="button" className="px-4 py-2 text-inherit rounded hover:bg-gray-200 border shadow-inner" onClick={handlerAddItem}>Add Row</div>
+                    // if (!cell.row.original?.ItemCode)
+                    //     return <div role="button" className="px-4 py-2 text-inherit rounded hover:bg-gray-200 border shadow-inner" onClick={handlerAddItem}>Add Row</div>
 
                     return <MUITextField
                         value={cell.getValue()}
@@ -85,7 +86,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "Quantity",
                 header: "Quantity",
                 Header: (header: any) => <label>Quantity <span className="text-red-500">*</span></label>,
-                size: 80,
+               
                 visible: true,
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
@@ -106,7 +107,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 header: "Unit Price",
                 visible: true,
                 Header: (header: any) => <label>Unit Price <span className="text-red-500">*</span></label>,
-                size: 80,
+               
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
                     return currencyFormat(cell.getValue());
@@ -126,7 +127,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "VatGroup",
                 header: "Tax Code",
                 visible: false,
-                size: 80,
+              
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
                     return cell.getValue();
@@ -136,7 +137,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "GrossPrice",
                 header: "Gross Price",
                 visible: false,
-                size: 80,
+               
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
 
@@ -148,7 +149,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "LineTotal",
                 header: "Total",
                 visible: false,
-                size: 80,
+                
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
                     return currencyFormat(cell.getValue());
@@ -158,7 +159,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "UomCode",
                 header: "Uom Code",
                 visible: false,
-                size: 80,
+                
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
                     return currencyFormat(cell.getValue());
@@ -168,7 +169,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "UomGrop",
                 header: "Uom Grop",
                 visible: false,
-                size: 80,
+                
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
                     return currencyFormat(cell.getValue());
@@ -177,7 +178,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
             {
                 accessorKey: "UnitOfMeasure",
                 header: "Item Per Group",
-                size: 80,
+               
                 visible: false,
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
@@ -188,7 +189,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "Dimesion1",
                 header: "Dimesion 1",
                 visible: false,
-                size: 80,
+              
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
                     return currencyFormat(cell.getValue());
@@ -197,7 +198,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
             {
                 accessorKey: "Dimesion2",
                 header: "Dimesion 2",
-                size: 80,
+                
                 visible: false,
 
                 Cell: ({ cell }: any) => {
@@ -210,7 +211,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 header: "Dimesion 3",
                 visible: false,
 
-                size: 80,
+                
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
                     return currencyFormat(cell.getValue());
@@ -220,7 +221,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "Dimesion4",
                 header: "Dimesion 4",
                 visible: false,
-                size: 80,
+                
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
                     return currencyFormat(cell.getValue());
@@ -230,7 +231,7 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
                 accessorKey: "Dimesion5",
                 header: "Dimesion 5",
                 visible: false,
-                size: 80,
+                
                 Cell: ({ cell }: any) => {
                     if (Object.keys(cell.row.original).length === 1) return null;
                     return currencyFormat(cell.getValue());
@@ -332,7 +333,6 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
         [serviceModalRef]
     );
 
-
     const onUpdateByItem = (item: any) => onChangeItemByCode(item);
     const onClose = React.useCallback(() => setCollapseError(false), []);
 
@@ -367,5 +367,6 @@ export default function ContentForm({ data, handlerChangeItem, handlerAddItem, h
         />
         <PurchaseAgreementItemModal ref={updateRef} onSave={onUpdateByItem} columns={itemColumns} />
         <PurchaseAgreementServiceModal ref={serviceModalRef} onSave={onUpdateByItem} />
+       
     </>
 }

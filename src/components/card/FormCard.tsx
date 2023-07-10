@@ -23,12 +23,10 @@ export default class FormCard extends React.Component<FormCardProps> {
 
     public render() {
 
-        const { theme }: any = this.context;
-
         return (
-            <div className={`flex flex-col  ${theme === 'light' ? 'bg-white' : 'bg-slate-700'} rounded-lg p-4 px-6 shadow ${this.state.collapse ? 'pb-6' : ''}`}>
+            <div className={`flex flex-col rounded-lg shadow-sm bg-white border p-6 pr-6 `}>
                 <div
-                    className={`font-bold text-lg flex justify-between items-center p-2  border-b ${theme === 'light' ? 'border-b-gray-300' : 'border-b-gray-600'} mb-3`}
+                    className={`font-bold  text-lg flex justify-between items-center border-b  mb-3`}
                 >
                     <h2>{this.props.title ?? 'Information'}</h2>
                     {this.props.action}

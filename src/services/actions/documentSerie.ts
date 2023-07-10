@@ -18,7 +18,7 @@ export default class DocumentSerieRepository {
       )}&$select=${this.query.join(",")}`,
       payload
     ).then((res: any) => {
-      return res?.data?.value?.filter((e: any) => e?.Locked === "tNO")
+      return res?.data?.value
     })
 
     return response

@@ -97,10 +97,6 @@ export default function App() {
                             >
                                 {theme === 'light' ? <MdOutlineDarkMode /> : <MdOutlineLightMode />}
                             </IconButton>
-                            {/* <IconButton color="primary" aria-label="menu" component="label">
-                            <RiUser3Line />
-                        </IconButton> */}
-                            {/* <ProfileMenu /> */}
                             <AccountMenu signOut={signOut} />
                         </div>
                     </div>

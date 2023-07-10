@@ -11,7 +11,7 @@ const ProcumentPage = () => {
 
     const goTo = (route: string) => navigate('/procument/' + route);
     return <>
-        <MainContainer title='Purchase'>
+        <MainContainer title='Procument'>
             <ItemCard amount={0} title='Purchase Agreement' onClick={() => goTo('purchase-agreement')} icon={<AiOutlineFileProtect />} />
             <ItemCard amount={0} title='Purchase Request' onClick={() => goTo('purchase-request')} icon={<AiOutlineFileProtect />} />
             <ItemCard amount={0} title='Purchase Quoatation' onClick={() => goTo('purchase-qoutation')} icon={<AiOutlineFileUnknown />} />

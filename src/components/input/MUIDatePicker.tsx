@@ -2,8 +2,8 @@ import React, { useMemo } from "react";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { ThemeProvider, createMuiTheme, OutlinedInputProps } from '@mui/material';
+import TextField from "@mui/material/TextField";
+import { ThemeProvider, createTheme, OutlinedInputProps } from '@mui/material';
 import dayjs from "dayjs";
 import { ThemeContext } from "@/contexts";
 
@@ -15,7 +15,7 @@ interface MUIDatePickerProps extends Omit<OutlinedInputProps, 'onChange'> {
   // disabled?: boolean,
   addOnDay?: number;
   label?: string;
-  helperText?: string;
+  helpertext?: string;
 }
 
 
@@ -34,7 +34,7 @@ const MUIDatePicker: React.FC<MUIDatePickerProps> = (props: MUIDatePickerProps) 
     return value;
   }, [value, addOnDay]);
 
-  const theme1 = React.useMemo(() => createMuiTheme({
+  const theme1 = React.useMemo(() => createTheme({
     typography: {
       allVariants: {
         color: theme === 'light' ? '' : 'white'
@@ -49,16 +49,17 @@ const MUIDatePicker: React.FC<MUIDatePickerProps> = (props: MUIDatePickerProps) 
 
 
   const onChangeInput = (event: any) => {
-
     if (!onChange) return;
+
+    if (dayjs(props.value).format('DD-MM-YYYY') === event.target.value) return;
 
     if (event.target.value === '') {
       props?.onChange(null);
       return;
     }
-
     onChange(dayjs(event.target.value).format('DD-MM-YYYY'))
   }
+
 
 
   return (
@@ -83,12 +84,12 @@ const MUIDatePicker: React.FC<MUIDatePickerProps> = (props: MUIDatePickerProps) 
               className={`${theme === 'light' ? '' : 'bg-slate-600'} ${disabled ? 'bg-gray-100' : ''}`}
               onChange={(e: any, inputVal: any) => onChange(dayjs(e).format('YYYY-MM-DD'))}
               renderInput={(params) => <TextField sx={{
-                '& .MuiFormHelperText-root': {
+                '& .MuiFormhelpertext-root': {
                   color: '#ef4444',
                   marginLeft: '8px'
                 },
                 ...props.sx
-              }} {...params} name={name} autoComplete="off" onBlur={onChangeInput} error={(!dayjs(value).isValid() && value === '') || props.error} helperText={props.helperText ?? (!dayjs(value).isValid() && (value || value === '') ? "invalid date format" : "")} />}
+              }} {...params} name={name} autoComplete="off" onBlur={onChangeInput} error={(!dayjs(value).isValid() && value === '') || props.error} helperText={props.helpertext ?? (!dayjs(value).isValid() && (value || value === '') ? "invalid date format" : "")} />}
             />
           </LocalizationProvider>
         </ThemeProvider>

@@ -6,6 +6,9 @@ import { Button, IconButton } from "@mui/material";
 import { AiOutlinePushpin } from "react-icons/ai";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { ThemeContext } from "@/contexts";
+import { FiEdit } from "react-icons/fi";
+
+
 
 interface DocumentHeaderComponentProps {
     data: any,
@@ -20,7 +23,6 @@ interface DocumentHeaderComponentProps {
 
 const DocumentHeaderComponent: React.FC<DocumentHeaderComponentProps> = (props: DocumentHeaderComponentProps) => {
     const [collapse, setCollapse] = React.useState<boolean>(true);
-    const [section, setSection] = React.useState<number>(0);
     const { theme } = React.useContext(ThemeContext);
 
     const location = useLocation();
@@ -46,41 +48,45 @@ const DocumentHeaderComponent: React.FC<DocumentHeaderComponentProps> = (props: 
         setCollapse(!collapse);
     }
 
-    const handlerClickMenu = (value: number) => setSection(value);
+    const navigateToEdit = () => navigate(location.pathname + "/edit")
 
 
-    return <div className={`w-full flex flex-col rounded ${!collapse ? 'gap-3' : ''} justify-between items-center  sticky top-0 border-y ${theme === 'light' ? 'bg-white border-y-gray-200 shadow-lg' : 'bg-slate-700 border-y-gray-600 shadow-lg'} z-50 px-4  `} >
+    return <div className={`w-full flex flex-col rounded ${!collapse ? 'gap-3' : ''} justify-between items-center  sticky top-0 border-y ${theme === 'light' ? 'bg-white border-y-gray-200 shadow-sm' : 'bg-slate-700 border-y-gray-600 shadow-lg'} z-50 px-4  `} >
         <div className={`w-full flex justify-between px-6 ${!collapse ? 'border-b  py-2' : 'pt-2'} ${theme === 'light' ? 'border-b-gray-200' : 'border-b-gray-600'} z-50 px-0`}>
             <div className='flex gap-2 items-center'>
-                <h1 className='text-md font-bold capitalize'>{location.pathname.split('/')[2].replace('-', ' ')} - {props?.data?.DocNum}</h1>
+                <h1 className='text-md  capitalize'>{location.pathname.split('/')[2].replace('-', ' ')} - {props?.data?.DocNum}</h1>
+                {!(location.pathname.includes('edit') || !id) && <IconButton
+                    size="small"
+                    sx={{ color: 'rgb(59 130 246) !important', marginLeft: '10px' }}
+                    onClick={navigateToEdit}
+                >
+                    <FiEdit className="text-red-200" />
+                </IconButton>}
             </div>
-            <div className='text-[12px] flex gap-3'>
-                <div className='mx-2'></div>
+            <div className=' flex gap-3 pr-3'>
+
             </div>
         </div>
-        <div className={`w-full  grid grid-cols-2 gap-2 px-6 py-1  rounded ${!collapse ? '' : 'hidden'}`}>
-            <div className="w-full text-[14px] flex gap-8">
+        <div className={`w-full  grid grid-cols-2 gap-2 px-6 py-1 transition-all rounded overflow-hidden duration-300 ease-out  ${!collapse ? 'h-[6rem]' : 'h-0'}`}>
+            <div className="w-full text-sm flex gap-8">
                 <div className="flex flex-col gap-2">
-                    <span className="text-[#656565] text-[12px]">Vendor</span>
-                    <span className="font-bold">{props?.data?.CardCode}</span>
-                    <span className="font-bold">{props?.data?.CardName}</span>
+                    <span className="text-[#ACACAC] text-sm font-bold">Vendor</span>
+                    <span className="font-bold text-blue-500">{props?.data?.CardCode}</span>
+                    <span className="font-bold text-blue-500">{props?.data?.CardName}</span>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <span className="text-[#656565] text-[12px]">Total Payment Due</span>
-                    <span className="font-bold">AUD {2000}</span>
+                    <span className="text-[#ACACAC] text-sm font-bold">Total Payment Due</span>
+                    <span className="font-bold text-blue-500">AUD {2000}</span>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <span className="text-[#656565] text-[12px]">Status</span>
+                    <span className="text-[#ACACAC] text-sm font-bold">Status</span>
                     <span className="font-bold text-green-500 uppercase">Open</span>
                 </div>
             </div>
         </div>
-        <div className={`w-full flex gap-2  px-4  text-sm  border-t  ${theme === 'light' ? 'border-t-gray-200' : 'border-t-gray-600'} py-0 sticky ${collapse ? 'mt-3' : ''}`}>
+        <div className={`w-full flex gap-2 px-4 text-sm border-t ${theme === 'light' ? 'border-t-gray-200' : 'border-t-gray-600'} py-0 sticky ${collapse ? 'mt-0' : ''}`}>
             {props?.menuTabs}
             <div className="absolute -top-[16px] w-full flex justify-center gap-2">
-                {/* <div role="button" title="btn-pin" className={`flex items-center justify-center w-8 h-8 rounded-md  p-2 ${theme === 'light' ? 'bg-white border' : 'bg-slate-600'} `}>
-                    <AiOutlinePushpin />
-                </div> */}
                 <div
                     title="btn-collapse"
                     role="button"

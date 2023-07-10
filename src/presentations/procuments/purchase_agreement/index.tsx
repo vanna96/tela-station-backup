@@ -182,16 +182,15 @@ export default function PurchaseAgreementLists() {
     return (
         <>
             {/* <ErrorDialogMessage key={error?.message} open={isError} title="Opp Something wrong!" message={error?.message ?? ''} /> */}
-            <div className="w-full h-full px-3 py-2 flex flex-col gap-1 relative ">
-                <div className="flex px-2 shadow-sm rounded-lg justify-between items-center sticky z-10 top-0 w-full  py-3">
-                    <h3 className="text-lg 2xl:text-base xl:text-sm">Procument / Purchase Agreement</h3>
-                    <Button variant="outlined" disableElevation size="small"
+            <div className="w-full h-full px-6 py-2 flex flex-col gap-1 relative ">
+                <div className="flex px-2  rounded-lg justify-between items-center sticky z-10 top-0 w-full  py-2">
+                    <h3 className="text-base 2xl:text-base xl:text-base ">Procument / Blanked Purchase Agreement</h3>
+                    <Button variant="contained" disableElevation size="small"
                         onClick={() => route('/procument/purchase-agreement/create')}
                     >
-                        <span className="text-xs">Create</span>
+                        <span className="text-sm capitalize text-white px-3">Create</span>
                     </Button>
                 </div>
-
                 <DataTable
                     columns={columns}
                     data={data}

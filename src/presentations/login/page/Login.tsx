@@ -25,6 +25,11 @@ import CustomsGroupRepository from '@/services/actions/customsGroupRepository';
 import ManufacturerRepository from '@/services/actions/manufacturerRepository';
 import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import GetCurrentUserRepository from '../repository/getCurrencyUserRepository';
+import MUITextField from '@/components/input/MUITextField';
+
+import sapLog from '../../../assets/sap_logo.png'
+import { Collapse } from '@mui/material';
+import { BASE_BG_COLOR } from '@/configs';
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["sessionId", 'user']);
@@ -32,17 +37,18 @@ export default function Login() {
   const [message, setMessage] = React.useState("");
   const navigate = useNavigate();
 
+  const company = React.useRef("TMCT");
   const username = React.useRef("manager");
-  const password = React.useRef("manager");
+  const password = React.useRef("Admin@123");
 
   const onSubmit = async () => {
     try {
       setLoading(true)
-      const auth = new AuthLogin('TMCT', 'manager', 'Admin@123');
+      const auth = new AuthLogin(company.current, username.current, password.current);
       const response: any = await request('POST', '/Login', auth.toJson());
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
       const user = await GetCurrentUserRepository.post();
-      setCookie("user",user, { maxAge: 2000 });
+      setCookie("user", user, { maxAge: 2000 });
       await fetchAllDate()
       navigate("/");
     } catch (e: any) {
@@ -50,6 +56,19 @@ export default function Login() {
       setMessage(e?.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const onChange = (event: any, field: string) => {
+    switch (field) {
+      case 'company':
+        company.current = event.target.value;
+        break;
+      case 'password':
+        password.current = event.target.value;
+        break;
+      default:
+        username.current = event.target.value;
     }
   }
 
@@ -80,18 +99,36 @@ export default function Login() {
 
   return (
     <div className='w-full h-full flex justify-center items-center dark-theme'>
-      <div className='w-[28rem] flex flex-col gap-5 p-10 rounded-xl shadow-lg '>
-        <h2 className=
-          'font-bold text-2xl text-center'>LOGIN</h2>
-        <div className='my-2'>
-          {message && <Alert severity='error' onClose={() => setMessage("")}>{message}</Alert>}
+      <div className='w-[30rem] h-[60vh] flex flex-col justify-between gap-2 p-10 pb-0 rounded-xl shadow-xl border bg-white'>
+
+        <div className='grow'>
+          <div className='flex justify-between items-center'>
+            <h2 className=
+              'font-bold text-xl '>SAP Web Access</h2>
+
+            <img src={sapLog} className='w-[4rem]' />
+          </div>
+
+          <div className='h-10'></div>
+          <h2 className='font-bold text-2xl my-3'>SIGN ME IN</h2>
+          <Collapse in={message !== ''}>
+            <div className='my-2'>
+              {message && <Alert severity='error' onClose={() => setMessage("")}>{message}</Alert>}
+            </div>
+          </Collapse>
+
+          <div className='flex flex-col gap-2'>
+            <MUITextField label="Company" id="outlined-size-small" size="small" defaultValue={company.current} onChange={(event) => onChange(event, 'company')} />
+            <MUITextField label="Username" id="outlined-size-small" size="small" defaultValue={username.current} onChange={(event) => onChange(event, 'username')} />
+            <MUITextField label="Password" type='password' id="outlined-size-small" size="small" defaultValue={password.current} onChange={(event) => onChange(event, 'password')} />
+          </div>
         </div>
-        <TextField label="Username" id="outlined-size-small" size="small" defaultValue={username.current} />
-        <TextField label="Password" id="outlined-size-small" size="small" defaultValue={password.current} />
-        <div className='my-1'></div>
-        <LoadingButton variant="contained" disableElevation loading={loading} onClick={onSubmit}>
-          Submit
-        </LoadingButton>
+
+        <div className='h-20 w-full'>
+          <LoadingButton fullWidth sx={{ backgroundColor: `${BASE_BG_COLOR} !important`, }} className='text-white' variant="contained" disableElevation loading={loading} onClick={onSubmit}>
+            <span className='font-bold'>Login</span>
+          </LoadingButton>
+        </div>
       </div>
     </div>
   )

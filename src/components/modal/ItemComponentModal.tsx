@@ -1,5 +1,4 @@
 import React, { FC, Fragment } from 'react'
-import Modal from './Modal';
 import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
 import itemRepository from '@/services/actions/itemRepostory';
@@ -14,7 +13,7 @@ import { Button, IconButton, OutlinedInput } from '@mui/material';
 import { HiSearch, HiX } from 'react-icons/hi';
 import shortid from 'shortid';
 
-type ItemType = 'purchase' | 'sale' | 'inventory';
+export type ItemType = 'purchase' | 'sale' | 'inventory';
 
 interface ItemModalProps {
     open: boolean,
@@ -88,8 +87,6 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
         let selectItems = keys.map((e: any) => items.find((ele: any) => ele?.ItemCode === e));
         const uomGroups: any = await new UnitOfMeasurementGroupRepository().get();
         const uoms = await new UnitOfMeasurementRepository().get();
-
-
 
         selectItems = selectItems.map((e: any) => {
             const vendor = vendors.data?.find((bp: any) => bp?.CardCode === e?.Mainsupplier);
@@ -243,8 +240,8 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                                         />
 
                                         <div className='w-full flex justify-end items-center border-t pt-3 gap-3'>
-                                            <Button size='small' disableElevation variant='outlined' onClick={onClose}><span className='capitalize px-6  text-blue-700'>Close</span></Button>
-                                            <Button size='small' disableElevation variant='contained' onClick={handlerConfirm}><span className='capitalize px-6 text-white'>Ok</span></Button>
+                                            <Button size='small' disableElevation variant='text' onClick={onClose}><span className='capitalize px-6  text-blue-700 text-xs'>Close</span></Button>
+                                            <Button size='small' disableElevation variant='contained' onClick={handlerConfirm}><span className='capitalize px-6 text-white text-xs'>Ok</span></Button>
                                         </div>
                                     </div>
                                 </div>
@@ -258,5 +255,43 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
 }
 
 export default ItemModal;
+
+interface ItemModalCompoentProps extends Omit<ItemModalProps, 'onClose' | 'open'> {
+    ref?: React.RefObject<ItemModalComponent | undefined>,
+
+}
+
+export class ItemModalComponent extends React.Component<ItemModalCompoentProps, any> {
+    constructor(props: ItemModalCompoentProps) {
+        super(props)
+
+        this.state = {
+            isOpen: false,
+        }
+
+        this.onClose = this.onClose.bind(this);
+        this.onOpen = this.onOpen.bind(this);
+        this.handlerOk = this.handlerOk.bind(this);
+    }
+
+    onClose() {
+        this.setState({ isOpen: false });
+    }
+
+    onOpen() {
+        this.setState({ isOpen: true });
+    }
+
+
+    handlerOk(items: any[]) {
+        this.setState({ isOpen: false });
+        this.props.onOk(items);
+    }
+
+    render(): React.ReactNode {
+        return <ItemModal open={this.state.isOpen} onClose={this.onClose} type={this.props.type} onOk={this.handlerOk} />
+    }
+}
+
 
 

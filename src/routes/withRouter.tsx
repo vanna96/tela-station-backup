@@ -1,9 +1,6 @@
-import { DocumentLine } from '@/models/interface';
-import itemRepository from '@/services/actions/itemRepostory';
-import UnitOfMeasurementGroupRepository from '@/services/actions/unitOfMeasurementGroupRepository';
 import { ComponentType } from 'react';
 import { useCookies } from 'react-cookie';
-import { MutationFunction, QueryFunction, useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export interface WithRouterProps<T = ReturnType<typeof useParams>> {
@@ -46,7 +43,10 @@ export const withRouter = <P extends object>(Component: ComponentType<P>) => {
 
         const query = {
             find: (key: string) => queryClient.getQueryData(key),
-            set: (key: any, data: any) => queryClient.setQueryData(key, data),
+            get: (key: string) => queryClient.getQueryData(key),
+            set: (key: any, data: any) => {
+                queryClient.setQueryData(key, data)
+            },
             mutation: (key: string, cb: any) => {
                 return useMutation(cb, {
                     onSuccess: (data: any) => {

@@ -2,6 +2,10 @@ hr {
   margin: 10px 0px;
 }
 
+.MuiLoadingButton-loadingIndicator {
+  color: white !important;
+}
+
 div.data-table .css-80pr5n-MuiPaper-root {
   padding: 0rem 1.5rem;
   border-radius: 0px;
@@ -159,9 +163,9 @@ span.MuiLinearProgress-root {
   border: 0.8px solid red;
 } */
 
-/* .date-picker-error > div > div > div > button > svg {
-  color: rgba(212, 5, 5, 0.815);
-} */
+button >svg {
+  color: rgba(43, 43, 43, 0.815) !important;
+}
 
 .date-picker > div > div > div > button > svg {
   font-size: 20px;
@@ -203,41 +207,6 @@ input[type="number"] {
   background-color: inherit !important;
 }
 
-.css-80pr5n-MuiPaper-root,
-.css-16253fi-MuiTablePagination-root,
-svg,
-button {
-  color: inherit !important;
-}
-
-.Mui-disabled > svg {
-  color: rgba(0, 0, 0, 0.26) !important;
-}
-
-.MuiPaper-root,
-.css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root,
-.MuiInputBase-root,
-.MuiInputAdornment-root,
-.MuiToolbar-root,
-.MuiBox-root,
-.css-cveggr-MuiListItemIcon-root {
-  color: inherit !important;
-  /* background-color: inherit !important; */
-}
-
-/* ul {
-  background-color: inherit;
-} */
-/* 
- */
-
-/* .css-bkrceb-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
-  background-color: #1976d2 !important;
-} */
-
-button {
-  color: inherit !important;
-}
 .css-19wwevd-MuiTypography-root-MuiDayPicker-weekDayLabel,
 .MuiTypography-body1,
 .MuiTableCell-root {
@@ -251,7 +220,7 @@ button {
   margin: 0 auto !important;
 }
 
-.MuiTableCell-body,
-.MuiTableCell-head {
-  /* background-color: inherit !important; */
+
+.text-system-color {
+  color:  #111749;
 }

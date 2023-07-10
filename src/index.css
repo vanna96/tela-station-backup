@@ -18,6 +18,11 @@
   }
 }
 
+@font-face {
+  font-family: "calibri";
+  src: url("./assets/fonts/Calibri.ttf");
+}
+
 html,
 body,
 #root {
@@ -31,7 +36,11 @@ body,
   background-color: #f4f6fa;
   /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
   /* font-family: "Roboto", sans-serif; */
-  font-family: "IBM Plex Sans", sans-serif;
+  /* font-family: "IBM Plex Sans", sans-serif, "Hanuman", serif; */
+  /* font-family: "calibri", sans-serif, "Hanuman", serif;
+   */
+
+   font-family: "72","72full",Arial,Helvetica,sans-serif;
 }
 
 /* width */
