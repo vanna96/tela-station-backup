@@ -68,7 +68,7 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
     queryKey: ["unit_measurement_groups"],
     queryFn: async () => {
       const res =
-        getLocalCacheData({ key: "UnitOfMeasurementGroups" }) ||
+        // getLocalCacheData({ key: "UnitOfMeasurementGroups" }) ||
         request(
           "GET",
           `/UnitOfMeasurementGroups?$select=Name,AbsEntry,Code,UoMGroupDefinitionCollection`
@@ -83,7 +83,7 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
     queryKey: ["unit_of_measurement"],
     queryFn: async () => {
       const res =
-        getLocalCacheData({ key: "UnitOfMeasurements" }) ||
+        // getLocalCacheData({ key: "UnitOfMeasurements" }) ||
         request("GET", `/UnitOfMeasurements`)
           .then((res: any) => res?.data?.value)
           .catch((error) => console.log(error));
@@ -140,7 +140,7 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
     ["shipping_type"],
     async () => {
       const res =
-        getLocalCacheData({ key: "shipping_types" }) ||
+        // getLocalCacheData({ key: "shipping_types" }) ||
         (await request("GET", `/ShippingTypes?$orderby=Name`)
           .then((res: any) => res?.data)
           .catch((e) => {
@@ -166,7 +166,7 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
     queryKey: "payment_terms_types",
     queryFn: async () => {
       const res =
-        getLocalCacheData({ key: "paymentTermTypes" }) ||
+        // getLocalCacheData({ key: "paymentTermTypes" }) ||
         request("GET", "/PaymentTermsTypes")
           .then((res: any) => res?.data?.value)
           .catch((error) => console.log(error));
@@ -213,7 +213,7 @@ export const FormOrderProvider = ({ children, Edit }: GeneralProps) => {
     queryKey: ["tax_code"],
     queryFn: async () => {
       const res =
-        getLocalCacheData({ key: "vatGroup" }) ||
+        // getLocalCacheData({ key: "vatGroup" }) ||
         request(
           "GET",
           `/VatGroups?$select=Category,Inactive , Name, Code, EU, VatGroups_Lines &$filter=Category eq 'bovcOutputTax' and Inactive eq 'tNO' &$orderby=Name asc`

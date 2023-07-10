@@ -46,7 +46,8 @@ export default function Login() {
   const onSubmit = async () => {
     try {
       setLoading(true)
-      const auth = new AuthLogin(company.current, username.current, password.current);
+      // const auth = new AuthLogin(company.current, username.current, password.current);
+      const auth = new AuthLogin('SBODemoAU', 'manager', 'manager');
       const response: any = await request('POST', '/Login', auth.toJson());
       setCookie("sessionId", response?.data?.SessionId, { maxAge: 2000 });
       const user = await GetCurrentUserRepository.post();

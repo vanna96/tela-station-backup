@@ -27,6 +27,7 @@ export default function SideBar(props: any) {
                 <NavButton onClick={() => goTo('/sale')} route="sale" collapse={props?.collapse} icon={<FiShoppingBag />} title="Sale" />
                 <NavButton onClick={() => goTo('/inventory')} route="inventory" collapse={props?.collapse} icon={<GiFactory />} title="Inventory" />
                 <NavButton onClick={() => goTo('/logistic')} route="logistic" collapse={props?.collapse} icon={<MdOutlineDirectionsTransitFilled />} title="Logistic" />
+                <NavButton onClick={() => goTo('/banking')} route="banking" collapse={props?.collapse} icon={<FiShoppingBag />} title="Banking" />
             {/* <div className='grow flex flex-col gap-2 whitespace-nowrap overflow-hidden text-base 2xl:text-sm xl:text-[12px]'>
                 <NavButton onClick={() => goTo('/system-initialize')} route="system-initialize" collapse={collapse} icon={<FiGrid />} title="System Initialize" />
                 <NavButton onClick={() => goTo('/master-data')} route="master-data" collapse={collapse} icon={<BsClipboardData />} title="Master Data" />
@@ -34,7 +35,7 @@ export default function SideBar(props: any) {
                 <NavButton onClick={() => goTo('/sale')} route="sale" collapse={collapse} icon={<FiShoppingBag />} title="Sale" />
                 <NavButton onClick={() => goTo('/inventory')} route="inventory" collapse={collapse} icon={<GiFactory />} title="Inventory" />
                 <NavButton onClick={() => goTo('/logistic')} route="logistic" collapse={collapse} icon={<MdOutlineDirectionsTransitFilled />} title="Logistic" />
-                <NavButton onClick={() => goTo('/banking')} route="banking" collapse={collapse} icon={<FiShoppingBag />} title="Banking" /> */}
+                 */}
             </div>
         </aside>
     )

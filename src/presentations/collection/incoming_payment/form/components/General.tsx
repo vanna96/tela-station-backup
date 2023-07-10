@@ -17,14 +17,13 @@ export default function General() {
     customers,
     documentNumber,
     Edit,
-    Projects,
     bussinessPartner,
     Vendor,
     currency,
   }: any = useContext(FormOrderContext);
   const type = form?.useType || "Customer";
-
-  const data = (type === "Supplier" ? Vendor : customers)?.value?.map(
+  
+  const data = (type === "Supplier" ? Vendor : customers)?.map(
     (option: any) => {
       return {
         value: option.CardCode,
@@ -33,10 +32,6 @@ export default function General() {
         label: `${option.CardCode} - ${option.CardName}`,
       };
     }
-  );
-
-  const payTo = bussinessPartner?.BPAddresses?.filter(
-    (pay: any) => pay.AddressType === "bo_BillTo"
   );
 
   if ((documentNumber || []).length > 0) {
@@ -80,92 +75,7 @@ export default function General() {
               readOnly: true,
             })}
           </div>
-          {/* <div className="grid lg:grid-cols-1 grid-cols-4 px-3 mt-3">
-            <div className="flex col-span-1">
-              <label className="block mb-2 text-sm font-medium text-gray-400 dark:text-white text-left w-[50%]">
-                Bill To
-              </label>
-              <Select
-                className="form-control h-[25px] w-[50%]"
-                sx={{ border: "0px solid black", padding: 0 }}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    payTo: e.target.value,
-                    payToValue: payTo?.find(
-                      (to: any) => to.AddressName === e.target.value
-                    )?.Street,
-                  })
-                }
-                value={form?.payTo || ""}
-                disabled={(form?.useType || "Customer") === "Account"}
-              >
-                <MenuItem value="">&nbsp;</MenuItem>
-                {payTo?.map((e: any, index: number) => (
-                  <MenuItem key={index} value={`${e.AddressName}`}>
-                    {e.AddressName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </div>
-            <textarea
-              rows={3}
-              className="form-control ml-[7%] lg:ml-[0%] w-[80%] lg:w-[100%] col-span-3"
-              value={form?.payToValue || ""}
-              onChange={(e: any) =>
-                setForm({ ...form, payToValue: e.target.value })
-              }
-              readOnly={(form?.useType || "Customer") === "Account"}
-            />
-          </div> */}
-          {/* <div className="flex md:block items-center px-3 mt-3">
-            {formLabel("Contact Person")}
-            <Select
-              className="form-control h-[25px] w-[60%] lg:w-[100%]"
-              onChange={(e) => {
-                setForm({
-                  ...form,
-                  internalCode: e.target.value,
-                });
-              }}
-              value={form?.internalCode || 0}
-              sx={{ border: "0px solid black", padding: 0 }}
-              disabled={(form?.useType || "Customer") === "Account"}
-            >
-              {customers?.value
-                ?.find((e: any) => e.CardCode === form?.cardCode)
-                ?.ContactEmployees?.map((e: any, index: number) => {
-                  return (
-                    <MenuItem key={index} value={e.InternalCode}>
-                      {e.Name}
-                    </MenuItem>
-                  );
-                })}
-            </Select>
-          </div> */}
-          {/* <div className="flex md:block items-center px-3 mt-3">
-            {formLabel("Project")}
-            <Select
-              className="form-control h-[30px] w-[60%] lg:w-[100%]"
-              sx={{ border: "0px solid black", padding: 0 }}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  bussinessPartnerProject: e.target.value,
-                })
-              }
-              value={form?.bussinessPartnerProject || ""}
-              disabled={Edit ? true : null || false}
-            >
-              <MenuItem value="">- Bussiness Partner Project -</MenuItem>
-              {Projects?.map((e: any, index: number) => (
-                <MenuItem key={index} value={e.Code}>
-                  {e.Code}
-                </MenuItem>
-              ))}
-            </Select>
-          </div> */}
-
+        
           {(form?.useType || "Customer") === "Account" ? (
             <div className="flex md:block items-center px-3 mt-3">
               {formLabel("Currency")}
@@ -211,12 +121,12 @@ export default function General() {
                     value={parseFloat(
                       form?.paymenyMeansExchangeRate || 0
                     ).toFixed(2)}
-                    onChange={({ target }: any) =>
-                      setForm({
-                        ...form,
-                        paymenyMeansExchangeRate: target.value,
-                      })
-                    }
+                    // onChange={({ target }: any) =>
+                    //   setForm({
+                    //     ...form,
+                    //     paymenyMeansExchangeRate: target.value,
+                    //   })
+                    // }
                     className="form-control h-[25px] w-full"
                   />
                 ) : (
@@ -267,7 +177,7 @@ export default function General() {
                       Edit?.DocCurrency ||
                       form?.paymenyMeansCurrency ||
                       bussinessPartner?.DefaultCurrency ||
-                      form?.currency
+                      form?.currency || "AUD"
                     }
                     className="form-control h-[25px] mb-4 w-[100%]"
                   />
