@@ -8,6 +8,8 @@ import { CircularProgress } from '@mui/material';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
 import Binlocation from '@/models/Binlocation';
 import BinlocationRepository from '@/services/actions/BinlocationRepository';
+import ItemGroupRepository from '@/services/actions/itemGroupRepository';
+import UnitOfMeasurementRepository from '@/services/actions/unitOfMeasurementRepository';
 
 
 
@@ -125,16 +127,20 @@ function General(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>No. of Batches/Serials</span> <span className='col-span-2 font-medium'>: {data?.buildingFloorRoom || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Alternative Sort Code</span> <span className='col-span-2 font-medium'>: {data.alternativeSortCode || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Bar Code</span> <span className='col-span-2 font-medium'>: {data.barCode || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Items</span> <span className='col-span-2 font-medium'>: {data.specificItem || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Items Group</span> <span className='col-span-2 font-medium'>: { new ItemGroupRepository().find(data.specificItemGroup)?.GroupName|| "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Current UoM Group</span> <span className='col-span-2 font-medium'>: {data.currentUoMGroup || "N/A"}</span></div>
+
     </div>
     <div className='flex flex-col gap-2'>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Minimun Quantity</span> <span className='col-span-2 font-medium'>: {data?.minimunQty || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Maximun Quantity</span> <span className='col-span-2 font-medium'>: {data?.maximunQty ?? "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Maximun Weight</span> <span className='col-span-2 font-medium'>: {data.maximunWeight || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Restricted Item Type</span> <span className='col-span-2 font-medium'>: {data?.restrictedItemType || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Restricted UoM Type</span> <span className='col-span-2 font-medium'>: {data.restrictedUoMType || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Batch Restriction</span> <span className='col-span-2 font-medium'>: {data.batchRestrictions || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Transaction Restriction</span> <span className='col-span-2 font-medium'>: {data.restrictedTransType || "N/A"}</span></div>
-      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Item Group</span> <span className='col-span-2 font-medium'>: {data.specificItemGroup || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Restricted Item Type</span> <span className='col-span-2 font-medium'>: {Binlocation.getRestrictedItemType(data?.restrictedItemType) || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Restricted UoM Type</span> <span className='col-span-2 font-medium'>: {Binlocation.getRestrictedUoMType(data.restrictedUoMType) || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Batch Restriction</span> <span className='col-span-2 font-medium'>: {Binlocation.getBatchRestriction(data.batchRestrictions) || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Transaction Restriction</span> <span className='col-span-2 font-medium'>: {Binlocation.getRestrictedTransType(data.restrictedTransType) || "N/A"}</span></div>
+      <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>UoM Group</span> <span className='col-span-2 font-medium'>: {new UnitOfMeasurementRepository().find(data.specificUoMGroup)?.Name || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Reason</span> <span className='col-span-2 font-medium'>: {data.restrictionReason || "N/A"}</span></div>
 
     </div>

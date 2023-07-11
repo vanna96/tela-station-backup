@@ -1,22 +1,17 @@
-import CoreFormDocument from '@/components/core/CoreFormDocument';
+
 import { withRouter } from '@/routes/withRouter';
 import { LoadingButton } from '@mui/lab';
-import DocumentSerieRepository from '@/services/actions/documentSerie';
-import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
-import GLAccount from '@/models/GLAccount';
-import { CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material';
 import { UpdateDataSuccess } from '../../../../utilies/ClientError';
-import PurchaseAgreement from '../../../../models/PurchaseAgreement';
-import { QueryClient, useMutation } from 'react-query';
 import HeadingForm from '../component/HeadingForm';
-import WarehouseRepository from '@/services/actions/WarehouseRepository';
-import Warehouses from '@/models/Warehouses';
 import General from '../component/General';
 import BinlocationRepository from '@/services/actions/BinlocationRepository';
 import Binlocation from '@/models/Binlocation';
 import React, { Component } from 'react';
 import FormMessageModal from '@/components/modal/FormMessageModal';
-import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify';
+import { ToastContainer, TypeOptions, toast } from 'react-toastify';
+import ItemsModal from '@/components/modal/itemsModal';
+import Item from '@/models/Item';
 
 const contextClass: any = {
   success: "bg-blue-600",
@@ -26,29 +21,45 @@ const contextClass: any = {
   default: "bg-indigo-600",
   dark: "bg-white-600 font-gray-300",
 };
+export interface BinlocationType {
+  loading: boolean;
+  showDialogMessage: boolean;
+  message: string;
+  isSubmitting: boolean;
+  title: string;
+  isOpenItems: boolean;
+  specificItem:string | undefined
 
-class BinlocationForm extends Component<any, any>{
+}
+
+class BinlocationForm extends Component<any, BinlocationType>{
 
   constructor(props: any) {
     super(props)
     this.state = {
       ...this.state,
-    } as any;
+      loading: true,
+      showDialogMessage: false,
+      isSubmitting: false,
+      isOpenItems: false,
+      specificItem:''
+
+    };
     this.handlerSubmit = this.handlerSubmit.bind(this);
+    this.handlerCloseItems = this.handlerCloseItems.bind(this)
+    this.handlerConfirmItems = this.handlerConfirmItems.bind(this)
   }
   dialog = React.createRef<FormMessageModal>();
 
   componentDidMount(): void {
 
     if (!this.props?.edit) {
-      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
-    }
+      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500);
 
-    if (this.props.edit) {
+    } else {
       if (this.props.location.state) {
         const routeState = this.props.location.state;
-
-        setTimeout(() => this.setState({ ...this.props.location.state }), 500)
+        setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
       } else {
         new BinlocationRepository().find(this.props.match.params.id).then((res: any) => {
           this.setState({ ...res, loading: false });
@@ -57,7 +68,9 @@ class BinlocationForm extends Component<any, any>{
         })
       }
     }
+
   }
+
 
 
 
@@ -121,7 +134,20 @@ class BinlocationForm extends Component<any, any>{
 
     this.setState(temps)
   }
+  protected handleOpenItems() {
+    this.setState({ ...this.state, isOpenItems: true })
+  }
 
+  protected handlerConfirmItems(record: Item) {
+    this.setState({
+      ...this.state,
+      specificItem: record.itemCode,
+      isOpenItems: false,
+    });
+  }
+  protected handlerCloseItems() {
+    // this.setState({ ...this.state, isOpenItems: false })
+  }
   render = () => {
     return <>
       <form onSubmit={this.handlerSubmit} className='h-full w-full flex flex-col gap-4'>
@@ -132,6 +158,14 @@ class BinlocationForm extends Component<any, any>{
             }
             bodyClassName={() => "text-sm font-white font-med block p-3"}
           />
+
+          <FormMessageModal ref={this.dialog} />
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={this.state.isSubmitting}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
           <HeadingForm
             data={this.state}
             edit={this.props?.edit}
@@ -141,6 +175,9 @@ class BinlocationForm extends Component<any, any>{
             data={this.state}
             edit={this.props?.edit}
             handlerChange={(key, value) => this.handlerChange(key, value)}
+            handleOpenItems={() => this.handleOpenItems()}
+
+
           />
           <div className="sticky w-full bottom-4  mt-2">
             <div className="backdrop-blur-sm bg-slate-700 p-2 rounded-lg shadow z-[1000] flex justify-between gap-3 border">
@@ -155,6 +192,8 @@ class BinlocationForm extends Component<any, any>{
             </div>
           </div>
         </>}
+        <ItemsModal  onClose={this.handlerCloseItems} open={this.state.isOpenItems} onOk={(record) => this.handlerConfirmItems(record)} />
+
       </form>
     </>
   }

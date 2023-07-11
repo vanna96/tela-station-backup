@@ -182,7 +182,7 @@ export default function PurchaseDownPaymentList() {
       refetch();
     }, 500)
   }
-
+  console.log(data);
   return (
     <>
       <div className="w-full h-full p-4 2xl:py-6 flex flex-col gap-3 relative bg-gray-100">

@@ -36,15 +36,26 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
     () => [
       {
         accessorKey: "DimensionCode",
-        header: "Branch Code",
+        header: "Code",
+        size:25,
+
       },
       {
         accessorKey: "DimensionName",
-        header: "Branch Name",
+        header: "Name",
+        size:25
       },
       {
         accessorKey: "IsActive",
         header: "Active",
+        Cell: ({ cell }: any) => (
+          <>
+            <span className={cell.getValue() === "tYES" ? "bg-green-50 border border-green-400 rounded-sm text-green-400 py-[4px] px-[7px] text-xs" : "bg-red-50 border border-red-400 rounded-sm text-red-400 py-[4px] px-[7px] text-xs"}>
+              {cell.getValue().replace("t","")}
+            </span>
+          </>
+        ),
+        size:25
       },
       {
         accessorKey: "DimensionDescription",
@@ -57,7 +68,7 @@ const dimensionModal: FC<DimensionModalProps> = ({ open, onClose }) => {
     <Modal
       open={open}
       onClose={onClose}
-      widthClass='w-[60rem]'
+      widthClass='w-[50rem]'
       title='List Of Projects'
       disableTitle={true}
       disableFooter={true}

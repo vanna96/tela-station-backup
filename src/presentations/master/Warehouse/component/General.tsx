@@ -3,7 +3,7 @@ import MUITextField from '@/components/input/MUITextField';
 import CitySelect from '@/components/selectbox/City';
 import CountrySelect from '@/components/selectbox/Country';
 import { Checkbox, SelectChangeEvent } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 export interface IGeneralProps {
   data: any,
   handlerChange: (key: string, value: any) => void
@@ -11,21 +11,21 @@ export interface IGeneralProps {
 }
 
 export default function General({ data, handlerChange, edit }: IGeneralProps) {
-  const [bShow, setBShow] = React.useState<any>({});
-
   const handleSelectChangeB = (event: any) => {
     const key = 'country';
     const value = event.target.value as string;
     // const selectedValue = event.target.value as string;
-    let emp;
-    // ------------------------------------------------
-    emp = {
-      ...data,
-      country: event.target.value
-    }
-    setBShow(emp);
+    // let emp;
+    // // ------------------------------------------------
+    // emp = {
+    //   ...data,
+    //   country: event.target.value
+    // }
+    // setBShow(emp);
     //-------------------------------------------------
     handlerChange(key, value)
+
+
 
   };
   return (
@@ -56,15 +56,15 @@ export default function General({ data, handlerChange, edit }: IGeneralProps) {
           <MUITextField label="Street Number:" value={data?.streetNo} onChange={(e) => handlerChange('streetNo', e.target.value)} name="StreetNo" />
           <MUITextField label="Zip Code:" value={data?.zipCode} onChange={(e) => handlerChange('zipCode', e.target.value)} name="ZipCode" />
           <MUITextField label="County:" value={data?.county} onChange={(e) => handlerChange('county', e.target.value)} name="County" />
+
           <div>
-            <label htmlFor="Code" className="text-gray-500 text-[14px]">State</label>
+            <label htmlFor="Code" className="text-gray-500 text-[14px]">State {data.state}</label>
 
             <CitySelect
               value={data?.state}
               onChange={(e) => handlerChange('state', e.target.value)}
               name="State"
-              country={bShow?.country}
-              key={bShow?.country}
+              country={data?.country}
             />
           </div>
           {/* <MUITextField label="State:" value={data?.state} onChange={(e) => handlerChange('state', e.target.value)} name="State" /> */}
@@ -83,7 +83,9 @@ export default function General({ data, handlerChange, edit }: IGeneralProps) {
           <div>
             <label htmlFor="Code" className="text-gray-500 text-[14px]">Country/Region</label>
             <CountrySelect
-              value={data?.country} onChange={handleSelectChangeB} name="Country"
+              value={data?.country}
+              key={data?.country}
+              onChange={handleSelectChangeB} name="Country"
             />
           </div>
           <MUITextField label="Federal Tax ID:" value={data?.federalTaxID} onChange={(e) => handlerChange('federalTaxID', e.target.value)} name="FederalTaxID" />

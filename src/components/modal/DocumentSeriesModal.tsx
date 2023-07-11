@@ -11,6 +11,7 @@ import { BsTag } from 'react-icons/bs';
 import DocumentNumberingRepository from '@/services/actions/DocumentNumberingRepository';
 import request from '@/utilies/request';
 import shortid from 'shortid';
+import { Checkbox } from '@mui/material';
 interface DocumentNumberingModalProps {
   open: boolean,
   onClose: () => void,
@@ -35,42 +36,69 @@ const DocumentSeriesModal: FC<DocumentNumberingModalProps> = (props) => {
       {
         accessorKey: 'Name',
         header: 'Name',
+        size: 100, // Set width to 150 pixels
       },
       {
         accessorKey: 'InitialNumber',
         header: 'First No.',
+        size: 50
       },
       {
         accessorKey: 'NextNumber',
         header: ' Next No.',
+        size: 50
       },
       {
         accessorKey: 'LastNumber',
         header: 'Last No.',
+        size: 50
       },
       {
         accessorKey: 'Prefix',
         header: 'Prefix',
+        size: 50
       },
       {
         accessorKey: 'Suffix',
         header: 'Suffix',
+        size: 50
       },
       {
         accessorKey: 'Remarks',
         header: 'Remarks',
+        size: 50
       },
       {
         accessorKey: 'GroupCode',
         header: 'Group',
+        Cell: ({ cell }: any) => (
+          <>
+            {cell.getValue()?.replace('sg_', '')}
+          </>
+        ),
+        size: 50
       },
       {
         accessorKey: 'PeriodIndicator',
         header: 'Period Ind.',
+        size: 50
       },
       {
         accessorKey: 'PeriodIndicator',
         header: 'Period Ind.',
+        size: 50
+      },
+      {
+        accessorKey: 'Loked',
+        header: 'Locked',
+        Cell: ({ cell }: any) => (
+          <span>
+            <Checkbox
+            disabled
+            />
+          </span>
+        ),
+        size: 50
       },
     ],
     []

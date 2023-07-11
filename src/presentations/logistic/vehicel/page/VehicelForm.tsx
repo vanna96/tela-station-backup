@@ -31,7 +31,9 @@ class VehicelForm extends CoreFormDocument {
       }]
 
 
+
     } as any;
+    console.log(this.state);
     this.handlerSubmit = this.handlerSubmit.bind(this);
     this.handlerChangeCompartement = this.handlerChangeCompartement.bind(this)
     // this.handlerChangePartment = this.handlerChangePartment.bind(this);
@@ -96,6 +98,8 @@ class VehicelForm extends CoreFormDocument {
     if (index > 0) items[index] = item;
     this.setState({ ...this.state, Items: items });
   }
+
+  
   FormRender = () => {
 
     return <>

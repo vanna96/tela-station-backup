@@ -50,6 +50,7 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
             <AiOutlineExpandAlt />
           </span>
         ),
+        size:50
       },
       {
         accessorKey: "ObjectName",
@@ -59,19 +60,25 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
       {
         accessorKey: "DfltSeries",
         header: "default Series",
+        size: 50
+
       },
       {
         accessorKey: "UpdCounter",
         header: "Fist No",
+        size: 50
+
       },
       {
         accessorKey: "as",
         header: "Next No",
+        size: 50
 
       },
       {
         accessorKey: "AutoKey",
         header: "Last No",
+        size: 50
 
       },
       {
@@ -109,7 +116,7 @@ const DocumentNumberingModal: FC<DocumentNumberingModalProps> = ({ open, onClose
     <Modal
       open={open}
       onClose={onClose}
-      widthClass='w-[75rem]'
+      widthClass='w-[60rem]'
       title='List Of Projects'
       disableTitle={true}
       disableFooter={true}

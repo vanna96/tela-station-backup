@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import MUITextField from './MUITextField'
 import VatGroupModal, { VatCategory } from '../modal/VatGroupModal';
+import { log } from 'console';
 
 
 interface VatGroupTextField {
@@ -16,7 +17,9 @@ const VatGroupTextField: FC<VatGroupTextField> = ({ value, onChange, name, type,
     const [open, setOpen] = React.useState<boolean>(false)
 
     const handlerConfirm = (businessPartner: any) => {
-        onChange({ target: { value: businessPartner } })
+        onChange({ target: { value:  businessPartner } })
+    
+        
     }
 
     const onClose = () => setOpen(false);

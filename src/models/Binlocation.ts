@@ -32,7 +32,7 @@ export interface BinlocationProps {
   batchRestrictions?: string;
   specificItem?: string;
   specificUoMGroup?: string;
-  restrictionReason?:string
+  restrictionReason?: string
 }
 
 export default class Binlocation extends Model {
@@ -146,6 +146,69 @@ export default class Binlocation extends Model {
     };
   }
 
+  public static getRestrictedItemType(RestrictedItemType: string | null): string {
+    switch (RestrictedItemType) {
+      case 'briNone':
+        return 'None'
+      case 'briSpecificItem':
+        return 'Specific Item'
+      case 'briSingleItemOnly':
+        return 'Single Item Only'
+      case 'briSpecificItemGroup':
+        return 'Specific Item Group'
+      case 'briSingleItemGrouponly':
+        return 'Single Item Group Only'
+      default:
+        return '';
+    }
+  }
+
+  public static getRestrictedUoMType(restrictedUoMType: string | null): string {
+    switch (restrictedUoMType) {
+      case 'briNone':
+        return 'None'
+      case 'bruSpecificUoM':
+        return 'Specific UoM'
+      case 'bruSingleUoMOnly':
+        return 'Single UoM Only'
+      case 'briSpecificItemGroup':
+        return 'Specific Item Group'
+      case 'briSingleItemGrouponly':
+        return 'Single Item Group Only'
+      case 'bruSingleUoMGrouponly':
+        return 'Single UoM Group Only'
+      case 'bruSpecificUoMGroup':
+        return 'Specific UoM Group'
+      default:
+        return '';
+    }
+  }
+  public static getBatchRestriction(batchRestriction: string | null): string {
+    switch (batchRestriction) {
+      case 'brbNoRestrictions':
+        return 'None'
+      case 'brbSingleBatch':
+        return 'Single Batch'
+
+      default:
+        return '';
+    }
+  }
+
+  public static getRestrictedTransType(restrictedTransType: string | null): string {
+    switch (restrictedTransType) {
+      case 'brtNoRestrictions':
+        return 'None'
+      case 'bruSpecificUoM':
+        return 'Specific UoM'
+      case 'brtAllTrans':
+        return 'All transaction'
+      case 'brtAllExceptInventoryTrans':
+        return 'All Except Inventory Transfer and Counting Transactions'
+      default:
+        return '';
+    }
+  }
 }
 
 

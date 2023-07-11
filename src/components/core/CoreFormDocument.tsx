@@ -145,6 +145,7 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
             tapIndex: 0,
             error: {},
         }
+        console.log(this.state);
 
         this.handlerConfirmItem = this.handlerConfirmItem.bind(this)
         this.handlerChangeItems = this.handlerChangeItems.bind(this);
@@ -331,3 +332,5 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
         }
     }
 }
+
+

@@ -1,14 +1,13 @@
 import CoreFormDocument from '@/components/core/CoreFormDocument';
 import { withRouter } from '@/routes/withRouter';
 import { LoadingButton } from '@mui/lab';
-import { CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress, Modal } from '@mui/material';
 import { UpdateDataSuccess } from '../../../../utilies/ClientError';
 import WarehouseRepository from '@/services/actions/WarehouseRepository';
 import Warehouses from '@/models/Warehouses';
 import HeadingForm from '../component/HeadingForm';
 import General from '../component/General';
 import { ToastContainer, ToastOptions, TypeOptions, toast } from 'react-toastify';
-import { documentType } from '@/constants';
 import React, { Component } from 'react';
 import FormMessageModal from '@/components/modal/FormMessageModal';
 
@@ -20,29 +19,38 @@ const contextClass: any = {
   default: "bg-indigo-600",
   dark: "bg-white-600 font-gray-300",
 };
+export interface WareHouseType {
+  loading: boolean;
+  showDialogMessage: boolean;
+  message: string;
+  isSubmitting: boolean;
+  title: string;
+}
 
-
-class WarehouseForm extends Component<any,any> {
+class WarehouseForm extends Component<any, WareHouseType> {
 
   constructor(props: any) {
     super(props)
     this.state = {
       ...this.state,
-    } as any;
+      loading: true,
+      showDialogMessage: false,
+      isSubmitting: false,
+      
+    }
     this.handlerSubmit = this.handlerSubmit.bind(this);
   }
   dialog = React.createRef<FormMessageModal>();
+  
   componentDidMount(): void {
 
     if (!this.props?.edit) {
-      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500)
-    }
+      setTimeout(() => this.setState({ ...this.state, loading: false, }), 500);
 
-    if (this.props.edit) {
+    } else {
       if (this.props.location.state) {
         const routeState = this.props.location.state;
-
-        setTimeout(() => this.setState({ ...this.props.location.state }), 500)
+        setTimeout(() => this.setState({ ...this.props.location.state, loading: false, }), 500)
       } else {
         new WarehouseRepository().find(this.props.match.params.id).then((res: any) => {
           this.setState({ ...res, loading: false });
@@ -51,6 +59,7 @@ class WarehouseForm extends Component<any,any> {
         })
       }
     }
+
   }
 
 
@@ -111,7 +120,7 @@ class WarehouseForm extends Component<any,any> {
   protected handlerChange(key: string, value: any) {
     let temps: any = { ...this.state };
     temps[key] = value;
-    
+
     this.setState(temps)
   }
 
@@ -126,6 +135,15 @@ class WarehouseForm extends Component<any,any> {
             }
             bodyClassName={() => "text-sm font-white font-med block p-3"}
           />
+
+
+          <FormMessageModal ref={this.dialog} />
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={this.state.isSubmitting}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
           <HeadingForm
             data={this.state}
             edit={this.props?.edit}

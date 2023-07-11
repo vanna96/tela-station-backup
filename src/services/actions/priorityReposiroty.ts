@@ -2,6 +2,7 @@ import Repository from "@/astractions/repository";
 import Encryption from "@/utilies/encryption";
 import request from "@/utilies/request";
 import Priority from "@/models/Priority";
+
 export default class PriorityRepository extends Repository<Priority> {
 
   url = '/BPPriorities';

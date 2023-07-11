@@ -3,8 +3,6 @@ import { withRouter } from '@/routes/withRouter';
 import { LoadingButton } from '@mui/lab';
 import AttachmentForm from '@/components/attachment';
 import DocumentSerieRepository from '@/services/actions/documentSerie';
-import PurchaseAgreementRepository from '../../../../services/actions/purchaseAgreementRepository';
-import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
 import GLAccount from '@/models/GLAccount';
 import VatGroupRepository from '@/services/actions/VatGroupRepository';
 import { UpdateDataSuccess } from '@/utilies/ClientError';
@@ -23,7 +21,7 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
     super(props)
     this.state = {
       ...this.state,
-      loading: true,
+      // loading: true,
       DocDate: new Date().toISOString(),
       DocDueDate: new Date().toISOString(),
       TaxDate: new Date().toISOString(),
@@ -44,33 +42,24 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
         this.setState({ ...this.state, Series: res?.Series, DocNum: res?.NextNumber, isLoadingSerie: false })
       });
     } else {
-      this.onInit();
+      if (this.props.location.state) {
+        const routeState = this.props.location.state;
+        setTimeout(() => this.setState({ ...this.props.location.state, isApproved: routeState?.status === 'A', loading: false, }), 500)
+      } else {
+        new PurchaseDownPaymentRepository().find(this.props.match.params.id).then((res: any) => {
+          this.setState({ ...res, loading: false });
+        }).catch((e: Error) => {
+          this.setState({ message: e.message });
+        })
+      }
     }
 
     // Get Series Lists
-    DocumentSerieRepository.getDocumentSeries(purchaseQoutationRepository?.documentSerie).then((res: any) => {
+    DocumentSerieRepository.getDocumentSeries(PurchaseDownPaymentRepository?.documentSerie).then((res: any) => {
       this.setState({ ...this.state, SerieLists: res, })
     });
 
   }
-
-  async onInit() {
-    if (this.props.edit) {
-      const { id } = this.props.match.params;
-      let state: any = this.props.query.find('pa-id-' + id);
-      let disables: any = {};
-
-      if (!state) {
-        await new PurchaseDownPaymentRepository().find(id).then(async (res: any) => {
-          state = res;
-          this.props.query.set('down-payment-request-id-' + id, res);
-        });
-      }
-      this.setState({ ...state, disable: disables, loading: false });
-    }
-
-  }
-
 
   handlerRemoveItem(code: string) {
     let items = [...this.state.Items ?? []];
@@ -124,6 +113,7 @@ class PurchaseDownPaymentForm extends CoreFormDocument {
           <Content
             edit={this.props?.edit}
             data={this.state}
+            setData={this.setState}
             handlerAddItem={() => this.handlerOpenItem()}
             handlerRemoveItem={this.handlerRemoveItem}
             handlerChangeItem={this.handlerChangeItems}

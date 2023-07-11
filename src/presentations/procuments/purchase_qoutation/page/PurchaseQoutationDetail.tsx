@@ -1,5 +1,9 @@
 import { withRouter } from '@/routes/withRouter';
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
+import PurchaseAgreement from '../../../../models/PurchaseAgreement';
+import EditIcon from "@mui/icons-material/Edit";
+import { HiOutlineEye, HiChevronDoubleLeft, HiChevronDoubleRight, HiChevronLeft, HiChevronRight, HiOutlineDocumentAdd, HiOutlineChevronDown } from "react-icons/hi";
 import Taps from '@/components/button/Taps';
 import MaterialReactTable from 'material-react-table';
 import { useMemo } from 'react';
@@ -7,6 +11,9 @@ import { currencyDetailFormat, currencyFormat, dateFormat, discountFormat, fileT
 import Modal from '@/components/modal/Modal';
 import PreviewAttachment from '@/components/attachment/PreviewAttachment';
 import { CircularProgress } from '@mui/material';
+import BackButton from '@/components/button/BackButton';
+import PurchaseAgreementRepository from '../../../../services/actions/purchaseQoutationRepository';
+import purchaseQoutationRepository from '@/services/actions/purchaseQoutationRepository';
 import PurchaseQoutation from '@/models/PurchaseQoutation';
 import DocumentHeaderComponent from '@/components/DocumenHeaderComponent';
 import OwnerRepository from '@/services/actions/ownerRepository';
@@ -18,6 +25,11 @@ import BusinessPartnerRepository from '@/services/actions/bussinessPartnerReposi
 import PurchaseQoutationRepository from '../../../../services/actions/purchaseQoutationRepository';
 import { getUOMGroupByCode } from '@/helpers';
 import moment from 'moment';
+import { useQuery } from 'react-query';
+import ChartOfAccount from '@/models/ChartOfAccount';
+import ChartOfAccountRepository from '@/services/actions/ChartOfaccountRepository';
+import shortid from 'shortid';
+import { log } from 'console';
 
 
 class PurchaseQoutationDetail extends Component<any, any> {
@@ -154,12 +166,37 @@ export default withRouter(PurchaseQoutationDetail);
 function Content(props: any) {
 
   const { data } = props;
-  const subTotal = data.Items?.reduce((accumulator: any, currentLine: any) => {
+  const [dataCopy, setDataCopy] = useState<boolean>(false)
+  const [dataCopySuccess, setDataCopySuccess] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false)
+
+
+
+  const handleCopyBtnClick = async () => {
+    const queryOpts: any = { name: 'clipboard-read'};
+    const permissionStatus = await navigator.permissions.query(queryOpts);
+    navigator?.clipboard?.writeText(JSON.stringify(data?.Items));
+    if (permissionStatus.state === "granted") {
+      setDataCopy(false)
+      setDataCopySuccess(true)
+      setOpen(true)
+    } else {
+      setDataCopy(true)
+      setDataCopySuccess(false)
+      setOpen(false)
+    }
+    navigator.clipboard.readText().then((res) => {
+      console.log(res)
+    })
+  };
+
+
+  const subTotal = data?.Items?.reduce((accumulator: any, currentLine: any) => {
     return accumulator + currentLine.LineTotal;
   }, 0);
   // const { data: chartData, isLoading }: any = useQuery({ queryKey: ['chartOfAccount'], queryFn: () => new ChartOfAccountRepository().get(), staleTime: Infinity })
   // let test = chartData;
-
+  
   //   data?.Items?.map((e:any, index:any) => {
   //     const matchingAccount = test?.find(
   //       (account:any) => account.Code === e.AccountCode
@@ -300,10 +337,11 @@ function Content(props: any) {
     [data]
   );
 
-  return <div className="data-table text-inherit  border-none p-0 mt-3">
+  return <div className="data-table  border-none p-0 mt-3">
     <MaterialReactTable
-      columns={data?.DocType === "I" ? itemColumn : serviceColumns}
-      data={data?.Items || []}
+
+      columns={data?.DocType === "dDocument_Items" ? itemColumn : serviceColumns}
+      data={data?.Items ?? []}
       enableHiding={true}
       initialState={{ density: "compact" }}
       enableDensityToggle={false}
@@ -326,7 +364,7 @@ function Content(props: any) {
       <div className='flex gap-2'>
         <span className='w-4/12 text-gray-500 text-sm'>Buyer</span>
         <span className="w-8/12 font-medium text-sm">
-          : {new BuyerRepository().find(data.SalesPersonCode)?.name || "N/A"}
+          : {new BuyerRepository().find(data?.SalesPersonCode)?.name || "N/A"}
         </span>
       </div>
       <div className='flex gap-2'>
@@ -361,7 +399,9 @@ function Content(props: any) {
 }
 function Account(props: any) {
   const { data }: any = props;
-
+  const test = useRef(null)
+  console.log(test.current);
+  
   return <div className='grow w-full grid grid-cols-2 gap-2 text-sm py-2'>
     <div className='flex flex-col gap-2'>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Jounral Remark</span> <span className='col-span-2 font-medium'>: {data.JournalMemo?.replace('at', '') || "N/A"}</span></div>
@@ -378,7 +418,7 @@ function Account(props: any) {
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Federal Tax ID</span> <span className='col-span-2 font-medium'>: {data.FederalTaxID || "N/A"}</span></div>
       <div className='grid grid-cols-3 gap-2'><span className='text-gray-500'>Order Number</span> <span className='col-span-2 font-medium'>: {data.ImportFileNum || "N/A"}</span></div>
     </div>
-
+    <input ref={ test} />
   </div>
 }
 

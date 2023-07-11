@@ -81,3 +81,81 @@ body,
 .ItemTable .css-1ygcj2i-MuiTableCell-root {
   @apply border p-[6px] bg-gray-100;
 }
+.pop {
+  width: 99%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 30;
+  top: 0;
+  right: 0;
+  border-radius: 7px;
+}
+
+.pop1 {
+  position: fixed;
+  width: 84.5%;
+  height: 100%;
+  /* background-color: #be4141; */
+  right: 0;
+  top: 0;
+}
+
+.none {
+  display: none;
+}
+
+.block {
+  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.opa {
+  background-color: rgba(0, 0, 0, .2);
+  transition-duration: .5s;
+}
+
+.guid {
+  width: 25rem;
+  /* height: 10rem; */
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  background-color: white;
+  /* padding: 10px; */
+  border-radius: 10px;
+  position: absolute;
+  animation: fade .3s linear;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.text-b {
+  color: #000 !important;
+}
+
+    
+    		tr:nth-child(even) {
+    		  /* background-color: #fda1a1; */
+    		}
+.select {
+  font-size: 15px !important;
+  border: none !important;
+  outline: none !important;
+}
+/* .t-sha{
+  text-shadow: 1px 1px 2px #b3b5b8;
+} */

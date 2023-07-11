@@ -2,19 +2,22 @@ import React, { FC } from 'react'
 import Modal from './Modal';
 import MaterialReactTable from 'material-react-table';
 import { useQuery } from 'react-query';
-import UsersRepository from '@/services/actions/UserRepostsitory';
+import itemRepository from '@/services/actions/itemRepostory';
+import Item from '@/models/Item';
 
 
-interface UserModalProps {
+interface ItemModalProps {
   open: boolean,
   onClose: () => void,
+  onOk: (item: Item) => void,
 }
 
 
-const UsersModal: FC<UserModalProps> = ({ open, onClose }) => {
+const ItemsModal: FC<ItemModalProps> = ({ open, onClose, onOk }) => {
+
   const { data, isLoading }: any = useQuery({
-    queryKey: ["users"],
-    queryFn: () => new UsersRepository().get(),
+    queryKey: ["items"],
+    queryFn: () => new itemRepository().get(),
     staleTime: Infinity,
   });
 
@@ -22,37 +25,41 @@ const UsersModal: FC<UserModalProps> = ({ open, onClose }) => {
     pageIndex: 0,
     pageSize: 8,
   });
-
-  const handlerConfirm = () => {
-  }
-
   const [rowSelection, setRowSelection] = React.useState({});
+
+  React.useEffect(() => {
+    setTimeout(() => setRowSelection({}), 500)
+  }, [open])
+
   const columns = React.useMemo(
     () => [
       {
-        accessorKey: "UserCode",
-        header: "User Code",
-
+        accessorKey: "ItemCode",
+        header: "Code",
       },
       {
-        accessorKey: "UserName",
-        header: "User Name",
- 
+        accessorKey: "ItemName",
+        header: "Name", //uses the default width from defaultColumn prop
+      },
+      {
+        accessorKey: "Description",
+        header: "Description",
       },
     ],
     []
   );
 
+
   return (
     <Modal
       open={open}
       onClose={onClose}
-      widthClass='w-[40rem]'
-      title='List Of Projects'
+      widthClass='w-[70%]'
+      title='List Of Items'
       disableTitle={true}
       disableFooter={true}
     >
-      <div className="data-table text-inherit" >
+      <div className="data-table" >
         <MaterialReactTable
           columns={columns}
           data={data ?? []}
@@ -75,7 +82,11 @@ const UsersModal: FC<UserModalProps> = ({ open, onClose }) => {
             showFirstButton: false,
             showLastButton: false,
           }}
-          muiTableBodyRowProps={() => ({
+          muiTableBodyRowProps={({ row }) => ({
+            onClick: () => {
+              onOk(new Item(row.original));
+              onClose();
+            },
             sx: { cursor: 'pointer' },
           })}
           state={
@@ -86,7 +97,7 @@ const UsersModal: FC<UserModalProps> = ({ open, onClose }) => {
             }
           }
           renderTopToolbarCustomActions={({ table }) => {
-            return <h2 className=" text-lg font-bold">List Of Users</h2>
+            return <h2 className=" text-lg font-bold">List Of Items</h2>
           }}
         />
       </div>
@@ -94,8 +105,6 @@ const UsersModal: FC<UserModalProps> = ({ open, onClose }) => {
   )
 }
 
-export default UsersModal;
-
-
+export default ItemsModal;
 
 

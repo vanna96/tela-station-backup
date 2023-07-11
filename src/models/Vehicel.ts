@@ -98,7 +98,7 @@ export default class Vehicel extends Model {
 }
 
 
-export class VehicelDocumentLine extends Model implements DocumentLine {
+export class VehicelDocumentLine extends Model {
   u_VEHCOMPNO?: number;
   u_VEHCOMPVO?: number;
   u_VEHCOMPHA?: number;
@@ -108,6 +108,37 @@ export class VehicelDocumentLine extends Model implements DocumentLine {
     this.u_VEHCOMPNO = json['U_VEHCOMPNO'];
     this.u_VEHCOMPVO = json['U_VEHCOMPVO'];
     this.u_VEHCOMPHA = json['U_VEHCOMPHA'];
+  }
+  itemCode?: string | undefined;
+  itemDescription?: string | undefined;
+  itemGroup?: string | undefined;
+  itemGroupName?: string | undefined;
+  quantity?: number | undefined;
+  unitPrice?: number | undefined;
+  currency?: string | undefined;
+  cumilativeQuantity?: number | undefined;
+  cumilativeAmount?: number | undefined;
+  plannedAmount?: number | undefined;
+  lineDiscount?: number | undefined;
+  uomGroupEntry?: number | undefined;
+  uomGroupName?: number | undefined;
+  uomEntry?: number | undefined;
+  uomCode?: string | undefined;
+  shippingType?: string | undefined;
+  project?: string | undefined;
+  taxCode?: string | undefined;
+  taxRate?: number | undefined;
+  vatGroup?: string | undefined;
+  accountName?: string | undefined;
+  // uomLists: any[] ;
+  setItemGroup(itemGroup: any): void {
+    throw new Error('Method not implemented.');
+  }
+  setUOMGroup(uomGroup: any): void {
+    throw new Error('Method not implemented.');
+  }
+  setUOM(uom: any): void {
+    throw new Error('Method not implemented.');
   }
 
 

@@ -27,6 +27,7 @@ import { getUOMGroupByCode } from "@/helpers";
 import VatGroupTextField from "@/components/input/VatGroupTextField";
 import { useDocumentTotalHook } from "@/hook";
 
+
 interface ContentFormProps {
   handlerAddItem: () => void,
   handlerChangeItem: (record: any) => void,
@@ -34,10 +35,11 @@ interface ContentFormProps {
   handlerChange: (key: string, value: any) => void;
   data: any,
   edit?: boolean
+  setData?:any
 }
 
 
-export default function ContentForm({ edit, data, handlerChangeItem, handlerChange, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
+export default function ContentForm({ setData,edit, data, handlerChangeItem, handlerChange, handlerAddItem, handlerRemoveItem }: ContentFormProps) {
   const [tableKey, setTableKey] = React.useState(Date.now())
 
   const handlerChangeInput = (event: any, row: any, field: any) => {
