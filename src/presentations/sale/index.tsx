@@ -1,22 +1,49 @@
-import MainContainer from '@/components/MainContainer';
-import ItemCard from '@/components/card/ItemCart';
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import { AiOutlineShopping, AiOutlineFileAdd, AiOutlineFileUnknown, AiOutlineSolution, AiOutlineSnippets, AiOutlineFileExcel, AiOutlineFileProtect } from "react-icons/ai";
-
+import MainContainer from "@/components/MainContainer";
+import ItemCard from "@/components/card/ItemCart";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineFileAdd, AiOutlineFileProtect } from "react-icons/ai";
+import { request } from "http";
+import SalesQuotationRepository from "@/services/actions/SalesQuotationRepository";
+import SalesOrderRepository from "@/services/actions/SalesOrderRepository";
 
 const SaleMasterPage = () => {
+  const navigate = useNavigate();
+  const [count, setCount]: any = useState();
+  const goTo = (route: string) => navigate("/sale/" + route);
 
-    const navigate = useNavigate();
+  const getCount = async () => {
+    const quotation = await new SalesQuotationRepository().getCount({});
+    const order = await new SalesOrderRepository().getCount({});
+    setCount({
+      ...count,
+      quotation,
+      order,
+    });
+  };
 
-    const goTo = (route: string) => navigate('/sale/' + route);
+  useEffect(() => {
+    getCount()
+  }, []);
 
-    return <>
-        <MainContainer title='Sales'>
-            <ItemCard title='Sale Quoatation' icon={<AiOutlineFileProtect />} />
-            <ItemCard title='Sale Order' icon={<AiOutlineFileAdd />} />
-        </MainContainer>
+  return (
+    <>
+      <MainContainer title="Sales">
+        <ItemCard
+          title="Sales Quotation"
+          icon={<AiOutlineFileProtect />}
+          onClick={() => goTo("sales-quotation")}
+          count={count?.quotation || 0}
+        />
+        <ItemCard
+          title="Sales Order"
+          icon={<AiOutlineFileAdd />}
+          onClick={() => goTo("sales-order")}
+          count={count?.order || 0}
+        />
+      </MainContainer>
     </>
-}
+  );
+};
 
 export default SaleMasterPage;

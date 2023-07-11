@@ -11,11 +11,11 @@
     --fill-color-indicator: #be4141;
   }
 
-  .dark-theme {
+  /* .dark-theme {
     --text-color: #ffffff;
     --fill-color: #161616;
     --fill-color-indicator: #be4141;
-  }
+  } */
 }
 
 @font-face {
@@ -68,4 +68,16 @@ body,
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #818181;
+}
+
+.form-control {
+  @apply border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-2.5   ;
+}
+
+.MuiAutocomplete-input {
+  @apply border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5    h-[25px] w-[100%] lg:w-[100%];
+}
+
+.ItemTable .css-1ygcj2i-MuiTableCell-root {
+  @apply border p-[6px] bg-gray-100;
 }

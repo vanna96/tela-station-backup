@@ -12,6 +12,7 @@ import InventoryRoute from './InventoryRoute'
 import LogisticRoute from './LogisticRoute';
 import { useCookies } from 'react-cookie'
 import SystemInitializeMasterPage from '@/presentations/systemInitialize/SystemInitialize'
+import CollectionRoute from './CollectionRoute'
 
 const Router = () => {
    
@@ -28,6 +29,7 @@ const Router = () => {
                         <Route path='/sale/*' element={<SaleRoute />} errorElement={<span>Error</span>} />
                         <Route path='/inventory/*' element={<InventoryRoute />} errorElement={<span>Error</span>} />
                         <Route path='/logistic/*' element={<LogisticRoute />} errorElement={<span>Error</span>} />
+                        <Route path='/banking/*' element={<CollectionRoute />} errorElement={<span>Error</span>} />
                     </Route>
                 </Routes>
             </BrowserRouter>
