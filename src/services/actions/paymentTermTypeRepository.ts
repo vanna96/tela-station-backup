@@ -5,7 +5,7 @@ import request from "@/utilies/request";
 
 export default class PaymentTermTypeRepository extends Repository<PaymentTermType> {
    
-    url = '/PaymentTermsTypes?$select=PaymentTermsGroupName,GroupNumber';
+    url = '/PaymentTermsTypes?$select=PaymentTermsGroupName,GroupNumber,GeneralDiscount';
     
     // specific key
     key = 'paymentTermTypes';

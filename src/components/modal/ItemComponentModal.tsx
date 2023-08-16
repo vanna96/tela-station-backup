@@ -20,10 +20,11 @@ interface ItemModalProps {
     onClose: () => void,
     onOk: (item: any[]) => void,
     type: ItemType,
+    CardCode?:any
 }
 
 
-const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
+const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk, CardCode }) => {
     const [globalFilter, setGlobalFilter] = React.useState('');
     const [filterKey, setFilterKey] = React.useState('key-id');
 
@@ -87,17 +88,19 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
         let selectItems = keys.map((e: any) => items.find((ele: any) => ele?.ItemCode === e));
         const uomGroups: any = await new UnitOfMeasurementGroupRepository().get();
         const uoms = await new UnitOfMeasurementRepository().get();
-
+        
         selectItems = selectItems.map((e: any) => {
-            const vendor = vendors.data?.find((bp: any) => bp?.CardCode === e?.Mainsupplier);
+            const vendor = vendors.data?.find((bp: any) => bp?.CardCode === CardCode || e?.Mainsupplier);
             const defaultPrice = e?.ItemPrices?.find((row: any) => row?.PriceList === vendor?.PriceListNum)?.Price;
             let vatRate: any = 0;
+            let saleVatGroup:any = "";
             switch (type) {
                 case 'purchase':
                     vatRate = (new VatGroupRepository().find(e?.PurchaseVATGroup) as VatGroup).vatRate;
                     break;
                 case 'sale':
                     vatRate = (new VatGroupRepository().find(e?.SalesVATGroup) as VatGroup).vatRate;
+                    saleVatGroup = e?.SalesVATGroup;
                     break;
                 default:
                     vatRate = 0;
@@ -126,7 +129,7 @@ const ItemModal: FC<ItemModalProps> = ({ open, onClose, type, onOk }) => {
                 ItemGroup: e?.ItemsGroupCode,
                 SaleVatGroup: e?.SalesVATGroup,
                 PurchaseVatGroup: e?.PurchaseVATGroup,
-                VatGroup: e?.PurchaseVATGroup,
+                VatGroup: saleVatGroup || e?.PurchaseVATGroup,
                 VatRate: vatRate,
                 Quantity: defaultPrice !== undefined ? 1 : 0,
                 UnitPrice: defaultPrice ?? 0,
@@ -267,6 +270,7 @@ export class ItemModalComponent extends React.Component<ItemModalCompoentProps, 
 
         this.state = {
             isOpen: false,
+            CardCode: ""
         }
 
         this.onClose = this.onClose.bind(this);
@@ -278,8 +282,8 @@ export class ItemModalComponent extends React.Component<ItemModalCompoentProps, 
         this.setState({ isOpen: false });
     }
 
-    onOpen() {
-        this.setState({ isOpen: true });
+    onOpen(CardCode?:any, type?:any) {
+        this.setState({ isOpen: true, CardCode:CardCode, type:type });
     }
 
 
@@ -289,7 +293,7 @@ export class ItemModalComponent extends React.Component<ItemModalCompoentProps, 
     }
 
     render(): React.ReactNode {
-        return <ItemModal open={this.state.isOpen} onClose={this.onClose} type={this.props.type} onOk={this.handlerOk} />
+        return <ItemModal open={this.state.isOpen} onClose={this.onClose} type={ this.state.type || this.props.type} onOk={this.handlerOk} CardCode={this.state.CardCode} />
     }
 }
 

@@ -42,7 +42,8 @@ export default class BusinessPartner extends Model {
     id?: number;
     owner?: number | null;
     defaultCurrency?: string;
-    currenciesCollection?: any[]
+    currenciesCollection?: any[];
+    PriceMode?: string | null | undefined;
 
     constructor(json: any, index: number) {
         super();
@@ -81,11 +82,12 @@ export default class BusinessPartner extends Model {
         this.website = json?.Website;
         this.bpAddress = json?.BPAddresses?.map((e: any) => new BPAddress(e));
         this.contactEmployee = json?.ContactEmployees?.map((e: any) => new ContactEmployee(e));
-        this.bpPaymentMethod = [];
+        this.bpPaymentMethod = json?.BPPaymentMethods;
         this.priceLists = json?.PriceListNum;
         this.owner = json?.OwnerCode;
         this.defaultCurrency = json?.DefaultCurrency;
         this.currenciesCollection = json?.BPCurrenciesCollection;
+        this.PriceMode = json?.PriceMode;
     }
 
 

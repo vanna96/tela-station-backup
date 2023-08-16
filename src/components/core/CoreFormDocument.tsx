@@ -217,12 +217,15 @@ export default abstract class CoreFormDocument extends React.Component<any, Core
                 temps['PaymentTermType'] = vendor.paymentTermTypeCode;
                 temps['PaymentMethod'] = vendor.paymentMethod;
                 temps['isOpenVendor'] = false;
-                temps['Currency'] = vendor.currency;
+                temps['Currency'] = vendor.defaultCurrency || vendor.currency;
                 temps['PriceLists'] = vendor.priceLists;
                 temps['SalesPersonCode'] = vendor.salePersonCode;
                 temps['Address2'] = vendor.getShipTo();
                 temps['Address'] = vendor.getBillToAddress();
                 temps['Owner'] = vendor?.owner ?? null;
+                temps['PriceMode'] = vendor?.PriceMode ?? null;
+                temps['BPAddresses'] = vendor?.bpAddress ?? [];
+                temps['JournalRemark'] = `Return Request - ${vendor?.cardCode}`;
                 break;
             case 'Status':
                 temps['disable'] = { ...temps['disable'], TerminateDate: !(value === 'T') };
