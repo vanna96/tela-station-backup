@@ -29,7 +29,7 @@ interface MUISelectProps<T = unknown> {
 
 const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, value, defaultValue, className, aliasvalue, aliaslabel, onChange, name, label }: MUISelectProps) => {
 
-  const { theme } = React.useContext(ThemeContext);
+  // const { theme } = React.useContext(ThemeContext);
 
   if (loading)
     return <div className="text-field">
@@ -57,18 +57,18 @@ const MUISelect: React.FC<MUISelectProps> = ({ error, items, disabled, loading, 
         <Select
           value={value === -1 ? '-1' : (value ?? '')}
           defaultValue={defaultValue ?? ''}
-          className={`w-full ${className} ${theme === 'light' ? '' : 'bg-slate-600'} ${disabled ? 'bg-gray-100' : ''} `}
+          className={`w-full ${className} ${disabled ? 'bg-gray-100' : ''} `}
           name={name}
           onChange={onChange}
           disabled={disabled}
-          MenuProps={{
-            MenuListProps: {
-              style: {
-                backgroundColor: theme === 'light' ? '' : '#475569',
-                color: theme === 'light' ? '' : '#fff',
-              }
-            }
-          }}
+          // MenuProps={{
+          //   MenuListProps: {
+          //     style: {
+          //       backgroundColor: theme === 'light' ? '' : '#475569',
+          //       color: theme === 'light' ? '' : '#fff',
+          //     }
+          //   }
+          // }}
         >
           {items?.length > 0 ? (
             items?.map((e) => {

@@ -81,7 +81,7 @@ const MUIDatePicker: React.FC<MUIDatePickerProps> = (props: MUIDatePickerProps) 
               inputFormat="DD-MM-YYYY"
               value={dateVal}
               disabled={disabled}
-              className={`${theme === 'light' ? '' : 'bg-slate-600'} ${disabled ? 'bg-gray-100' : ''}`}
+              className={` ${disabled ? 'bg-gray-100' : ''}`}
               onChange={(e: any, inputVal: any) => onChange(dayjs(e).format('YYYY-MM-DD'))}
               renderInput={(params) => <TextField sx={{
                 '& .MuiFormhelpertext-root': {

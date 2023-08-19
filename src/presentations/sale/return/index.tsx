@@ -1,13 +1,17 @@
 import request, { url } from "@/utilies/request"
-import { Button } from "@mui/material"
 import React from "react"
 import { useQuery } from "react-query"
 import { useNavigate } from "react-router-dom"
 import DataTable from "./components/DataTable"
 import VisibilityIcon from "@mui/icons-material/Visibility"
-import EditIcon from "@mui/icons-material/Edit"
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline"
+import MUITextField from "@/components/input/MUITextField"
+import BPAutoComplete from "@/components/input/BPAutoComplete"
+import { Button } from "@mui/material"
+import { ModalAdaptFilter } from "./components/ModalAdaptFilter"
 
 export default function ReturnRequestLists() {
+  const [open, setOpen] = React.useState<boolean>(false)
   const route = useNavigate()
   const columns = React.useMemo(
     () => [
@@ -33,57 +37,6 @@ export default function ReturnRequestLists() {
         visible: true,
         type: "string",
       },
-      // {
-      //     accessorKey: "StartDate",
-      //     header: "Start Date",
-      //     type: 'date',
-      //     visible: true,
-      //     enableClickToCopy: true,
-      //     Cell: ({ cell }: any) => {
-      //         return (
-      //             <>
-      //                 {dateFormat(cell.getValue())}
-      //             </>
-      //         );
-      //     },
-      // },
-      // {
-      //     accessorKey: "EndDate",
-      //     header: "End Date",
-      //     type: 'date',
-      //     visible: true,
-      //     Cell: ({ cell }: any) => (
-      //         <>
-      //             {dateFormat(cell.getValue())}
-      //         </>
-      //     ),
-
-      // },
-
-      // {
-      //     accessorKey: "SigningDate",
-      //     header: "Signing Date",
-      //     type: 'date',
-      //     visible: false,
-      //     Cell: ({ cell }: any) => (
-      //         <>
-      //             {dateFormat(cell.getValue())}
-      //         </>
-      //     ),
-
-      // },
-
-      // {
-      //     accessorKey: "TerminationDate",
-      //     header: "Termination Date",
-      //     type: 'date',
-      //     visible: false,
-      //     Cell: ({ cell }: any) => (
-      //         <>
-      //             {dateFormat(cell.getValue())}
-      //         </>
-      //     ),
-      // },
       {
         accessorKey: "DocEntry",
         enableFilterMatchHighlighting: false,
@@ -95,9 +48,11 @@ export default function ReturnRequestLists() {
         minSize: 100,
         maxSize: 100,
         header: "Action",
+        visible: true,
         Cell: (cell: any) => (
-          <div className="flex gap-4">
+          <div className="flex space-x-2">
             <button
+              className="bg-transparent text-gray-700 px-[4px] py-0 border border-gray-200 rounded"
               onClick={() => {
                 route("/sale/return/" + cell.row.original.DocEntry, {
                   state: cell.row.original,
@@ -105,18 +60,22 @@ export default function ReturnRequestLists() {
                 })
               }}
             >
-              <VisibilityIcon fontSize="small" className="text-gray-600 " />
+              <VisibilityIcon fontSize="small" className="text-gray-600 " /> View
             </button>
             <button
-              title="back"
-              onClick={() =>
-                route(
-                  "/sale/return/" + cell.row.original.DocEntry + "/edit",
-                  { state: cell.row.original, replace: true }
-                )
-              }
+              className="bg-transparent text-gray-700 px-[4px] py-0 border border-gray-200 rounded"
+              onClick={() => {
+                route("/sale/return/" + cell.row.original.DocEntry, {
+                  state: cell.row.original,
+                  replace: true,
+                })
+              }}
             >
-              <EditIcon fontSize="small" className="text-blue-400" />
+              <DriveFileRenameOutlineIcon
+                fontSize="small"
+                className="text-gray-600 "
+              />{" "}
+              Edit
             </button>
           </div>
         ),
@@ -132,7 +91,7 @@ export default function ReturnRequestLists() {
     pageSize: 10,
   })
 
-  const returnRequestCount: any = useQuery({
+  const Count: any = useQuery({
     queryKey: ["pa-count" + filter !== "" ? "-f" : ""],
     queryFn: async () => {
       const response: any = await request(
@@ -175,7 +134,7 @@ export default function ReturnRequestLists() {
       pageSize: 10,
     })
     setTimeout(() => {
-      returnRequestCount.refetch()
+      Count.refetch()
       refetch()
     }, 500)
   }, [])
@@ -201,26 +160,50 @@ export default function ReturnRequestLists() {
     })
 
     setTimeout(() => {
-      returnRequestCount.refetch()
+      Count.refetch()
       refetch()
     }, 500)
   }
 
+  const handleAdaptFilter = () => {
+    setOpen(true)
+  }
+
   return (
     <>
-      <div className="w-full h-full px-6 py-2 flex flex-col gap-1 relative ">
-        <div className="flex px-2  rounded-lg justify-between items-center sticky z-10 top-0 w-full  py-2">
-          <h3 className="text-base 2xl:text-base xl:text-base ">
-            Sale / Returns
-          </h3>
-          <Button
-            variant="contained"
-            disableElevation
-            size="small"
-            onClick={() => route("/sale/return/create")}
-          >
-            <span className="text-sm capitalize text-white px-3">Create</span>
-          </Button>
+      <ModalAdaptFilter isOpen={open} handleClose={() => setOpen(false)}></ModalAdaptFilter>
+      <div className="w-full h-full px-6 py-2 flex flex-col gap-1 relative">
+        <div className="flex pr-2  rounded-lg justify-between items-center z-10 top-0 w-full  py-2">
+          <h3 className="text-base 2xl:text-base xl:text-base ">Sale / Returns</h3>
+        </div>
+        <div className="grid grid-cols-5 gap-3 mb-5 mt-4">
+          <MUITextField
+            label="Search"
+            placeholder="Search"
+            className="bg-white"
+            autoComplete="off"
+          />
+          <MUITextField
+            label="Document No."
+            placeholder="Document No."
+            className="bg-white"
+            autoComplete="off"
+          />
+          <BPAutoComplete label="Customer" />
+          <MUITextField
+            label="Posting Date"
+            placeholder="Posting Date"
+            className="bg-white"
+            type="date"
+          />
+          <div className="flex justify-end items-center align-center space-x-4 mt-4">
+            <Button variant="contained" size="small">
+              Go
+            </Button>
+            <Button variant="outlined" size="small" onClick={handleAdaptFilter}>
+              Adapt Filter
+            </Button>
+          </div>
         </div>
         <DataTable
           columns={columns}
@@ -228,11 +211,11 @@ export default function ReturnRequestLists() {
           handlerRefresh={handlerRefresh}
           handlerSearch={handlerSearch}
           handlerSortby={handlerSortby}
-          count={returnRequestCount?.data || 0}
+          count={Count?.data || 0}
           loading={isLoading || isFetching}
           pagination={pagination}
           paginationChange={setPagination}
-          title="Return Request"
+          title="Returns"
         />
       </div>
     </>

@@ -27,9 +27,6 @@ interface ModalProps {
 }
 
 const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, children, title, disableClose = false, okLabel, disableTitle = false, disableFooter = false, onOk, titleClass, pannelClass, disableShadow, renderTitle, topToolAction, contentClass }) => {
-
-    const { theme } = React.useContext(ThemeContext);
-
     return (
         <Transition appear show={open} as={Fragment}>
             <Dialog as="div" className="relative z-[100]" onClose={onClose}>
@@ -56,7 +53,7 @@ const Modal: FC<ModalProps> = ({ open, onClose, widthClass, heightClass, size, c
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className={`${widthClass ?? 'max-w-md'} ${heightClass ?? ''}  ${pannelClass ?? ''} ${disableShadow ? '' : 'shadow-xl'} flex flex-col relative transform overflow-hidden rounded-lg ${theme === 'light' ? 'bg-white' : 'bg-slate-600'} py-1 px-5 text-left align-middle  transition-all`}>
+                            <Dialog.Panel className={`${widthClass ?? 'max-w-md'} ${heightClass ?? ''}  ${pannelClass ?? ''} ${disableShadow ? '' : 'shadow-xl'} flex flex-col relative transform overflow-hidden rounded-lg bg-white py-1 px-5 text-left align-middle  transition-all`}>
                                 {!disableTitle ? <Dialog.Title
                                     as="h3"
                                     className="w-full flex py-3 border-b justify-between items-center text-lg font-medium leading-6 text-gray-900"

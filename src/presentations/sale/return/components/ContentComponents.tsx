@@ -323,37 +323,37 @@ export default function ContentComponent(props: ContentComponentProps) {
             icons={{
               ViewColumnIcon: (props: any) => <AiOutlineSetting {...props} />,
             }}
-            muiTableHeadCellProps={{
-              sx: {
-                backgroundColor: theme === "light" ? "" : "#334155",
-              },
-            }}
-            muiTableBodyCellProps={{
-              sx: {
-                backgroundColor: theme === "light" ? "" : "#364455 !important",
-              },
-            }}
-            muiTableContainerProps={{
-              sx: {
-                backgroundColor: theme === "light" ? "" : "#334155",
-              },
-            }}
-            muiTableBodyProps={{
-              sx: {
-                "& tr:nth-of-type(odd)": {
-                  backgroundColor: theme === "light" ? "" : "#2C3847 !important",
-                },
-                ":hover": {
-                  backgroundColor: theme === "light" ? "" : "#334155",
-                },
-              },
-            }}
-            muiBottomToolbarProps={{
-              sx: {
-                display: "none",
-                backgroundColor: theme === "light" ? "" : "#334155 !important",
-              },
-            }}
+            // muiTableHeadCellProps={{
+            //   sx: {
+            //     backgroundColor: theme === "light" ? "" : "#334155",
+            //   },
+            // }}
+            // muiTableBodyCellProps={{
+            //   sx: {
+            //     backgroundColor: theme === "light" ? "" : "#364455 !important",
+            //   },
+            // }}
+            // muiTableContainerProps={{
+            //   sx: {
+            //     backgroundColor: theme === "light" ? "" : "#334155",
+            //   },
+            // }}
+            // muiTableBodyProps={{
+            //   sx: {
+            //     "& tr:nth-of-type(odd)": {
+            //       backgroundColor: theme === "light" ? "" : "#2C3847 !important",
+            //     },
+            //     ":hover": {
+            //       backgroundColor: theme === "light" ? "" : "#334155",
+            //     },
+            //   },
+            // }}
+            // muiBottomToolbarProps={{
+            //   sx: {
+            //     display: "none",
+            //     backgroundColor: theme === "light" ? "" : "#334155 !important",
+            //   },
+            // }}
             enableTableFooter={false}
           />
 

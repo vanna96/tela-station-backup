@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -19,8 +19,8 @@
 }
 
 @font-face {
-  font-family: "calibri";
-  src: url("./assets/fonts/Calibri.ttf");
+  font-family: "Roboto Condensed", sans-serif;
+  src: url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400&display=swap");
 }
 
 html,
@@ -40,7 +40,7 @@ body,
   /* font-family: "calibri", sans-serif, "Hanuman", serif;
    */
 
-   font-family: "72","72full",Arial,Helvetica,sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 /* width */
@@ -80,4 +80,25 @@ body,
 
 .ItemTable .css-1ygcj2i-MuiTableCell-root {
   @apply border p-[6px] bg-gray-100;
+}
+
+table,
+tbody,
+th,
+td,
+tr,
+p,
+div,
+span,
+li,
+input {
+  font-family: "Roboto Condensed", sans-serif !important;
+}
+
+.MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputAdornedEnd.MuiAutocomplete-input.MuiAutocomplete-inputFocused.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+  margin-top: -14px !important;
+}
+
+.MuiCircularProgress-root.MuiCircularProgress-indeterminate.MuiCircularProgress-colorInherit.css-62e83j-MuiCircularProgress-root {
+  margin-top: -12px;
 }

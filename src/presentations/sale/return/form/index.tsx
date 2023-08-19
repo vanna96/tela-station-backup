@@ -2,9 +2,6 @@ import CoreFormDocument from "@/components/core/CoreFormDocument"
 import { withRouter } from "@/routes/withRouter"
 import { LoadingButton } from "@mui/lab"
 import DocumentSerieRepository from "@/services/actions/documentSerie"
-import PurchaseAgreementRepository from "../../../../services/actions/purchaseAgreementRepository"
-import { UpdateDataSuccess } from "../../../../utilies/ClientError"
-import PurchaseAgreement from "../../../../models/PurchaseAgreement"
 import MenuButton from "@/components/button/MenuButton"
 import { FormValidateException } from "@/utilies/error"
 import LoadingProgress from "@/components/LoadingProgress"
@@ -372,7 +369,7 @@ class Form extends CoreFormDocument {
   }
 
   hanndAddNewItem() {
-    // if (!this.state?.CardCode) return
+    if (!this.state?.CardCode) return
     if (this.state.DocType === "dDocument_Items")
       return this.itemModalRef.current?.onOpen(this.state?.CardCode, "sale")
     this.serviceRef.current?.onOpen(this.state?.CardCode)
